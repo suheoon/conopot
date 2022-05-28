@@ -1,4 +1,6 @@
+import 'package:conopot/models/MusicSearchItem.dart';
 import 'package:conopot/models/NavItem.dart';
+import 'package:conopot/models/musicSearchItem.dart';
 import 'package:conopot/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
