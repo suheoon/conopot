@@ -22,7 +22,7 @@ class BottomNavBar extends StatelessWidget {
         ]),
         child: SafeArea(
           child: SizedBox(
-            height: 70,
+            height: 65,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -69,7 +69,8 @@ class BottomNavBar extends StatelessWidget {
         ),
         Text(
           title,
-          style: TextStyle(color: isActive ? kTextColor : kTextLightColor),
+          style: TextStyle(
+              color: isActive ? kTextColor : kTextLightColor, fontSize: 10),
         ),
       ],
     );

@@ -27,7 +27,7 @@ class NavItem {
 // If we made any changes here Provider package rebuid those widget those use this NavItems
 class NavItems extends ChangeNotifier {
   // By default first one is selected
-  int selectedIndex = 1;
+  int selectedIndex = 0;
 
   void changeNavIndex({required int index}) {
     selectedIndex = index;
