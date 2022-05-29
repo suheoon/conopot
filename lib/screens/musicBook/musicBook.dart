@@ -1,14 +1,10 @@
+import 'dart:ui';
+
 import 'package:conopot/components/bottom_nav_bar.dart';
 import 'package:conopot/constants.dart';
-import 'package:conopot/models/MusicSearchItem.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
-import 'dart:io';
-import 'package:path/path.dart' as p;
-import 'dart:convert';
 import 'dart:core';
 import 'package:provider/provider.dart';
 
@@ -16,7 +12,6 @@ class MusicBookScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    MusicSearchItemLists().init();
     double widthSize = SizeConfig.screenWidth / 10;
 
     return Consumer<MusicSearchItemLists>(
@@ -44,7 +39,7 @@ class MusicBookScreen extends StatelessWidget {
                   'TJ',
                   style: TextStyle(
                     color: (musicList.tabIndex == 1)
-                        ? kPrimaryColor
+                        ? kTextColor
                         : kTextLightColor,
                     fontSize: 18,
                   ),
@@ -53,9 +48,9 @@ class MusicBookScreen extends StatelessWidget {
                   '금영',
                   style: TextStyle(
                     color: (musicList.tabIndex == 2)
-                        ? kPrimaryColor
+                        ? kTextColor
                         : kTextLightColor,
-                    fontSize: 18,
+                    fontSize: 16,
                   ),
                 ),
               ],
@@ -65,19 +60,7 @@ class MusicBookScreen extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextField(
-                    onChanged: (text) => {
-                      musicList.runFilter(text, 1),
-                    },
-                    decoration: InputDecoration(
-                        hintText: '검색', suffixIcon: Icon(Icons.search)),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  SearchBar(musicList: musicList),
                   Expanded(
                     child: musicList.foundItems.isNotEmpty
                         ? ListView.builder(
@@ -88,8 +71,14 @@ class MusicBookScreen extends StatelessWidget {
                               child: ListTile(
                                 leading: Text(
                                   musicList.foundItems[index].songNumber,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                title: Text(musicList.foundItems[index].title),
+                                title: Text(
+                                  musicList.foundItems[index].title,
+                                ),
                                 subtitle:
                                     Text(musicList.foundItems[index].singer),
                               ),
@@ -104,19 +93,7 @@ class MusicBookScreen extends StatelessWidget {
               ),
               Column(
                 children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextField(
-                    onChanged: (text) => {
-                      musicList.runFilter(text, 2),
-                    },
-                    decoration: InputDecoration(
-                        hintText: '검색', suffixIcon: Icon(Icons.search)),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  SearchBar(musicList: musicList),
                   Expanded(
                     child: musicList.foundItems.isNotEmpty
                         ? ListView.builder(
@@ -144,6 +121,44 @@ class MusicBookScreen extends StatelessWidget {
             ],
           ),
           bottomNavigationBar: BottomNavBar(),
+        ),
+      ),
+    );
+  }
+}
+
+class SearchBar extends StatelessWidget {
+  final MusicSearchItemLists musicList;
+
+  const SearchBar({required this.musicList});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(20.0),
+      child: TextField(
+        onChanged: (text) => {
+          musicList.runFilter(text, musicList.tabIndex),
+        },
+        textAlign: TextAlign.center,
+        keyboardType: TextInputType.name,
+        decoration: InputDecoration(
+          hintText: '제목 및 가수명을 검색하세요',
+          contentPadding: EdgeInsets.all(0),
+          suffixIcon: Icon(Icons.search),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(50.0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color(0xFF7B61FF),
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(50.0)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(50.0)),
+          ),
         ),
       ),
     );

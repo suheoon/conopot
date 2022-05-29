@@ -7,7 +7,9 @@ import 'package:flutter/services.dart';
 class MusicSearchItemLists extends ChangeNotifier {
   List<MusicSearchItem> foundItems = [];
   List<MusicSearchItem> results = [];
-  List<MusicSearchItem> tjSongList = [];
+  List<MusicSearchItem> tjSongList = [
+    MusicSearchItem(title: '123', singer: '123', songNumber: '123')
+  ];
   List<MusicSearchItem> kySongList = [];
 
   int tabIndex = 1; // TJ or 금영
@@ -20,6 +22,7 @@ class MusicSearchItemLists extends ChangeNotifier {
     return await rootBundle.loadString('assets/musics/musicbook_KY.txt');
   }
 
+  // 프로그램 실행 시, 노래방 책 List 초기화 (TJ, KY txt -> List)
   void init() async {
     String TJMusics = await getTJMusics();
     String KYMusics = await getKYMusics();
@@ -81,6 +84,7 @@ class MusicSearchItemLists extends ChangeNotifier {
     notifyListeners();
   }
 
+  // 검색 필터링 기능(일반검색)
   void runFilter(String enteredKeyword, int _tabIndex) {
     if (_tabIndex == 1) {
       //TJ
