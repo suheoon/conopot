@@ -7,9 +7,7 @@ import 'package:flutter/services.dart';
 class MusicSearchItemLists extends ChangeNotifier {
   List<MusicSearchItem> foundItems = [];
   List<MusicSearchItem> results = [];
-  List<MusicSearchItem> tjSongList = [
-    MusicSearchItem(title: '123', singer: '123', songNumber: '123')
-  ];
+  List<MusicSearchItem> tjSongList = [];
   List<MusicSearchItem> kySongList = [];
 
   int tabIndex = 1; // TJ or 금영
@@ -81,6 +79,7 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   void changeTabIndex({required int index}) {
     tabIndex = index;
+    foundItems = (index == 1) ? tjSongList : kySongList;
     notifyListeners();
   }
 
