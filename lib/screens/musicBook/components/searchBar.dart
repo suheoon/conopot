@@ -13,8 +13,6 @@ class SearchBar extends StatelessWidget {
       child: TextField(
         onChanged: (text) => {
           musicList.runFilter(text, musicList.tabIndex),
-          print(text),
-          print(musicList.tabIndex),
         },
         textAlign: TextAlign.center,
         keyboardType: TextInputType.name,
