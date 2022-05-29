@@ -1,3 +1,4 @@
+import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:conopot/models/NavItem.dart';
 import 'package:conopot/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => NavItems(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => NavItems()),
+        ChangeNotifierProvider(create: (context) => MusicSearchItemLists()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'conopot',
