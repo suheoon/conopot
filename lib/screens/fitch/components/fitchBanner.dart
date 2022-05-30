@@ -1,4 +1,5 @@
 import 'package:conopot/models/FitchItem.dart';
+import 'package:conopot/screens/fitch/fitchResult.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -40,6 +41,13 @@ class FitchBanner extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       //local storage? or 최종결과 page route
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              FitchResult(pitchLevel: fitchItem.id),
+                        ),
+                      );
                     },
                     child: Text('여기까지가 끝인가보오..'),
                   ),
