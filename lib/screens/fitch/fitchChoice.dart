@@ -7,10 +7,14 @@ class FitchChoice extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('FitchChoice'),
+        leading: BackButton(color: Colors.black),
+        title: Text(
+          '음역대 측정',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
       ),
       body: Center(
-        child: Text('FitchChoice'),
+        child: Text('FitchMeasure'),
       ),
     );
   }

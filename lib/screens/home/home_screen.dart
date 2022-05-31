@@ -1,8 +1,8 @@
 import 'package:conopot/components/bottom_nav_bar.dart';
 import 'package:conopot/constants.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
-import 'package:conopot/screens/fitch/fitchChoice.dart';
 import 'package:conopot/screens/fitch/fitchMeasure.dart';
+import 'package:conopot/screens/fitch/fitchChoice.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

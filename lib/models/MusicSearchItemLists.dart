@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:conopot/models/MusicSearchItem.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class MusicSearchItemLists extends ChangeNotifier {
   List<MusicSearchItem> foundItems = [];
@@ -11,6 +12,13 @@ class MusicSearchItemLists extends ChangeNotifier {
   List<MusicSearchItem> kySongList = [];
 
   int tabIndex = 1; // TJ or 금영
+
+  int userFitch = 13;
+
+  void changeUserFitch({required int pitch}) {
+    userFitch = pitch;
+    notifyListeners();
+  }
 
   Future<String> getTJMusics() async {
     return await rootBundle.loadString('assets/musics/musicbook_TJ.txt');
@@ -22,6 +30,11 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   // 프로그램 실행 시, 노래방 책 List 초기화 (TJ, KY txt -> List)
   void init() async {
+    //사용자 음정 불러오기
+    final storage = new FlutterSecureStorage();
+    String? value = await storage.read(key: 'userPitch');
+    userFitch = int.parse(value!);
+
     String TJMusics = await getTJMusics();
     String KYMusics = await getKYMusics();
 

@@ -61,6 +61,12 @@ class ChartScreen extends StatelessWidget {
             children: [
               Column(
                 children: [
+                  TextButton(
+                    onPressed: () {
+                      print(musicList.userFitch);
+                    },
+                    child: Text('getFitch'),
+                  ),
                   SearchBar(musicList: musicList),
                   SearchList(musicList: musicList),
                 ],
