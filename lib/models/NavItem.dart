@@ -1,3 +1,4 @@
+import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:conopot/screens/chart/chart_screen.dart';
 import 'package:conopot/screens/home/home_screen.dart';
 import 'package:conopot/screens/musicBook/musicBook.dart';
@@ -31,6 +32,7 @@ class NavItems extends ChangeNotifier {
 
   void changeNavIndex({required int index}) {
     selectedIndex = index;
+
     // if any changes made it notify widgets that use the value
     notifyListeners();
   }

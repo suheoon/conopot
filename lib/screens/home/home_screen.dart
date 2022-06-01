@@ -17,14 +17,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () {
-      Provider.of<MusicSearchItemLists>(context, listen: false).init();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(

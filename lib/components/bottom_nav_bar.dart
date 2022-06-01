@@ -1,4 +1,5 @@
 import 'package:conopot/constants.dart';
+import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:conopot/models/NavItem.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,19 @@ class BottomNavBar extends StatelessWidget {
                   title: navItems.items[index].title,
                   press: () {
                     navItems.changeNavIndex(index: index);
+                    if (index == 1) {
+                      Future.delayed(Duration.zero, () {
+                        Provider.of<MusicSearchItemLists>(context,
+                                listen: false)
+                            .initChart();
+                      });
+                    } else {
+                      Future.delayed(Duration.zero, () {
+                        Provider.of<MusicSearchItemLists>(context,
+                                listen: false)
+                            .init();
+                      });
+                    }
                     if (navItems.items[index].destinationChecker())
                       Navigator.push(
                         context,

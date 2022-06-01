@@ -1,6 +1,7 @@
 import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:conopot/models/NavItem.dart';
 import 'package:conopot/screens/home/home_screen.dart';
+import 'package:conopot/screens/home/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
           appBarTheme: AppBarTheme(color: Colors.white, elevation: 0),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: HomeScreen(),
+        home: SplashScreen(),
       ),
     );
   }

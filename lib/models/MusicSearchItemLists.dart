@@ -11,6 +11,8 @@ class MusicSearchItemLists extends ChangeNotifier {
   List<MusicSearchItem> results = [];
   List<MusicSearchItem> tjSongList = [];
   List<MusicSearchItem> kySongList = [];
+  List<MusicSearchItem> tjChartSongList = [];
+  List<MusicSearchItem> kyChartSongList = [];
   List<FitchMusic> highestSongList = [];
   List<FitchMusic> highestFoundItems = [];
   List<FitchMusic> highestResults = [];
@@ -54,12 +56,24 @@ class MusicSearchItemLists extends ChangeNotifier {
     return await rootBundle.loadString('assets/musics/musicbook_TJ.txt');
   }
 
+  Future<String> getTJMusicChart() async {
+    return await rootBundle.loadString('assets/musics/chart_TJ.txt');
+  }
+
   Future<String> getKYMusics() async {
     return await rootBundle.loadString('assets/musics/musicbook_KY.txt');
   }
 
+  Future<String> getKYMusicChart() async {
+    return await rootBundle.loadString('assets/musics/chart_KY.txt');
+  }
+
   Future<String> getHighMusics() async {
     return await rootBundle.loadString('assets/musics/music_highest_key.txt');
+  }
+
+  void initChart() {
+    foundItems = tjChartSongList;
   }
 
   // 프로그램 실행 시, 노래방 책 List 초기화 (TJ, KY txt -> List)
@@ -70,7 +84,9 @@ class MusicSearchItemLists extends ChangeNotifier {
     userFitch = int.parse(value!);
 
     String TJMusics = await getTJMusics();
+    String TJMusicChart = await getTJMusicChart();
     String KYMusics = await getKYMusics();
+    String KYMusicChart = await getKYMusicChart();
     String HighMusics = await getHighMusics();
 
     LineSplitter ls = new LineSplitter();
@@ -119,6 +135,52 @@ class MusicSearchItemLists extends ChangeNotifier {
           songNumber = tmp;
       }
       kySongList.add(MusicSearchItem(
+          title: title, singer: singer, songNumber: songNumber));
+    }
+
+    contents = ls.convert(TJMusicChart);
+
+    //문자열 파싱 -> MusicSearchItem
+    for (String str in contents) {
+      int start = 0, end = 0;
+
+      for (int i = 0; i < 3; i++) {
+        end = str.indexOf('^', start);
+        if (start == end) continue;
+        String tmp = str.substring(start, end);
+        start = end + 1;
+
+        if (i == 0)
+          title = tmp;
+        else if (i == 1)
+          singer = tmp;
+        else
+          songNumber = tmp;
+      }
+      tjChartSongList.add(MusicSearchItem(
+          title: title, singer: singer, songNumber: songNumber));
+    }
+
+    contents = ls.convert(KYMusicChart);
+
+    //문자열 파싱 -> MusicSearchItem
+    for (String str in contents) {
+      int start = 0, end = 0;
+
+      for (int i = 0; i < 3; i++) {
+        end = str.indexOf('^', start);
+        if (start == end) continue;
+        String tmp = str.substring(start, end);
+        start = end + 1;
+
+        if (i == 0)
+          title = tmp;
+        else if (i == 1)
+          singer = tmp;
+        else
+          songNumber = tmp;
+      }
+      kyChartSongList.add(MusicSearchItem(
           title: title, singer: singer, songNumber: songNumber));
     }
 
@@ -183,8 +245,15 @@ class MusicSearchItemLists extends ChangeNotifier {
     notifyListeners();
   }
 
+  void changeChartTabIndex({required int index}) {
+    tabIndex = index;
+    foundItems = (index == 1) ? tjChartSongList : kyChartSongList;
+    notifyListeners();
+  }
+
   // 검색 필터링 기능(일반검색)
   void runFilter(String enteredKeyword, int _tabIndex) {
+    results = [];
     if (_tabIndex == 1) {
       //TJ
       if (enteredKeyword.isEmpty) {
@@ -215,8 +284,39 @@ class MusicSearchItemLists extends ChangeNotifier {
   }
 
   // 검색 필터링 기능(인기검색)
-  void runFitchFilter(String enteredKeyword) {
-    //TJ
+  void runFitchFilter(String enteredKeyword, int _tabIndex) {
+    results = [];
+    if (_tabIndex == 1) {
+      //TJ
+      if (enteredKeyword.isEmpty) {
+        results = tjChartSongList;
+      } else {
+        results = tjChartSongList
+            .where((string) =>
+                string.title.contains(enteredKeyword) ||
+                string.singer.contains(enteredKeyword))
+            .toList();
+      }
+    } else {
+      //KY
+      if (enteredKeyword.isEmpty) {
+        results = kyChartSongList;
+      } else {
+        results = kyChartSongList
+            .where((string) =>
+                string.title.contains(enteredKeyword) ||
+                string.singer.contains(enteredKeyword))
+            .toList();
+      }
+    }
+    foundItems = results;
+
+    notifyListeners();
+  }
+
+  // 검색 필터링 기능(인기검색)
+  void runHighFitchFilter(String enteredKeyword) {
+    highestResults = [];
     if (enteredKeyword.isEmpty) {
       highestResults = highestSongList;
     } else {
@@ -226,10 +326,7 @@ class MusicSearchItemLists extends ChangeNotifier {
               string.tj_singer.contains(enteredKeyword))
           .toList();
     }
-
     highestFoundItems = highestResults;
-
-    print(highestFoundItems.length);
 
     notifyListeners();
   }
