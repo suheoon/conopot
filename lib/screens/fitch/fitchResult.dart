@@ -1,5 +1,6 @@
 import 'package:conopot/constants.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
+import 'package:conopot/models/NavItem.dart';
 import 'package:conopot/screens/chart/chart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -54,25 +55,13 @@ class _FitchResultState extends State<FitchResult> {
               fontSize: 15,
             ),
           ),
-          RangeSlider(
-            values: RangeValues(pitchLevel - 2, pitchLevel.toDouble()),
-            max: 21,
-            min: -5,
-            divisions: 4,
-            labels: RangeLabels(
-              RangeValues(pitchLevel - 2, pitchLevel.toDouble())
-                  .start
-                  .round()
-                  .toString(),
-              RangeValues(pitchLevel - 2, pitchLevel.toDouble())
-                  .end
-                  .round()
-                  .toString(),
-            ),
-            onChanged: (RangeValues values) {},
-          ),
+          Text(pitchLevel.toString()),
           TextButton(
             onPressed: () {
+              Future.delayed(Duration.zero, () {
+                Provider.of<NavItems>(context, listen: false)
+                    .changeNavIndex(index: 1);
+              });
               Navigator.push(
                 context,
                 MaterialPageRoute(

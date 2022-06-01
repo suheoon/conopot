@@ -1,6 +1,8 @@
 import 'package:conopot/components/bottom_nav_bar.dart';
 import 'package:conopot/constants.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
+import 'package:conopot/screens/chart/components/fitchSearchBar.dart';
+import 'package:conopot/screens/chart/components/fitchSearchList.dart';
 import 'package:conopot/screens/musicBook/components/searchBar.dart';
 import 'package:conopot/screens/musicBook/components/searchList.dart';
 import 'package:conopot/size_config.dart';
@@ -61,20 +63,14 @@ class ChartScreen extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  TextButton(
-                    onPressed: () {
-                      print(musicList.userFitch);
-                    },
-                    child: Text('getFitch'),
-                  ),
-                  SearchBar(musicList: musicList),
-                  SearchList(musicList: musicList),
+                  FitchSearchBar(musicList: musicList),
+                  FitchSearchList(musicList: musicList),
                 ],
               ),
               Column(
                 children: [
-                  SearchBar(musicList: musicList),
-                  SearchList(musicList: musicList),
+                  FitchSearchBar(musicList: musicList),
+                  FitchSearchList(musicList: musicList),
                 ],
               ),
             ],
