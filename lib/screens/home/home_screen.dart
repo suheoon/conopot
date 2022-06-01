@@ -17,14 +17,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () {
-      Provider.of<MusicSearchItemLists>(context, listen: false).init();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
@@ -96,21 +88,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             },
-            child: Card(
-              color: Colors.white,
-              elevation: 2,
-              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-              child: SizedBox(
-                width: SizeConfig.screenWidth * 0.9,
-                height: SizeConfig.screenHeight * 0.15,
-                child: Center(
-                  child: ListTile(
-                    leading: SvgPicture.asset('assets/icons/homeSpeak.svg'),
-                    title: Text(
-                      '직접 음역대 측정해볼래요!',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+            child: Center(
+              child: Card(
+                color: Colors.white,
+                elevation: 2,
+                margin: EdgeInsets.symmetric(vertical: 15.0),
+                child: SizedBox(
+                  width: SizeConfig.screenWidth * 0.9,
+                  height: SizeConfig.screenHeight * 0.15,
+                  child: Center(
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.mic,
+                        size: SizeConfig.screenHeight * 0.15 * 0.5,
+                      ),
+                      title: Text(
+                        '직접 음역대 측정해볼래요!',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text('크게 소리낼 수 있는 환경에서 추천'),
                     ),
-                    subtitle: Text('크게 소리낼 수 있는 환경에서 추천'),
                   ),
                 ),
               ),
@@ -125,21 +122,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             },
-            child: Card(
-              color: Colors.white,
-              elevation: 2,
-              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-              child: SizedBox(
-                width: SizeConfig.screenWidth * 0.9,
-                height: SizeConfig.screenHeight * 0.15,
-                child: Center(
-                  child: ListTile(
-                    leading: SvgPicture.asset('assets/icons/homeUnSpeak.svg'),
-                    title: Text(
-                      '이 노래 불러봤어요!',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+            child: Center(
+              child: Card(
+                color: Colors.white,
+                elevation: 2,
+                margin: EdgeInsets.symmetric(vertical: 15.0),
+                child: SizedBox(
+                  width: SizeConfig.screenWidth * 0.9,
+                  height: SizeConfig.screenHeight * 0.15,
+                  child: Center(
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.music_note_outlined,
+                        size: SizeConfig.screenHeight * 0.15 * 0.5,
+                      ),
+                      title: Text(
+                        '이 노래 불러봤어요!',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text('불러본 노래 바탕으로 내 음역대 찾기'),
                     ),
-                    subtitle: Text('불러본 노래 바탕으로 내 음역대 찾기'),
                   ),
                 ),
               ),

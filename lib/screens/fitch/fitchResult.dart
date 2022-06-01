@@ -1,6 +1,8 @@
 import 'package:conopot/constants.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
+import 'package:conopot/models/NavItem.dart';
 import 'package:conopot/screens/chart/chart_screen.dart';
+import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +39,7 @@ class _FitchResultState extends State<FitchResult> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(color: Colors.black),
@@ -45,44 +48,45 @@ class _FitchResultState extends State<FitchResult> {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
       ),
-      body: Column(
-        children: [
-          Text(
-            '내 최고음 구간',
-            style: TextStyle(
-              color: kTextLightColor,
-              fontSize: 15,
+      body: Center(
+        child: Column(
+          children: [
+            SizedBox(
+              height: SizeConfig.defaultSize,
             ),
-          ),
-          RangeSlider(
-            values: RangeValues(pitchLevel - 2, pitchLevel.toDouble()),
-            max: 21,
-            min: -5,
-            divisions: 4,
-            labels: RangeLabels(
-              RangeValues(pitchLevel - 2, pitchLevel.toDouble())
-                  .start
-                  .round()
-                  .toString(),
-              RangeValues(pitchLevel - 2, pitchLevel.toDouble())
-                  .end
-                  .round()
-                  .toString(),
+            Image(
+              image: AssetImage('assets/images/resultImg.png'),
             ),
-            onChanged: (RangeValues values) {},
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChartScreen(),
+            Text(pitchLevel.toString()),
+            TextButton(
+              onPressed: () {
+                Future.delayed(Duration.zero, () {
+                  Provider.of<NavItems>(context, listen: false)
+                      .changeNavIndex(index: 1);
+                });
+                Future.delayed(Duration.zero, () {
+                  Provider.of<MusicSearchItemLists>(context, listen: false)
+                      .initChart();
+                });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChartScreen(),
+                  ),
+                );
+              },
+              child: Text(
+                '나에게 맞는 노래 찾으러 가기',
+                style: TextStyle(
+                  color: Colors.white,
                 ),
-              );
-            },
-            child: Text('나에게 맞는 노래 찾으러 가기'),
-          ),
-        ],
+              ),
+              style: TextButton.styleFrom(
+                backgroundColor: Color(0xFF7B61FF),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

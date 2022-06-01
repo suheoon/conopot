@@ -1,3 +1,4 @@
+import 'package:conopot/constants.dart';
 import 'package:conopot/models/FitchItem.dart';
 import 'package:conopot/screens/fitch/components/fitchBanner.dart';
 import 'package:conopot/screens/fitch/components/indicator.dart';
@@ -25,10 +26,41 @@ class _FitchMeasureState extends State<FitchMeasure> {
           ),
         ),
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('주의 사항'),
-            Text('blah blah blah ~'),
+            SizedBox(
+              height: SizeConfig.screenHeight * 0.1,
+            ),
+            Text(
+              '주의 사항',
+              style: TextStyle(
+                color: kTextColor,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(
+              height: SizeConfig.defaultSize,
+            ),
+            Text(
+              '혼자 있는 곳 또는 노래방에서 테스트하세요',
+              style: TextStyle(
+                color: kTextColor,
+                fontSize: 16,
+              ),
+            ),
+            SizedBox(
+              height: SizeConfig.defaultSize * 0.5,
+            ),
+            Text(
+              '가성이 아닌 진성으로 부르기!',
+              style: TextStyle(
+                color: kTextColor,
+                fontSize: 16,
+              ),
+            ),
+            SizedBox(
+              height: SizeConfig.screenHeight * 0.1,
+            ),
             Container(
               margin: EdgeInsets.symmetric(vertical: 16.0),
               height: SizeConfig.screenHeight / 3,

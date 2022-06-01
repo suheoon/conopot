@@ -1,5 +1,6 @@
 import 'package:conopot/models/FitchItem.dart';
 import 'package:conopot/screens/fitch/fitchResult.dart';
+import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -23,35 +24,72 @@ class FitchBanner extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Color.fromRGBO(0, 0, 0, 0.3),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
+                    borderRadius: BorderRadius.circular(20.0),
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 0.5,
+                    )),
               ),
               Center(
-                child: Column(children: [
-                  Text(fitchItem.fitchName),
-                  Text(fitchItem.fitchCode),
-                  Text(fitchItem.fitchContext),
-                  TextButton(
-                    onPressed: () {
-                      play(fitchItem.fitchCode);
-                    },
-                    child: Icon(Icons.play_arrow),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      //local storage? or 최종결과 page route
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              FitchResult(pitchLevel: fitchItem.id),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          fitchItem.fitchName,
+                          style: TextStyle(
+                            fontSize: 21.0,
+                          ),
                         ),
-                      );
-                    },
-                    child: Text('여기까지가 끝인가보오..'),
-                  ),
-                ]),
+                        Text(
+                          fitchItem.fitchCode,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        SizedBox(
+                          height: SizeConfig.defaultSize,
+                        ),
+                        Text(
+                          fitchItem.fitchContext,
+                          style: TextStyle(
+                            fontSize: 13.0,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            play(fitchItem.fitchCode);
+                          },
+                          child: Icon(
+                            Icons.play_circle_outline_outlined,
+                            color: Colors.black,
+                            size: 40.0,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            //local storage? or 최종결과 page route
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    FitchResult(pitchLevel: fitchItem.id),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            '더 이상 안올라가요!',
+                            style: TextStyle(
+                              color: Color(0xFF7B61FF),
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ]),
+                ),
               )
             ],
           )),
