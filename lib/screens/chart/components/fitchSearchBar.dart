@@ -12,7 +12,7 @@ class FitchSearchBar extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
       child: TextField(
         onChanged: (text) => {
-          musicList.runFitchFilter(text, musicList.tabIndex),
+          musicList.runHighFitchFilter(text),
         },
         textAlign: TextAlign.center,
         keyboardType: TextInputType.name,
