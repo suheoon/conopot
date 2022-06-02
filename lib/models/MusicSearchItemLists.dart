@@ -76,12 +76,16 @@ class MusicSearchItemLists extends ChangeNotifier {
     foundItems = tjChartSongList;
   }
 
+  void initBook() {
+    foundItems = tjSongList;
+  }
+
   // 프로그램 실행 시, 노래방 책 List 초기화 (TJ, KY txt -> List)
   void init() async {
     //사용자 음정 불러오기
     final storage = new FlutterSecureStorage();
     String? value = await storage.read(key: 'userPitch');
-    userFitch = int.parse(value!);
+    if (value != null) userFitch = int.parse(value);
 
     String TJMusics = await getTJMusics();
     String TJMusicChart = await getTJMusicChart();

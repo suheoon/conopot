@@ -45,7 +45,7 @@ class BottomNavBar extends StatelessWidget {
                       Future.delayed(Duration.zero, () {
                         Provider.of<MusicSearchItemLists>(context,
                                 listen: false)
-                            .init();
+                            .initBook();
                       });
                     }
                     if (navItems.items[index].destinationChecker())

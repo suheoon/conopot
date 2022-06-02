@@ -40,6 +40,11 @@ dependencies:
   flutter_svg: ^1.1.0
   audioplayers: ^0.20.1
   flutter_secure_storage: ^5.0.2
+  flutter_native_splash: ^2.2.2
+flutter_native_splash:
+  android: false
+  ios: false
+  color: "#42a5f5"
 
 dev_dependencies:
   flutter_test:
