@@ -1,7 +1,8 @@
 import 'package:conopot/models/MusicSearchItemLists.dart';
-import 'package:conopot/screens/chart/chart_screen.dart';
+import 'package:conopot/screens/chart/fitch_screen.dart';
 import 'package:conopot/screens/home/home_screen.dart';
 import 'package:conopot/screens/musicBook/musicBook.dart';
+import 'package:conopot/screens/musicBook/music_screen.dart';
 import 'package:flutter/material.dart';
 
 class NavItem {
@@ -47,14 +48,14 @@ class NavItems extends ChangeNotifier {
     NavItem(
       id: 2,
       icon: "assets/icons/chart.svg",
-      title: "인기 차트",
-      destination: ChartScreen(),
+      title: "옥타브 차트",
+      destination: FitchScreen(),
     ),
     NavItem(
       id: 3,
       icon: "assets/icons/book.svg",
       title: "노래 검색",
-      destination: MusicBookScreen(),
+      destination: MusicScreen(),
     ),
   ];
 }

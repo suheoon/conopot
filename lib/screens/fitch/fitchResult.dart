@@ -1,7 +1,7 @@
 import 'package:conopot/constants.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:conopot/models/NavItem.dart';
-import 'package:conopot/screens/chart/chart_screen.dart';
+import 'package:conopot/screens/chart/fitch_screen.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -71,7 +71,7 @@ class _FitchResultState extends State<FitchResult> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ChartScreen(),
+                    builder: (context) => FitchScreen(),
                   ),
                 );
               },

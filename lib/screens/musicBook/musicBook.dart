@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:conopot/components/bottom_nav_bar.dart';
 import 'package:conopot/constants.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
