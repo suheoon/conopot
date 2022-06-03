@@ -72,6 +72,10 @@ class MusicSearchItemLists extends ChangeNotifier {
     return await rootBundle.loadString('assets/musics/music_highest_key.txt');
   }
 
+  void initFitch() {
+    highestFoundItems = highestSongList;
+  }
+
   void initChart() {
     foundItems = tjChartSongList;
   }

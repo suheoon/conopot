@@ -31,7 +31,12 @@ class _FitchScreenState extends State<FitchScreen> {
       ) =>
           Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false, // back button 숨기기 위함
+          title: Text(
+            '옥타브 차트',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          automaticallyImplyLeading: false,
+          centerTitle: true,
         ),
         body: Column(
           children: [

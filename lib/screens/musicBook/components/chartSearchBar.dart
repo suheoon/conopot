@@ -1,18 +1,18 @@
 import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:flutter/material.dart';
 
-class HighFitchSearchBar extends StatelessWidget {
+class ChartSearchBar extends StatelessWidget {
   final MusicSearchItemLists musicList;
 
-  const HighFitchSearchBar({required this.musicList});
+  const ChartSearchBar({required this.musicList});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+      padding: EdgeInsets.all(20.0),
       child: TextField(
         onChanged: (text) => {
-          musicList.runHighFitchFilter(text),
+          musicList.runFitchFilter(text, musicList.tabIndex),
         },
         textAlign: TextAlign.center,
         keyboardType: TextInputType.name,

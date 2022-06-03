@@ -34,11 +34,11 @@ class _SplashScreenState extends State<SplashScreen> {
       child: Column(
         children: [
           SizedBox(
-            height: SizeConfig.screenHeight * 0.1,
+            height: SizeConfig.screenHeight * 0.3,
           ),
           Image(
             image: AssetImage('assets/images/splash.png'),
-            width: SizeConfig.screenWidth * 0.8,
+            width: SizeConfig.screenWidth * 0.4,
           ),
           SizedBox(
             height: SizeConfig.defaultSize * 2,
@@ -63,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                 ),
                 TextSpan(
-                  text: '부르지?',
+                  text: ' 부르지?',
                   style: TextStyle(
                     color: kTextColor,
                   ),

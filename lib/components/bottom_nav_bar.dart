@@ -39,7 +39,7 @@ class BottomNavBar extends StatelessWidget {
                       Future.delayed(Duration.zero, () {
                         Provider.of<MusicSearchItemLists>(context,
                                 listen: false)
-                            .initChart();
+                            .initFitch();
                       });
                     } else {
                       Future.delayed(Duration.zero, () {

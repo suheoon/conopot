@@ -4,8 +4,6 @@ import 'package:conopot/constants.dart';
 import 'package:conopot/models/FitchMusic.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:conopot/screens/chart/components/fitchSearchBar.dart';
-import 'package:conopot/screens/fitch/components/HighFitchSearchBar.dart';
-import 'package:conopot/screens/fitch/components/HighFitchSearchList.dart';
 import 'package:conopot/screens/fitch/components/dropdownOption.dart';
 import 'package:conopot/screens/fitch/components/fitchCheckBox.dart';
 import 'package:conopot/screens/fitch/fitchResult.dart';
@@ -30,6 +28,7 @@ class FitchChoice extends StatelessWidget {
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                   ),
+                  centerTitle: true,
                 ),
                 body: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,

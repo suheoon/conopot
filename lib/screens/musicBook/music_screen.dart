@@ -1,9 +1,11 @@
 import 'package:conopot/components/bottom_nav_bar.dart';
 import 'package:conopot/constants.dart';
+import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:conopot/screens/musicBook/chart_screen.dart';
 import 'package:conopot/screens/musicBook/musicBook.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MusicScreen extends StatelessWidget {
   const MusicScreen({Key? key}) : super(key: key);
@@ -20,6 +22,10 @@ class MusicScreen extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
+                Future.delayed(Duration.zero, () {
+                  Provider.of<MusicSearchItemLists>(context, listen: false)
+                      .initChart();
+                });
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -33,13 +39,14 @@ class MusicScreen extends StatelessWidget {
                   elevation: 2,
                   margin: EdgeInsets.symmetric(vertical: 15.0),
                   child: SizedBox(
-                    width: SizeConfig.screenWidth * 0.9,
+                    width: SizeConfig.screenWidth * 0.8,
                     height: SizeConfig.screenHeight * 0.15,
                     child: Center(
                       child: ListTile(
                         leading: Icon(
-                          Icons.mic,
+                          Icons.bar_chart_rounded,
                           size: SizeConfig.screenHeight * 0.15 * 0.5,
+                          color: Colors.black,
                         ),
                         title: Text(
                           '인기 차트',
@@ -54,6 +61,10 @@ class MusicScreen extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
+                Future.delayed(Duration.zero, () {
+                  Provider.of<MusicSearchItemLists>(context, listen: false)
+                      .initBook();
+                });
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -67,13 +78,14 @@ class MusicScreen extends StatelessWidget {
                   elevation: 2,
                   margin: EdgeInsets.symmetric(vertical: 15.0),
                   child: SizedBox(
-                    width: SizeConfig.screenWidth * 0.9,
+                    width: SizeConfig.screenWidth * 0.8,
                     height: SizeConfig.screenHeight * 0.15,
                     child: Center(
                       child: ListTile(
                         leading: Icon(
-                          Icons.music_note_outlined,
+                          Icons.search,
                           size: SizeConfig.screenHeight * 0.15 * 0.5,
+                          color: Colors.black,
                         ),
                         title: Text(
                           '노래 검색',
