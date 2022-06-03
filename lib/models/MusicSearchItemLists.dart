@@ -84,6 +84,13 @@ class MusicSearchItemLists extends ChangeNotifier {
     foundItems = tjSongList;
   }
 
+  void initFitchMusic({required int fitchNum}) {
+    highestResults = [];
+    highestResults =
+        highestSongList.where((string) => string.fitchNum == fitchNum).toList();
+    highestFoundItems = highestResults;
+  }
+
   // 프로그램 실행 시, 노래방 책 List 초기화 (TJ, KY txt -> List)
   void init() async {
     //사용자 음정 불러오기

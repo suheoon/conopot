@@ -1,3 +1,4 @@
+import 'package:conopot/components/custom_page_route.dart';
 import 'package:conopot/constants.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:conopot/models/NavItem.dart';
@@ -51,9 +52,8 @@ class BottomNavBar extends StatelessWidget {
                     if (navItems.items[index].destinationChecker())
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              navItems.items[index].destination,
+                        CustomPageRoute(
+                          child: navItems.items[index].destination,
                         ),
                       );
                   },

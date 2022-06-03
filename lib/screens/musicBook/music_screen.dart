@@ -1,4 +1,5 @@
 import 'package:conopot/components/bottom_nav_bar.dart';
+import 'package:conopot/components/custom_page_route.dart';
 import 'package:conopot/constants.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:conopot/screens/musicBook/chart_screen.dart';
@@ -28,8 +29,8 @@ class MusicScreen extends StatelessWidget {
                 });
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => ChartScreen(),
+                  CustomPageRoute(
+                    child: ChartScreen(),
                   ),
                 );
               },
@@ -67,8 +68,8 @@ class MusicScreen extends StatelessWidget {
                 });
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => MusicBookScreen(),
+                  CustomPageRoute(
+                    child: MusicBookScreen(),
                   ),
                 );
               },

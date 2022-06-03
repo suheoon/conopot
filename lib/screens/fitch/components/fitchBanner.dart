@@ -1,3 +1,4 @@
+import 'package:conopot/components/custom_page_route.dart';
 import 'package:conopot/models/FitchItem.dart';
 import 'package:conopot/screens/fitch/fitchResult.dart';
 import 'package:conopot/size_config.dart';
@@ -73,9 +74,8 @@ class FitchBanner extends StatelessWidget {
                             //local storage? or 최종결과 page route
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    FitchResult(pitchLevel: fitchItem.id),
+                              CustomPageRoute(
+                                child: FitchResult(fitchLevel: fitchItem.id),
                               ),
                             );
                           },

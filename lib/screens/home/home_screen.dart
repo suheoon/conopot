@@ -1,4 +1,5 @@
 import 'package:conopot/components/bottom_nav_bar.dart';
+import 'package:conopot/components/custom_page_route.dart';
 import 'package:conopot/constants.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:conopot/screens/fitch/fitchMeasure.dart';
@@ -83,8 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => FitchMeasure(),
+                CustomPageRoute(
+                  child: FitchMeasure(),
                 ),
               );
             },
@@ -118,8 +119,8 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => FitchChoice(),
+                CustomPageRoute(
+                  child: FitchChoice(),
                 ),
               );
             },

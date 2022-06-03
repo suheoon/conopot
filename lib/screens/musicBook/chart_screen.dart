@@ -63,13 +63,11 @@ class ChartScreen extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  ChartSearchBar(musicList: musicList),
                   ChartSearchList(musicList: musicList),
                 ],
               ),
               Column(
                 children: [
-                  ChartSearchBar(musicList: musicList),
                   ChartSearchList(musicList: musicList),
                 ],
               ),

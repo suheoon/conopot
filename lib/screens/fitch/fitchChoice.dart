@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:conopot/components/custom_page_route.dart';
 import 'package:conopot/constants.dart';
 import 'package:conopot/models/FitchMusic.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
@@ -88,9 +89,9 @@ class FitchChoice extends StatelessWidget {
                       {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                FitchResult(pitchLevel: musicList.userMaxFitch),
+                          CustomPageRoute(
+                            child:
+                                FitchResult(fitchLevel: musicList.userMaxFitch),
                           ),
                         ),
                       }
