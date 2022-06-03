@@ -72,12 +72,23 @@ class MusicSearchItemLists extends ChangeNotifier {
     return await rootBundle.loadString('assets/musics/music_highest_key.txt');
   }
 
+  void initFitch() {
+    highestFoundItems = highestSongList;
+  }
+
   void initChart() {
     foundItems = tjChartSongList;
   }
 
   void initBook() {
     foundItems = tjSongList;
+  }
+
+  void initFitchMusic({required int fitchNum}) {
+    highestResults = [];
+    highestResults =
+        highestSongList.where((string) => string.fitchNum == fitchNum).toList();
+    highestFoundItems = highestResults;
   }
 
   // 프로그램 실행 시, 노래방 책 List 초기화 (TJ, KY txt -> List)

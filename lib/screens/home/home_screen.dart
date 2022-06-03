@@ -1,4 +1,5 @@
 import 'package:conopot/components/bottom_nav_bar.dart';
+import 'package:conopot/components/custom_page_route.dart';
 import 'package:conopot/constants.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:conopot/screens/fitch/fitchMeasure.dart';
@@ -83,8 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => FitchMeasure(),
+                CustomPageRoute(
+                  child: FitchMeasure(),
                 ),
               );
             },
@@ -94,13 +95,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 elevation: 2,
                 margin: EdgeInsets.symmetric(vertical: 15.0),
                 child: SizedBox(
-                  width: SizeConfig.screenWidth * 0.9,
+                  width: SizeConfig.screenWidth * 0.8,
                   height: SizeConfig.screenHeight * 0.15,
                   child: Center(
                     child: ListTile(
                       leading: Icon(
                         Icons.mic,
                         size: SizeConfig.screenHeight * 0.15 * 0.5,
+                        color: Colors.black,
                       ),
                       title: Text(
                         '직접 음역대 측정해볼래요!',
@@ -117,8 +119,8 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => FitchChoice(),
+                CustomPageRoute(
+                  child: FitchChoice(),
                 ),
               );
             },
@@ -128,13 +130,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 elevation: 2,
                 margin: EdgeInsets.symmetric(vertical: 15.0),
                 child: SizedBox(
-                  width: SizeConfig.screenWidth * 0.9,
+                  width: SizeConfig.screenWidth * 0.8,
                   height: SizeConfig.screenHeight * 0.15,
                   child: Center(
                     child: ListTile(
                       leading: Icon(
                         Icons.music_note_outlined,
                         size: SizeConfig.screenHeight * 0.15 * 0.5,
+                        color: Colors.black,
                       ),
                       title: Text(
                         '이 노래 불러봤어요!',

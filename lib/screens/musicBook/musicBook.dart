@@ -25,7 +25,9 @@ class MusicBookScreen extends StatelessWidget {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
+            leading: BackButton(color: Colors.black),
             automaticallyImplyLeading: false, // back button 숨기기 위함
+            centerTitle: true,
 
             title: TabBar(
               isScrollable: true,

@@ -24,6 +24,7 @@ class _FitchMeasureState extends State<FitchMeasure> {
             '음역대 측정',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
+          centerTitle: true,
         ),
         body: Column(
           children: [
