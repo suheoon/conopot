@@ -9,7 +9,7 @@ class FitchSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
       child: TextField(
         onChanged: (text) => {
           musicList.runHighFitchFilter(text),

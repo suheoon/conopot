@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:conopot/constants.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:conopot/screens/home/home_screen.dart';
+import 'package:conopot/screens/home/main_screen.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,8 +22,8 @@ class _SplashScreenState extends State<SplashScreen> {
     });
 
     Timer(Duration(milliseconds: 3000), () {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => MainScreen()));
     });
   }
 

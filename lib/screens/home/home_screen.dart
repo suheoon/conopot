@@ -1,4 +1,3 @@
-import 'package:conopot/components/bottom_nav_bar.dart';
 import 'package:conopot/components/custom_page_route.dart';
 import 'package:conopot/constants.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
@@ -117,6 +116,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           GestureDetector(
             onTap: () {
+              Future.delayed(Duration.zero, () {
+                Provider.of<MusicSearchItemLists>(context, listen: false)
+                    .initFitch();
+              });
               Navigator.push(
                 context,
                 CustomPageRoute(
@@ -152,7 +155,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

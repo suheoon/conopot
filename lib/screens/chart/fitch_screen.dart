@@ -1,4 +1,3 @@
-import 'package:conopot/components/bottom_nav_bar.dart';
 import 'package:conopot/constants.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:conopot/screens/chart/components/fitchSearchBar.dart';
@@ -32,7 +31,7 @@ class _FitchScreenState extends State<FitchScreen> {
           Scaffold(
         appBar: AppBar(
           title: Text(
-            '옥타브 차트',
+            '나만의 옥타브 차트',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           automaticallyImplyLeading: false,
@@ -41,11 +40,32 @@ class _FitchScreenState extends State<FitchScreen> {
         body: Column(
           children: [
             FitchSearchBar(musicList: musicList),
+            RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+                children: [
+                  TextSpan(
+                    text: '* 음역대 측정 ',
+                    style: TextStyle(
+                      color: Color(0xFF7B61FF),
+                    ),
+                  ),
+                  TextSpan(
+                    text: '후 내게 맞는 노래인지 확인하세요!',
+                    style: TextStyle(
+                      color: kTextColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             DropdownOption(musicList: musicList),
             FitchSearchList(musicList: musicList),
           ],
         ),
-        bottomNavigationBar: BottomNavBar(),
       ),
     );
   }

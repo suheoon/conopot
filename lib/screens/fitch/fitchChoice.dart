@@ -7,6 +7,7 @@ import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:conopot/screens/chart/components/fitchSearchBar.dart';
 import 'package:conopot/screens/fitch/components/dropdownOption.dart';
 import 'package:conopot/screens/fitch/components/fitchCheckBox.dart';
+import 'package:conopot/screens/fitch/components/fitchDropdown.dart';
 import 'package:conopot/screens/fitch/fitchResult.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +72,7 @@ class FitchChoice extends StatelessWidget {
                       ),
                     ),
                     FitchSearchBar(musicList: musicList),
-                    DropdownOption(musicList: musicList),
+                    FitchDropdown(musicList: musicList),
                     FitchCheckBox(musicList: musicList),
                   ],
                 ),
