@@ -40,7 +40,28 @@ class _FitchScreenState extends State<FitchScreen> {
         body: Column(
           children: [
             FitchSearchBar(musicList: musicList),
-            Text('* 음역대 측정 후 내게 맞는 노래인지 확인하세요!'),
+            RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+                children: [
+                  TextSpan(
+                    text: '* 음역대 측정 ',
+                    style: TextStyle(
+                      color: Color(0xFF7B61FF),
+                    ),
+                  ),
+                  TextSpan(
+                    text: '후 내게 맞는 노래인지 확인하세요!',
+                    style: TextStyle(
+                      color: kTextColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             DropdownOption(musicList: musicList),
             FitchSearchList(musicList: musicList),
           ],

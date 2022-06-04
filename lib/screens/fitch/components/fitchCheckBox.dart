@@ -14,7 +14,6 @@ class _FitchCheckBoxState extends State<FitchCheckBox> {
   final MusicSearchItemLists musicList;
 
   _FitchCheckBoxState(this.musicList);
-
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -27,12 +26,17 @@ class _FitchCheckBoxState extends State<FitchCheckBox> {
                 child: CheckboxListTile(
                   title: Text(musicList.highestFoundItems[index].tj_title),
                   subtitle: Text(musicList.highestFoundItems[index].tj_singer),
-                  secondary: Text(
-                    musicList.highestFoundItems[index].fitch,
-                    style: TextStyle(
-                      color: Colors.green,
-                    ),
-                    textAlign: TextAlign.center,
+                  secondary: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        musicList.highestFoundItems[index].fitch,
+                        style: TextStyle(
+                          color: Colors.green,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
                   value: musicList.isChecked[index],
                   onChanged: (bool? value) {
