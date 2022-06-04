@@ -14,6 +14,8 @@ class SearchBar extends StatelessWidget {
         onChanged: (text) => {
           musicList.runFilter(text, musicList.tabIndex),
         },
+        enableInteractiveSelection: false,
+        focusNode: FocusNode(),
         textAlign: TextAlign.center,
         keyboardType: TextInputType.name,
         decoration: InputDecoration(

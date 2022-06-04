@@ -32,6 +32,7 @@ class _FitchCheckBoxState extends State<FitchCheckBox> {
                     style: TextStyle(
                       color: Colors.green,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                   value: musicList.isChecked[index],
                   onChanged: (bool? value) {

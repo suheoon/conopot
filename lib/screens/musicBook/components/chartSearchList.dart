@@ -16,8 +16,16 @@ class ChartSearchList extends StatelessWidget {
                 color: Colors.white,
                 elevation: 1,
                 child: ListTile(
-                  leading: Text(
-                    musicList.foundItems[index].songNumber,
+                  leading: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        musicList.foundItems[index].songNumber,
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
                   ),
                   title: Text(musicList.foundItems[index].title),
                   subtitle: Text(musicList.foundItems[index].singer),

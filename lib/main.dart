@@ -1,5 +1,4 @@
 import 'package:conopot/models/MusicSearchItemLists.dart';
-import 'package:conopot/models/NavItem.dart';
 import 'package:conopot/screens/home/home_screen.dart';
 import 'package:conopot/screens/home/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => NavItems()),
         ChangeNotifierProvider(create: (context) => MusicSearchItemLists()),
       ],
       child: MaterialApp(

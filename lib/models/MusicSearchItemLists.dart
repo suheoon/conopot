@@ -21,7 +21,7 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   int tabIndex = 1; // TJ or 금영
 
-  int userFitch = 13;
+  int userFitch = 23;
 
   int userMaxFitch = -1;
 
@@ -43,12 +43,21 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   void changeSortOption({required String? option}) {
     //option에 따라 현재 리스트에서 보여지는 highestFoundItems를 정렬한다.
-
     if (option == '높은 음정순') {
       highestFoundItems.sort(((a, b) => b.fitchNum.compareTo(a.fitchNum)));
-    } else {
+    } else if (option == '낮은 음정순') {
       highestFoundItems.sort(((a, b) => a.fitchNum.compareTo(b.fitchNum)));
+    } else if (option == '내 음역대의 노래') {
+      highestResults = highestSongList
+          .where((string) => (userFitch - 2 <= string.fitchNum &&
+              string.fitchNum <= userFitch))
+          .toList();
+      highestFoundItems = highestResults;
+    } else {
+      highestResults = highestSongList;
+      highestFoundItems = highestResults;
     }
+
     notifyListeners();
   }
 
@@ -86,8 +95,10 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   void initFitchMusic({required int fitchNum}) {
     highestResults = [];
-    highestResults =
-        highestSongList.where((string) => string.fitchNum == fitchNum).toList();
+    highestResults = highestSongList
+        .where((string) => (fitchNum - 1 <= string.fitchNum &&
+            string.fitchNum <= fitchNum + 1))
+        .toList();
     highestFoundItems = highestResults;
   }
 

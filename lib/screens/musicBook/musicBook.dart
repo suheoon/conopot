@@ -1,4 +1,3 @@
-import 'package:conopot/components/bottom_nav_bar.dart';
 import 'package:conopot/constants.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
 import 'package:conopot/screens/musicBook/components/searchBar.dart';
@@ -74,7 +73,6 @@ class MusicBookScreen extends StatelessWidget {
               ),
             ],
           ),
-          bottomNavigationBar: BottomNavBar(),
         ),
       ),
     );

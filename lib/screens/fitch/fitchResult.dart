@@ -2,7 +2,6 @@ import 'package:conopot/components/custom_page_route.dart';
 import 'package:conopot/constants.dart';
 import 'package:conopot/models/FitchItem.dart';
 import 'package:conopot/models/MusicSearchItemLists.dart';
-import 'package:conopot/models/NavItem.dart';
 import 'package:conopot/screens/chart/components/fitchSearchList.dart';
 import 'package:conopot/screens/chart/fitch_screen.dart';
 import 'package:conopot/screens/home/home_screen.dart';
@@ -74,86 +73,153 @@ class _FitchResultState extends State<FitchResult> {
                 style: TextStyle(
                   color: kTextColor,
                   fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(
-                height: SizeConfig.defaultSize,
+                height: SizeConfig.defaultSize * 2,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    FitchNumToString[(fitchLevel - 3 < 1) ? 1 : fitchLevel - 3],
-                    style: TextStyle(
-                      color: Color(0xFF7B61FF),
-                      fontSize: 18,
+                  Container(
+                    padding: EdgeInsets.all(6.0),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFE2DCFC),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Text(
+                      FitchNumToString[
+                          (fitchLevel - 2 < 1) ? 1 : fitchLevel - 2],
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
-                  SizedBox(
-                    width: SizeConfig.defaultSize,
-                  ),
-                  Text(
-                    FitchNumToString[fitchLevel],
-                    style: TextStyle(
-                      color: Color(0xFF7B61FF),
-                      fontSize: 18,
+                  Icon(Icons.remove),
+                  Container(
+                    padding: EdgeInsets.all(6.0),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFE2DCFC),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Text(
+                      FitchNumToString[fitchLevel],
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                 ],
               ),
               SizedBox(
-                height: SizeConfig.defaultSize,
+                height: SizeConfig.defaultSize * 2,
               ),
+
               Text(
                 '대한민국 평균 음역대',
                 style: TextStyle(
                   color: kTextColor,
                   fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '2옥타브 솔',
-                    style: TextStyle(
-                      color: Color(0xFF7B61FF),
-                      fontSize: 18,
-                    ),
-                  ),
-                  SizedBox(
-                    width: SizeConfig.defaultSize,
-                  ),
-                  Text(
-                    '2옥타브 라',
-                    style: TextStyle(
-                      color: Color(0xFF7B61FF),
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
+              SizedBox(
+                height: SizeConfig.defaultSize * 2,
+              ),
+              Text(
+                '남자',
+                style: TextStyle(
+                  color: Color(0xFF0359FF),
+                ),
+              ),
+              SizedBox(
+                height: SizeConfig.defaultSize,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    '3옥타브 레',
-                    style: TextStyle(
-                      color: Color(0xFF7B61FF),
-                      fontSize: 18,
+                  Container(
+                    padding: EdgeInsets.all(6.0),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF79A7FF),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Text(
+                      '2옥타브 솔',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
-                  SizedBox(
-                    width: SizeConfig.defaultSize,
-                  ),
-                  Text(
-                    '3옥타브 미',
-                    style: TextStyle(
-                      color: Color(0xFF7B61FF),
-                      fontSize: 18,
+                  Icon(Icons.remove),
+                  Container(
+                    padding: EdgeInsets.all(6.0),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF79A7FF),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Text(
+                      '2옥타브 라',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                 ],
+              ),
+              SizedBox(
+                height: SizeConfig.defaultSize * 2,
+              ),
+              Text(
+                '여자',
+                style: TextStyle(
+                  color: Color(0xFFFF037C),
+                ),
+              ),
+              SizedBox(
+                height: SizeConfig.defaultSize,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(6.0),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFB83BC),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Text(
+                      '3옥타브 레',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  Icon(Icons.remove),
+                  Container(
+                    padding: EdgeInsets.all(6.0),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFB83BC),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Text(
+                      '3옥타브 미',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: SizeConfig.defaultSize * 3,
               ),
 
               //내 음역대의 인기곡들
@@ -161,7 +227,7 @@ class _FitchResultState extends State<FitchResult> {
                 text: TextSpan(
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                    fontSize: 21,
                   ),
                   children: [
                     TextSpan(
@@ -171,13 +237,13 @@ class _FitchResultState extends State<FitchResult> {
                       ),
                     ),
                     TextSpan(
-                      text: '음역대',
+                      text: '최고음',
                       style: TextStyle(
                         color: Color(0xFF7B61FF),
                       ),
                     ),
                     TextSpan(
-                      text: '의 인기곡들',
+                      text: ' 주변의 인기곡들',
                       style: TextStyle(
                         color: kTextColor,
                       ),
@@ -185,31 +251,20 @@ class _FitchResultState extends State<FitchResult> {
                   ],
                 ),
               ),
+              SizedBox(
+                height: SizeConfig.defaultSize * 2,
+              ),
 
               Divider(
                 height: 1,
+              ),
+              SizedBox(
+                height: SizeConfig.defaultSize,
               ),
               FitchSearchList(musicList: musicList),
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => {
-            Future.delayed(Duration.zero, () {
-              Provider.of<NavItems>(context, listen: false)
-                  .changeNavIndex(index: 1);
-            }),
-            Navigator.push(
-              context,
-              CustomPageRoute(
-                child: FitchScreen(),
-              ),
-            ),
-          },
-          icon: Icon(Icons.check_sharp),
-          label: Text('내 음역대에 맞는 노래 찾으러 가기'),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );
   }
