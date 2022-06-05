@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => MusicSearchItemLists()),
       ],
       child: MaterialApp(
+        themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: false,
         title: 'conopot',
         theme: ThemeData(

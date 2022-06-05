@@ -37,12 +37,15 @@ class _SplashScreenState extends State<SplashScreen> {
           SizedBox(
             height: SizeConfig.screenHeight * 0.3,
           ),
-          Image(
-            image: AssetImage('assets/images/splash.png'),
-            width: SizeConfig.screenWidth * 0.4,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: Image(
+              image: AssetImage('assets/images/splash.png'),
+              width: SizeConfig.screenWidth * 0.4,
+            ),
           ),
           SizedBox(
-            height: SizeConfig.defaultSize * 2,
+            height: SizeConfig.defaultSize * 5,
           ),
           RichText(
             text: TextSpan(
