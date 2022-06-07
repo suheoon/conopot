@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.conopot">
+    package="com.soma.conopot">
    <application
         android:label="conopot"
         android:name="${applicationName}"

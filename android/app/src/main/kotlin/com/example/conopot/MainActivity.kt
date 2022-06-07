@@ -1,4 +1,4 @@
-package com.example.conopot
+package com.soma.conopot
 
 import io.flutter.embedding.android.FlutterActivity
 
