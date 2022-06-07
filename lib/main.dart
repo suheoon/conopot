@@ -1,6 +1,5 @@
-import 'package:conopot/models/MusicSearchItemLists.dart';
-import 'package:conopot/screens/home/home_screen.dart';
-import 'package:conopot/screens/home/splash_screen.dart';
+import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,10 +22,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'conopot',
         theme: ThemeData(
-          //backgroundColor: Colors.white,
           scaffoldBackgroundColor: Colors.white,
-          // We apply this to our appBarTheme because most of our appBar have this style
-          appBarTheme: AppBarTheme(color: Colors.white, elevation: 0),
+          appBarTheme: const AppBarTheme(color: Colors.white, elevation: 0),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: SplashScreen(),

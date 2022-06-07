@@ -1,18 +1,15 @@
 import 'package:conopot/constants.dart';
-import 'package:conopot/models/FitchItem.dart';
-import 'package:conopot/screens/fitch/components/fitchBanner.dart';
-import 'package:conopot/screens/fitch/components/indicator.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 
-class FitchMeasure extends StatefulWidget {
-  FitchMeasure({Key? key}) : super(key: key);
+class PitchMeasure extends StatefulWidget {
+  PitchMeasure({Key? key}) : super(key: key);
 
   @override
-  State<FitchMeasure> createState() => _FitchMeasureState();
+  State<PitchMeasure> createState() => _PitchMeasureState();
 }
 
-class _FitchMeasureState extends State<FitchMeasure> {
+class _PitchMeasureState extends State<PitchMeasure> {
   var _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {

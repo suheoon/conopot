@@ -1,4 +1,4 @@
-import 'package:conopot/models/MusicSearchItemLists.dart';
+import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:flutter/material.dart';
 
 class FitchCheckBox extends StatefulWidget {
@@ -30,7 +30,7 @@ class _FitchCheckBoxState extends State<FitchCheckBox> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        musicList.highestFoundItems[index].fitch,
+                        musicList.highestFoundItems[index].pitch,
                         style: TextStyle(
                           color: Colors.green,
                         ),

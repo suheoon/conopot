@@ -1,20 +1,16 @@
-import 'dart:math';
-
 import 'package:conopot/components/custom_page_route.dart';
-import 'package:conopot/constants.dart';
-import 'package:conopot/models/FitchMusic.dart';
-import 'package:conopot/models/MusicSearchItemLists.dart';
-import 'package:conopot/screens/chart/components/fitchSearchBar.dart';
-import 'package:conopot/screens/fitch/components/dropdownOption.dart';
-import 'package:conopot/screens/fitch/components/fitchCheckBox.dart';
-import 'package:conopot/screens/fitch/components/fitchDropdown.dart';
-import 'package:conopot/screens/fitch/fitchResult.dart';
+import 'package:conopot/constants.dart';\
+import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/screens/chart/components/pitch_search_bar.dart';
+import 'package:conopot/screens/pitch/components/pitch_checkbox.dart';
+import 'package:conopot/screens/pitch/components/pitch_dropdown.dart';
+import 'package:conopot/screens/pitch/pitch_result.dart';\
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class FitchChoice extends StatelessWidget {
-  const FitchChoice({Key? key}) : super(key: key);
+class PitchChoice extends StatelessWidget {
+  const PitchChoice({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -78,8 +74,8 @@ class FitchChoice extends StatelessWidget {
                 ),
                 floatingActionButton: FloatingActionButton.extended(
                   onPressed: () => {
-                    musicList.getMaxFitch(),
-                    if (musicList.userMaxFitch == -1)
+                    musicList.getMaxPitch(),
+                    if (musicList.userMaxPitch == -1)
                       {
                         AlertDialog(
                           title: Text('최소 하나 이상 선택해주세요!'),
@@ -92,7 +88,7 @@ class FitchChoice extends StatelessWidget {
                           context,
                           CustomPageRoute(
                             child:
-                                FitchResult(fitchLevel: musicList.userMaxFitch),
+                                FitchResult(fitchLevel: musicList.userMaxPitch),
                           ),
                         ),
                       }

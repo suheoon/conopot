@@ -1,12 +1,12 @@
 import 'package:conopot/components/custom_page_route.dart';
-import 'package:conopot/models/FitchItem.dart';
-import 'package:conopot/screens/fitch/fitchResult.dart';
+import 'package:conopot/models/pitch_item.dart';
+import 'package:conopot/screens/fitch/pitch_result.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class FitchBanner extends StatelessWidget {
-  final FitchItem fitchItem;
+  final PitchItem fitchItem;
   const FitchBanner({
     Key? key,
     required this.fitchItem,
@@ -38,13 +38,13 @@ class FitchBanner extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
-                          fitchItem.fitchName,
+                          fitchItem.pitchName,
                           style: TextStyle(
                             fontSize: 21.0,
                           ),
                         ),
                         Text(
-                          fitchItem.fitchCode,
+                          fitchItem.pitchCode,
                           style: TextStyle(
                             fontSize: 16.0,
                           ),
@@ -53,7 +53,7 @@ class FitchBanner extends StatelessWidget {
                           height: SizeConfig.defaultSize,
                         ),
                         Text(
-                          fitchItem.fitchContext,
+                          fitchItem.pitchContext,
                           style: TextStyle(
                             fontSize: 13.0,
                           ),
@@ -61,7 +61,7 @@ class FitchBanner extends StatelessWidget {
                         ),
                         TextButton(
                           onPressed: () {
-                            play(fitchItem.fitchCode);
+                            play(fitchItem.pitchCode);
                           },
                           child: Icon(
                             Icons.play_circle_outline_outlined,

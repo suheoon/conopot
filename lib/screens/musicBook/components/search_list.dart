@@ -1,10 +1,10 @@
-import 'package:conopot/models/MusicSearchItemLists.dart';
+import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:flutter/material.dart';
 
-class ChartSearchList extends StatelessWidget {
+class SearchList extends StatelessWidget {
   final MusicSearchItemLists musicList;
 
-  const ChartSearchList({super.key, required this.musicList});
+  const SearchList({super.key, required this.musicList});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +16,9 @@ class ChartSearchList extends StatelessWidget {
                 color: Colors.white,
                 elevation: 1,
                 child: ListTile(
+                  contentPadding: EdgeInsets.only(
+                    left: 15.0,
+                  ),
                   leading: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

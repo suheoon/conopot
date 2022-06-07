@@ -1,8 +1,9 @@
 import 'package:conopot/components/custom_page_route.dart';
 import 'package:conopot/constants.dart';
-import 'package:conopot/models/MusicSearchItemLists.dart';
-import 'package:conopot/screens/fitch/fitchMeasure.dart';
-import 'package:conopot/screens/fitch/fitchChoice.dart';
+import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/screens/fitch/pitch_measure.dart';
+import 'package:conopot/screens/fitch/pitch_choice.dart';
+import 'package:conopot/screens/pitch/pitch_choice.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -116,6 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           GestureDetector(
             onTap: () {
+              /// Pitch chart 초기화
               Future.delayed(Duration.zero, () {
                 Provider.of<MusicSearchItemLists>(context, listen: false)
                     .initFitch();
@@ -123,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.push(
                 context,
                 CustomPageRoute(
-                  child: FitchChoice(),
+                  child: PitchChoice(),
                 ),
               );
             },
