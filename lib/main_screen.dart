@@ -15,39 +15,42 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  /// 선택된 네비게이션 위젯 (0, 1, 2)
+  final _navigatorKeys = {
+    0: GlobalKey<NavigatorState>(),
+    1: GlobalKey<NavigatorState>(),
+    2: GlobalKey<NavigatorState>(),
+  };
 
-  final List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    FitchScreen(),
-    const MusicScreen(),
-  ];
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Scaffold(
-      bottomNavigationBar: Container(
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          selectedLabelStyle: const TextStyle(fontSize: 11),
-          unselectedLabelStyle: const TextStyle(fontSize: 11),
-          selectedItemColor: Colors.black,
-          items: navbarItems,
-
-          /// BottomNavigationBarItem List
-          onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
+    return WillPopScope(
+      onWillPop: () async =>
+          !await _navigatorKeys[_selectedIndex]!.currentState!.maybePop(),
+      child: Scaffold(
+        body: Stack(
+          children: [
+            _buildOffstageNavigator(0),
+            _buildOffstageNavigator(1),
+            _buildOffstageNavigator(2),
+          ],
         ),
-      ),
-      body: Stack(
-        children: [
-          _buildOffstageNavigator(0),
-          _buildOffstageNavigator(1),
-          _buildOffstageNavigator(2),
-        ],
+        bottomNavigationBar: Container(
+          child: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            selectedLabelStyle: const TextStyle(fontSize: 11),
+            unselectedLabelStyle: const TextStyle(fontSize: 11),
+            selectedItemColor: Colors.black,
+            items: navbarItems,
+
+            /// BottomNavigationBarItem List
+            onTap: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+          ),
+        ),
       ),
     );
   }

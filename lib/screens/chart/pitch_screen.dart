@@ -2,7 +2,7 @@ import 'package:conopot/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/screens/chart/components/pitch_search_bar.dart';
 import 'package:conopot/screens/chart/components/pitch_search_list.dart';
-import 'package:conopot/screens/pitch/components/dropdown_option.dart';
+import 'package:conopot/screens/pitch/components/pitch_dropdown_option.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +37,7 @@ class _FitchScreenState extends State<FitchScreen> {
         ),
         body: Column(
           children: [
-            FitchSearchBar(musicList: musicList),
+            PitchSearchBar(musicList: musicList),
             RichText(
               text: TextSpan(
                 style: TextStyle(
@@ -60,8 +60,8 @@ class _FitchScreenState extends State<FitchScreen> {
                 ],
               ),
             ),
-            DropdownOption(musicList: musicList),
-            FitchSearchList(musicList: musicList),
+            PitchDropdownOption(musicList: musicList),
+            PitchSearchList(musicList: musicList),
           ],
         ),
       ),

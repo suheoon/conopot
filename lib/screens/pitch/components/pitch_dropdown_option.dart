@@ -1,19 +1,20 @@
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:flutter/material.dart';
 
-class DropdownOption extends StatefulWidget {
-  DropdownOption({Key? key, required this.musicList}) : super(key: key);
+class PitchDropdownOption extends StatefulWidget {
+  PitchDropdownOption({Key? key, required this.musicList}) : super(key: key);
   final MusicSearchItemLists musicList;
 
   @override
-  State<DropdownOption> createState() => _DropdownOptionState(musicList);
+  State<PitchDropdownOption> createState() =>
+      _PitchDropdownOptionState(musicList);
 }
 
-class _DropdownOptionState extends State<DropdownOption> {
+class _PitchDropdownOptionState extends State<PitchDropdownOption> {
   final MusicSearchItemLists musicList;
   String optionString = '모든 노래';
 
-  _DropdownOptionState(this.musicList);
+  _PitchDropdownOptionState(this.musicList);
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -1,4 +1,7 @@
 import 'package:conopot/constants.dart';
+import 'package:conopot/models/pitch_item.dart';
+import 'package:conopot/screens/pitch/components/indicator.dart';
+import 'package:conopot/screens/pitch/components/pitch_banner.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 
@@ -69,16 +72,16 @@ class _PitchMeasureState extends State<PitchMeasure> {
                   });
                 },
                 controller: PageController(viewportFraction: 0.7),
-                itemCount: fitchItemList.length,
+                itemCount: pitchItemList.length,
                 itemBuilder: (context, index) {
-                  var fitch = fitchItemList[index];
+                  var fitch = pitchItemList[index];
                   var _scale = _selectedIndex == index ? 1.0 : 0.8;
 
                   return TweenAnimationBuilder(
                     duration: Duration(milliseconds: 350),
                     tween: Tween(begin: _scale, end: _scale),
                     curve: Curves.ease,
-                    child: FitchBanner(
+                    child: PitchBanner(
                       fitchItem: fitch,
                     ),
                     builder: (context, value, child) {

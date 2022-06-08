@@ -1,13 +1,13 @@
 import 'package:conopot/components/custom_page_route.dart';
 import 'package:conopot/models/pitch_item.dart';
-import 'package:conopot/screens/fitch/pitch_result.dart';
+import 'package:conopot/screens/pitch/pitch_result.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-class FitchBanner extends StatelessWidget {
+class PitchBanner extends StatelessWidget {
   final PitchItem fitchItem;
-  const FitchBanner({
+  const PitchBanner({
     Key? key,
     required this.fitchItem,
   }) : super(key: key);
@@ -75,7 +75,7 @@ class FitchBanner extends StatelessWidget {
                             Navigator.push(
                               context,
                               CustomPageRoute(
-                                child: FitchResult(fitchLevel: fitchItem.id),
+                                child: PitchResult(fitchLevel: fitchItem.id),
                               ),
                             );
                           },

@@ -1,10 +1,10 @@
 import 'package:conopot/components/custom_page_route.dart';
-import 'package:conopot/constants.dart';\
+import 'package:conopot/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/screens/chart/components/pitch_search_bar.dart';
 import 'package:conopot/screens/pitch/components/pitch_checkbox.dart';
 import 'package:conopot/screens/pitch/components/pitch_dropdown.dart';
-import 'package:conopot/screens/pitch/pitch_result.dart';\
+import 'package:conopot/screens/pitch/pitch_result.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -67,9 +67,9 @@ class PitchChoice extends StatelessWidget {
                         color: Color(0xFF4F4F4F),
                       ),
                     ),
-                    FitchSearchBar(musicList: musicList),
-                    FitchDropdown(musicList: musicList),
-                    FitchCheckBox(musicList: musicList),
+                    PitchSearchBar(musicList: musicList),
+                    PitchDropdown(musicList: musicList),
+                    PitchCheckBox(musicList: musicList),
                   ],
                 ),
                 floatingActionButton: FloatingActionButton.extended(
@@ -88,7 +88,7 @@ class PitchChoice extends StatelessWidget {
                           context,
                           CustomPageRoute(
                             child:
-                                FitchResult(fitchLevel: musicList.userMaxPitch),
+                                PitchResult(fitchLevel: musicList.userMaxPitch),
                           ),
                         ),
                       }
