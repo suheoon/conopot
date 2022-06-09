@@ -1,8 +1,7 @@
 import 'package:conopot/components/custom_page_route.dart';
-import 'package:conopot/constants.dart';
-import 'package:conopot/models/MusicSearchItemLists.dart';
-import 'package:conopot/screens/musicBook/chart_screen.dart';
-import 'package:conopot/screens/musicBook/musicBook.dart';
+import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/screens/musicBook/music_chart_screen.dart';
+import 'package:conopot/screens/musicBook/music_book.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +28,7 @@ class MusicScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   CustomPageRoute(
-                    child: ChartScreen(),
+                    child: const ChartScreen(),
                   ),
                 );
               },
@@ -37,7 +36,7 @@ class MusicScreen extends StatelessWidget {
                 child: Card(
                   color: Colors.white,
                   elevation: 2,
-                  margin: EdgeInsets.symmetric(vertical: 15.0),
+                  margin: const EdgeInsets.symmetric(vertical: 15.0),
                   child: SizedBox(
                     width: SizeConfig.screenWidth * 0.8,
                     height: SizeConfig.screenHeight * 0.15,

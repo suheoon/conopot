@@ -1,10 +1,10 @@
-import 'package:conopot/models/MusicSearchItemLists.dart';
+import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:flutter/material.dart';
 
-class ChartSearchBar extends StatelessWidget {
+class SearchBar extends StatelessWidget {
   final MusicSearchItemLists musicList;
 
-  const ChartSearchBar({required this.musicList});
+  const SearchBar({required this.musicList});
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +12,10 @@ class ChartSearchBar extends StatelessWidget {
       padding: EdgeInsets.all(20.0),
       child: TextField(
         onChanged: (text) => {
-          musicList.runFitchFilter(text, musicList.tabIndex),
+          musicList.runFilter(text, musicList.tabIndex),
         },
+        enableInteractiveSelection: false,
+        focusNode: FocusNode(),
         textAlign: TextAlign.center,
         keyboardType: TextInputType.name,
         decoration: InputDecoration(

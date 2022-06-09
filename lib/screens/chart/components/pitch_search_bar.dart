@@ -1,10 +1,10 @@
-import 'package:conopot/models/MusicSearchItemLists.dart';
+import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:flutter/material.dart';
 
-class FitchSearchBar extends StatelessWidget {
+class PitchSearchBar extends StatelessWidget {
   final MusicSearchItemLists musicList;
 
-  const FitchSearchBar({required this.musicList});
+  const PitchSearchBar({required this.musicList});
 
   @override
   Widget build(BuildContext context) {

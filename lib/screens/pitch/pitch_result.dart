@@ -1,28 +1,25 @@
-import 'package:conopot/components/custom_page_route.dart';
 import 'package:conopot/constants.dart';
-import 'package:conopot/models/FitchItem.dart';
-import 'package:conopot/models/MusicSearchItemLists.dart';
-import 'package:conopot/screens/chart/components/fitchSearchList.dart';
-import 'package:conopot/screens/chart/fitch_screen.dart';
-import 'package:conopot/screens/home/home_screen.dart';
+import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/models/pitch_item.dart';
+import 'package:conopot/screens/chart/components/pitch_search_list.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
-class FitchResult extends StatefulWidget {
-  FitchResult({Key? key, required this.fitchLevel}) : super(key: key);
+class PitchResult extends StatefulWidget {
+  PitchResult({Key? key, required this.fitchLevel}) : super(key: key);
 
   final int fitchLevel;
 
   @override
-  State<FitchResult> createState() => _FitchResultState(fitchLevel);
+  State<PitchResult> createState() => _PitchResultState(fitchLevel);
 }
 
-class _FitchResultState extends State<FitchResult> {
-  final int fitchLevel;
+class _PitchResultState extends State<PitchResult> {
+  final int pitchLevel;
 
-  _FitchResultState(this.fitchLevel);
+  _PitchResultState(this.pitchLevel);
 
   @override
   void initState() {
@@ -32,16 +29,16 @@ class _FitchResultState extends State<FitchResult> {
 
   Future<void> setUserFitch() async {
     final storage = new FlutterSecureStorage();
-    await storage.write(key: 'userPitch', value: fitchLevel.toString());
+    await storage.write(key: 'userPitch', value: pitchLevel.toString());
 
     Future.delayed(Duration.zero, () {
       Provider.of<MusicSearchItemLists>(context, listen: false)
-          .changeUserFitch(pitch: fitchLevel);
+          .changeUserPitch(pitch: pitchLevel);
     });
 
     Future.delayed(Duration.zero, () {
       Provider.of<MusicSearchItemLists>(context, listen: false)
-          .initFitchMusic(fitchNum: fitchLevel);
+          .initPitchMusic(pitchNum: pitchLevel);
     });
   }
 
@@ -89,8 +86,8 @@ class _FitchResultState extends State<FitchResult> {
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     child: Text(
-                      FitchNumToString[
-                          (fitchLevel - 2 < 1) ? 1 : fitchLevel - 2],
+                      pitchNumToString[
+                          (pitchLevel - 2 < 1) ? 1 : pitchLevel - 2],
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 18,
@@ -105,7 +102,7 @@ class _FitchResultState extends State<FitchResult> {
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     child: Text(
-                      FitchNumToString[fitchLevel],
+                      pitchNumToString[pitchLevel],
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 18,
@@ -261,7 +258,7 @@ class _FitchResultState extends State<FitchResult> {
               SizedBox(
                 height: SizeConfig.defaultSize,
               ),
-              FitchSearchList(musicList: musicList),
+              PitchSearchList(musicList: musicList),
             ],
           ),
         ),

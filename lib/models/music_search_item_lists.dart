@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:conopot/models/FitchMusic.dart';
-import 'package:conopot/models/MusicSearchItem.dart';
+import 'package:conopot/models/pitch_music.dart';
+import 'package:conopot/models/music_search_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -21,36 +21,37 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   int tabIndex = 1; // TJ or 금영
 
-  int userFitch = 23;
+  int userPitch = 23;
 
-  int userMaxFitch = -1;
+  int userMaxPitch = -1;
 
-  void changeUserFitch({required int pitch}) {
-    userFitch = pitch;
+  void changeUserPitch({required int pitch}) {
+    userPitch = pitch;
     notifyListeners();
   }
 
-  void getMaxFitch() {
-    userMaxFitch = -1;
-    //만약 비어있다면
-    if (checkedMusics.length != 0) {
+  void getMaxPitch() {
+    userMaxPitch = -1;
+
+    /// 사용자가 선택한 노래가 존재한다면
+    if (checkedMusics.isNotEmpty) {
       for (FitchMusic iter in checkedMusics) {
-        userMaxFitch = max(userMaxFitch, iter.fitchNum);
+        userMaxPitch = max(userMaxPitch, iter.pitchNum);
       }
     }
     notifyListeners();
   }
 
   void changeSortOption({required String? option}) {
-    //option에 따라 현재 리스트에서 보여지는 highestFoundItems를 정렬한다.
+    ///option에 따라 현재 리스트에서 보여지는 highestFoundItems를 정렬한다.
     if (option == '높은 음정순') {
-      highestFoundItems.sort(((a, b) => b.fitchNum.compareTo(a.fitchNum)));
+      highestFoundItems.sort(((a, b) => b.pitchNum.compareTo(a.pitchNum)));
     } else if (option == '낮은 음정순') {
-      highestFoundItems.sort(((a, b) => a.fitchNum.compareTo(b.fitchNum)));
+      highestFoundItems.sort(((a, b) => a.pitchNum.compareTo(b.pitchNum)));
     } else if (option == '내 음역대의 노래') {
       highestResults = highestSongList
-          .where((string) => (userFitch - 2 <= string.fitchNum &&
-              string.fitchNum <= userFitch))
+          .where((string) => (userPitch - 2 <= string.pitchNum &&
+              string.pitchNum <= userPitch))
           .toList();
       highestFoundItems = highestResults;
     } else {
@@ -93,11 +94,11 @@ class MusicSearchItemLists extends ChangeNotifier {
     foundItems = tjSongList;
   }
 
-  void initFitchMusic({required int fitchNum}) {
+  void initPitchMusic({required int pitchNum}) {
     highestResults = [];
     highestResults = highestSongList
-        .where((string) => (fitchNum - 1 <= string.fitchNum &&
-            string.fitchNum <= fitchNum + 1))
+        .where((string) => (pitchNum - 1 <= string.pitchNum &&
+            string.pitchNum <= pitchNum + 1))
         .toList();
     highestFoundItems = highestResults;
   }
@@ -107,7 +108,7 @@ class MusicSearchItemLists extends ChangeNotifier {
     //사용자 음정 불러오기
     final storage = new FlutterSecureStorage();
     String? value = await storage.read(key: 'userPitch');
-    if (value != null) userFitch = int.parse(value);
+    if (value != null) userPitch = int.parse(value);
 
     String TJMusics = await getTJMusics();
     String TJMusicChart = await getTJMusicChart();
@@ -116,99 +117,20 @@ class MusicSearchItemLists extends ChangeNotifier {
     String HighMusics = await getHighMusics();
 
     LineSplitter ls = new LineSplitter();
+
     List<String> contents = ls.convert(TJMusics);
 
-    //문자열 파싱 -> MusicSearchItem
-    late String title, singer, songNumber;
-    for (String str in contents) {
-      int start = 0, end = 0;
-
-      for (int i = 0; i < 3; i++) {
-        end = str.indexOf('^', start);
-        if (start == end) continue;
-        String tmp = str.substring(start, end);
-        start = end + 1;
-
-        if (i == 0)
-          title = tmp;
-        else if (i == 1)
-          singer = tmp;
-        else
-          songNumber = tmp;
-      }
-      tjSongList.add(MusicSearchItem(
-          title: title, singer: singer, songNumber: songNumber));
-    }
+    parseMusics(contents, tjSongList);
     foundItems = tjSongList;
 
     contents = ls.convert(KYMusics);
-
-    //문자열 파싱 -> MusicSearchItem
-    for (String str in contents) {
-      int start = 0, end = 0;
-
-      for (int i = 0; i < 3; i++) {
-        end = str.indexOf('^', start);
-        if (start == end) continue;
-        String tmp = str.substring(start, end);
-        start = end + 1;
-
-        if (i == 0)
-          title = tmp;
-        else if (i == 1)
-          singer = tmp;
-        else
-          songNumber = tmp;
-      }
-      kySongList.add(MusicSearchItem(
-          title: title, singer: singer, songNumber: songNumber));
-    }
+    parseMusics(contents, kySongList);
 
     contents = ls.convert(TJMusicChart);
-
-    //문자열 파싱 -> MusicSearchItem
-    for (String str in contents) {
-      int start = 0, end = 0;
-
-      for (int i = 0; i < 3; i++) {
-        end = str.indexOf('^', start);
-        if (start == end) continue;
-        String tmp = str.substring(start, end);
-        start = end + 1;
-
-        if (i == 0)
-          title = tmp;
-        else if (i == 1)
-          singer = tmp;
-        else
-          songNumber = tmp;
-      }
-      tjChartSongList.add(MusicSearchItem(
-          title: title, singer: singer, songNumber: songNumber));
-    }
+    parseMusics(contents, tjChartSongList);
 
     contents = ls.convert(KYMusicChart);
-
-    //문자열 파싱 -> MusicSearchItem
-    for (String str in contents) {
-      int start = 0, end = 0;
-
-      for (int i = 0; i < 3; i++) {
-        end = str.indexOf('^', start);
-        if (start == end) continue;
-        String tmp = str.substring(start, end);
-        start = end + 1;
-
-        if (i == 0)
-          title = tmp;
-        else if (i == 1)
-          singer = tmp;
-        else
-          songNumber = tmp;
-      }
-      kyChartSongList.add(MusicSearchItem(
-          title: title, singer: singer, songNumber: songNumber));
-    }
+    parseMusics(contents, kyChartSongList);
 
     //최고음 db 파싱
     contents = ls.convert(HighMusics);
@@ -256,8 +178,8 @@ class MusicSearchItemLists extends ChangeNotifier {
           ky_singer: ky_singer,
           ky_songNumber: ky_songNumber,
           gender: gender,
-          fitch: fitch,
-          fitchNum: fitchNum));
+          pitch: fitch,
+          pitchNum: fitchNum));
       highestFoundItems = highestSongList;
 
       isChecked = List<bool>.filled(highestFoundItems.length, false);
@@ -304,38 +226,6 @@ class MusicSearchItemLists extends ChangeNotifier {
       }
     }
     foundItems = results;
-    print(foundItems.length);
-
-    notifyListeners();
-  }
-
-  // 검색 필터링 기능(인기검색)
-  void runFitchFilter(String enteredKeyword, int _tabIndex) {
-    results = [];
-    if (_tabIndex == 1) {
-      //TJ
-      if (enteredKeyword.isEmpty) {
-        results = tjChartSongList;
-      } else {
-        results = tjChartSongList
-            .where((string) =>
-                string.title.contains(enteredKeyword) ||
-                string.singer.contains(enteredKeyword))
-            .toList();
-      }
-    } else {
-      //KY
-      if (enteredKeyword.isEmpty) {
-        results = kyChartSongList;
-      } else {
-        results = kyChartSongList
-            .where((string) =>
-                string.title.contains(enteredKeyword) ||
-                string.singer.contains(enteredKeyword))
-            .toList();
-      }
-    }
-    foundItems = results;
 
     notifyListeners();
   }
@@ -355,5 +245,29 @@ class MusicSearchItemLists extends ChangeNotifier {
     highestFoundItems = highestResults;
 
     notifyListeners();
+  }
+
+  void parseMusics(List<String> contents, List<MusicSearchItem> musicList) {
+    late String title, singer, songNumber;
+    //문자열 파싱 -> MusicSearchItem
+    for (String str in contents) {
+      int start = 0, end = 0;
+
+      for (int i = 0; i < 3; i++) {
+        end = str.indexOf('^', start);
+        if (start == end) continue;
+        String tmp = str.substring(start, end);
+        start = end + 1;
+
+        if (i == 0)
+          title = tmp;
+        else if (i == 1)
+          singer = tmp;
+        else
+          songNumber = tmp;
+      }
+      musicList.add(MusicSearchItem(
+          title: title, singer: singer, songNumber: songNumber));
+    }
   }
 }

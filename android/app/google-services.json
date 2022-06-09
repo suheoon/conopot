@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "776980976362",
+    "project_id": "conopot",
+    "storage_bucket": "conopot.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:776980976362:android:44efd06c241072c10c3d93",
+        "android_client_info": {
+          "package_name": "com.soma.conopot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "776980976362-klctn4rgu7nm9kdass1g9j1l874nv9na.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB20SZ0PatB3uuAys0o6-BKu_oqKaDUI2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "776980976362-klctn4rgu7nm9kdass1g9j1l874nv9na.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "776980976362-b63us9qaf5s86smgbdchkil7reafeq23.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.swmaestro.conopot"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,11 +1,12 @@
-import 'package:conopot/models/MusicSearchItemLists.dart';
+import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 
-class FitchSearchList extends StatelessWidget {
+class PitchSearchList extends StatelessWidget {
   final MusicSearchItemLists musicList;
 
-  const FitchSearchList({super.key, required this.musicList});
+  const PitchSearchList({super.key, required this.musicList});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +22,10 @@ class FitchSearchList extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          musicList.highestFoundItems[index].fitch,
+                          pitchNumToString[
+                              musicList.highestFoundItems[index].pitchNum],
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 11,
                           ),
                         ),
                       ],
@@ -32,20 +34,20 @@ class FitchSearchList extends StatelessWidget {
                     subtitle:
                         Text(musicList.highestFoundItems[index].tj_singer),
                     trailing: Text(
-                      (musicList.userFitch - 2 >
-                              musicList.highestFoundItems[index].fitchNum)
+                      (musicList.userPitch - 2 >
+                              musicList.highestFoundItems[index].pitchNum)
                           ? '쉬움'
-                          : (musicList.userFitch + 2 >
-                                  musicList.highestFoundItems[index].fitchNum)
+                          : (musicList.userPitch + 2 >
+                                  musicList.highestFoundItems[index].pitchNum)
                               ? '적정'
                               : '어려움',
                       style: TextStyle(
-                          color: (musicList.userFitch - 2 >
-                                  musicList.highestFoundItems[index].fitchNum)
+                          color: (musicList.userPitch - 2 >
+                                  musicList.highestFoundItems[index].pitchNum)
                               ? Colors.green
-                              : (musicList.userFitch + 2 >
+                              : (musicList.userPitch + 2 >
                                       musicList
-                                          .highestFoundItems[index].fitchNum)
+                                          .highestFoundItems[index].pitchNum)
                                   ? Colors.blue
                                   : Colors.red),
                     )),

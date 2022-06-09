@@ -1,11 +1,30 @@
-import 'package:conopot/models/MusicSearchItemLists.dart';
-import 'package:conopot/screens/home/home_screen.dart';
-import 'package:conopot/screens/home/splash_screen.dart';
+import 'dart:async';
+
+import 'package:conopot/firebase_config.dart';
+import 'package:conopot/firebase_options.dart';
+import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/splash/splash_screen.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  /// firebase crashlytics init
+  runZonedGuarded<Future<void>>(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    /// firebase analytics init
+    await Firebase.initializeApp(
+        options: DefaultFirebaseConfig.platformOptions);
+
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+    runApp(const MyApp());
+  },
+      (error, stack) =>
+          FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
 }
 
 class MyApp extends StatelessWidget {
@@ -23,10 +42,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'conopot',
         theme: ThemeData(
-          //backgroundColor: Colors.white,
           scaffoldBackgroundColor: Colors.white,
-          // We apply this to our appBarTheme because most of our appBar have this style
-          appBarTheme: AppBarTheme(color: Colors.white, elevation: 0),
+          appBarTheme: const AppBarTheme(color: Colors.white, elevation: 0),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: SplashScreen(),

@@ -1,13 +1,13 @@
 import 'package:conopot/constants.dart';
-import 'package:conopot/models/MusicSearchItemLists.dart';
-import 'package:conopot/screens/musicBook/components/searchBar.dart';
-import 'package:conopot/screens/musicBook/components/searchList.dart';
+import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/screens/musicBook/components/search_list.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
-import 'dart:core';
 import 'package:provider/provider.dart';
 
-class MusicBookScreen extends StatelessWidget {
+class ChartScreen extends StatelessWidget {
+  const ChartScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -31,7 +31,7 @@ class MusicBookScreen extends StatelessWidget {
             title: TabBar(
               isScrollable: true,
               onTap: (index) {
-                musicList.changeTabIndex(index: index + 1);
+                musicList.changeChartTabIndex(index: index + 1);
               },
               indicatorSize: TabBarIndicatorSize.label,
               indicatorColor: Color(0xFF7B61FF),
@@ -61,13 +61,11 @@ class MusicBookScreen extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  SearchBar(musicList: musicList),
                   SearchList(musicList: musicList),
                 ],
               ),
               Column(
                 children: [
-                  SearchBar(musicList: musicList),
                   SearchList(musicList: musicList),
                 ],
               ),

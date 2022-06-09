@@ -1,19 +1,19 @@
-import 'package:conopot/models/MusicSearchItemLists.dart';
+import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:flutter/material.dart';
 
-class FitchCheckBox extends StatefulWidget {
-  FitchCheckBox({Key? key, required this.musicList}) : super(key: key);
+class PitchCheckBox extends StatefulWidget {
+  PitchCheckBox({Key? key, required this.musicList}) : super(key: key);
 
   final MusicSearchItemLists musicList;
 
   @override
-  State<FitchCheckBox> createState() => _FitchCheckBoxState(musicList);
+  State<PitchCheckBox> createState() => _PitchCheckBoxState(musicList);
 }
 
-class _FitchCheckBoxState extends State<FitchCheckBox> {
+class _PitchCheckBoxState extends State<PitchCheckBox> {
   final MusicSearchItemLists musicList;
 
-  _FitchCheckBoxState(this.musicList);
+  _PitchCheckBoxState(this.musicList);
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -30,7 +30,7 @@ class _FitchCheckBoxState extends State<FitchCheckBox> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        musicList.highestFoundItems[index].fitch,
+                        musicList.highestFoundItems[index].pitch,
                         style: TextStyle(
                           color: Colors.green,
                         ),
