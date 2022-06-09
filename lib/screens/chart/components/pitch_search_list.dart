@@ -1,4 +1,5 @@
 import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/size_config.dart';
 import 'package:flutter/material.dart';
 
@@ -21,9 +22,10 @@ class PitchSearchList extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          musicList.highestFoundItems[index].pitch,
+                          pitchNumToString[
+                              musicList.highestFoundItems[index].pitchNum],
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 11,
                           ),
                         ),
                       ],

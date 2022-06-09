@@ -3,10 +3,13 @@ import 'package:conopot/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/main_screen.dart';
 import 'package:conopot/size_config.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
