@@ -94,29 +94,6 @@ class _PitchMeasureState extends State<PitchMeasure> {
                 },
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Indicator(
-                  isActive: (_selectedIndex < 7) ? true : false,
-                ),
-                Indicator(
-                  isActive: (7 <= _selectedIndex && _selectedIndex < 7 * 2)
-                      ? true
-                      : false,
-                ),
-                Indicator(
-                  isActive: (7 * 2 <= _selectedIndex && _selectedIndex < 7 * 3)
-                      ? true
-                      : false,
-                ),
-                Indicator(
-                  isActive: (7 * 3 <= _selectedIndex && _selectedIndex < 7 * 4)
-                      ? true
-                      : false,
-                ),
-              ],
-            ),
           ],
         ));
   }
