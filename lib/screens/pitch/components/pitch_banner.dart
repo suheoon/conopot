@@ -1,7 +1,7 @@
 import 'package:conopot/components/custom_page_route.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/pitch/pitch_result.dart';
-import 'package:conopot/size_config.dart';
+import 'package:conopot/config/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -55,7 +55,7 @@ class PitchBanner extends StatelessWidget {
                         Text(
                           fitchItem.pitchContext,
                           style: TextStyle(
-                            fontSize: 15.0,
+                            fontSize: 14.0,
                           ),
                           textAlign: TextAlign.center,
                         ),
