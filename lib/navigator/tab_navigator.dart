@@ -7,9 +7,10 @@ class TabNavigatorRoutes {
 }
 
 class TabNavigator extends StatelessWidget {
-  TabNavigator({required this.navigatorKey, required this.tabItem});
   final GlobalKey<NavigatorState>? navigatorKey;
   final TabItem tabItem;
+
+  TabNavigator({required this.navigatorKey, required this.tabItem});
 
   Map<String, WidgetBuilder> _routeBuilders(BuildContext context) {
     return {

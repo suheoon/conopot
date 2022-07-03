@@ -35,73 +35,15 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-        body: Center(
-      child: Column(
-        children: [
-          SizedBox(
-            height: SizeConfig.screenHeight * 0.3,
+      body: Center(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image(
+            image: const AssetImage('assets/images/splash.png'),
+            height: SizeConfig.screenWidth * 0.3,
           ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(50),
-            child: Image(
-              image: const AssetImage('assets/images/splash.png'),
-              width: SizeConfig.screenWidth * 0.4,
-            ),
-          ),
-          SizedBox(
-            height: SizeConfig.defaultSize * 5,
-          ),
-          RichText(
-            text: TextSpan(
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
-              ),
-              children: [
-                TextSpan(
-                  text: '오늘은 ',
-                  style: TextStyle(
-                    color: kTextColor,
-                  ),
-                ),
-                TextSpan(
-                  text: '어떤 노래',
-                  style: TextStyle(
-                    color: Color(0xFF7B61FF),
-                  ),
-                ),
-                TextSpan(
-                  text: ' 부르지?',
-                  style: TextStyle(
-                    color: kTextColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: SizeConfig.defaultSize * 2,
-          ),
-          Text(
-            '내 음역대를 바탕으로 보여주는',
-            style: TextStyle(
-              color: kTextLightColor,
-              fontSize: 15,
-            ),
-          ),
-          SizedBox(
-            height: SizeConfig.defaultSize * 0.5,
-          ),
-          Text(
-            '내가 부르기 좋은 노래',
-            style: TextStyle(
-              color: kPrimaryColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-            ),
-          ),
-        ],
+        ),
       ),
-    ));
+    );
   }
 }

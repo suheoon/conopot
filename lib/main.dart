@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/firebase/firebase_config.dart';
+import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/splash/splash_screen.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -31,7 +32,6 @@ Future<void> amplitudeInit() async {
 
   // Set user Id
   analytics.setUserId("test_user");
-
   // Turn on automatic session events
   analytics.trackingSessionEvents(true);
 
@@ -99,17 +99,28 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => MusicSearchItemLists()),
+        ChangeNotifierProvider<NoteData>(create: (context) => NoteData()),
       ],
-      child: MaterialApp(
-        themeMode: ThemeMode.light,
-        debugShowCheckedModeBanner: false,
-        title: 'conopot',
-        theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white,
-          appBarTheme: const AppBarTheme(color: Colors.white, elevation: 0),
-          visualDensity: VisualDensity.adaptivePlatformDensity,
+      child: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus(); // 키보드 닫기
+        },
+        child: MaterialApp(
+          themeMode: ThemeMode.light,
+          debugShowCheckedModeBanner: false,
+          title: 'conopot',
+          theme: ThemeData(
+            scaffoldBackgroundColor: Colors.white,
+            appBarTheme: const AppBarTheme(
+              centerTitle: true,
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.black,
+              elevation: 0,
+            ),
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          home: const SplashScreen(),
         ),
-        home: const SplashScreen(),
       ),
     );
   }
