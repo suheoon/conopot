@@ -32,7 +32,12 @@ class _PitchScreenState extends State<PitchScreen> {
             '나만의 옥타브 차트',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
-          automaticallyImplyLeading: false,
+          leading: BackButton(
+            color: Colors.black,
+            onPressed: () {
+              Navigator.pop(context); //뒤로가기
+            },
+          ),
           centerTitle: true,
         ),
         body: Column(

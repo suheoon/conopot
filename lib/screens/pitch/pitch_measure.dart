@@ -275,22 +275,19 @@ class _PitchMeasureState extends State<PitchMeasure> {
                                 SizedBox(
                                   height: SizeConfig.defaultSize,
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "현재 측정되는 음: ",
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                      ),
-                                    ),
-                                    Text(
-                                      frequencyToPitch(),
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  "현재 측정되는 음",
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                                Text(
+                                  frequencyToPitch(),
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: kTextColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                                 SizedBox(
                                   height: SizeConfig.defaultSize,
