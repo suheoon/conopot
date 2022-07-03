@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/user/user_screen.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,10 @@ class _NoteScreenState extends State<NoteScreen> {
         elevation: 5.0,
         child: SvgPicture.asset('assets/icons/addButton.svg'),
         onPressed: () {
+          Future.delayed(Duration.zero, () {
+            Provider.of<MusicSearchItemLists>(context, listen: false)
+                .initBook();
+          });
           Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => AddNoteScreen()),
