@@ -16,6 +16,9 @@ class MusicSearchItemLists extends ChangeNotifier {
   List<FitchMusic> highestSongList = [];
   List<FitchMusic> highestFoundItems = [];
   List<FitchMusic> highestResults = [];
+  List<FitchMusic> combinedSongList = [];
+  List<FitchMusic> combinedFoundItems = [];
+
   List<bool> isChecked = [];
   List<FitchMusic> checkedMusics = [];
 
@@ -82,6 +85,10 @@ class MusicSearchItemLists extends ChangeNotifier {
     return await rootBundle.loadString('assets/musics/music_highest_key.txt');
   }
 
+  Future<String> getCombinedMusics() async {
+    return await rootBundle.loadString('assets/musics/matching_Musics.txt');
+  }
+
   void initFitch() {
     highestFoundItems = highestSongList;
   }
@@ -115,6 +122,7 @@ class MusicSearchItemLists extends ChangeNotifier {
     String KYMusics = await getKYMusics();
     String KYMusicChart = await getKYMusicChart();
     String HighMusics = await getHighMusics();
+    String CombinedMusics = await getCombinedMusics();
 
     LineSplitter ls = new LineSplitter();
 
@@ -185,6 +193,54 @@ class MusicSearchItemLists extends ChangeNotifier {
       isChecked = List<bool>.filled(highestFoundItems.length, false);
       notifyListeners();
     }
+
+    //최고음 db 파싱
+    contents = ls.convert(CombinedMusics);
+
+    //문자열 파싱 -> MusicSearchItem
+    for (String str in contents) {
+      int start = 0, end = 0;
+
+      for (int i = 0; i < 9; i++) {
+        end = str.indexOf('^', start);
+        if (start == end) continue;
+        String tmp = str.substring(start, end);
+        start = end + 1;
+
+        if (i == 0)
+          tj_title = tmp;
+        else if (i == 1)
+          tj_singer = tmp;
+        else if (i == 2)
+          tj_songNumber = tmp;
+        else if (i == 3)
+          ky_title = tmp;
+        else if (i == 4)
+          ky_singer = tmp;
+        else if (i == 5)
+          ky_songNumber = tmp;
+        else if (i == 6)
+          gender = tmp;
+        else if (i == 7)
+          fitch = tmp;
+        else
+          fitchNum = (tmp != '?') ? int.parse(tmp) : 0;
+      }
+
+      combinedSongList.add(FitchMusic(
+          tj_title: tj_title,
+          tj_singer: tj_singer,
+          tj_songNumber: tj_songNumber,
+          ky_title: ky_title,
+          ky_singer: ky_singer,
+          ky_songNumber: ky_songNumber,
+          gender: gender,
+          pitch: fitch,
+          pitchNum: fitchNum));
+    }
+
+    combinedFoundItems = combinedSongList;
+    notifyListeners();
   }
 
   void changeTabIndex({required int index}) {
@@ -226,6 +282,24 @@ class MusicSearchItemLists extends ChangeNotifier {
       }
     }
     foundItems = results;
+
+    notifyListeners();
+  }
+
+  // 검색 필터링 기능(전체검색)
+  void runCombinedFilter(String enteredKeyword) {
+    highestResults = [];
+    if (enteredKeyword.isEmpty) {
+      highestResults = combinedSongList;
+    } else {
+      highestResults = combinedSongList
+          .where((string) =>
+              string.tj_title.contains(enteredKeyword) ||
+              string.tj_singer.contains(enteredKeyword))
+          .toList();
+    }
+
+    combinedFoundItems = highestResults;
 
     notifyListeners();
   }

@@ -14,7 +14,7 @@ class NoteSearchBar extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10),
       child: TextField(
         onChanged: (text) => {
-          musicList.runFilter(text, musicList.tabIndex),
+          musicList.runCombinedFilter(text),
         },
         onTap: () {
           print("yes");
