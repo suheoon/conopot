@@ -1,5 +1,5 @@
 import 'package:conopot/screens/chart/pitch_screen.dart';
-import 'package:conopot/screens/home/home_screen.dart';
+import 'package:conopot/screens/pitch/pitch_main_screen.dart';
 import 'package:conopot/screens/musicBook/music_screen.dart';
 import 'package:flutter/material.dart';
 
