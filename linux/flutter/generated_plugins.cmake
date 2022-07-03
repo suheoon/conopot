@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  flutter_audio_capture
   flutter_secure_storage_linux
 )
 

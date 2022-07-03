@@ -52,13 +52,6 @@ class PitchBanner extends StatelessWidget {
                         SizedBox(
                           height: SizeConfig.defaultSize,
                         ),
-                        Text(
-                          fitchItem.pitchContext,
-                          style: TextStyle(
-                            fontSize: 14.0,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
                         TextButton(
                           onPressed: () {
                             play(fitchItem.pitchCode);
