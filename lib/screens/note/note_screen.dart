@@ -20,33 +20,39 @@ class _NoteScreenState extends State<NoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "애창곡 노트",
-            style: TextStyle(color: Colors.black),
+      appBar: AppBar(
+        title: Text(
+          "애창곡 노트",
+          style: TextStyle(color: Colors.black),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.account_circle),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => UserScreen()));
+            },
           ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.account_circle),
-              onPressed: () {},
-            ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.white,
-          elevation: 5.0,
-          child: SvgPicture.asset('assets/icons/addButton.svg'),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => AddNoteScreen()),
-            );
-          },
-        ),
-        body: Column(children: [
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        elevation: 5.0,
+        child: SvgPicture.asset('assets/icons/addButton.svg'),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => AddNoteScreen()),
+          );
+        },
+      ),
+      body: Column(
+        children: [
           _CarouselSlider(),
           _ReorderListView(),
-        ]));
+        ],
+      ),
+    );
   }
 
   // 배너 아이템 위젯
@@ -232,39 +238,6 @@ class _NoteScreenState extends State<NoteScreen> {
           );
         },
       ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "애창곡 노트",
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.account_circle),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => UserScreen()));
-            },
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        elevation: 5.0,
-        child: SvgPicture.asset('assets/icons/addButton.svg'),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => AddNoteScreen()),
-          );
-        },
-      ),
-      body: _ReorderListView(),
     );
   }
 }
