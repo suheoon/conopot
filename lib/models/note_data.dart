@@ -40,7 +40,8 @@ class NoteData extends ChangeNotifier {
             combinedSongList[i].gender,
             combinedSongList[i].pitch,
             combinedSongList[i].pitchNum,
-            memo!);
+            memo!,
+            0);
         notes.add(note);
       }
     }
@@ -61,7 +62,8 @@ class NoteData extends ChangeNotifier {
         musicSearchItem.gender,
         musicSearchItem.pitch,
         musicSearchItem.pitchNum,
-        memo);
+        memo,
+        0);
 
     bool flag = false;
     for (Note iter_note in notes) {
@@ -108,6 +110,16 @@ class NoteData extends ChangeNotifier {
     } else {
       this.selectedIndex = idx;
     }
+    notifyListeners();
+  }
+
+  void pluskeyAdjustment(int idx) {
+    notes[idx].keyAdjustment++;
+    notifyListeners();
+  }
+
+  void minuskeyAdjustment(int idx) {
+    notes[idx].keyAdjustment--;
     notifyListeners();
   }
 }

@@ -9,6 +9,7 @@ class Note {
   final String pitch;
   final int pitchNum;
   final String memo;
+  int keyAdjustment;
 
   Note(
       this.tj_title,
@@ -20,5 +21,6 @@ class Note {
       this.gender,
       this.pitch,
       this.pitchNum,
-      this.memo);
+      this.memo,
+      this.keyAdjustment);
 }
