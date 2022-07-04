@@ -1,6 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:conopot/config/constants.dart';
+import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/screens/pitch/pitch_main_screen.dart';
+import 'package:conopot/screens/pitch/pitch_measure.dart';
+import 'package:conopot/screens/user/user_note_setting_screen.dart';
 import 'package:conopot/screens/user/user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -20,159 +25,239 @@ class NoteScreen extends StatefulWidget {
 class _NoteScreenState extends State<NoteScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "애창곡 노트",
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.account_circle),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => UserScreen()));
-            },
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        elevation: 5.0,
-        child: SvgPicture.asset('assets/icons/addButton.svg'),
-        onPressed: () {
-          Future.delayed(Duration.zero, () {
-            Provider.of<MusicSearchItemLists>(context, listen: false)
-                .initBook();
-          });
-          Provider.of<NoteData>(context, listen: false).setSelectedIndex(-1);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => AddNoteScreen()),
-          );
-        },
-      ),
-      body: Column(
-        children: [
-          _CarouselSlider(),
-          _ReorderListView(),
-        ],
-      ),
-    );
+    return Consumer<NoteData>(
+        builder: (context, noteData, child) => Scaffold(
+              appBar: AppBar(
+                title: Text(
+                  "애창곡 노트",
+                  style: TextStyle(color: Colors.black),
+                ),
+                actions: [
+                  IconButton(
+                    icon: Icon(Icons.account_circle),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UserScreen()));
+                    },
+                  ),
+                ],
+              ),
+              floatingActionButton: (!noteData.notes.isEmpty)
+                  ? FloatingActionButton(
+                      backgroundColor: Colors.white,
+                      elevation: 5.0,
+                      child: SvgPicture.asset('assets/icons/addButton.svg'),
+                      onPressed: () {
+                        Future.delayed(Duration.zero, () {
+                          Provider.of<MusicSearchItemLists>(context,
+                                  listen: false)
+                              .initBook();
+                        });
+                        noteData.setSelectedIndex(-1);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => AddNoteScreen()),
+                        );
+                      },
+                    )
+                  : null,
+              body: Column(
+                children: [
+                  _CarouselSlider(context),
+                  (noteData.notes.isEmpty)
+                      ? emptyNoteView()
+                      : _ReorderListView(),
+                ],
+              ),
+            ));
   }
 
-  // 배너 아이템 위젯
-  List<Widget> _banner = [
-    // banner 1
-    Stack(children: [
-      Container(
-        margin: EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(
-          color: Color(0x402F80ED),
-          borderRadius: BorderRadius.all(
-            Radius.circular(7),
-          ),
-        ),
-      ),
-      Align(
-        alignment: Alignment(-0.8, 0.0),
-        child: SvgPicture.asset(
-          'assets/icons/banner_sound.svg',
-          height: 45,
-          width: 45,
-        ),
-      ),
-      Align(
-        alignment: Alignment(0, 0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "노래방 전투력 측정 😎",
-              style: TextStyle(
-                fontSize: 14,
-                color: Color(0xFF4b5f7e),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Text(
-              "당신의 최고음을 측정해보세요",
-              style: TextStyle(
-                fontSize: 17,
-                color: Color(0xFF1b1a5b),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    ]),
-    // banner 2
-    Stack(
-      children: [
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 10),
-          decoration: BoxDecoration(
-            color: Color(0x40832FED),
-            borderRadius: BorderRadius.all(
-              Radius.circular(7),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment(-0.8, 0.0),
-          child: SvgPicture.asset(
-            'assets/icons/banner_music.svg',
-            height: 45,
-            width: 45,
-          ),
-        ),
-        Align(
-          alignment: Alignment(0.4, 0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "최고음 표시가 가능한 것을 아시나요? 🧐",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFF4b5f7e),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Text(
-                "우측 상단 [내 정보] - [애창곡 노트 설정]",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Color(0xFF1b1a5b),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    ),
-  ];
-
   // carouselslider
-  Widget _CarouselSlider() {
+  Widget _CarouselSlider(BuildContext context) {
     return CarouselSlider(
       options: CarouselOptions(
         height: MediaQuery.of(context).size.height * 0.12,
         enableInfiniteScroll: false,
         viewportFraction: 1,
       ),
-      items: _banner,
+      items: [
+        // banner 1
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => HomeScreen()),
+            );
+          },
+          child: Stack(children: [
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: Color(0x402F80ED),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(7),
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment(-0.8, 0.0),
+              child: SvgPicture.asset(
+                'assets/icons/banner_sound.svg',
+                height: 45,
+                width: 45,
+              ),
+            ),
+            Align(
+              alignment: Alignment(0, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "노래방 전투력 측정 😎",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF4b5f7e),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    "당신의 최고음을 측정해보세요",
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: Color(0xFF1b1a5b),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ]),
+        ),
+        // banner 2
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => noteSettingScreen()),
+            );
+          },
+          child: Stack(
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  color: Color(0x40832FED),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(7),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment(-0.8, 0.0),
+                child: SvgPicture.asset(
+                  'assets/icons/banner_music.svg',
+                  height: 45,
+                  width: 45,
+                ),
+              ),
+              Align(
+                alignment: Alignment(0.4, 0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "최고음 표시가 가능한 것을 아시나요? 🧐",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFF4b5f7e),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      "우측 상단 [내 정보] - [애창곡 노트 설정]",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF1b1a5b),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
+  }
+
+  // emptyNoteView
+  Widget emptyNoteView() {
+    return Expanded(
+        child: Column(
+      children: [
+        SizedBox(
+          height: SizeConfig.screenHeight / 5,
+        ),
+        RichText(
+            text: TextSpan(children: [
+          TextSpan(
+            text: "나만의 ",
+            style: TextStyle(
+              color: kTextColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+          TextSpan(
+              text: '첫 애창곡',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: kPrimaryColor,
+                fontSize: 20,
+              )),
+          TextSpan(
+            text: "을 저장해보세요!",
+            style: TextStyle(
+              color: kTextColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+        ])),
+        SizedBox(
+          height: SizeConfig.defaultSize * 3,
+        ),
+        GestureDetector(
+          onTap: () {
+            Future.delayed(Duration.zero, () {
+              Provider.of<MusicSearchItemLists>(context, listen: false)
+                  .initBook();
+            });
+            Provider.of<NoteData>(context, listen: false).setSelectedIndex(-1);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => AddNoteScreen()),
+            );
+          },
+          child: Container(
+            height: 100,
+            width: 100,
+            child: SvgPicture.asset('assets/icons/addButton.svg'),
+          ),
+        )
+      ],
+    ));
   }
 
   // redorderlistview
