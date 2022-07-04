@@ -118,7 +118,10 @@ class MusicSearchItemLists extends ChangeNotifier {
   void init() async {
     //사용자 음정 불러오기
     String? value = await storage.read(key: 'userPitch');
-    if (value != null) userPitch = int.parse(value);
+    if (value != null) {
+      userPitch = int.parse(value);
+      userMaxPitch = userPitch;
+    }
 
     String TJMusics = await getTJMusics();
     String TJMusicChart = await getTJMusicChart();

@@ -1,3 +1,4 @@
+import 'package:conopot/config/constants.dart';
 import 'package:flutter/material.dart';
 
 enum NoteMark { tjnum, highestNote, noteDiff }
@@ -41,6 +42,32 @@ class _noteSettingScreenState extends State<noteSettingScreen> {
                 },
               ),
             ),
+            Card(
+              //color: Color.fromARGB(255, 232, 228, 255),
+              margin: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+              child: ListTile(
+                title: RichText(
+                    text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: "취중고백",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                        )),
+                    TextSpan(text: " "),
+                    TextSpan(
+                        text: "김민석",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 13,
+                        )),
+                  ],
+                )),
+                subtitle: Text("요즘 유명한 노래"),
+                trailing: Text("80906"),
+              ),
+            ),
             ListTile(
               title: const Text('노래 최고음 표시'),
               leading: Radio<NoteMark>(
@@ -53,6 +80,35 @@ class _noteSettingScreenState extends State<noteSettingScreen> {
                 },
               ),
             ),
+            Card(
+              //color: Color.fromARGB(255, 232, 228, 255),
+              margin: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+              child: ListTile(
+                title: RichText(
+                    text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: "취중고백",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                        )),
+                    TextSpan(text: " "),
+                    TextSpan(
+                        text: "김민석",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 13,
+                        )),
+                  ],
+                )),
+                subtitle: Text("요즘 유명한 노래"),
+                trailing: Text(
+                  "2옥타브 라#",
+                  style: TextStyle(color: Color(0xFF7B61FF)),
+                ),
+              ),
+            ),
             ListTile(
               title: const Text('최고음 기반 노래방 키 조정 표시'),
               leading: Radio<NoteMark>(
@@ -63,6 +119,35 @@ class _noteSettingScreenState extends State<noteSettingScreen> {
                     choice = value;
                   });
                 },
+              ),
+            ),
+            Card(
+              //color: Color.fromARGB(255, 232, 228, 255),
+              margin: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+              child: ListTile(
+                title: RichText(
+                    text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: "취중고백",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                        )),
+                    TextSpan(text: " "),
+                    TextSpan(
+                        text: "김민석",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 13,
+                        )),
+                  ],
+                )),
+                subtitle: Text("요즘 유명한 노래"),
+                trailing: Text(
+                  "3도 높이기",
+                  style: TextStyle(color: Color(0xFFFF8845)),
+                ),
               ),
             ),
           ],
