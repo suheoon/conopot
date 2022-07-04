@@ -10,8 +10,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../models/note.dart';
 
 class NoteDetailScreen extends StatefulWidget {
-  final int index;
-  NoteDetailScreen({Key? key, required this.index}) : super(key: key);
+  final Note note;
+  NoteDetailScreen({Key? key, required this.note}) : super(key: key);
 
   @override
   State<NoteDetailScreen> createState() => _NoteDetailScreenState();
@@ -21,8 +21,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   showAlertDialog(BuildContext context) {
     Widget okButton = ElevatedButton(
         onPressed: () {
-          Provider.of<NoteData>(context, listen: false)
-              .deleteNoteAt(widget.index);
+          Provider.of<NoteData>(context, listen: false).deleteNote(widget.note);
           Navigator.of(context).popUntil((route) => route.isFirst);
         },
         child: Text("노트삭제"));
@@ -77,13 +76,13 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(notes[widget.index].title,
+                    Text(widget.note.tj_title,
                         overflow: TextOverflow.ellipsis, maxLines: 1),
                     SizedBox(
                       height: 5,
                     ),
                     Text(
-                      notes[widget.index].singer,
+                      widget.note.tj_singer,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
@@ -98,8 +97,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   padding: EdgeInsets.only(right: 10),
                   icon: SvgPicture.asset('assets/icons/youtube.svg'),
                   onPressed: () async {
-                    final url =
-                        Uri.parse('https://www.youtube.com/results?search_query=${notes[widget.index].title}');
+                    final url = Uri.parse(
+                        'https://www.youtube.com/results?search_query=${widget.note.tj_title}');
                     if (await canLaunchUrl(url)) {
                       launchUrl(url, mode: LaunchMode.externalApplication);
                     }
@@ -196,7 +195,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                     height: 40,
                     child: Align(
                       alignment: Alignment(-0.9, 0),
-                      child: Text(notes[widget.index].memo),
+                      child: Text(widget.note.memo),
                     ),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(5)),

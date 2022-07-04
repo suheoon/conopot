@@ -270,71 +270,63 @@ class _NoteScreenState extends State<NoteScreen> {
             children: noteData.notes
                 .map(
                   (note) => Card(
-                    key: Key(
-                      '${noteData.notes.indexOf(note)}',
-                    ),
-                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    child: Slidable(
                       key: Key(
                         '${noteData.notes.indexOf(note)}',
                       ),
-                      endActionPane: ActionPane(
-                          extentRatio: .20,
-                          motion: ScrollMotion(),
-                          children: [
-                            SlidableAction(
-                              onPressed: (BuildContext context) {
-                                noteData.deleteNote(note);
+                      margin:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      child: Slidable(
+                          key: Key(
+                            '${noteData.notes.indexOf(note)}',
+                          ),
+                          endActionPane: ActionPane(
+                              extentRatio: .20,
+                              motion: ScrollMotion(),
+                              children: [
+                                SlidableAction(
+                                  onPressed: (BuildContext context) {
+                                    noteData.deleteNote(note);
+                                  },
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                  icon: Icons.delete,
+                                ),
+                              ]),
+                          child: GestureDetector(
+                            child: ListTile(
+                              title: RichText(
+                                  text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                      text: note.tj_title,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                      )),
+                                  TextSpan(text: " "),
+                                  TextSpan(
+                                      text: note.tj_singer,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 13,
+                                      )),
+                                ],
+                              )),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => NoteDetailScreen(
+                                      note: note,
+                                    ),
+                                  ),
+                                );
                               },
-                              backgroundColor: Colors.red,
-                              foregroundColor: Colors.white,
-                              icon: Icons.delete,
+                              subtitle: Text(note.memo),
+                              trailing: Text(note.tj_songNumber),
                             ),
-                          ]),
-
-                      
-                            
-                      child: GestureDetector(
-                        child: ListTile(
-                        title: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: note.tj_title,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                  )),
-                              TextSpan(text: " "),
-                              TextSpan(
-                                  text: note.tj_singer,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 13,
-                                  )),
-                            ],
-                          )
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => NoteDetailScreen(
-                                index: noteData.notes.indexOf(note),
-                              ),
-                            ),
-                          );
-                        },
-                       
-                        subtitle: Text(note.memo),
-                        trailing: Text(note.tj_songNumber),
-                      ),
-                      )
-                    )
-
-                      ),
-                    )
-                  
+                          ))),
+                )
                 .toList(),
             onReorder: (oldIndex, newIndex) {
               setState(() {
