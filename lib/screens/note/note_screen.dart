@@ -6,6 +6,7 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
 import 'package:conopot/screens/pitch/pitch_measure.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
+import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:conopot/screens/user/user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -290,7 +291,11 @@ class _NoteScreenState extends State<NoteScreen> {
                               icon: Icons.delete,
                             ),
                           ]),
-                      child: ListTile(
+
+                      
+                            
+                      child: GestureDetector(
+                        child: ListTile(
                         title: RichText(
                           text: TextSpan(
                             children: [
@@ -308,14 +313,28 @@ class _NoteScreenState extends State<NoteScreen> {
                                     fontSize: 13,
                                   )),
                             ],
-                          ),
+                          )
                         ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NoteDetailScreen(
+                                index: noteData.notes.indexOf(note),
+                              ),
+                            ),
+                          );
+                        },
+                       
                         subtitle: Text(note.memo),
                         trailing: Text(note.tj_songNumber),
                       ),
-                    ),
-                  ),
-                )
+                      )
+                    )
+
+                      ),
+                    )
+                  
                 .toList(),
             onReorder: (oldIndex, newIndex) {
               setState(() {
