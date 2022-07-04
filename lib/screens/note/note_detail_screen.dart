@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/screens/chart/components/pitch_search_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -185,9 +187,11 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                 ],
               ),
               SizedBox(height: 30),
-              _recommendList(widget.note.pitch)
             ],
           ),
+        ),
+        Expanded(
+          child: _recommendList(widget.note.pitchNum),
         ),
       ]),
     );
@@ -242,7 +246,13 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
       actions: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [okButton, SizedBox(width: 10,),cancelButton],
+          children: [
+            okButton,
+            SizedBox(
+              width: 10,
+            ),
+            cancelButton
+          ],
         ),
       ],
     );
@@ -289,13 +299,18 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
           );
   }
 
-  Widget _recommendList(String pitch) {
-    return pitch == '?'
+  Widget _recommendList(int pitchNum) {
+    Provider.of<MusicSearchItemLists>(context, listen: false)
+        .initPitchMusic(pitchNum: pitchNum);
+    return pitchNum == '?'
         ? Container()
         : Column(
             children: [
               Text("노래 추천"),
               SizedBox(height: 20),
+              PitchSearchList(
+                  musicList: Provider.of<MusicSearchItemLists>(context,
+                      listen: false)),
             ],
           );
   }

@@ -18,39 +18,39 @@ class PitchSearchList extends StatelessWidget {
                 color: Colors.white,
                 elevation: 1,
                 child: ListTile(
-                    leading: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          pitchNumToString[
-                              musicList.highestFoundItems[index].pitchNum],
-                          style: TextStyle(
-                            fontSize: 11,
-                          ),
+                  leading: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        pitchNumToString[
+                            musicList.highestFoundItems[index].pitchNum],
+                        style: TextStyle(
+                          fontSize: 11,
                         ),
-                      ],
-                    ),
-                    title: Text(musicList.highestFoundItems[index].tj_title),
-                    subtitle:
-                        Text(musicList.highestFoundItems[index].tj_singer),
-                    trailing: Text(
-                      (musicList.userPitch - 2 >
-                              musicList.highestFoundItems[index].pitchNum)
-                          ? '쉬움'
-                          : (musicList.userPitch + 2 >
-                                  musicList.highestFoundItems[index].pitchNum)
-                              ? '적정'
-                              : '어려움',
-                      style: TextStyle(
-                          color: (musicList.userPitch - 2 >
-                                  musicList.highestFoundItems[index].pitchNum)
-                              ? Colors.green
-                              : (musicList.userPitch + 2 >
-                                      musicList
-                                          .highestFoundItems[index].pitchNum)
-                                  ? Colors.blue
-                                  : Colors.red),
-                    )),
+                      ),
+                    ],
+                  ),
+                  title: Text(musicList.highestFoundItems[index].tj_title),
+                  subtitle: Text(musicList.highestFoundItems[index].tj_singer),
+                  // trailing: Text(
+                  //   (musicList.userPitch - 2 >
+                  //           musicList.highestFoundItems[index].pitchNum)
+                  //       ? '쉬움'
+                  //       : (musicList.userPitch + 2 >
+                  //               musicList.highestFoundItems[index].pitchNum)
+                  //           ? '적정'
+                  //           : '어려움',
+                  //   style: TextStyle(
+                  //       color: (musicList.userPitch - 2 >
+                  //               musicList.highestFoundItems[index].pitchNum)
+                  //           ? Colors.green
+                  //           : (musicList.userPitch + 2 >
+                  //                   musicList
+                  //                       .highestFoundItems[index].pitchNum)
+                  //               ? Colors.blue
+                  //               : Colors.red),
+                  // )
+                ),
               ),
             )
           : Padding(
