@@ -45,6 +45,7 @@ class _NoteScreenState extends State<NoteScreen> {
             Provider.of<MusicSearchItemLists>(context, listen: false)
                 .initBook();
           });
+          Provider.of<NoteData>(context, listen: false).setSelectedIndex(-1);
           Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => AddNoteScreen()),
@@ -209,14 +210,14 @@ class _NoteScreenState extends State<NoteScreen> {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                  text: note.title,
+                                  text: note.tj_title,
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 18,
                                   )),
                               TextSpan(text: " "),
                               TextSpan(
-                                  text: note.singer,
+                                  text: note.tj_singer,
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 13,
@@ -225,7 +226,7 @@ class _NoteScreenState extends State<NoteScreen> {
                           ),
                         ),
                         subtitle: Text(note.memo),
-                        trailing: Text(note.songNumber),
+                        trailing: Text(note.tj_songNumber),
                       ),
                     ),
                   ),

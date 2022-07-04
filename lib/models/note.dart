@@ -1,13 +1,24 @@
 class Note {
-  final String title;
-  final String singer;
+  final String tj_title;
+  final String tj_singer;
+  final String tj_songNumber;
+  final String ky_title;
+  final String ky_singer;
+  final String ky_songNumber;
+  final String gender;
+  final String pitch;
+  final int pitchNum;
   final String memo;
-  final String songNumber;
 
-  Note({
-    required this.title,
-    required this.singer,
-    required this.memo,
-    required this.songNumber,
-  });
+  Note(
+      this.tj_title,
+      this.tj_singer,
+      this.tj_songNumber,
+      this.ky_title,
+      this.ky_singer,
+      this.ky_songNumber,
+      this.gender,
+      this.pitch,
+      this.pitchNum,
+      this.memo);
 }

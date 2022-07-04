@@ -57,6 +57,7 @@ dependencies:
   pitchupdart: ^0.0.2
   flutter_audio_capture: ^1.0.0
   permission_handler: ^10.0.0
+  fluttertoast: ^8.0.9
 
 dev_dependencies:
   flutter_test:

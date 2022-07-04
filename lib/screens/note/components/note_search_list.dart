@@ -15,9 +15,9 @@ class NoteSearchList extends StatefulWidget {
 }
 
 class _NoteSearchListState extends State<NoteSearchList> {
-  int _selectedIndex = -1;
-
   Widget _ListView(BuildContext context) {
+    int _selectedIndex =
+        Provider.of<NoteData>(context, listen: false).selectedIndex;
     return widget.musicList.combinedFoundItems.isNotEmpty
         ? Expanded(
             child: ListView.builder(
@@ -94,11 +94,13 @@ class _NoteSearchListState extends State<NoteSearchList> {
                       ),
                     ),
                     onTap: () => setState(() {
-                      _selectedIndex = index;
+                      Provider.of<NoteData>(context, listen: false)
+                          .setSelectedIndex(index);
                       Provider.of<NoteData>(context, listen: false)
                           .showTextFiled();
                       Provider.of<NoteData>(context, listen: false)
-                          .musicSearchItem = widget.musicList.foundItems[index];
+                              .musicSearchItem =
+                          widget.musicList.combinedFoundItems[index];
                     }),
                   ),
                 ),

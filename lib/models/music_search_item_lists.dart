@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:conopot/models/music_search_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 
 class MusicSearchItemLists extends ChangeNotifier {
   List<MusicSearchItem> foundItems = [];
@@ -27,6 +29,8 @@ class MusicSearchItemLists extends ChangeNotifier {
   int userPitch = 23;
 
   int userMaxPitch = -1;
+
+  final storage = new FlutterSecureStorage();
 
   void changeUserPitch({required int pitch}) {
     userPitch = pitch;
@@ -113,7 +117,6 @@ class MusicSearchItemLists extends ChangeNotifier {
   // 프로그램 실행 시, 노래방 책 List 초기화 (TJ, KY txt -> List)
   void init() async {
     //사용자 음정 불러오기
-    final storage = new FlutterSecureStorage();
     String? value = await storage.read(key: 'userPitch');
     if (value != null) userPitch = int.parse(value);
 
@@ -240,6 +243,7 @@ class MusicSearchItemLists extends ChangeNotifier {
     }
 
     combinedFoundItems = combinedSongList;
+
     notifyListeners();
   }
 
