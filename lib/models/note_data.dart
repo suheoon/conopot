@@ -122,4 +122,9 @@ class NoteData extends ChangeNotifier {
     notes[idx].keyAdjustment--;
     notifyListeners();
   }
+
+  void changeKySongNumber(int idx, String kySongNumber) {
+    notes[idx].ky_songNumber = kySongNumber;
+    notifyListeners();
+  }
 }

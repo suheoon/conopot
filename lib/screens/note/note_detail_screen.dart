@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:conopot/config/size_config.dart';
+import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pitchupdart/pitch_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../models/music_search_item.dart';
 import '../../models/note.dart';
 
 class NoteDetailScreen extends StatefulWidget {
@@ -35,7 +38,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   color: Colors.red,
                 )),
             onPressed: () {
-              _showAlertDialog(context);
+              _showDeleteDialog(context);
             },
           ),
         ],
@@ -128,16 +131,26 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                 children: [
                   Container(width: 30, child: Text("금영")),
                   SizedBox(width: 10),
-                  Container(
-                    width: 70,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      color: Color(0x30826A6A),
+                  GestureDetector(
+                    onTap: () {
+                      // 금영 검색 창
+                      _showKySearchDialog(context, notes, index);
+                    },
+                    child: Container(
+                      width: 70,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        color: Color(0x30826A6A),
+                      ),
+                      child: Row(children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Icon(Icons.search),
+                        ),
+                        Text(notes[index].ky_songNumber == '?' ? '' : notes[index].ky_songNumber),
+                      ]),
                     ),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Icon(Icons.search)),
                   ),
                   SizedBox(width: 30),
                   Container(
@@ -193,6 +206,60 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     );
   }
 
+  _showKySearchDialog(BuildContext context, List<Note> notes, int idx) {
+    Provider.of<MusicSearchItemLists>(context, listen: false)
+        .runFilter(widget.note.tj_title, 2);
+    List<MusicSearchItem> kySearchSongList =
+        Provider.of<MusicSearchItemLists>(context, listen: false).foundItems;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Center(
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            child: Container(
+              width: SizeConfig.screenWidth * 0.8,
+              height: SizeConfig.screenHeight * 0.6,
+              color: Colors.white,
+              child: Column(children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: DefaultTextStyle(
+                    style: TextStyle(color: Colors.black, fontSize: 30),
+                    child: Text("금영 번호 추가"),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: kySearchSongList.length,
+                    itemBuilder: (context, index) => Container(
+                      margin: EdgeInsets.symmetric(horizontal: 5),
+                      height: 100,
+                      child: Card(
+                        elevation: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            Provider.of<NoteData>(context, listen: false).changeKySongNumber(idx, kySearchSongList[index].songNumber);
+                            Navigator.of(context).pop();
+                          },
+                          child: ListTile(
+                            title: Text(kySearchSongList[index].title),
+                            subtitle: Text(kySearchSongList[index].singer),
+                            trailing: Text(kySearchSongList[index].songNumber),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ]),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   // 정보요청 다이어로그 창
   _showRequestDialog(BuildContext context) {
     Widget requestButton = Row(
@@ -223,7 +290,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
         });
   }
 
-  _showAlertDialog(BuildContext context) {
+  _showDeleteDialog(BuildContext context) {
     Widget okButton = ElevatedButton(
         onPressed: () {
           Provider.of<NoteData>(context, listen: false).deleteNote(widget.note);
@@ -242,7 +309,13 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
       actions: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [okButton, SizedBox(width: 10,),cancelButton],
+          children: [
+            okButton,
+            SizedBox(
+              width: 10,
+            ),
+            cancelButton
+          ],
         ),
       ],
     );
@@ -255,7 +328,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   }
 
   Widget _pitchInfo(String pitch) {
-    print(pitch);
     return pitch == '?'
         ? GestureDetector(
             onTap: () {

@@ -4,7 +4,7 @@ class Note {
   final String tj_songNumber;
   final String ky_title;
   final String ky_singer;
-  final String ky_songNumber;
+  String ky_songNumber;
   final String gender;
   final String pitch;
   final int pitchNum;
