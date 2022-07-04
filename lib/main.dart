@@ -111,6 +111,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'conopot',
           theme: ThemeData(
+            fontFamily: 'pretendard',
             scaffoldBackgroundColor: Colors.white,
             appBarTheme: const AppBarTheme(
               centerTitle: true,
