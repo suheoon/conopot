@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:conopot/screens/user/user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -204,28 +205,40 @@ class _NoteScreenState extends State<NoteScreen> {
                               icon: Icons.delete,
                             ),
                           ]),
-                      child: ListTile(
-                        title: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: note.title,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                  )),
-                              TextSpan(text: " "),
-                              TextSpan(
-                                  text: note.singer,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 13,
-                                  )),
-                            ],
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NoteDetailScreen(
+                                index: noteData.notes.indexOf(note),
+                              ),
+                            ),
+                          );
+                        },
+                        child: ListTile(
+                          title: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: note.title,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                    )),
+                                TextSpan(text: " "),
+                                TextSpan(
+                                    text: note.singer,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                    )),
+                              ],
+                            ),
                           ),
+                          subtitle: Text(note.memo),
+                          trailing: Text(note.songNumber),
                         ),
-                        subtitle: Text(note.memo),
-                        trailing: Text(note.songNumber),
                       ),
                     ),
                   ),
