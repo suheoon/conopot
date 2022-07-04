@@ -21,6 +21,12 @@ class NoteData extends ChangeNotifier {
     notes.remove(note);
     notifyListeners();
   }
+
+  void deleteNoteAt(int index) {
+    notes.removeAt(index);
+    notifyListeners();
+  }
+
   void hideTextFiled() {
     this.visibleOfTextField = false;
     notifyListeners();
@@ -30,4 +36,5 @@ class NoteData extends ChangeNotifier {
     this.visibleOfTextField = true;
     notifyListeners();
   }
+
 }

@@ -4,6 +4,7 @@ import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/firebase/firebase_config.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/screens/note/note_screen.dart';
 import 'package:conopot/splash/splash_screen.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
