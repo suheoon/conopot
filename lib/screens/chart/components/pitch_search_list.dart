@@ -18,17 +18,20 @@ class PitchSearchList extends StatelessWidget {
                 color: Colors.white,
                 elevation: 1,
                 child: ListTile(
-                  leading: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        pitchNumToString[
-                            musicList.highestFoundItems[index].pitchNum],
-                        style: TextStyle(
-                          fontSize: 11,
+                  leading: Container(
+                    width: 60,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          pitchNumToString[
+                              musicList.highestFoundItems[index].pitchNum],
+                          style: TextStyle(
+                            fontSize: 11,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   title: Text(musicList.highestFoundItems[index].tj_title),
                   subtitle: Text(musicList.highestFoundItems[index].tj_singer),

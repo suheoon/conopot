@@ -54,7 +54,7 @@ class _NoteScreenState extends State<NoteScreen> {
                         Future.delayed(Duration.zero, () {
                           Provider.of<MusicSearchItemLists>(context,
                                   listen: false)
-                              .initBook();
+                              .initCombinedBook();
                         });
                         noteData.setSelectedIndex(-1);
                         Navigator.push(
@@ -323,7 +323,23 @@ class _NoteScreenState extends State<NoteScreen> {
                                 );
                               },
                               subtitle: Text(note.memo),
-                              trailing: Text(note.tj_songNumber),
+                              trailing: Container(
+                                width: 70,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "TJ",
+                                      style: TextStyle(
+                                          color: Color(0xFFff4b00),
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(note.tj_songNumber),
+                                  ],
+                                ),
+                              ),
                             ),
                           ))),
                 )

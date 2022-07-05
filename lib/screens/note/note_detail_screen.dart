@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/chart/components/pitch_search_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -142,29 +144,25 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                         child: Icon(Icons.search)),
                   ),
                   SizedBox(width: 30),
-                  Container(
-                    child: Text("키조정"),
-                    width: 50,
-                  ),
-                  Row(children: [
-                    IconButton(
-                      icon: Icon(Icons.remove),
-                      onPressed: () {
-                        Provider.of<NoteData>(context, listen: false)
-                            .minuskeyAdjustment(index);
-                      },
+                  if (widget.note.pitch != '?')
+                    Row(
+                      children: [
+                        Container(
+                          child: Text("최고음 들어보기"),
+                          width: 50,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            play(pitchNumToCode[widget.note.pitchNum]);
+                          },
+                          child: Icon(
+                            Icons.play_circle_outline_outlined,
+                            color: Colors.black,
+                            size: 40.0,
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(width: 5),
-                    Text('${notes[index].keyAdjustment}'),
-                    SizedBox(width: 5),
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {
-                        Provider.of<NoteData>(context, listen: false)
-                            .pluskeyAdjustment(index);
-                      },
-                    )
-                  ])
                 ],
               ),
               SizedBox(height: 30),
@@ -314,4 +312,9 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             ],
           );
   }
+}
+
+void play(String fitch) async {
+  final player = AudioCache(prefix: 'assets/fitches/');
+  await player.play('$fitch.mp3');
 }

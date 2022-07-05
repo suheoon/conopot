@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:conopot/models/music_search_item.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -55,15 +56,8 @@ class MusicSearchItemLists extends ChangeNotifier {
       highestFoundItems.sort(((a, b) => b.pitchNum.compareTo(a.pitchNum)));
     } else if (option == '낮은 음정순') {
       highestFoundItems.sort(((a, b) => a.pitchNum.compareTo(b.pitchNum)));
-    } else if (option == '내 음역대의 노래') {
-      highestResults = highestSongList
-          .where((string) => (userPitch - 2 <= string.pitchNum &&
-              string.pitchNum <= userPitch))
-          .toList();
-      highestFoundItems = highestResults;
     } else {
-      highestResults = highestSongList;
-      highestFoundItems = highestResults;
+      highestFoundItems = List.from(highestSongList);
     }
 
     notifyListeners();
@@ -94,7 +88,8 @@ class MusicSearchItemLists extends ChangeNotifier {
   }
 
   void initFitch() {
-    highestFoundItems = highestSongList;
+    highestFoundItems = List.from(highestSongList);
+    notifyListeners();
   }
 
   void initChart() {
@@ -105,9 +100,13 @@ class MusicSearchItemLists extends ChangeNotifier {
     foundItems = tjSongList;
   }
 
+  void initCombinedBook() {
+    combinedFoundItems = combinedSongList;
+  }
+
   void initPitchMusic({required int pitchNum}) {
-    highestResults = [];
-    highestResults = highestSongList
+    highestResults = List.from(highestSongList);
+    highestResults = highestResults
         .where((string) => (pitchNum - 1 <= string.pitchNum &&
             string.pitchNum <= pitchNum + 1))
         .toList();
@@ -194,7 +193,7 @@ class MusicSearchItemLists extends ChangeNotifier {
           gender: gender,
           pitch: fitch,
           pitchNum: fitchNum));
-      highestFoundItems = highestSongList;
+      highestFoundItems = List.from(highestSongList);
 
       isChecked = List<bool>.filled(highestFoundItems.length, false);
       notifyListeners();
@@ -264,85 +263,89 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   // 검색 필터링 기능(일반검색)
   void runFilter(String enteredKeyword, int _tabIndex) {
-    results = [];
-    //공백 제거 && 대문자 → 소문자 변경
-    enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
+    EasyDebounce.debounce('searching', Duration(milliseconds: 500), () {
+      results = [];
+      //공백 제거 && 대문자 → 소문자 변경
+      enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
 
-    if (_tabIndex == 1) {
-      //TJ
-      if (enteredKeyword.isEmpty) {
-        results = tjSongList;
+      if (_tabIndex == 1) {
+        //TJ
+        if (enteredKeyword.isEmpty) {
+          results = tjSongList;
+        } else {
+          results = tjSongList
+              .where((string) =>
+                  (string.title.replaceAll(' ', '').toLowerCase())
+                      .contains(enteredKeyword) ||
+                  (string.singer.replaceAll(' ', '').toLowerCase())
+                      .contains(enteredKeyword))
+              .toList();
+        }
       } else {
-        results = tjSongList
-            .where((string) =>
-                (string.title.replaceAll(' ', '').toLowerCase())
-                    .contains(enteredKeyword) ||
-                (string.singer.replaceAll(' ', '').toLowerCase())
-                    .contains(enteredKeyword))
-            .toList();
+        //KY
+        if (enteredKeyword.isEmpty) {
+          results = kySongList;
+        } else {
+          results = kySongList
+              .where((string) =>
+                  (string.title.replaceAll(' ', '').toLowerCase())
+                      .contains(enteredKeyword) ||
+                  (string.singer.replaceAll(' ', '').toLowerCase())
+                      .contains(enteredKeyword))
+              .toList();
+        }
       }
-    } else {
-      //KY
-      if (enteredKeyword.isEmpty) {
-        results = kySongList;
-      } else {
-        results = kySongList
-            .where((string) =>
-                (string.title.replaceAll(' ', '').toLowerCase())
-                    .contains(enteredKeyword) ||
-                (string.singer.replaceAll(' ', '').toLowerCase())
-                    .contains(enteredKeyword))
-            .toList();
-      }
-    }
-    foundItems = results;
+      foundItems = results;
 
-    notifyListeners();
+      notifyListeners();
+    });
   }
 
   // 검색 필터링 기능(전체검색)
   void runCombinedFilter(String enteredKeyword) {
-    highestResults = [];
-    //공백 제거 && 대문자 → 소문자 변경
-    enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
+    EasyDebounce.debounce('searching', Duration(milliseconds: 500), () {
+      highestResults = [];
+      //공백 제거 && 대문자 → 소문자 변경
+      enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
 
-    if (enteredKeyword.isEmpty) {
-      highestResults = combinedSongList;
-    } else {
-      highestResults = combinedSongList
-          .where((string) =>
-              (string.tj_title.replaceAll(' ', '').toLowerCase())
-                  .contains(enteredKeyword) ||
-              (string.tj_singer.replaceAll(' ', '').toLowerCase())
-                  .contains(enteredKeyword))
-          .toList();
-    }
+      if (enteredKeyword.isEmpty) {
+        highestResults = combinedSongList;
+      } else {
+        highestResults = combinedSongList
+            .where((string) =>
+                (string.tj_title.replaceAll(' ', '').toLowerCase())
+                    .contains(enteredKeyword) ||
+                (string.tj_singer.replaceAll(' ', '').toLowerCase())
+                    .contains(enteredKeyword))
+            .toList();
+      }
 
-    combinedFoundItems = highestResults;
+      combinedFoundItems = highestResults;
 
-    notifyListeners();
+      notifyListeners();
+    });
   }
 
   // 검색 필터링 기능(인기검색)
   void runHighFitchFilter(String enteredKeyword) {
-    highestResults = [];
-    //공백 제거 && 대문자 → 소문자 변경
-    enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
+    EasyDebounce.debounce('searching', Duration(milliseconds: 500), () {
+      highestResults = List.from(highestSongList);
+      //공백 제거 && 대문자 → 소문자 변경
+      enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
 
-    if (enteredKeyword.isEmpty) {
-      highestResults = highestSongList;
-    } else {
-      highestResults = highestSongList
-          .where((string) =>
-              (string.tj_title.replaceAll(' ', '').toLowerCase())
-                  .contains(enteredKeyword) ||
-              (string.tj_singer.replaceAll(' ', '').toLowerCase())
-                  .contains(enteredKeyword))
-          .toList();
-    }
-    highestFoundItems = highestResults;
+      if (!enteredKeyword.isEmpty) {
+        highestResults = highestResults
+            .where((string) =>
+                (string.tj_title.replaceAll(' ', '').toLowerCase())
+                    .contains(enteredKeyword) ||
+                (string.tj_singer.replaceAll(' ', '').toLowerCase())
+                    .contains(enteredKeyword))
+            .toList();
+      }
+      highestFoundItems = highestResults;
 
-    notifyListeners();
+      notifyListeners();
+    });
   }
 
   void parseMusics(List<String> contents, List<MusicSearchItem> musicList) {
