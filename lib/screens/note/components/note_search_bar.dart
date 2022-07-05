@@ -18,7 +18,6 @@ class NoteSearchBar extends StatelessWidget {
                   musicList.runCombinedFilter(text),
                 },
                 onTap: () {
-                  print("yes");
                   noteData.setSelectedIndex(-1);
                   noteData.hideTextFiled();
                 },

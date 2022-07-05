@@ -80,7 +80,6 @@ class PitchChoice extends StatelessWidget {
                         AlertDialog(
                           title: Text('최소 하나 이상 선택해주세요!'),
                         ),
-                        print(1),
                       }
                     else
                       {

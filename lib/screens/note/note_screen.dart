@@ -3,6 +3,7 @@ import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
 import 'package:conopot/screens/pitch/pitch_measure.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
@@ -332,19 +333,19 @@ class _NoteScreenState extends State<NoteScreen> {
                               },
                               subtitle: Text(note.memo),
                               trailing: Container(
-                                width: 70,
+                                width: 80,
                                 child: Row(
                                   children: [
-                                    Text(
-                                      "TJ",
-                                      style: TextStyle(
-                                          color: Color(0xFFff4b00),
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(note.tj_songNumber),
+                                    UserSetWidget(
+                                        Provider.of<MusicSearchItemLists>(
+                                                context,
+                                                listen: true)
+                                            .userNoteSetting,
+                                        note,
+                                        Provider.of<MusicSearchItemLists>(
+                                                context,
+                                                listen: true)
+                                            .userMaxPitch),
                                   ],
                                 ),
                               ),
@@ -366,4 +367,19 @@ class _NoteScreenState extends State<NoteScreen> {
       ),
     );
   }
+}
+
+Widget UserSetWidget(int setNum, Note note, int userPitch) {
+  if (setNum == 0) {
+    return RichText(
+        text: TextSpan(children: [
+      TextSpan(text: 'TJ ', style: TextStyle(color: Color(0xFFff4b00))),
+      TextSpan(text: note.tj_songNumber, style: TextStyle(color: Colors.black)),
+    ]));
+  } else if (setNum == 1) {
+    if (note.pitch != '?') {
+      return Text(pitchNumToString[note.pitchNum]);
+    }
+  }
+  return Text('');
 }

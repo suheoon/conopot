@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:conopot/config/constants.dart';
+import 'package:http/http.dart' as http;
 import 'package:conopot/config/size_config.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
@@ -12,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pitchupdart/pitch_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -165,6 +168,13 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                           child:
                               Center(child: Text(notes[index].ky_songNumber)),
                         ),
+
+                        Text(notes[index].ky_songNumber == '?'
+                            ? ''
+                            : notes[index].ky_songNumber),
+                      ]),
+                    ),
+                  ),
                   SizedBox(width: 30),
                   if (widget.note.pitch != '?')
                     Row(
@@ -238,6 +248,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                     child: Text("금영 번호 추가"),
                   ),
                 ),
+
                 kySearchSongList.length == 0
                     ? Padding(
                         padding: EdgeInsets.only(top: 20),
@@ -270,6 +281,25 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                                 ),
                               ),
                             ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: kySearchSongList.length,
+                    itemBuilder: (context, index) => Container(
+                      margin: EdgeInsets.symmetric(horizontal: 5),
+                      height: 100,
+                      child: Card(
+                        elevation: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            Provider.of<NoteData>(context, listen: false)
+                                .changeKySongNumber(
+                                    idx, kySearchSongList[index].songNumber);
+                            Navigator.of(context).pop();
+                          },
+                          child: ListTile(
+                            title: Text(kySearchSongList[index].title),
+                            subtitle: Text(kySearchSongList[index].singer),
+                            trailing: Text(kySearchSongList[index].songNumber),
                           ),
                         ),
                       )
@@ -288,8 +318,18 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
       children: [
         ElevatedButton(
           onPressed: () {
+            noteInfoPostRequest(widget.note);
             // 정보요청
             Navigator.of(context).pop();
+
+            Fluttertoast.showToast(
+                msg: "최고음 정보를 요청하였습니다 :)",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 16.0);
           },
           child: Text("정보 요청"),
         ),
@@ -379,11 +419,38 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   Widget _recommendList(int pitchNum) {
     Provider.of<MusicSearchItemLists>(context, listen: false)
         .initPitchMusic(pitchNum: pitchNum);
-    return pitchNum == '?'
+    return pitchNum == 0
         ? Container()
         : Column(
             children: [
-              Text("노래 추천"),
+              RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: '비슷한 ',
+                      style: TextStyle(
+                        color: Color(0xFF7B61FF),
+                      ),
+                    ),
+                    TextSpan(
+                      text: '음역대',
+                      style: TextStyle(
+                        color: Color(0xFF7B61FF),
+                      ),
+                    ),
+                    TextSpan(
+                      text: ' 노래 추천',
+                      style: TextStyle(
+                        color: kTextColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               SizedBox(height: 20),
               PitchSearchList(
                   musicList: Provider.of<MusicSearchItemLists>(context,
@@ -391,6 +458,28 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             ],
           );
   }
+}
+
+void noteInfoPostRequest(Note note) async {
+  String url =
+      'https://zeq3b9zt96.execute-api.ap-northeast-2.amazonaws.com/conopot/Conopot_Mailing';
+
+  final response = await http.post(
+    Uri.parse(url),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode({
+      "fields": {
+        "MusicName": "${note.tj_title}",
+        "MusicSinger": "${note.tj_singer}",
+        "MusicNumberTJ": "${note.tj_songNumber}",
+        "MusicNumberKY": "${note.ky_songNumber}",
+        "Calls": 0,
+        "Status": "To do"
+      }
+    }),
+  );
 }
 
 void play(String fitch) async {

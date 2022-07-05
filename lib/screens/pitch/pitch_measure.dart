@@ -11,6 +11,7 @@ import 'package:conopot/screens/pitch/components/indicator.dart';
 import 'package:conopot/screens/pitch/components/pitch_banner.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/screens/pitch/pitch_result.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_capture/flutter_audio_capture.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -108,8 +109,8 @@ class _PitchMeasureState extends State<PitchMeasure> {
       flag = 1;
     });
 
-    //누르고 2초 후 음 측정 시작
-    Timer(Duration(milliseconds: 2000), () {
+    EasyDebounce.debounce('searching', Duration(milliseconds: 2000), () {
+      //누르고 2초 후 음 측정 시작
       _startCapture();
     });
   }
@@ -294,7 +295,6 @@ class _PitchMeasureState extends State<PitchMeasure> {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    
                                     setState(() {
                                       nowPitchName =
                                           pitchItemList[pitchIdx].pitchName;
