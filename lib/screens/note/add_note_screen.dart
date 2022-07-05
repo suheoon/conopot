@@ -3,7 +3,7 @@ import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/musicBook/components/search_bar.dart';
 import 'package:conopot/screens/note/components/note_search_list.dart';
-import 'package:conopot/screens/note/components/note_serach_textfield.dart';
+import 'package:conopot/screens/note/components/editable_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -35,7 +35,6 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
           children: [
             NoteSearchBar(musicList: musicList),
             NoteSearchList(musicList: musicList),
-            NoteSearchTextfiled(),
           ],
         ),
       ),

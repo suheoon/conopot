@@ -211,52 +211,60 @@ class _NoteScreenState extends State<NoteScreen> {
           height: SizeConfig.screenHeight / 5,
         ),
         RichText(
-            text: TextSpan(children: [
-          TextSpan(
-            text: "나만의 ",
-            style: TextStyle(
-              color: kTextColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: "나만의 ",
+                style: TextStyle(
+                  color: kTextColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              TextSpan(
+                  text: '첫 애창곡',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: kPrimaryColor,
+                    fontSize: 20,
+                  )),
+              TextSpan(
+                text: "을 저장해보세요!",
+                style: TextStyle(
+                  color: kTextColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ],
           ),
-          TextSpan(
-              text: '첫 애창곡',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: kPrimaryColor,
-                fontSize: 20,
-              )),
-          TextSpan(
-            text: "을 저장해보세요!",
-            style: TextStyle(
-              color: kTextColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-          ),
-        ])),
+        ),
         SizedBox(
           height: SizeConfig.defaultSize * 3,
         ),
-        GestureDetector(
-          onTap: () {
-            Future.delayed(Duration.zero, () {
-              Provider.of<MusicSearchItemLists>(context, listen: false)
-                  .initBook();
-            });
-            Provider.of<NoteData>(context, listen: false).setSelectedIndex(-1);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => AddNoteScreen()),
-            );
-          },
-          child: Container(
-            height: 100,
-            width: 100,
-            child: SvgPicture.asset('assets/icons/addButton.svg'),
+        Container(
+          height: SizeConfig.screenHeight * 0.2,
+          width: SizeConfig.screenWidth * 0.5,
+          child: FittedBox(
+            child: FloatingActionButton(
+              backgroundColor: Colors.white,
+              elevation: 5.0,
+              onPressed: () {
+                Future.delayed(Duration.zero, () {
+                  Provider.of<MusicSearchItemLists>(context, listen: false)
+                      .initBook();
+                });
+                Provider.of<NoteData>(context, listen: false)
+                    .setSelectedIndex(-1);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => AddNoteScreen()),
+                );
+              },
+              child: SvgPicture.asset('assets/icons/addButton.svg'),
+            ),
           ),
-        )
+        ),
       ],
     ));
   }
