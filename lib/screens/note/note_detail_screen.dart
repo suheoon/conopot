@@ -122,7 +122,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                       color: Color(0x30826A6A),
                     ),
-                    child: Center(child: Text("60398")),
+                    child: Center(child: Text(notes[index].tj_songNumber)),
                   ),
                   SizedBox(width: 30),
                   Container(
