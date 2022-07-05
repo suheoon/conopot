@@ -19,12 +19,6 @@ class NoteData extends ChangeNotifier {
     // Read all values
     Map<String, String> allValues = await storage.readAll();
 
-    print(allValues);
-
-    print(allValues.keys);
-
-    print(combinedSongList.length);
-
     //합친 곡 리스트 순회하며 노트에 있는 곡인지 체크
     for (int i = 0; i < combinedSongList.length; i++) {
       if (allValues.containsKey(combinedSongList[i].tj_songNumber)) {

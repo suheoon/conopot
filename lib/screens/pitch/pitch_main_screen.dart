@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       children: [
                         SvgPicture.asset(
-                          'assets/icons/pitchMeasure.svg',
+                          'assets/icons/singer.svg',
                           height: SizeConfig.screenHeight * 0.25 * 0.5,
                         ),
                         SizedBox(
@@ -121,8 +121,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Center(
                     child: Column(
                       children: [
-                        SvgPicture.asset(
-                          'assets/icons/pitchChoice.svg',
+                        Image(
+                          image: AssetImage('assets/images/microphone.png'),
                           height: SizeConfig.screenHeight * 0.25 * 0.5,
                         ),
                         SizedBox(
