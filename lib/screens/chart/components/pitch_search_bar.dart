@@ -1,5 +1,6 @@
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PitchSearchBar extends StatelessWidget {
   final MusicSearchItemLists musicList;

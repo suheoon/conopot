@@ -99,6 +99,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           GestureDetector(
             onTap: () {
+              Provider.of<MusicSearchItemLists>(context, listen: false)
+                  .initFitch();
               Navigator.push(
                 context,
                 CustomPageRoute(
