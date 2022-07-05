@@ -9,7 +9,7 @@ import 'note.dart';
 class NoteData extends ChangeNotifier {
   List<Note> notes = [];
   bool visibleOfTextField = false;
-  late FitchMusic musicSearchItem;
+  late FitchMusic clickedItem;
   int selectedIndex = -1;
   bool emptyCheck = false;
 
@@ -47,32 +47,38 @@ class NoteData extends ChangeNotifier {
   //예외 : 이미 있는 노래를 추가할 경우
   Future<void> addNote(String memo) async {
     Note note = Note(
-        musicSearchItem.tj_title,
-        musicSearchItem.tj_singer,
-        musicSearchItem.tj_songNumber,
-        musicSearchItem.ky_title,
-        musicSearchItem.ky_singer,
-        musicSearchItem.ky_songNumber,
-        musicSearchItem.gender,
-        musicSearchItem.pitch,
-        musicSearchItem.pitchNum,
+        clickedItem.tj_title,
+        clickedItem.tj_singer,
+        clickedItem.tj_songNumber,
+        clickedItem.ky_title,
+        clickedItem.ky_singer,
+        clickedItem.ky_songNumber,
+        clickedItem.gender,
+        clickedItem.pitch,
+        clickedItem.pitchNum,
         memo,
         0);
 
     bool flag = false;
     for (Note iter_note in notes) {
-      if (iter_note.tj_songNumber == musicSearchItem.tj_songNumber) {
+      if (iter_note.tj_songNumber == clickedItem.tj_songNumber) {
         flag = true;
         break;
       }
     }
     if (!flag) {
-      await storage.write(key: musicSearchItem.tj_songNumber, value: memo);
+      await storage.write(key: clickedItem.tj_songNumber, value: memo);
       notes.add(note);
     } else {
       emptyCheck = true;
     }
 
+    notifyListeners();
+  }
+
+  Future<void> editNote(Note note, String memo) async{
+    note.memo = memo;
+    await storage.write(key: note.tj_songNumber, value: memo);
     notifyListeners();
   }
 

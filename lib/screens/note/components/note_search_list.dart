@@ -2,8 +2,12 @@ import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+
+import '../../../config/constants.dart';
 
 class NoteSearchList extends StatefulWidget {
   final MusicSearchItemLists musicList;
@@ -15,6 +19,57 @@ class NoteSearchList extends StatefulWidget {
 }
 
 class _NoteSearchListState extends State<NoteSearchList> {
+  TextEditingController memoController = new TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return _ListView(context);
+  }
+
+  Widget _actionSheet() {
+    return CupertinoActionSheet(
+      actions: [
+        CupertinoActionSheetAction(
+          child: Text("추가"),
+          onPressed: () {
+            Provider.of<NoteData>(context, listen: false)
+                            .addNote(memoController.text);
+                        if (Provider.of<NoteData>(context, listen: false)
+                                .emptyCheck ==
+                            true) {
+                          Fluttertoast.showToast(
+                              msg: "이미 저장된 노래입니다!",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                          Provider.of<NoteData>(context, listen: false)
+                              .initEmptyCheck();
+                        } else {
+                          Navigator.of(context).popUntil((route) => route.isFirst);
+                          Fluttertoast.showToast(
+                              msg: "노트가 생성되었습니다.",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: kPrimaryColor,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        }
+          },
+        ),
+      ],
+      cancelButton: CupertinoActionSheetAction(
+        child: Text("취소", style: TextStyle(color: Colors.red),),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+    );
+  }
+
   Widget _ListView(BuildContext context) {
     int _selectedIndex =
         Provider.of<NoteData>(context, listen: false).selectedIndex;
@@ -28,6 +83,17 @@ class _NoteSearchListState extends State<NoteSearchList> {
                 child: Card(
                   elevation: 0,
                   child: GestureDetector(
+                    onTap: () => setState(() {
+                      Provider.of<NoteData>(context, listen: false)
+                          .setSelectedIndex(index);
+                      Provider.of<NoteData>(context, listen: false)
+                              .clickedItem =
+                          widget.musicList.combinedFoundItems[index];
+                      showCupertinoModalPopup(
+                        context: context,
+                        builder: (context) => _actionSheet(),
+                      );
+                    }),
                     child: Container(
                       decoration: BoxDecoration(
                         color:
@@ -93,15 +159,6 @@ class _NoteSearchListState extends State<NoteSearchList> {
                         ],
                       ),
                     ),
-                    onTap: () => setState(() {
-                      Provider.of<NoteData>(context, listen: false)
-                          .setSelectedIndex(index);
-                      Provider.of<NoteData>(context, listen: false)
-                          .showTextFiled();
-                      Provider.of<NoteData>(context, listen: false)
-                              .musicSearchItem =
-                          widget.musicList.combinedFoundItems[index];
-                    }),
                   ),
                 ),
               ),
@@ -111,10 +168,5 @@ class _NoteSearchListState extends State<NoteSearchList> {
             '검색 결과가 없습니다',
             style: TextStyle(fontSize: 18),
           );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _ListView(context);
   }
 }

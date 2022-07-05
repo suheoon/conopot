@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:conopot/config/constants.dart';
@@ -8,6 +9,7 @@ import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/chart/components/pitch_search_list.dart';
+import 'package:conopot/screens/note/components/editable_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -20,7 +22,7 @@ import '../../models/music_search_item.dart';
 import '../../models/note.dart';
 
 class NoteDetailScreen extends StatefulWidget {
-  final Note note;
+  late Note note;
   NoteDetailScreen({Key? key, required this.note}) : super(key: key);
 
   @override
@@ -83,9 +85,9 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   icon: SvgPicture.asset('assets/icons/youtube.svg'),
                   onPressed: () async {
                     final url = Uri.parse(
-                        'https://www.youtube.com/results?search_query=${widget.note.tj_title}');
+                        'https://www.youtube.com/results?search_query=tj ${widget.note.tj_title} ${widget.note.tj_singer}');
                     if (await canLaunchUrl(url)) {
-                      launchUrl(url, mode: LaunchMode.externalApplication);
+                      launchUrl(url, mode: LaunchMode.inAppWebView);
                     }
                   }),
             ),
@@ -137,23 +139,36 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                 children: [
                   Container(width: 30, child: Text("금영")),
                   SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () {
-                      // 금영 검색 창
-                      _showKySearchDialog(context, notes, index);
-                    },
-                    child: Container(
-                      width: 70,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        color: Color(0x30826A6A),
-                      ),
-                      child: Row(children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Icon(Icons.search),
+                  widget.note.ky_songNumber == '?'
+                      ? GestureDetector(
+                          onTap: () {
+                            _showKySearchDialog(context, notes, index);
+                          },
+                          child: Container(
+                            width: 70,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              color: Color(0x30826A6A),
+                            ),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Icon(Icons.search),
+                            ),
+                          ),
+                        )
+                      : Container(
+                          width: 70,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            color: Color(0x30826A6A),
+                          ),
+                          child:
+                              Center(child: Text(notes[index].ky_songNumber)),
                         ),
+
                         Text(notes[index].ky_songNumber == '?'
                             ? ''
                             : notes[index].ky_songNumber),
@@ -188,20 +203,18 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                 children: [
                   Text("메모"),
                   SizedBox(height: 10),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 40,
-                    child: Align(
-                      alignment: Alignment(-0.9, 0),
-                      child: Text(widget.note.memo),
+                  Stack(children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 40,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          color: Color(0xFFF5F5FA)),
                     ),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        color: Color(0xFFF5F5FA)),
-                  )
+                    EditableTextField(note: widget.note)
+                  ]),
                 ],
               ),
-              SizedBox(height: 30),
             ],
           ),
         ),
@@ -235,6 +248,39 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                     child: Text("금영 번호 추가"),
                   ),
                 ),
+
+                kySearchSongList.length == 0
+                    ? Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: DefaultTextStyle(
+                          style: TextStyle(fontSize: 13, color: Colors.black),
+                          child: Text("검색 결과가 없습니다"),
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: kySearchSongList.length,
+                          itemBuilder: (context, index) => Container(
+                            margin: EdgeInsets.symmetric(horizontal: 5),
+                            height: 100,
+                            child: Card(
+                              elevation: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Provider.of<NoteData>(context, listen: false)
+                                      .changeKySongNumber(idx,
+                                          kySearchSongList[index].songNumber);
+                                  Navigator.of(context).pop();
+                                },
+                                child: ListTile(
+                                  title: Text(kySearchSongList[index].title),
+                                  subtitle:
+                                      Text(kySearchSongList[index].singer),
+                                  trailing:
+                                      Text(kySearchSongList[index].songNumber),
+                                ),
+                              ),
+                            ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: kySearchSongList.length,
@@ -256,10 +302,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                             trailing: Text(kySearchSongList[index].songNumber),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                )
+                      )
               ]),
             ),
           ),
@@ -310,11 +353,13 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
 
   _showDeleteDialog(BuildContext context) {
     Widget okButton = ElevatedButton(
-        onPressed: () {
-          Provider.of<NoteData>(context, listen: false).deleteNote(widget.note);
-          Navigator.of(context).popUntil((route) => route.isFirst);
-        },
-        child: Text("삭제"));
+      style: ElevatedButton.styleFrom(primary: Colors.red),
+      onPressed: () {
+        Provider.of<NoteData>(context, listen: false).deleteNote(widget.note);
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      },
+      child: Text("삭제"),
+    );
 
     Widget cancelButton = ElevatedButton(
         onPressed: () {
@@ -325,16 +370,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     AlertDialog alert = AlertDialog(
       content: Text("노트가 삭제 됩니다."),
       actions: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            okButton,
-            SizedBox(
-              width: 10,
-            ),
-            cancelButton
-          ],
-        ),
+        cancelButton,
+        okButton,
       ],
     );
 

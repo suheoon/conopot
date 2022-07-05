@@ -8,7 +8,7 @@ class Note {
   final String gender;
   final String pitch;
   final int pitchNum;
-  final String memo;
+  String memo;
   int keyAdjustment;
 
   Note(
