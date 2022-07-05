@@ -1,7 +1,7 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/screens/note/components/editable_text_field.dart';
 import 'package:http/http.dart' as http;
 import 'package:conopot/config/size_config.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -9,7 +9,6 @@ import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/chart/components/pitch_search_list.dart';
-import 'package:conopot/screens/note/components/editable_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -168,13 +167,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                           child:
                               Center(child: Text(notes[index].ky_songNumber)),
                         ),
-
-                        Text(notes[index].ky_songNumber == '?'
-                            ? ''
-                            : notes[index].ky_songNumber),
-                      ]),
-                    ),
-                  ),
                   SizedBox(width: 30),
                   if (widget.note.pitch != '?')
                     Row(
@@ -248,7 +240,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                     child: Text("금영 번호 추가"),
                   ),
                 ),
-
                 kySearchSongList.length == 0
                     ? Padding(
                         padding: EdgeInsets.only(top: 20),
@@ -281,25 +272,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                                 ),
                               ),
                             ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: kySearchSongList.length,
-                    itemBuilder: (context, index) => Container(
-                      margin: EdgeInsets.symmetric(horizontal: 5),
-                      height: 100,
-                      child: Card(
-                        elevation: 0,
-                        child: GestureDetector(
-                          onTap: () {
-                            Provider.of<NoteData>(context, listen: false)
-                                .changeKySongNumber(
-                                    idx, kySearchSongList[index].songNumber);
-                            Navigator.of(context).pop();
-                          },
-                          child: ListTile(
-                            title: Text(kySearchSongList[index].title),
-                            subtitle: Text(kySearchSongList[index].singer),
-                            trailing: Text(kySearchSongList[index].songNumber),
                           ),
                         ),
                       )
@@ -318,6 +290,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
       children: [
         ElevatedButton(
           onPressed: () {
+            // 정보요청
             noteInfoPostRequest(widget.note);
             // 정보요청
             Navigator.of(context).pop();
