@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:conopot/config/size_config.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/pitch_item.dart';
+import 'package:conopot/screens/chart/components/pitch_search_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -153,29 +156,25 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                     ),
                   ),
                   SizedBox(width: 30),
-                  Container(
-                    child: Text("키조정"),
-                    width: 50,
-                  ),
-                  Row(children: [
-                    IconButton(
-                      icon: Icon(Icons.remove),
-                      onPressed: () {
-                        Provider.of<NoteData>(context, listen: false)
-                            .minuskeyAdjustment(index);
-                      },
+                  if (widget.note.pitch != '?')
+                    Row(
+                      children: [
+                        Container(
+                          child: Text("최고음 들어보기"),
+                          width: 50,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            play(pitchNumToCode[widget.note.pitchNum]);
+                          },
+                          child: Icon(
+                            Icons.play_circle_outline_outlined,
+                            color: Colors.black,
+                            size: 40.0,
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(width: 5),
-                    Text('${notes[index].keyAdjustment}'),
-                    SizedBox(width: 5),
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {
-                        Provider.of<NoteData>(context, listen: false)
-                            .pluskeyAdjustment(index);
-                      },
-                    )
-                  ])
                 ],
               ),
               SizedBox(height: 30),
@@ -198,9 +197,11 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                 ],
               ),
               SizedBox(height: 30),
-              _recommendList(widget.note.pitch)
             ],
           ),
+        ),
+        Expanded(
+          child: _recommendList(widget.note.pitchNum),
         ),
       ]),
     );
@@ -361,14 +362,24 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
           );
   }
 
-  Widget _recommendList(String pitch) {
-    return pitch == '?'
+  Widget _recommendList(int pitchNum) {
+    Provider.of<MusicSearchItemLists>(context, listen: false)
+        .initPitchMusic(pitchNum: pitchNum);
+    return pitchNum == '?'
         ? Container()
         : Column(
             children: [
               Text("노래 추천"),
               SizedBox(height: 20),
+              PitchSearchList(
+                  musicList: Provider.of<MusicSearchItemLists>(context,
+                      listen: false)),
             ],
           );
   }
+}
+
+void play(String fitch) async {
+  final player = AudioCache(prefix: 'assets/fitches/');
+  await player.play('$fitch.mp3');
 }

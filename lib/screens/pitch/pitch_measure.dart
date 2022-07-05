@@ -108,7 +108,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
       flag = 1;
     });
 
-    //누르고 1초 후 음 측정 시작
+    //누르고 2초 후 음 측정 시작
     Timer(Duration(milliseconds: 2000), () {
       _startCapture();
     });
@@ -294,6 +294,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                                 ),
                                 TextButton(
                                   onPressed: () {
+                                    
                                     setState(() {
                                       nowPitchName =
                                           pitchItemList[pitchIdx].pitchName;

@@ -42,7 +42,9 @@ class _PitchScreenState extends State<PitchScreen> {
         ),
         body: Column(
           children: [
-            PitchSearchBar(musicList: musicList),
+            PitchSearchBar(
+              musicList: musicList,
+            ),
             RichText(
               text: TextSpan(
                 style: TextStyle(
