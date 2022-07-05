@@ -31,10 +31,19 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   int userMaxPitch = -1;
 
+  int userNoteSetting = 0; //(0: 번호, 1: 최고음, 2: 최고음 차이)
+
   final storage = new FlutterSecureStorage();
 
   void changeUserPitch({required int pitch}) {
     userPitch = pitch;
+    notifyListeners();
+  }
+
+  void changeUserNoteSetting(int settingNum) {
+    print(settingNum);
+    userNoteSetting = settingNum;
+    storage.write(key: 'userNoteSetting', value: settingNum.toString());
     notifyListeners();
   }
 
@@ -120,6 +129,11 @@ class MusicSearchItemLists extends ChangeNotifier {
     if (value != null) {
       userPitch = int.parse(value);
       userMaxPitch = userPitch;
+    }
+
+    value = await storage.read(key: 'userNoteSetting');
+    if (value != null) {
+      userNoteSetting = int.parse(value);
     }
 
     String TJMusics = await getTJMusics();

@@ -58,29 +58,7 @@ class PitchSearchList extends StatelessWidget {
             )
           : Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '검색 결과가 없습니다 ❗️',
-                    style: TextStyle(fontSize: 21),
-                  ),
-                  SizedBox(
-                    height: SizeConfig.defaultSize,
-                  ),
-                  Text(
-                    '음을 너무 낮거나 높게 설정한 경우 \n노래가 나오지 않을 수 있습니다.\n 검색 결과가 없는 노래 중 옥타브가 궁금한 노래는\n 아래 메일로 문의주세요!\n',
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    'conopots@gmail.com',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 38, 181, 247),
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ],
-              ),
+              child: Column(),
             ),
     );
   }
