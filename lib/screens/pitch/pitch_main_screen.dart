@@ -74,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(
                             color: kTextLightColor,
                             fontSize: 13,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         SizedBox(
@@ -133,6 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(
                             color: kTextLightColor,
                             fontSize: 13,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         SizedBox(

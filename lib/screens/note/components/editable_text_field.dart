@@ -1,3 +1,4 @@
+import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class _EditableTextFieldState extends State<EditableTextField> {
           decoration: InputDecoration(
               border: InputBorder.none,
               suffixIcon: TextButton(
-                child: Text("저장"),
+                child: Text("저장", style: TextStyle(color: kTitleColor),),
                 onPressed: () {
                   setState(() {
                     initialText = _editingController.text;
@@ -75,6 +76,7 @@ class _EditableTextFieldState extends State<EditableTextField> {
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 15.0,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

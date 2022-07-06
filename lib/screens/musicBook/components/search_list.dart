@@ -1,3 +1,4 @@
+import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +17,8 @@ class SearchList extends StatelessWidget {
                 color: Colors.white,
                 elevation: 1,
                 child: ListTile(
-                  title: Text(musicList.foundItems[index].title),
-                  subtitle: Text(musicList.foundItems[index].singer),
+                  title: Text(musicList.foundItems[index].title, style: TextStyle(color: kTitleColor, fontWeight: FontWeight.bold, fontSize: 18),),
+                  subtitle: Text(musicList.foundItems[index].singer, style: TextStyle(color: kSubTitleColor, fontWeight: FontWeight.bold,)),
                   trailing: Text(musicList.foundItems[index].songNumber),
                 ),
               ),

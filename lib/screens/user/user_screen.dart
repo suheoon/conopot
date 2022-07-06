@@ -146,15 +146,16 @@ class _UserScreenState extends State<UserScreen> {
                         );
                       },
                       child: Container(
+                        margin: EdgeInsets.only(left: 5),
                         padding: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 20.0),
                         child: Row(
                           children: [
                             SvgPicture.asset(
-                              'assets/icons/homeSpeak.svg',
+                              'assets/icons/measure.svg',
                               height: 20,
                             ),
                             SizedBox(
-                              width: SizeConfig.defaultSize,
+                              width: 20,
                             ),
                             Text(
                               '최고 음역대 측정하기',

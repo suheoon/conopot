@@ -25,7 +25,7 @@ class _PitchDropdownOptionState extends State<PitchDropdownOption> {
           value: optionString,
           icon: const Icon(Icons.arrow_drop_down_sharp),
           elevation: 16,
-          style: const TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           onChanged: (String? newValue) {
             musicList.changeSortOption(option: newValue);
             setState(() {

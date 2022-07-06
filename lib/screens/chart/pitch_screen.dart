@@ -55,7 +55,7 @@ class _PitchScreenState extends State<PitchScreen> {
                   TextSpan(
                     text: '* 음역대 측정 ',
                     style: TextStyle(
-                      color: Color(0xFF7B61FF),
+                      color: kPrimaryColor,
                     ),
                   ),
                   TextSpan(

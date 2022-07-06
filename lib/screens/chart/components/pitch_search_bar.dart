@@ -18,7 +18,7 @@ class PitchSearchBar extends StatelessWidget {
         textAlign: TextAlign.center,
         keyboardType: TextInputType.name,
         decoration: InputDecoration(
-          hintText: '제목 및 가수명을 검색하세요',
+          hintText: '제목 및 가수명을 입력하세요',
           contentPadding: EdgeInsets.all(0),
           suffixIcon: Icon(Icons.search),
           focusedBorder: OutlineInputBorder(

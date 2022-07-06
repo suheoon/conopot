@@ -42,9 +42,9 @@ class PitchChoice extends StatelessWidget {
                         ),
                         children: [
                           TextSpan(
-                            text: '이노래, ',
+                            text: '이 노래, ',
                             style: TextStyle(
-                              color: Color(0xFF7B61FF),
+                              color: kPrimaryColor,
                             ),
                           ),
                           TextSpan(
@@ -62,7 +62,7 @@ class PitchChoice extends StatelessWidget {
                     Text(
                       '전 구간 부를 수 있는 노래만 선택해주세요!',
                       style: TextStyle(
-                        fontWeight: FontWeight.normal,
+                        fontWeight: FontWeight.bold,
                         fontSize: 16,
                         color: Color(0xFF4F4F4F),
                       ),

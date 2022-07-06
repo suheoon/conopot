@@ -1,3 +1,4 @@
+import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:flutter/material.dart';
 
@@ -43,16 +44,15 @@ class PopSearchList extends StatelessWidget {
                                       )
                                     : Row(
                                         children: [
-                                          Text((index + 1).toString()),
-                                          Text("위"),
+                                          Text((index + 1).toString() + "위", style: TextStyle(fontWeight: FontWeight.bold, color: kTextColor),),
                                         ],
                                       ),
                       ],
                     ),
                   ),
-                  title: Text(musicList.foundItems[index].title),
-                  subtitle: Text(musicList.foundItems[index].singer),
-                  trailing: Text(musicList.foundItems[index].songNumber),
+                  title: Text(musicList.foundItems[index].title, style: TextStyle(color: kTitleColor, fontWeight: FontWeight.bold, fontSize: 18),),
+                  subtitle: Text(musicList.foundItems[index].singer, style: TextStyle(color: kSubTitleColor, fontWeight: FontWeight.bold)),
+                  trailing: Text(musicList.foundItems[index].songNumber, style: TextStyle(fontWeight: FontWeight.bold, color: kPrimaryBlackColor),),
                 ),
               ),
             )

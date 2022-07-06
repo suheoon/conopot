@@ -1,5 +1,6 @@
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 class PitchDropdown extends StatelessWidget {
@@ -25,7 +26,7 @@ class PitchDropdown extends StatelessWidget {
               .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
-              child: Text(value),
+              child: Text(value, style: TextStyle(fontWeight: FontWeight.bold),),
             );
           }).toList(),
         ),

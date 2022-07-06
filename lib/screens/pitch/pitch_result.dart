@@ -81,14 +81,15 @@ class _PitchResultState extends State<PitchResult> {
               Container(
                 padding: EdgeInsets.all(6.0),
                 decoration: BoxDecoration(
-                  color: Color(0xFFE2DCFC),
+                  color: kTitleColor,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Text(
                   pitchNumToString[pitchLevel],
                   style: TextStyle(
-                    color: Colors.black,
+                    color: kPrimaryCreamColor,
                     fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -118,7 +119,7 @@ class _PitchResultState extends State<PitchResult> {
                     TextSpan(
                       text: '최고음',
                       style: TextStyle(
-                        color: Color(0xFF7B61FF),
+                        color: kTextColor,
                       ),
                     ),
                     TextSpan(
@@ -153,7 +154,7 @@ class _PitchResultState extends State<PitchResult> {
           },
           label: Text(
             '애창곡 노트 설정하러가기',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(fontWeight: FontWeight.bold, color: kPrimaryCreamColor),
           ),
           icon: Icon(Icons.note_add_outlined),
           backgroundColor: kPrimaryColor,
