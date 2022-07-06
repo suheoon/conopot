@@ -62,8 +62,16 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.note.tj_title,
-                        overflow: TextOverflow.ellipsis, maxLines: 1),
+                    Text(
+                      widget.note.tj_title,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: kTitleColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 23,
+                      ),
+                    ),
                     SizedBox(
                       height: 5,
                     ),
@@ -71,6 +79,10 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                       widget.note.tj_singer,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
+                      style: TextStyle(
+                          color: kSubTitleColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -107,13 +119,20 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("정보"),
+              Text(
+                "정보",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
               SizedBox(
                 height: 10,
               ),
               Row(
                 children: [
-                  Container(width: 30, child: Text("TJ")),
+                  Container(
+                      width: 50,
+                      child: Text("TJ",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold))),
                   SizedBox(width: 10),
                   Container(
                     width: 70,
@@ -122,11 +141,20 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                       color: Color(0x30826A6A),
                     ),
-                    child: Center(child: Text(notes[index].tj_songNumber)),
+                    child: Center(
+                        child: Text(
+                      notes[index].tj_songNumber,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                    )),
                   ),
                   SizedBox(width: 30),
                   Container(
-                    child: Text("최고음"),
+                    child: Text("최고음",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        )),
                     width: 50,
                   ),
                   SizedBox(width: 10),
@@ -136,7 +164,14 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
               SizedBox(height: 10),
               Row(
                 children: [
-                  Container(width: 30, child: Text("금영")),
+                  Container(
+                    width: 50,
+                    child: Text(
+                      "금영",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
                   SizedBox(width: 10),
                   widget.note.ky_songNumber == '?'
                       ? GestureDetector(
@@ -164,15 +199,22 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                             color: Color(0x30826A6A),
                           ),
-                          child:
-                              Center(child: Text(notes[index].ky_songNumber)),
+                          child: Center(
+                            child: Text(
+                              notes[index].ky_songNumber,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17),
+                            ),
+                          ),
                         ),
                   SizedBox(width: 30),
                   if (widget.note.pitch != '?')
                     Row(
                       children: [
                         Container(
-                          child: Text("최고음 들어보기"),
+                          child: Text("최고음\n들어보기",
+                              style: TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.bold)),
                           width: 50,
                         ),
                         TextButton(
@@ -189,11 +231,14 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                     ),
                 ],
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 15),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("메모"),
+                  Text(
+                    "메모",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                   SizedBox(height: 10),
                   Stack(children: [
                     Container(
@@ -209,6 +254,9 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
               ),
             ],
           ),
+        ),
+        SizedBox(
+          height: 15,
         ),
         Expanded(
           child: _recommendList(widget.note.pitchNum),
@@ -384,7 +432,10 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
               color: Color(0xFFF54141),
             ),
             child: Center(
-              child: Text(pitch),
+              child: Text(
+                pitch,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           );
   }
@@ -404,23 +455,17 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   ),
                   children: [
                     TextSpan(
-                      text: '비슷한 ',
-                      style: TextStyle(
-                        color: kPrimaryColor,
-                      ),
-                    ),
-                    TextSpan(
-                      text: '음역대',
-                      style: TextStyle(
-                        color: kPrimaryColor,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' 노래 추천',
+                      text: '비슷한 음역대 노래 추천',
                       style: TextStyle(
                         color: kTextColor,
                       ),
                     ),
+                    // TextSpan(
+                    //   text: '추천',
+                    //   style: TextStyle(
+                    //     color: kPrimaryColor,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

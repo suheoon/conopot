@@ -51,7 +51,8 @@ class _EditableTextFieldState extends State<EditableTextField> {
                   setState(() {
                     initialText = _editingController.text;
                     _isEditingText = false;
-                    Provider.of<NoteData>(context, listen: false).editNote(widget.note, initialText);
+                    Provider.of<NoteData>(context, listen: false)
+                        .editNote(widget.note, initialText);
                   });
                 },
               )),
@@ -60,28 +61,32 @@ class _EditableTextFieldState extends State<EditableTextField> {
     }
     return Row(
       children: [
-        SizedBox(
-          width: SizeConfig.screenWidth * 0.8,
-          child: Text(
-            initialText,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 15.0,
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _isEditingText = true;
+            });
+          },
+          child: SizedBox(
+            width: SizeConfig.screenWidth * 0.75,
+            child: Text(
+              initialText,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15.0,
+              ),
             ),
           ),
         ),
         Expanded(
-          child: Align(
-            alignment: Alignment(0.9, 0),
-            child: IconButton(
-              onPressed: () {
-                setState(() {
-                  _isEditingText = true;
-                });
-              },
-              icon: Icon(Icons.edit),
-            ),
+          child: IconButton(
+            onPressed: () {
+              setState(() {
+                _isEditingText = true;
+              });
+            },
+            icon: Icon(Icons.edit),
           ),
         )
       ],
