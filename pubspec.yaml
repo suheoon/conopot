@@ -16,13 +16,13 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 
-version: 1.0.1+6
+version: 1.0.1+9
 
 environment:
   sdk: ">=2.17.1 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
-# To automatically upgrade your package dependencies to the latest versions
+# To automatically upgrade your package dependencies to theg latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
@@ -46,7 +46,6 @@ dependencies:
   firebase_analytics: ^9.1.9
   firebase_crashlytics: ^2.8.1
   amplitude_flutter: ^3.7.0
-  firebase_messaging: ^11.4.1
   flutter_local_notifications: ^9.6.0
   get: ^4.6.5
   audioplayers: ^0.20.1

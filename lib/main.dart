@@ -4,12 +4,9 @@ import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/firebase/firebase_config.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
-import 'package:conopot/screens/note/note_screen.dart';
 import 'package:conopot/splash/splash_screen.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -56,8 +53,6 @@ Future<void> amplitudeInit() async {
 }
 
 Future<void> main() async {
-  final Rxn<RemoteMessage> message = Rxn<RemoteMessage>();
-
   /// firebase crashlytics init
   runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -69,21 +64,6 @@ Future<void> main() async {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
     amplitudeInit();
-
-    // Android 에서는 별도의 확인 없이 리턴되지만, requestPermission()을 호출하지 않으면 수신되지 않는다.
-    await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      announcement: true,
-      badge: true,
-      carPlay: true,
-      criticalAlert: true,
-      provisional: true,
-      sound: true,
-    );
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage rm) {
-      message.value = rm;
-    });
 
     runApp(const MyApp());
   },
