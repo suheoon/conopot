@@ -1,3 +1,4 @@
+import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/config/size_config.dart';
@@ -27,14 +28,27 @@ class PitchSearchList extends StatelessWidget {
                           pitchNumToString[
                               musicList.highestFoundItems[index].pitchNum],
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  title: Text(musicList.highestFoundItems[index].tj_title),
-                  subtitle: Text(musicList.highestFoundItems[index].tj_singer),
+                  title: Text(
+                    musicList.highestFoundItems[index].tj_title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: kTitleColor,
+                    ),
+                  ),
+                  subtitle: Text(
+                    musicList.highestFoundItems[index].tj_singer,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: kSubTitleColor,
+                    ),
+                  ),
                   // trailing: Text(
                   //   (musicList.userPitch - 2 >
                   //           musicList.highestFoundItems[index].pitchNum)
