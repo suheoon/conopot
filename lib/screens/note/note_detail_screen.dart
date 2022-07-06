@@ -406,13 +406,13 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                     TextSpan(
                       text: '비슷한 ',
                       style: TextStyle(
-                        color: Color(0xFF7B61FF),
+                        color: kPrimaryColor,
                       ),
                     ),
                     TextSpan(
                       text: '음역대',
                       style: TextStyle(
-                        color: Color(0xFF7B61FF),
+                        color: kPrimaryColor,
                       ),
                     ),
                     TextSpan(
