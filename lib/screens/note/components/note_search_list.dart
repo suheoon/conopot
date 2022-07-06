@@ -33,36 +33,37 @@ class _NoteSearchListState extends State<NoteSearchList> {
           child: Text("추가"),
           onPressed: () {
             Provider.of<NoteData>(context, listen: false)
-                            .addNote(memoController.text);
-                        if (Provider.of<NoteData>(context, listen: false)
-                                .emptyCheck ==
-                            true) {
-                          Fluttertoast.showToast(
-                              msg: "이미 저장된 노래입니다!",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.red,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                          Provider.of<NoteData>(context, listen: false)
-                              .initEmptyCheck();
-                        } else {
-                          Navigator.of(context).popUntil((route) => route.isFirst);
-                          Fluttertoast.showToast(
-                              msg: "노트가 생성되었습니다.",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: kPrimaryColor,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                        }
+                .addNote(memoController.text);
+            if (Provider.of<NoteData>(context, listen: false).emptyCheck ==
+                true) {
+              Fluttertoast.showToast(
+                  msg: "이미 저장된 노래입니다!",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+              Provider.of<NoteData>(context, listen: false).initEmptyCheck();
+            } else {
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              Fluttertoast.showToast(
+                  msg: "노트가 생성되었습니다.",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: kPrimaryColor,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+            }
           },
         ),
       ],
       cancelButton: CupertinoActionSheetAction(
-        child: Text("취소", style: TextStyle(color: Colors.red),),
+        child: Text(
+          "취소",
+          style: TextStyle(color: Colors.red),
+        ),
         onPressed: () {
           Navigator.of(context).pop();
         },
@@ -134,12 +135,18 @@ class _NoteSearchListState extends State<NoteSearchList> {
                                     children: [
                                       ClipRRect(
                                         borderRadius: BorderRadius.all(
-                                            Radius.circular(10)),
+                                            Radius.circular(7)),
                                         child: Container(
-                                          decoration:
-                                              BoxDecoration(color: Colors.red),
+                                          decoration: BoxDecoration(
+                                              color: kPrimaryColor),
                                           padding: EdgeInsets.all(3),
-                                          child: Text("최고음"),
+                                          child: Text(
+                                            "최고음",
+                                            style: TextStyle(
+                                              color: kPrimaryCreamColor,
+                                              fontSize: 13,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                       SizedBox(width: 5),

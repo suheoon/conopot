@@ -109,8 +109,8 @@ class _PitchMeasureState extends State<PitchMeasure> {
       flag = 1;
     });
 
-    EasyDebounce.debounce('searching', Duration(milliseconds: 2000), () {
-      //누르고 2초 후 음 측정 시작
+    EasyDebounce.debounce('searching', Duration(milliseconds: 2500), () {
+      //누르고 2.5초 후 음 측정 시작
       _startCapture();
     });
   }

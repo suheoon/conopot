@@ -5,9 +5,7 @@ import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/chart/pitch_screen.dart';
 import 'package:conopot/screens/musicBook/music_book.dart';
 import 'package:conopot/screens/musicBook/music_chart_screen.dart';
-import 'package:conopot/screens/musicBook/music_screen.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
-import 'package:conopot/screens/pitch/pitch_choice.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -65,8 +63,10 @@ class _UserScreenState extends State<UserScreen> {
                             children: [
                               Text(
                                 '내 최고음',
-                                style:
-                                    TextStyle(color: kTextColor, fontSize: 15),
+                                style: TextStyle(
+                                    color: kPrimaryBlackColor,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600),
                                 textAlign: TextAlign.left,
                               ),
                               SizedBox(
@@ -89,6 +89,12 @@ class _UserScreenState extends State<UserScreen> {
                                               builder: (_) => HomeScreen()),
                                         );
                                       },
+                                      style: TextButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                        minimumSize: Size(50, 30),
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                      ),
                                       child: Text("음 측정하러 가기")),
                             ],
                           )
@@ -99,6 +105,7 @@ class _UserScreenState extends State<UserScreen> {
                       height: SizeConfig.screenWidth / 20,
                     ),
                     GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Navigator.push(
                           context,
@@ -131,6 +138,7 @@ class _UserScreenState extends State<UserScreen> {
                       ),
                     ),
                     GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Navigator.push(
                           context,
@@ -162,6 +170,7 @@ class _UserScreenState extends State<UserScreen> {
                       ),
                     ),
                     GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Future.delayed(Duration.zero, () {
                           musicList.initBook();
@@ -196,6 +205,7 @@ class _UserScreenState extends State<UserScreen> {
                       ),
                     ),
                     GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Future.delayed(Duration.zero, () {
                           musicList.initChart();
@@ -230,6 +240,7 @@ class _UserScreenState extends State<UserScreen> {
                       ),
                     ),
                     GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Future.delayed(Duration.zero, () {
                           musicList.initFitch();

@@ -309,14 +309,14 @@ class _NoteScreenState extends State<NoteScreen> {
                                   TextSpan(
                                       text: note.tj_title,
                                       style: TextStyle(
-                                        color: Colors.black,
+                                        color: kPrimaryBlackColor,
                                         fontSize: 18,
                                       )),
                                   TextSpan(text: " "),
                                   TextSpan(
                                       text: note.tj_singer,
                                       style: TextStyle(
-                                        color: Colors.black,
+                                        color: kPrimaryLightBlackColor,
                                         fontSize: 13,
                                       )),
                                 ],
@@ -331,7 +331,12 @@ class _NoteScreenState extends State<NoteScreen> {
                                   ),
                                 );
                               },
-                              subtitle: Text(note.memo),
+                              subtitle: Text(
+                                note.memo,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                ),
+                              ),
                               trailing: Container(
                                 width: 80,
                                 child: Row(
@@ -372,13 +377,23 @@ class _NoteScreenState extends State<NoteScreen> {
 Widget UserSetWidget(int setNum, Note note, int userPitch) {
   if (setNum == 0) {
     return RichText(
-        text: TextSpan(children: [
-      TextSpan(text: 'TJ ', style: TextStyle(color: Color(0xFFff4b00))),
-      TextSpan(text: note.tj_songNumber, style: TextStyle(color: Colors.black)),
-    ]));
+        text: TextSpan(
+            style: TextStyle(
+              fontSize: 15,
+            ),
+            children: [
+          TextSpan(text: 'TJ ', style: TextStyle(color: kPrimaryColor)),
+          TextSpan(
+              text: note.tj_songNumber,
+              style: TextStyle(color: kPrimaryBlackColor)),
+        ]));
   } else if (setNum == 1) {
     if (note.pitch != '?') {
-      return Text(pitchNumToString[note.pitchNum]);
+      return Text(
+        pitchNumToString[note.pitchNum],
+        style: TextStyle(
+            color: (note.pitchNum >= 29) ? kPrimaryColor : kPrimaryGreenColor),
+      );
     }
   }
   return Text('');
