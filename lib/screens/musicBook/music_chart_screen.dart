@@ -47,6 +47,7 @@ class ChartScreen extends StatelessWidget {
                         ? kTextColor
                         : kTextLightColor,
                     fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
@@ -56,6 +57,7 @@ class ChartScreen extends StatelessWidget {
                         ? kTextColor
                         : kTextLightColor,
                     fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],

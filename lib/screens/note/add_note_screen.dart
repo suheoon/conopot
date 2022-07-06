@@ -23,7 +23,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("곡추가"),
+        title: const Text("곡추가", style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: Consumer<MusicSearchItemLists>(
         builder: (

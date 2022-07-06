@@ -181,13 +181,19 @@ class _PitchMeasureState extends State<PitchMeasure> {
               SizedBox(
                 height: SizeConfig.screenHeight * 0.1,
               ),
-              Text(
-                '주의 사항',
-                style: TextStyle(
-                  color: kTextColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '주의 사항',
+                    style: TextStyle(
+                      color: kPrimaryColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Icon(Icons.warning, color: Colors.yellow[800]),
+                ],
               ),
               SizedBox(
                 height: SizeConfig.defaultSize,
@@ -197,6 +203,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                 style: TextStyle(
                   color: kTextColor,
                   fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(
@@ -207,6 +214,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                 style: TextStyle(
                   color: kTextColor,
                   fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(
@@ -237,39 +245,52 @@ class _PitchMeasureState extends State<PitchMeasure> {
                                   style: TextStyle(
                                     fontSize: 21.0,
                                     fontWeight: FontWeight.bold,
+                                    color: kPrimaryBlackColor,
                                   ),
                                 ),
                                 Text(
                                   pitchItemList[pitchIdx].pitchCode,
                                   style: TextStyle(
                                     fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: kPrimaryLightBlackColor,
                                   ),
                                 ),
-                                SizedBox(
-                                  height: SizeConfig.defaultSize,
-                                ),
+                                // SizedBox(
+                                //   height: SizeConfig.defaultSize,
+                                // ),
                                 (flag == 0)
                                     ? Text(
                                         "재생버튼을 눌러주세요",
-                                        style: TextStyle(color: Colors.red),
+                                        style: TextStyle(
+                                          color: kPrimaryColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       )
                                     : (flag == 1)
                                         ? Text(
                                             "음을 측정 중입니다...",
-                                            style:
-                                                TextStyle(color: Colors.amber),
+                                            style: TextStyle(
+                                              color: kPrimaryGreenColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13
+                                            ),
                                           )
                                         : Column(
                                             children: [
                                               Text(
                                                 "성공입니다!",
                                                 style: TextStyle(
-                                                    color: Colors.green),
+                                                  color: kTitleColor,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                               Text(
                                                 "아래 버튼을 눌러 다음 단계로 이동하세요!",
                                                 style: TextStyle(
-                                                    color: Colors.green),
+                                                  color: kSubTitleColor,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -279,7 +300,8 @@ class _PitchMeasureState extends State<PitchMeasure> {
                                 Text(
                                   "현재 측정되는 음",
                                   style: TextStyle(
-                                    fontSize: 16.0,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 Text(
@@ -343,8 +365,8 @@ class _PitchMeasureState extends State<PitchMeasure> {
                                       '더 이상 안올라가요!',
                                       style: TextStyle(
                                         color: Color(0xFF7B61FF),
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13,
                                       ),
                                     ),
                                   ),

@@ -35,7 +35,12 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     int index = notes.indexOf(widget.note);
     return Scaffold(
       appBar: AppBar(
-        title: Text("곡 상세정보"),
+        title: Text(
+          "곡 상세정보",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         actions: [
           IconButton(
             icon: Padding(
@@ -243,7 +248,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   Stack(children: [
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      height: 40,
+                      height: 50,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                           color: Color(0xFFF5F5FA)),
@@ -352,7 +357,10 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                 textColor: Colors.white,
                 fontSize: 16.0);
           },
-          child: Text("정보 요청"),
+          child: Text(
+            "정보 요청",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
       ],
     );
@@ -360,7 +368,10 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     AlertDialog alert = AlertDialog(
       content: Text(
         "최고음이 표시 되지 않을 경우 정보를 요청해주세요 ☺️",
-        style: TextStyle(fontSize: 11),
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       actions: [requestButton],
     );
@@ -379,17 +390,20 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
         Provider.of<NoteData>(context, listen: false).deleteNote(widget.note);
         Navigator.of(context).popUntil((route) => route.isFirst);
       },
-      child: Text("삭제"),
+      child: Text("삭제", style: TextStyle(fontWeight: FontWeight.bold)),
     );
 
     Widget cancelButton = ElevatedButton(
         onPressed: () {
           Navigator.of(context).pop();
         },
-        child: Text("취소"));
+        child: Text("취소", style: TextStyle(fontWeight: FontWeight.bold)));
 
     AlertDialog alert = AlertDialog(
-      content: Text("노트가 삭제 됩니다."),
+      content: Text(
+        "노트가 삭제 됩니다",
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
       actions: [
         cancelButton,
         okButton,
@@ -419,7 +433,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
               child: Center(
                 child: Text(
                   "정보요청",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -434,7 +449,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             child: Center(
               child: Text(
                 pitch,
-                style: TextStyle(color: Colors.white),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
           );
@@ -460,16 +476,10 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                         color: kTextColor,
                       ),
                     ),
-                    // TextSpan(
-                    //   text: '추천',
-                    //   style: TextStyle(
-                    //     color: kPrimaryColor,
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               PitchSearchList(
                   musicList: Provider.of<MusicSearchItemLists>(context,
                       listen: false)),

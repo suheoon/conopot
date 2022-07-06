@@ -19,7 +19,10 @@ class _noteSettingScreenState extends State<noteSettingScreen> {
         appBar: AppBar(
           title: Text(
             "애창곡 노트 설정",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           leading: BackButton(
             color: Colors.black,
@@ -32,7 +35,12 @@ class _noteSettingScreenState extends State<noteSettingScreen> {
         body: Column(
           children: [
             ListTile(
-              title: const Text('TJ 반주기 번호 표시'),
+              title: const Text(
+                'TJ 반주기 번호 표시',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               leading: Radio<int>(
                 value: 0,
                 groupValue: choice,
@@ -55,24 +63,40 @@ class _noteSettingScreenState extends State<noteSettingScreen> {
                     TextSpan(
                         text: "취중고백",
                         style: TextStyle(
-                          color: Colors.black,
+                          color: kTitleColor,
                           fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         )),
                     TextSpan(text: " "),
                     TextSpan(
                         text: "김민석",
                         style: TextStyle(
-                          color: Colors.black,
+                          color: kSubTitleColor,
                           fontSize: 13,
+                          fontWeight: FontWeight.bold,
                         )),
                   ],
                 )),
-                subtitle: Text("요즘 유명한 노래"),
-                trailing: Text("80906"),
+                subtitle: Text(
+                  "요즘 유명한 노래",
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                trailing: Text(
+                  "80906",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
             ListTile(
-              title: const Text('노래 최고음 표시'),
+              title: const Text(
+                '노래 최고음 표시',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               leading: Radio<int>(
                 value: 1,
                 groupValue: choice,
@@ -95,22 +119,28 @@ class _noteSettingScreenState extends State<noteSettingScreen> {
                     TextSpan(
                         text: "취중고백",
                         style: TextStyle(
-                          color: Colors.black,
+                          color: kTitleColor,
                           fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         )),
                     TextSpan(text: " "),
                     TextSpan(
                         text: "김민석",
                         style: TextStyle(
-                          color: Colors.black,
+                          color: kSubTitleColor,
                           fontSize: 13,
+                          fontWeight: FontWeight.bold,
                         )),
                   ],
                 )),
-                subtitle: Text("요즘 유명한 노래"),
+                subtitle: Text("요즘 유명한 노래", style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.bold,
+                        ) ),
                 trailing: Text(
                   "2옥타브 라#",
-                  style: TextStyle(color: Color(0xFF7B61FF)),
+                  style: TextStyle(color: kPrimaryGreenColor, fontWeight: FontWeight.bold),
                 ),
               ),
             ),

@@ -1,3 +1,4 @@
+import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,15 +26,28 @@ class _PitchCheckBoxState extends State<PitchCheckBox> {
                 color: Colors.white,
                 elevation: 1,
                 child: CheckboxListTile(
-                  title: Text(musicList.highestFoundItems[index].tj_title),
-                  subtitle: Text(musicList.highestFoundItems[index].tj_singer),
+                  title: Text(
+                    musicList.highestFoundItems[index].tj_title,
+                    style: TextStyle(
+                      color: kTitleColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                    musicList.highestFoundItems[index].tj_singer,
+                    style: TextStyle(
+                      color: kSubTitleColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   secondary: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         musicList.highestFoundItems[index].pitch,
                         style: TextStyle(
-                          color: Colors.green,
+                          color: kTextColor,
+                          fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -57,7 +71,7 @@ class _PitchCheckBoxState extends State<PitchCheckBox> {
             )
           : Text(
               '검색 결과가 없습니다',
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
     );
   }

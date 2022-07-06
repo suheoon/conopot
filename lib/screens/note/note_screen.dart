@@ -32,7 +32,10 @@ class _NoteScreenState extends State<NoteScreen> {
               appBar: AppBar(
                 title: Text(
                   "애창곡 노트",
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(
+                    color: kPrimaryBlackColor,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 actions: [
                   IconButton(
@@ -47,23 +50,30 @@ class _NoteScreenState extends State<NoteScreen> {
                 ],
               ),
               floatingActionButton: (!noteData.notes.isEmpty)
-                  ? FloatingActionButton(
-                      backgroundColor: Colors.white,
-                      elevation: 5.0,
-                      child: SvgPicture.asset('assets/icons/addButton.svg'),
-                      onPressed: () {
-                        Future.delayed(Duration.zero, () {
-                          Provider.of<MusicSearchItemLists>(context,
-                                  listen: false)
-                              .initCombinedBook();
-                        });
-                        noteData.setSelectedIndex(-1);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => AddNoteScreen()),
-                        );
-                      },
-                    )
+                  ? Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 15, 15),
+                    width: 75,
+                    height: 75,
+                    child: FittedBox(
+                      child: FloatingActionButton(
+                          backgroundColor: Colors.white,
+                          elevation: 5.0,
+                          child: SvgPicture.asset('assets/icons/addButton.svg'),
+                          onPressed: () {
+                            Future.delayed(Duration.zero, () {
+                              Provider.of<MusicSearchItemLists>(context,
+                                      listen: false)
+                                  .initCombinedBook();
+                            });
+                            noteData.setSelectedIndex(-1);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => AddNoteScreen()),
+                            );
+                          },
+                        ),
+                    ),
+                  )
                   : null,
               body: Column(
                 children: [
@@ -309,15 +319,17 @@ class _NoteScreenState extends State<NoteScreen> {
                                   TextSpan(
                                       text: note.tj_title,
                                       style: TextStyle(
-                                        color: kPrimaryBlackColor,
+                                        color: kTitleColor,
                                         fontSize: 18,
+                                        fontWeight: FontWeight.bold,
                                       )),
                                   TextSpan(text: " "),
                                   TextSpan(
                                       text: note.tj_singer,
                                       style: TextStyle(
-                                        color: kPrimaryLightBlackColor,
+                                        color: kSubTitleColor,
                                         fontSize: 13,
+                                        fontWeight: FontWeight.bold,
                                       )),
                                 ],
                               )),
@@ -335,6 +347,7 @@ class _NoteScreenState extends State<NoteScreen> {
                                 note.memo,
                                 style: TextStyle(
                                   fontSize: 13,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                               trailing: Container(
@@ -382,17 +395,27 @@ Widget UserSetWidget(int setNum, Note note, int userPitch) {
               fontSize: 15,
             ),
             children: [
-          TextSpan(text: 'TJ ', style: TextStyle(color: kPrimaryColor)),
           TextSpan(
-              text: note.tj_songNumber,
-              style: TextStyle(color: kPrimaryBlackColor)),
+            text: 'TJ ',
+            style: TextStyle(
+              color: kPrimaryColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          TextSpan(
+            text: note.tj_songNumber,
+            style: TextStyle(
+                color: kPrimaryBlackColor, fontWeight: FontWeight.bold),
+          ),
         ]));
   } else if (setNum == 1) {
     if (note.pitch != '?') {
       return Text(
         pitchNumToString[note.pitchNum],
         style: TextStyle(
-            color: (note.pitchNum >= 29) ? kPrimaryColor : kPrimaryGreenColor),
+          color: (note.pitchNum >= 29) ? kPrimaryColor : kPrimaryGreenColor,
+          fontWeight: FontWeight.bold,
+        ),
       );
     }
   }

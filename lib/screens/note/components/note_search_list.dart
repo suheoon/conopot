@@ -37,7 +37,7 @@ class _NoteSearchListState extends State<NoteSearchList> {
             if (Provider.of<NoteData>(context, listen: false).emptyCheck ==
                 true) {
               Fluttertoast.showToast(
-                  msg: "이미 저장된 노래입니다!",
+                  msg: "이미 저장된 노래입니다😅",
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.BOTTOM,
                   timeInSecForIosWeb: 1,
@@ -48,7 +48,7 @@ class _NoteSearchListState extends State<NoteSearchList> {
             } else {
               Navigator.of(context).popUntil((route) => route.isFirst);
               Fluttertoast.showToast(
-                  msg: "노트가 생성되었습니다.",
+                  msg: "노트가 생성되었습니다😆",
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.BOTTOM,
                   timeInSecForIosWeb: 1,
@@ -112,10 +112,16 @@ class _NoteSearchListState extends State<NoteSearchList> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    widget.musicList.combinedFoundItems[index]
-                                        .tj_title,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1),
+                                  widget.musicList.combinedFoundItems[index]
+                                      .tj_title,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    color: kTitleColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                                 SizedBox(
                                   height: 5,
                                 ),
@@ -124,6 +130,10 @@ class _NoteSearchListState extends State<NoteSearchList> {
                                       .tj_singer,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
+                                  style: TextStyle(
+                                    color: kSubTitleColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                                 SizedBox(
                                   height: 5,
@@ -145,13 +155,20 @@ class _NoteSearchListState extends State<NoteSearchList> {
                                             style: TextStyle(
                                               color: kPrimaryCreamColor,
                                               fontSize: 13,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                         ),
                                       ),
                                       SizedBox(width: 5),
-                                      Text(pitchNumToString[widget.musicList
-                                          .combinedFoundItems[index].pitchNum]),
+                                      Text(
+                                        pitchNumToString[widget
+                                            .musicList
+                                            .combinedFoundItems[index]
+                                            .pitchNum],
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ],
                                   ),
                               ],
@@ -160,8 +177,11 @@ class _NoteSearchListState extends State<NoteSearchList> {
                           SizedBox(width: 5),
                           Container(
                             alignment: Alignment.centerRight,
-                            child: Text(widget.musicList
-                                .combinedFoundItems[index].tj_songNumber),
+                            child: Text(
+                              widget.musicList.combinedFoundItems[index]
+                                  .tj_songNumber,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ],
                       ),
