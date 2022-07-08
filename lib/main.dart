@@ -5,6 +5,7 @@ import 'package:conopot/firebase/firebase_config.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/splash/splash_screen.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,35 +22,6 @@ Future<void> firebaseInit() async {
 Future<void> amplitudeInit() async {
   // Create the instance
   final Amplitude analytics = Amplitude.getInstance(instanceName: "project");
-
-  // Initialize SDK
-  analytics.init('cf1298f461883c1cbf97daeb0393b987');
-
-  // Enable COPPA privacy guard. This is useful when you choose not to report sensitive user information.
-  analytics.enableCoppaControl();
-
-  // Set user Id
-  analytics.setUserId("test_user");
-  // Turn on automatic session events
-  analytics.trackingSessionEvents(true);
-
-  // Log an event
-  analytics.logEvent('MyApp startup',
-      eventProperties: {'friend_num': 10, 'is_heavy_user': true});
-
-  // Identify
-  final Identify identify1 = Identify()
-    ..set('identify_test',
-        'identify sent at ${DateTime.now().millisecondsSinceEpoch}')
-    ..add('identify_count', 1);
-  analytics.identify(identify1);
-
-  // Set group
-  analytics.setGroup('orgId', 15);
-
-  // Group identify
-  final Identify identify2 = Identify()..set('identify_count', 1);
-  analytics.groupIdentify('orgId', '15', identify2);
 }
 
 Future<void> main() async {
@@ -62,6 +34,17 @@ Future<void> main() async {
         options: DefaultFirebaseConfig.platformOptions);
 
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
+    await FirebaseAnalytics.instance.logBeginCheckout(
+        value: 10.0,
+        currency: 'USD',
+        items: [
+          AnalyticsEventItem(
+              itemName: 'Socks', itemId: 'xjw73ndnw', price: 10.0),
+        ],
+        coupon: '10PERCENTOFF');
 
     amplitudeInit();
 

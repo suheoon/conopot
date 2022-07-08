@@ -100,7 +100,7 @@ class _NoteScreenState extends State<NoteScreen> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => HomeScreen()),
+              MaterialPageRoute(builder: (_) => PitchMainScreen()),
             );
           },
           child: Stack(children: [

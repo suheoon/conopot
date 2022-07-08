@@ -1,4 +1,7 @@
+import 'package:amplitude_flutter/amplitude.dart';
+import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +18,39 @@ class NoteData extends ChangeNotifier {
 
   final storage = new FlutterSecureStorage();
 
+  Amplitude analytics = Amplitude.getInstance(instanceName: "project");
+
   void initNotes(List<FitchMusic> combinedSongList) async {
+    //Amplitude Init 부분
+
+    // Initialize SDK
+    analytics.init('cf1298f461883c1cbf97daeb0393b987');
+
+    // Enable COPPA privacy guard. This is useful when you choose not to report sensitive user information.
+    analytics.enableCoppaControl();
+
+    // Set user Id
+    analytics.setUserId("test_user");
+    // Turn on automatic session events
+    analytics.trackingSessionEvents(true);
+
+    // Log an event
+    analytics.logEvent('MyApp startup',
+        eventProperties: {'friend_num': 10, 'is_heavy_user': true});
+
+    // Identify
+    final Identify identify1 = Identify()
+      ..set('identify_test',
+          'identify sent at ${DateTime.now().millisecondsSinceEpoch}')
+      ..add('identify_count', 1);
+    analytics.identify(identify1);
+
+    // Set group
+    analytics.setGroup('orgId', 15);
+
+    // Group identify
+    final Identify identify2 = Identify()..set('identify_count', 1);
+    analytics.groupIdentify('orgId', '15', identify2);
     // Read all values
     Map<String, String> allValues = await storage.readAll();
 
@@ -39,6 +74,9 @@ class NoteData extends ChangeNotifier {
         notes.add(note);
       }
     }
+
+    analytics
+        .logEvent('Init', eventProperties: {'User_Song_Count': notes.length});
 
     notifyListeners();
   }
@@ -73,10 +111,14 @@ class NoteData extends ChangeNotifier {
       emptyCheck = true;
     }
 
+    analytics.logEvent('Song_Add',
+        eventProperties: {'User_Song_add': note.tj_title});
+    Amplitude.getInstance().uploadEvents();
+
     notifyListeners();
   }
 
-  Future<void> editNote(Note note, String memo) async{
+  Future<void> editNote(Note note, String memo) async {
     note.memo = memo;
     await storage.write(key: note.tj_songNumber, value: memo);
     notifyListeners();

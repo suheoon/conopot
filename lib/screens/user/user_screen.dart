@@ -86,7 +86,7 @@ class _UserScreenState extends State<UserScreen> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (_) => HomeScreen()),
+                                              builder: (_) => PitchMainScreen()),
                                         );
                                       },
                                       style: TextButton.styleFrom(
@@ -142,7 +142,7 @@ class _UserScreenState extends State<UserScreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => HomeScreen()),
+                          MaterialPageRoute(builder: (_) => PitchMainScreen()),
                         );
                       },
                       child: Container(
