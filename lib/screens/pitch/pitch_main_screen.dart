@@ -9,14 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
-  HomeScreen({Key? key}) : super(key: key);
+class PitchMainScreen extends StatefulWidget {
+  PitchMainScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<PitchMainScreen> createState() => _PitchMainScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _PitchMainScreenState extends State<PitchMainScreen> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);

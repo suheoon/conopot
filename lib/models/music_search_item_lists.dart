@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:amplitude_flutter/amplitude.dart';
+import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:conopot/models/music_search_item.dart';
@@ -35,11 +37,13 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   final storage = new FlutterSecureStorage();
 
+  //측정 결과 페이지 (유저의 최고음이 바뀐 경우)
   void changeUserPitch({required int pitch}) {
     userPitch = pitch;
     notifyListeners();
   }
 
+  //유저가 노트 세팅을 바꿨을 때
   void changeUserNoteSetting(int settingNum) {
     print(settingNum);
     userNoteSetting = settingNum;

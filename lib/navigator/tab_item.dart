@@ -12,7 +12,7 @@ const Map<TabItem, String> tabName = {
 };
 
 Map<TabItem, Widget> tabScreen = {
-  TabItem.home: HomeScreen(),
+  TabItem.home: PitchMainScreen(),
   TabItem.pitch: PitchScreen(),
   TabItem.music: const MusicScreen(),
 };
