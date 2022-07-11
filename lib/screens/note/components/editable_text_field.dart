@@ -47,8 +47,14 @@ class _EditableTextFieldState extends State<EditableTextField> {
           decoration: InputDecoration(
               border: InputBorder.none,
               suffixIcon: TextButton(
-                child: Text("저장", style: TextStyle(color: kTitleColor),),
+                child: Text(
+                  "저장",
+                  style: TextStyle(color: kTitleColor),
+                ),
                 onPressed: () {
+                  //!event: 곡 상세정보 뷰 - 메모 수정
+                  Provider.of<NoteData>(context, listen: false)
+                      .songMemoEditEvent(widget.note.tj_title);
                   setState(() {
                     initialText = _editingController.text;
                     _isEditingText = false;

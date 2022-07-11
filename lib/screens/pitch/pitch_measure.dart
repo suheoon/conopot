@@ -271,10 +271,9 @@ class _PitchMeasureState extends State<PitchMeasure> {
                                         ? Text(
                                             "음을 측정 중입니다...",
                                             style: TextStyle(
-                                              color: kPrimaryGreenColor,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 13
-                                            ),
+                                                color: kPrimaryGreenColor,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 13),
                                           )
                                         : Column(
                                             children: [

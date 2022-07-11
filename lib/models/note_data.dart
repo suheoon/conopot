@@ -1,5 +1,6 @@
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/identify.dart';
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/pitch_music.dart';
@@ -18,39 +19,7 @@ class NoteData extends ChangeNotifier {
 
   final storage = new FlutterSecureStorage();
 
-  Amplitude analytics = Amplitude.getInstance(instanceName: "project");
-
   void initNotes(List<FitchMusic> combinedSongList) async {
-    //Amplitude Init 부분
-
-    // Initialize SDK
-    analytics.init('cf1298f461883c1cbf97daeb0393b987');
-
-    // Enable COPPA privacy guard. This is useful when you choose not to report sensitive user information.
-    analytics.enableCoppaControl();
-
-    // Set user Id
-    analytics.setUserId("test_user");
-    // Turn on automatic session events
-    analytics.trackingSessionEvents(true);
-
-    // Log an event
-    analytics.logEvent('MyApp startup',
-        eventProperties: {'friend_num': 10, 'is_heavy_user': true});
-
-    // Identify
-    final Identify identify1 = Identify()
-      ..set('identify_test',
-          'identify sent at ${DateTime.now().millisecondsSinceEpoch}')
-      ..add('identify_count', 1);
-    analytics.identify(identify1);
-
-    // Set group
-    analytics.setGroup('orgId', 15);
-
-    // Group identify
-    final Identify identify2 = Identify()..set('identify_count', 1);
-    analytics.groupIdentify('orgId', '15', identify2);
     // Read all values
     Map<String, String> allValues = await storage.readAll();
 
@@ -75,10 +44,90 @@ class NoteData extends ChangeNotifier {
       }
     }
 
-    analytics
-        .logEvent('Init', eventProperties: {'User_Song_Count': notes.length});
+    int memoCnt = 0; //전체 노트 중 메모를 한 노트의 수
+    for (Note note in notes) {
+      if (note.memo != null && note.memo != "") {
+        memoCnt++;
+      }
+    }
+
+    //!event : 노트 뷰 조회
+    Analytics_config.analytics.logEvent('애창곡 노트 뷰 - 노트 뷰  조회',
+        eventProperties: {'노트 개수': notes.length, '메모 노트 개수': memoCnt});
 
     notifyListeners();
+  }
+
+  //!event : 애창곡 노트 뷰 - 곡 추가
+  void addNoteEvent() {
+    Analytics_config.analytics
+        .logEvent('애창곡 노트 뷰 - 곡 추가', eventProperties: {'노트 개수': notes.length});
+  }
+
+  //!event : 애창곡 노트 뷰 - 곡 상세 정보 조회
+  void viewNoteEvent(Note note) {
+    Analytics_config.analytics
+        .logEvent('애창곡 노트 뷰 - 곡 상세 정보 조회', eventProperties: {
+      '곡 이름': note.tj_title,
+      '가수 이름': note.tj_singer,
+      'TJ 번호': note.tj_songNumber,
+      '금영 번호': note.ky_songNumber,
+      '최고음': note.pitch,
+      '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
+      '메모 여부': note.memo
+    });
+  }
+
+  //!event: 곡 추가 뷰 - 리스트 클릭 시
+  void addSongClickEvent(FitchMusic fitchMusic) {
+    Analytics_config.analytics.logEvent('곡 추가 뷰 - 리스트 클릭 시', eventProperties: {
+      '노트 개수': notes.length,
+      '곡 이름': fitchMusic.tj_title,
+      '가수 이름': fitchMusic.tj_singer,
+      'TJ 번호': fitchMusic.tj_songNumber,
+      '금영 번호': fitchMusic.ky_songNumber,
+      '최고음': fitchMusic.pitch,
+      '매칭 여부': (fitchMusic.tj_songNumber == fitchMusic.ky_songNumber),
+    });
+  }
+
+  //!event: 곡 상세정보 뷰 - 노트 삭제
+  void noteDeleteEvent(Note note) {
+    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 노트 삭제', eventProperties: {
+      '노트 개수': notes.length,
+      '곡 이름': note.tj_title,
+      '가수 이름': note.tj_singer,
+      'TJ 번호': note.tj_songNumber,
+      '금영 번호': note.ky_songNumber,
+      '최고음': note.pitch,
+      '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
+    });
+  }
+
+  //!event: 곡 상세정보 뷰 - 최고음 들어보기
+  void pitchListenEvent(String pitch) {
+    Analytics_config.analytics
+        .logEvent('곡 상세정보 뷰 - 최고음 들어보기', eventProperties: {
+      '최고음': pitch,
+    });
+  }
+
+  //!event: 곡 상세정보 뷰 - 유튜브 클릭
+  void youtubeClickEvent(Note note) {
+    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 유튜브 클릭',
+        eventProperties: {'곡 이름': note.tj_title, '메모': note.memo});
+  }
+
+  //!event: 곡 상세정보 뷰 - 금영 검색
+  void kySearchEvent(String tjNumber) {
+    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 금영 검색',
+        eventProperties: {'노트 개수': notes.length, 'TJ 번호': tjNumber});
+  }
+
+  //!event: 곡 상세정보 뷰 - 메모 수정
+  void songMemoEditEvent(String title) {
+    Analytics_config.analytics
+        .logEvent('곡 상세정보 뷰 - 메모 수정', eventProperties: {'곡 이름': title});
   }
 
   //local storage 저장 (key : songNum, value : memo)
@@ -111,9 +160,16 @@ class NoteData extends ChangeNotifier {
       emptyCheck = true;
     }
 
-    analytics.logEvent('Song_Add',
-        eventProperties: {'User_Song_add': note.tj_title});
-    Amplitude.getInstance().uploadEvents();
+    //!event: 곡 추가 뷰 - 노트 추가 이벤트
+    Analytics_config.analytics.logEvent('곡 추가 뷰 - 노트 추가 이벤트', eventProperties: {
+      '곡 이름': note.tj_title,
+      '가수 이름': note.tj_singer,
+      'TJ 번호': note.tj_songNumber,
+      '금영 번호': note.ky_songNumber,
+      '최고음': note.pitch,
+      '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
+      '메모 여부': note.memo
+    });
 
     notifyListeners();
   }

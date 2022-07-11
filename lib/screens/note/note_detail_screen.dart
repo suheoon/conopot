@@ -100,6 +100,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   padding: EdgeInsets.only(right: 10),
                   icon: SvgPicture.asset('assets/icons/youtube.svg'),
                   onPressed: () async {
+                    Provider.of<NoteData>(context, listen: false)
+                        .youtubeClickEvent(widget.note);
                     final url = Uri.parse(
                         'https://www.youtube.com/results?search_query=tj ${widget.note.tj_title} ${widget.note.tj_singer}');
                     if (await canLaunchUrl(url)) {
@@ -224,6 +226,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                         ),
                         TextButton(
                           onPressed: () {
+                            Provider.of<NoteData>(context, listen: false)
+                                .pitchListenEvent(widget.note.pitch);
                             play(pitchNumToCode[widget.note.pitchNum]);
                           },
                           child: Icon(
@@ -271,6 +275,9 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   }
 
   _showKySearchDialog(BuildContext context, List<Note> notes, int idx) {
+    //!event: 곡 상세정보 뷰 - 금영 검색
+    Provider.of<NoteData>(context, listen: false)
+        .kySearchEvent(widget.note.tj_songNumber);
     Provider.of<MusicSearchItemLists>(context, listen: false)
         .runFilter(widget.note.tj_title, 2);
     List<MusicSearchItem> kySearchSongList =
@@ -387,6 +394,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     Widget okButton = ElevatedButton(
       style: ElevatedButton.styleFrom(primary: Colors.red),
       onPressed: () {
+        Provider.of<NoteData>(context, listen: false)
+            .noteDeleteEvent(widget.note);
         Provider.of<NoteData>(context, listen: false).deleteNote(widget.note);
         Navigator.of(context).popUntil((route) => route.isFirst);
       },

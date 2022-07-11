@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'package:amplitude_flutter/amplitude.dart';
-import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/firebase/firebase_config.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
@@ -16,12 +14,6 @@ Future<void> firebaseInit() async {
   await Firebase.initializeApp(options: DefaultFirebaseConfig.platformOptions);
 
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-}
-
-/// Amplitude init
-Future<void> amplitudeInit() async {
-  // Create the instance
-  final Amplitude analytics = Amplitude.getInstance(instanceName: "project");
 }
 
 Future<void> main() async {
@@ -45,8 +37,6 @@ Future<void> main() async {
               itemName: 'Socks', itemId: 'xjw73ndnw', price: 10.0),
         ],
         coupon: '10PERCENTOFF');
-
-    amplitudeInit();
 
     runApp(const MyApp());
   },
