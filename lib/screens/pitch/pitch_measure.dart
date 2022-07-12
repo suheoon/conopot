@@ -124,44 +124,74 @@ class _PitchMeasureState extends State<PitchMeasure> {
   String frequencyToPitch() {
     if (130 <= frequency && frequency <= 135)
       ret = "1옥타브 도";
+    else if (138 <= frequency && frequency <= 141)
+      ret = "1옥타브 도#";
     else if (145 <= frequency && frequency <= 150)
       ret = "1옥타브 레";
+    else if (155 <= frequency && frequency <= 158)
+      ret = "1옥타브 레#";
     else if (160 <= frequency && frequency <= 165)
       ret = "1옥타브 미";
     else if (173 <= frequency && frequency <= 178)
       ret = "1옥타브 파";
+    else if (184 <= frequency && frequency <= 186)
+      ret = "1옥타브 파#";
     else if (195 <= frequency && frequency <= 200)
       ret = "1옥타브 솔";
+    else if (207 <= frequency && frequency <= 209)
+      ret = "1옥타브 솔#";
     else if (218 <= frequency && frequency <= 223)
       ret = "1옥타브 라";
+    else if (232 <= frequency && frequency <= 234)
+      ret = "1옥타브 라#";
     else if (245 <= frequency && frequency <= 250)
       ret = "1옥타브 시";
     else if (260 <= frequency && frequency <= 265)
       ret = "2옥타브 도";
+    else if (276 <= frequency && frequency <= 278)
+      ret = "2옥타브 도#";
     else if (290 <= frequency && frequency <= 303)
       ret = "2옥타브 레";
+    else if (310 <= frequency && frequency <= 312)
+      ret = "2옥타브 레#";
     else if (325 <= frequency && frequency <= 330)
       ret = "2옥타브 미";
     else if (345 <= frequency && frequency <= 350)
       ret = "2옥타브 파";
+    else if (369 <= frequency && frequency <= 371)
+      ret = "2옥타브 파#";
     else if (390 <= frequency && frequency <= 395)
       ret = "2옥타브 솔";
+    else if (414 <= frequency && frequency <= 416)
+      ret = "2옥타브 솔#";
     else if (438 <= frequency && frequency <= 443)
       ret = "2옥타브 라";
+    else if (465 <= frequency && frequency <= 467)
+      ret = "2옥타브 라#";
     else if (492 <= frequency && frequency <= 497)
       ret = "2옥타브 시";
     else if (520 <= frequency && frequency <= 525)
       ret = "3옥타브 도";
+    else if (553 <= frequency && frequency <= 555)
+      ret = "3옥타브 도#";
     else if (585 <= frequency && frequency <= 590)
       ret = "3옥타브 레";
+    else if (621 <= frequency && frequency <= 623)
+      ret = "3옥타브 레#";
     else if (655 <= frequency && frequency <= 670)
       ret = "3옥타브 미";
     else if (695 <= frequency && frequency <= 700)
       ret = "3옥타브 파";
+    else if (739 <= frequency && frequency <= 741)
+      ret = "3옥타브 파#";
     else if (780 <= frequency && frequency <= 785)
       ret = "3옥타브 솔";
+    else if (830 <= frequency && frequency <= 832)
+      ret = "3옥타브 솔#";
     else if (880 <= frequency && frequency <= 885)
       ret = "3옥타브 라";
+    else if (931 <= frequency && frequency <= 933)
+      ret = "3옥타브 라#";
     else if (985 <= frequency && frequency <= 990) ret = "3옥타브 시";
 
     return ret;
