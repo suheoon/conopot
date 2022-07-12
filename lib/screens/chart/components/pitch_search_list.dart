@@ -54,8 +54,8 @@ class PitchSearchList extends StatelessWidget {
                     ),
                     onTap: () {
                       if (musicList.tabIndex == 1) {
-                        _showDeleteDialog(
-                            context, musicList.foundItems[index].songNumber);
+                        _showDeleteDialog(context,
+                            musicList.highestFoundItems[index].tj_songNumber);
                       }
                     }),
               ),
@@ -70,7 +70,6 @@ class PitchSearchList extends StatelessWidget {
 
 _showDeleteDialog(BuildContext context, String songNumber) {
   Widget okButton = ElevatedButton(
-    style: ElevatedButton.styleFrom(primary: Colors.red),
     onPressed: () {
       Provider.of<NoteData>(context, listen: false).addNodeBySongNumber(
           songNumber,
@@ -102,6 +101,7 @@ _showDeleteDialog(BuildContext context, String songNumber) {
   );
 
   Widget cancelButton = ElevatedButton(
+      style: ElevatedButton.styleFrom(primary: Colors.red),
       onPressed: () {
         Navigator.of(context).pop();
       },
