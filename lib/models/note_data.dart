@@ -290,7 +290,8 @@ class NoteData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeKySongNumber(int idx, String kySongNumber) {
+  void changeKySongNumber(Note note, String kySongNumber) {
+    int idx = notes.indexOf(note);
     notes[idx].ky_songNumber = kySongNumber;
     notifyListeners();
   }

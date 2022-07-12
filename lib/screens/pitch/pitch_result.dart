@@ -147,16 +147,13 @@ class _PitchResultState extends State<PitchResult> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => noteSettingScreen()),
-            );
+            Navigator.of(context).popUntil((route) => route.isFirst);
           },
           label: Text(
-            '애창곡 노트 설정하러가기',
+            '홈 화면으로 이동',
             style: TextStyle(fontWeight: FontWeight.bold, color: kPrimaryCreamColor),
           ),
-          icon: Icon(Icons.note_add_outlined),
+          icon: Icon(Icons.home),
           backgroundColor: kPrimaryColor,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

@@ -31,8 +31,6 @@ class NoteDetailScreen extends StatefulWidget {
 class _NoteDetailScreenState extends State<NoteDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    List<Note> notes = Provider.of<NoteData>(context, listen: true).notes;
-    int index = notes.indexOf(widget.note);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -96,7 +94,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             Container(
               width: 80,
               alignment: Alignment.center,
-
               child: Column(
                 children: [
                   IconButton(
@@ -104,12 +101,18 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                       icon: SvgPicture.asset('assets/icons/youtube.svg'),
                       onPressed: () async {
                         final url = Uri.parse(
-                            'https://www.\e.com/results?search_query=tj ${widget.note.tj_title} ${widget.note.tj_singer}');
+                            'https://www.youtube.com/results?search_query=tj ${widget.note.tj_title} ${widget.note.tj_singer}');
                         if (await canLaunchUrl(url)) {
                           launchUrl(url, mode: LaunchMode.inAppWebView);
                         }
                       }),
-                  Align(alignment: Alignment(-0.3,0),child: Text("노래 듣기", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),)),
+                  Align(
+                      alignment: Alignment(-0.3, 0),
+                      child: Text(
+                        "노래 듣기",
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.bold),
+                      )),
                 ],
               ),
             ),
@@ -154,7 +157,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                     ),
                     child: Center(
                         child: Text(
-                      notes[index].tj_songNumber,
+                      widget.note.tj_songNumber,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                     )),
@@ -187,7 +190,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   widget.note.ky_songNumber == '?'
                       ? GestureDetector(
                           onTap: () {
-                            _showKySearchDialog(context, notes, index);
+                            _showKySearchDialog(context);
                           },
                           child: Container(
                             width: 70,
@@ -212,7 +215,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                           ),
                           child: Center(
                             child: Text(
-                              notes[index].ky_songNumber,
+                              widget.note.ky_songNumber,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 17),
                             ),
@@ -261,7 +264,10 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                           color: Color(0xFFF5F5FA)),
                     ),
-                  Container(child: EditableTextField(note: widget.note), padding: EdgeInsets.only(left: 15),)
+                    Container(
+                      child: EditableTextField(note: widget.note),
+                      padding: EdgeInsets.only(left: 15),
+                    )
                   ]),
                 ],
               ),
@@ -278,7 +284,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     );
   }
 
-  _showKySearchDialog(BuildContext context, List<Note> notes, int idx) async {
+  _showKySearchDialog(BuildContext context) async {
     //!event: 곡 상세정보 뷰 - 금영 검색
     Provider.of<NoteData>(context, listen: false)
         .kySearchEvent(widget.note.tj_songNumber);
@@ -301,7 +307,10 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   padding: EdgeInsets.only(top: 20),
                   child: DefaultTextStyle(
                     style: TextStyle(color: Colors.black, fontSize: 30),
-                    child: Text("금영 번호 추가", style: TextStyle(fontWeight: FontWeight.bold),),
+                    child: Text(
+                      "금영 번호 추가",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 kySearchSongList.length == 0
@@ -309,7 +318,12 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                         padding: EdgeInsets.only(top: 20),
                         child: DefaultTextStyle(
                           style: TextStyle(fontSize: 15, color: Colors.black),
-                          child: Text("검색 결과가 없습니다 😪", style: TextStyle(fontWeight: FontWeight.bold, color: kPrimaryLightGreenColor),),
+                          child: Text(
+                            "검색 결과가 없습니다 😪",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryLightGreenColor),
+                          ),
                         ),
                       )
                     : Expanded(
@@ -323,7 +337,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                               child: GestureDetector(
                                 onTap: () {
                                   Provider.of<NoteData>(context, listen: false)
-                                      .changeKySongNumber(idx,
+                                      .changeKySongNumber(widget.note,
                                           kySearchSongList[index].songNumber);
                                   Navigator.of(context).pop();
                                 },

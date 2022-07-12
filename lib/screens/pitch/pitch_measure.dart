@@ -12,6 +12,7 @@ import 'package:conopot/screens/pitch/components/pitch_banner.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/screens/pitch/pitch_result.dart';
 import 'package:easy_debounce/easy_debounce.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_capture/flutter_audio_capture.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -38,6 +39,8 @@ class _PitchMeasureState extends State<PitchMeasure> {
   int flag = 0; //음 측정 중인지 확인
   String nowPitchName = "";
   bool playFlag = false;
+  String selected1 = "1옥타브";
+  String selected2 = "도";
 
   Future<void> _startCapture() async {
     //마이크 사용 권한 확인 (android)
@@ -196,22 +199,76 @@ class _PitchMeasureState extends State<PitchMeasure> {
     return ret;
   }
 
+  List<String> octave1 = [
+    '1옥타브',
+    '2옥타브',
+    '3옥타브',
+  ];
+
+  List<String> octave2 = [
+    '도',
+    '도#',
+    '레',
+    '레#',
+    '미',
+    '파',
+    '파#',
+    '솔',
+    '솔#',
+    '라',
+    '라#',
+    '시',
+  ];
+
   var pitchIdx = 0;
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(color: Colors.black),
-        title: Text(
-          '음역대 측정',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        appBar: AppBar(
+          leading: BackButton(color: Colors.black),
+          title: Text(
+            '음역대 측정',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: (flag == 0 || flag == 1) ? _firstScreen() : _secondScreen()
-    );
+        body: (flag == 0 || flag == 1) ? _firstScreen() : _secondScreen());
+  }
+
+  Widget _picker1() {
+    return CupertinoPicker(
+        itemExtent: 75,
+        onSelectedItemChanged: (i) {
+          setState(() {
+            selected1 = octave1[i];
+          });
+        },
+        children: [
+          ...octave1.map((e) => Center(
+                child: Text(
+                  e,
+                ),
+              ))
+        ]);
+  }
+
+  Widget _picker2() {
+    return CupertinoPicker(
+        itemExtent: 75,
+        onSelectedItemChanged: (i) {
+          setState(() {
+            selected2 = octave2[i];
+          });
+        },
+        children: [
+          ...octave2.map((e) => Center(
+                child: Text(
+                  e,
+                ),
+              ))
+        ]);
   }
 
   // 측정 시작, 측정 중지
@@ -396,50 +453,80 @@ class _PitchMeasureState extends State<PitchMeasure> {
           child: Center(
             child: Column(
               children: [
-                SizedBox(height: SizeConfig.defaultSize),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                        });
-                      },
-                      child: Container(
-                        width: 100,
-                        height: 30,
-                        child: Center(
-                            child: Text(
-                          "다시 측정하기",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        )),
+                    Container(
+                        height: SizeConfig.screenHeight * 0.2,
+                        width: SizeConfig.screenWidth * 0.3,
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black, width: 1),
-                            borderRadius: BorderRadius.circular(5.0),
-                            color: Colors.red),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {});
-                      },
-                      child: Container(
-                        width: 100,
-                        height: 30,
-                        child: Center(
-                            child: Text(
-                          "선택 완료",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        )),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: _picker1()),
+                    Container(
+                        height: SizeConfig.screenHeight * 0.2,
+                        width: SizeConfig.screenWidth * 0.3,
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black, width: 1),
-                            borderRadius: BorderRadius.circular(5.0),
-                            color: Colors.blue),
-                      ),
-                    ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: _picker2()),
                   ],
+                ),
+                SizedBox(height: SizeConfig.defaultSize),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            flag = 0;
+                          });
+                        },
+                        child: Container(
+                          width: 100,
+                          height: 30,
+                          child: Center(
+                              child: Text(
+                            "다시 측정하기",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          )),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black, width: 1),
+                              borderRadius: BorderRadius.circular(5.0),
+                              color: Colors.red),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              CustomPageRoute(
+                                child: PitchResult(
+                                    fitchLevel: StringToPitchNum[
+                                        selected1 + ' ' + selected2]),
+                              ));
+                        },
+                        child: Container(
+                          width: 100,
+                          height: 30,
+                          child: Center(
+                              child: Text(
+                            "선택 완료",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          )),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black, width: 1),
+                              borderRadius: BorderRadius.circular(5.0),
+                              color: Colors.blue),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
