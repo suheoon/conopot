@@ -62,6 +62,32 @@ class ChartScreen extends StatelessWidget {
                 ),
               ],
             ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: Center(
+                    child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "${DateTime.now().month}월 ",
+                        style: TextStyle(
+                          color: kPrimaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(
+                        text: "인기차트",
+                        style: TextStyle(
+                          color: kTextColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+              ),
+            ],
           ),
           body: TabBarView(
             children: [
