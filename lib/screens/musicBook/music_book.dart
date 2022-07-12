@@ -64,13 +64,13 @@ class MusicBookScreen extends StatelessWidget {
               Column(
                 children: [
                   SearchBar(musicList: musicList),
-                  SearchList(musicList: musicList),
+                  SearchList(musicList: musicList, tabIdx: musicList.tabIndex),
                 ],
               ),
               Column(
                 children: [
                   SearchBar(musicList: musicList),
-                  SearchList(musicList: musicList),
+                  SearchList(musicList: musicList, tabIdx: musicList.tabIndex),
                 ],
               ),
             ],

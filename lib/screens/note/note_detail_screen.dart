@@ -512,7 +512,7 @@ void noteInfoPostRequest(Note note) async {
         "MusicSinger": "${note.tj_singer}",
         "MusicNumberTJ": "${note.tj_songNumber}",
         "MusicNumberKY": "${note.ky_songNumber}",
-        "Calls": 0,
+        "Calls": 1,
         "Status": "To do"
       }
     }),
