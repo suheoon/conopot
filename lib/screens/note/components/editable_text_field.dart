@@ -43,8 +43,9 @@ class _EditableTextFieldState extends State<EditableTextField> {
         child: TextField(
           autofocus: true,
           controller: _editingController,
-          maxLength: 25,
+          maxLength: 30,
           decoration: InputDecoration(
+              hintText: "메모를 입력해 주세요",
               border: InputBorder.none,
               suffixIcon: TextButton(
                 child: Text("저장", style: TextStyle(color: kTitleColor),),
@@ -69,7 +70,7 @@ class _EditableTextFieldState extends State<EditableTextField> {
             });
           },
           child: SizedBox(
-            width: SizeConfig.screenWidth * 0.75,
+            width: SizeConfig.screenWidth * 0.7,
             child: Text(
               initialText,
               overflow: TextOverflow.ellipsis,

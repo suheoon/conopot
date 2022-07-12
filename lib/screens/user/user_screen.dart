@@ -155,7 +155,7 @@ class _UserScreenState extends State<UserScreen> {
                               height: 20,
                             ),
                             SizedBox(
-                              width: 20,
+                              width: 15,
                             ),
                             Text(
                               '최고 음역대 측정하기',

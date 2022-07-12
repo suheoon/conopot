@@ -45,28 +45,28 @@ class _PitchScreenState extends State<PitchScreen> {
             PitchSearchBar(
               musicList: musicList,
             ),
-            RichText(
-              text: TextSpan(
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-                children: [
-                  TextSpan(
-                    text: '* 음역대 측정 ',
-                    style: TextStyle(
-                      color: kPrimaryColor,
-                    ),
-                  ),
-                  TextSpan(
-                    text: '후 내게 맞는 노래인지 확인하세요!',
-                    style: TextStyle(
-                      color: kTextColor,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // RichText(
+            //   text: TextSpan(
+            //     style: TextStyle(
+            //       fontWeight: FontWeight.bold,
+            //       fontSize: 12,
+            //     ),
+            //     children: [
+            //       TextSpan(
+            //         text: '* 음역대 측정 ',
+            //         style: TextStyle(
+            //           color: kPrimaryColor,
+            //         ),
+            //       ),
+            //       TextSpan(
+            //         text: '후 내게 맞는 노래인지 확인하세요!',
+            //         style: TextStyle(
+            //           color: kTextColor,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             PitchDropdownOption(musicList: musicList),
             PitchSearchList(musicList: musicList),
           ],
