@@ -83,10 +83,15 @@ class _UserScreenState extends State<UserScreen> {
                                     )
                                   : TextButton(
                                       onPressed: () {
+                                        Provider.of<MusicSearchItemLists>(
+                                                context,
+                                                listen: false)
+                                            .checkPitchMeasureEvent();
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (_) => PitchMainScreen()),
+                                              builder: (_) =>
+                                                  PitchMainScreen()),
                                         );
                                       },
                                       style: TextButton.styleFrom(
@@ -107,6 +112,9 @@ class _UserScreenState extends State<UserScreen> {
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
+                        Provider.of<MusicSearchItemLists>(context,
+                                listen: false)
+                            .checkPitchMeasureEvent();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -140,6 +148,9 @@ class _UserScreenState extends State<UserScreen> {
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
+                        Provider.of<MusicSearchItemLists>(context,
+                                listen: false)
+                            .checkPitchMeasureEvent();
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (_) => PitchMainScreen()),
@@ -208,9 +219,13 @@ class _UserScreenState extends State<UserScreen> {
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
+                        Provider.of<MusicSearchItemLists>(context,
+                                listen: false)
+                            .checkPitchMeasureEvent();
                         Future.delayed(Duration.zero, () {
                           musicList.initChart();
                         });
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (_) => ChartScreen()),
@@ -243,6 +258,9 @@ class _UserScreenState extends State<UserScreen> {
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
+                        Provider.of<MusicSearchItemLists>(context,
+                                listen: false)
+                            .checkPitchMeasureEvent();
                         Future.delayed(Duration.zero, () {
                           musicList.initFitch();
                         });

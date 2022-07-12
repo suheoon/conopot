@@ -1,38 +1,40 @@
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/identify.dart';
+import 'package:conopot/firebase/firebase_options.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/widgets.dart';
 
 class Analytics_config {
   static late Amplitude analytics =
-      Amplitude.getInstance(instanceName: "project");
+      Amplitude.getInstance(instanceName: "conopot");
 
-  void init() {
+  static late FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.instance;
+
+  Future<void> init() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    firebaseAnalytics.logAppOpen();
     // Initialize SDK
     analytics.init('cf1298f461883c1cbf97daeb0393b987');
 
     // Enable COPPA privacy guard. This is useful when you choose not to report sensitive user information.
     analytics.enableCoppaControl();
 
-    // Set user Id
-    analytics.setUserId("test_user");
     // Turn on automatic session events
     analytics.trackingSessionEvents(true);
 
     // Log an event
-    analytics.logEvent('MyApp startup',
-        eventProperties: {'friend_num': 10, 'is_heavy_user': true});
+    analytics.logEvent('앱 실행');
 
     // Identify
-    final Identify identify1 = Identify()
-      ..set('identify_test',
-          'identify sent at ${DateTime.now().millisecondsSinceEpoch}')
-      ..add('identify_count', 1);
-    analytics.identify(identify1);
-
-    // Set group
-    analytics.setGroup('orgId', 15);
-
-    // Group identify
-    final Identify identify2 = Identify()..set('identify_count', 1);
-    analytics.groupIdentify('orgId', '15', identify2);
+    // final Identify identify1 = Identify()
+    //   ..set('identify_test',
+    //       'identify sent at ${DateTime.now().millisecondsSinceEpoch}')
+    //   ..add('identify_count', 1);
+    // analytics.identify(identify1);
   }
 }

@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Provider.of<MusicSearchItemLists>(context, listen: false).init();
     });
 
-    /// 3초 후 MainScreen 전환 (replace)
+    /// 2초 후 MainScreen 전환 (replace)
     Timer(Duration(milliseconds: 2000), () {
       /// 사용자 노트 초기화 (local storage)
       Provider.of<NoteData>(context, listen: false).initNotes(

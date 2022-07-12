@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/identify.dart';
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:conopot/models/music_search_item.dart';
@@ -128,6 +129,10 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   // 프로그램 실행 시, 노래방 책 List 초기화 (TJ, KY txt -> List)
   void init() async {
+    //!event : 앱 실행
+
+    Analytics_config.firebaseAnalytics.logAppOpen();
+
     //사용자 음정 불러오기
     String? value = await storage.read(key: 'userPitch');
     if (value != null) {
@@ -313,10 +318,22 @@ class MusicSearchItemLists extends ChangeNotifier {
         }
       }
       foundItems = results;
+
+      //!event : 일반 검색 뷰 - 검색 키워드
+      Analytics_config.analytics.logEvent('일반 검색 뷰 - 검색 키워드', eventProperties: {
+        '검색 키워드': enteredKeyword,
+      });
+
+      Analytics_config.firebaseAnalytics
+          .logEvent(name: '일반 검색 뷰 - 검색 키워드', parameters: {
+        '검색 키워드': enteredKeyword,
+      });
+
       notifyListeners();
     });
   }
 
+  // 검색 필터링 기능(곡 추가 시 검색)
   void runKYFilter(String enteredKeyword) {
     results = [];
     enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
@@ -356,6 +373,11 @@ class MusicSearchItemLists extends ChangeNotifier {
 
       combinedFoundItems = highestResults;
 
+      //!event : 곡 추가 뷰 - 검색 키워드
+      Analytics_config.analytics.logEvent('곡 추가 뷰 - 검색 키워드', eventProperties: {
+        '검색 키워드': enteredKeyword,
+      });
+
       notifyListeners();
     });
   }
@@ -377,6 +399,12 @@ class MusicSearchItemLists extends ChangeNotifier {
             .toList();
       }
       highestFoundItems = highestResults;
+
+      //!event : 최고음 검색 뷰 - 검색 키워드
+      Analytics_config.analytics
+          .logEvent('최고음 검색 뷰 - 검색 키워드', eventProperties: {
+        '검색 키워드': enteredKeyword,
+      });
 
       notifyListeners();
     });
@@ -404,5 +432,30 @@ class MusicSearchItemLists extends ChangeNotifier {
       musicList.add(MusicSearchItem(
           title: title, singer: singer, songNumber: songNumber));
     }
+  }
+
+  //!event: 애창곡 노트 뷰 - 최고음 배너 클릭 시
+  void pitchBannerClickEvent(int noteCnt) {
+    Analytics_config.analytics.logEvent('애창곡 노트 뷰 - 최고음 배너 클릭',
+        eventProperties: {
+          '사용자 최고음 등록 여부': (userMaxPitch != -1),
+          '노트 개수': noteCnt
+        });
+  }
+
+  //!event: 애창곡 노트 뷰 - 노트 설정 배너 클릭 시
+  void noteSettingBannerClickEvent(int noteCnt) {
+    Analytics_config.analytics.logEvent('애창곡 노트 뷰 - 노트 설정 배너 클릭',
+        eventProperties: {
+          '사용자 최고음 등록 여부': (userMaxPitch != -1),
+          '노트 개수': noteCnt
+        });
+  }
+
+  //!event: 내 정보 - 최고음 측정 여부
+  void checkPitchMeasureEvent() {
+    Analytics_config.analytics.logEvent('내 정보 - 최고음 측정 여부', eventProperties: {
+      '사용자 최고음 등록 여부': (userMaxPitch != -1),
+    });
   }
 }

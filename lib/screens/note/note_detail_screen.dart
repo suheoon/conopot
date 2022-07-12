@@ -96,6 +96,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             Container(
               width: 80,
               alignment: Alignment.center,
+
               child: Column(
                 children: [
                   IconButton(
@@ -229,6 +230,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                         ),
                         TextButton(
                           onPressed: () {
+                            Provider.of<NoteData>(context, listen: false)
+                                .pitchListenEvent(widget.note.pitch);
                             play(pitchNumToCode[widget.note.pitchNum]);
                           },
                           child: Icon(
@@ -276,6 +279,9 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   }
 
   _showKySearchDialog(BuildContext context, List<Note> notes, int idx) async {
+    //!event: 곡 상세정보 뷰 - 금영 검색
+    Provider.of<NoteData>(context, listen: false)
+        .kySearchEvent(widget.note.tj_songNumber);
     Provider.of<MusicSearchItemLists>(context, listen: false)
         .runKYFilter(widget.note.tj_title);
     List<MusicSearchItem> kySearchSongList =
@@ -392,6 +398,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     Widget okButton = ElevatedButton(
       style: ElevatedButton.styleFrom(primary: Colors.red),
       onPressed: () {
+        Provider.of<NoteData>(context, listen: false)
+            .noteDeleteEvent(widget.note);
         Provider.of<NoteData>(context, listen: false).deleteNote(widget.note);
         Navigator.of(context).popUntil((route) => route.isFirst);
       },

@@ -90,6 +90,10 @@ class _NoteSearchListState extends State<NoteSearchList> {
                       Provider.of<NoteData>(context, listen: false)
                               .clickedItem =
                           widget.musicList.combinedFoundItems[index];
+                      //!event: 곡 추가 뷰 - 리스트 클릭 시
+                      Provider.of<NoteData>(context, listen: false)
+                          .addSongClickEvent(
+                              widget.musicList.combinedFoundItems[index]);
                       showCupertinoModalPopup(
                         context: context,
                         builder: (context) => _actionSheet(),

@@ -51,11 +51,11 @@ class _NoteScreenState extends State<NoteScreen> {
               ),
               floatingActionButton: (!noteData.notes.isEmpty)
                   ? Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 15, 15),
-                    width: 75,
-                    height: 75,
-                    child: FittedBox(
-                      child: FloatingActionButton(
+                      margin: EdgeInsets.fromLTRB(0, 0, 15, 15),
+                      width: 75,
+                      height: 75,
+                      child: FittedBox(
+                        child: FloatingActionButton(
                           backgroundColor: Colors.white,
                           elevation: 5.0,
                           child: SvgPicture.asset('assets/icons/addButton.svg'),
@@ -68,12 +68,13 @@ class _NoteScreenState extends State<NoteScreen> {
                             noteData.setSelectedIndex(-1);
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (_) => AddNoteScreen()),
+                              MaterialPageRoute(
+                                  builder: (_) => AddNoteScreen()),
                             );
                           },
                         ),
-                    ),
-                  )
+                      ),
+                    )
                   : null,
               body: Column(
                 children: [
@@ -98,6 +99,9 @@ class _NoteScreenState extends State<NoteScreen> {
         // banner 1
         GestureDetector(
           onTap: () {
+            Provider.of<MusicSearchItemLists>(context, listen: false)
+                .pitchBannerClickEvent(
+                    Provider.of<NoteData>(context, listen: false).notes.length);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => PitchMainScreen()),
@@ -154,6 +158,9 @@ class _NoteScreenState extends State<NoteScreen> {
         // banner 2
         GestureDetector(
           onTap: () {
+            Provider.of<MusicSearchItemLists>(context, listen: false)
+                .noteSettingBannerClickEvent(
+                    Provider.of<NoteData>(context, listen: false).notes.length);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => noteSettingScreen()),
@@ -267,6 +274,7 @@ class _NoteScreenState extends State<NoteScreen> {
                 });
                 Provider.of<NoteData>(context, listen: false)
                     .setSelectedIndex(-1);
+                Provider.of<NoteData>(context, listen: false).addNoteEvent();
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => AddNoteScreen()),
@@ -334,6 +342,8 @@ class _NoteScreenState extends State<NoteScreen> {
                                 ],
                               )),
                               onTap: () {
+                                Provider.of<NoteData>(context, listen: false)
+                                    .viewNoteEvent(note);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -378,6 +388,7 @@ class _NoteScreenState extends State<NoteScreen> {
                 }
                 final Note note = noteData.notes.removeAt(oldIndex);
                 noteData.notes.insert(newIndex, note);
+                Provider.of<NoteData>(context, listen: false).reorderEvent();
               });
             },
           );
