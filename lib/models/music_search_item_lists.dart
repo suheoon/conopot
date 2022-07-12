@@ -130,7 +130,8 @@ class MusicSearchItemLists extends ChangeNotifier {
   // 프로그램 실행 시, 노래방 책 List 초기화 (TJ, KY txt -> List)
   void init() async {
     //!event : 앱 실행
-    Analytics_config().init();
+
+    Analytics_config.firebaseAnalytics.logAppOpen();
 
     //사용자 음정 불러오기
     String? value = await storage.read(key: 'userPitch');
@@ -321,6 +322,11 @@ class MusicSearchItemLists extends ChangeNotifier {
 
       //!event : 일반 검색 뷰 - 검색 키워드
       Analytics_config.analytics.logEvent('일반 검색 뷰 - 검색 키워드', eventProperties: {
+        '검색 키워드': enteredKeyword,
+      });
+
+      Analytics_config.firebaseAnalytics
+          .logEvent(name: '일반 검색 뷰 - 검색 키워드', parameters: {
         '검색 키워드': enteredKeyword,
       });
 

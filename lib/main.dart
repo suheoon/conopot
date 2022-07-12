@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/firebase/firebase_config.dart';
+import 'package:conopot/firebase/firebase_options.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/splash/splash_screen.dart';
@@ -9,35 +11,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-Future<void> firebaseInit() async {
-  /// firebase analytics init
-  await Firebase.initializeApp(options: DefaultFirebaseConfig.platformOptions);
-
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-}
-
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  Analytics_config().init();
+
+  Analytics_config.firebaseAnalytics.logEvent(name: "abc");
+
   /// firebase crashlytics init
   runZonedGuarded<Future<void>>(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-
-    /// firebase analytics init
-    await Firebase.initializeApp(
-        options: DefaultFirebaseConfig.platformOptions);
-
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-
-    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-
-    await FirebaseAnalytics.instance.logBeginCheckout(
-        value: 10.0,
-        currency: 'USD',
-        items: [
-          AnalyticsEventItem(
-              itemName: 'Socks', itemId: 'xjw73ndnw', price: 10.0),
-        ],
-        coupon: '10PERCENTOFF');
-
     runApp(const MyApp());
   },
       (error, stack) =>
@@ -50,6 +36,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    Analytics_config().init();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => MusicSearchItemLists()),
@@ -75,6 +62,10 @@ class MyApp extends StatelessWidget {
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           home: const SplashScreen(),
+          navigatorObservers: [
+            FirebaseAnalyticsObserver(
+                analytics: Analytics_config.firebaseAnalytics),
+          ],
         ),
       ),
     );
