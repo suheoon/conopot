@@ -167,23 +167,73 @@ class NoteData extends ChangeNotifier {
     if (!flag) {
       notes.add(note);
       await storage.write(key: 'notes', value: jsonEncode(notes));
-      //await storage.write(key: clickedItem.tj_songNumber, value: memo);
+
+      //!event: 곡 추가 뷰 - 노트 추가 이벤트
+      Analytics_config.analytics
+          .logEvent('곡 추가 뷰 - 노트 추가 이벤트', eventProperties: {
+        '곡 이름': note.tj_title,
+        '가수 이름': note.tj_singer,
+        'TJ 번호': note.tj_songNumber,
+        '금영 번호': note.ky_songNumber,
+        '최고음': note.pitch,
+        '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
+        '메모 여부': note.memo
+      });
     } else {
       emptyCheck = true;
     }
 
-    //!event: 곡 추가 뷰 - 노트 추가 이벤트
-    Analytics_config.analytics.logEvent('곡 추가 뷰 - 노트 추가 이벤트', eventProperties: {
-      '곡 이름': note.tj_title,
-      '가수 이름': note.tj_singer,
-      'TJ 번호': note.tj_songNumber,
-      '금영 번호': note.ky_songNumber,
-      '최고음': note.pitch,
-      '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
-      '메모 여부': note.memo
-    });
-
     notifyListeners();
+  }
+
+  Future<void> addNodeBySongNumber(
+      String songNumber, List<FitchMusic> musicList) async {
+    for (FitchMusic fitchMusic in musicList) {
+      if (fitchMusic.tj_songNumber == songNumber) {
+        Note note = Note(
+            fitchMusic.tj_title,
+            fitchMusic.tj_singer,
+            fitchMusic.tj_songNumber,
+            fitchMusic.ky_title,
+            fitchMusic.ky_singer,
+            fitchMusic.ky_songNumber,
+            fitchMusic.gender,
+            fitchMusic.pitch,
+            fitchMusic.pitchNum,
+            "",
+            0);
+
+        bool flag = false;
+        for (Note iter_note in notes) {
+          if (iter_note.tj_songNumber == fitchMusic.tj_songNumber) {
+            flag = true;
+            break;
+          }
+        }
+        if (!flag) {
+          notes.add(note);
+          await storage.write(key: 'notes', value: jsonEncode(notes));
+
+          //!event: 곡 추가 뷰 - 노트 추가 이벤트
+          Analytics_config.analytics
+              .logEvent('검색 - 노트 추가 이벤트', eventProperties: {
+            '곡 이름': note.tj_title,
+            '가수 이름': note.tj_singer,
+            'TJ 번호': note.tj_songNumber,
+            '금영 번호': note.ky_songNumber,
+            '최고음': note.pitch,
+            '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
+            '메모 여부': note.memo
+          });
+        } else {
+          emptyCheck = true;
+        }
+
+        notifyListeners();
+
+        break;
+      }
+    }
   }
 
   Future<void> editNote(Note note, String memo) async {
