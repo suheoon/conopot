@@ -388,6 +388,7 @@ class _NoteScreenState extends State<NoteScreen> {
                 }
                 final Note note = noteData.notes.removeAt(oldIndex);
                 noteData.notes.insert(newIndex, note);
+                Provider.of<NoteData>(context, listen: false).reorderEvent();
               });
             },
           );

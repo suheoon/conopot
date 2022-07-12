@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/config/analytics_config.dart';
@@ -21,27 +23,36 @@ class NoteData extends ChangeNotifier {
 
   void initNotes(List<FitchMusic> combinedSongList) async {
     // Read all values
-    Map<String, String> allValues = await storage.readAll();
+    String? allValues = await storage.read(key: 'notes');
+    if (allValues != null) {
+      var noteJson = jsonDecode(allValues) as List;
+      List<Note> savedNote =
+          noteJson.map((noteIter) => Note.fromJson(noteIter)).toList();
 
-    //합친 곡 리스트 순회하며 노트에 있는 곡인지 체크
-    for (int i = 0; i < combinedSongList.length; i++) {
-      if (allValues.containsKey(combinedSongList[i].tj_songNumber)) {
-        String? memo =
-            await storage.read(key: combinedSongList[i].tj_songNumber);
-        Note note = Note(
-            combinedSongList[i].tj_title,
-            combinedSongList[i].tj_singer,
-            combinedSongList[i].tj_songNumber,
-            combinedSongList[i].ky_title,
-            combinedSongList[i].ky_singer,
-            combinedSongList[i].ky_songNumber,
-            combinedSongList[i].gender,
-            combinedSongList[i].pitch,
-            combinedSongList[i].pitchNum,
-            memo!,
-            0);
-        notes.add(note);
-      }
+      notes = savedNote;
+
+      //print(notes);
+
+      // //합친 곡 리스트 순회하며 노트에 있는 곡인지 체크
+      // for (int i = 0; i < combinedSongList.length; i++) {
+      //   if (savedNote.contains(combinedSongList[i].tj_songNumber)) {
+      //     String? memo =
+      //         await storage.read(key: combinedSongList[i].tj_songNumber);
+      //     Note note = Note(
+      //         combinedSongList[i].tj_title,
+      //         combinedSongList[i].tj_singer,
+      //         combinedSongList[i].tj_songNumber,
+      //         combinedSongList[i].ky_title,
+      //         combinedSongList[i].ky_singer,
+      //         combinedSongList[i].ky_songNumber,
+      //         combinedSongList[i].gender,
+      //         combinedSongList[i].pitch,
+      //         combinedSongList[i].pitchNum,
+      //         memo!,
+      //         0);
+      //     notes.add(note);
+      //   }
+      // }
     }
 
     int memoCnt = 0; //전체 노트 중 메모를 한 노트의 수
@@ -154,8 +165,9 @@ class NoteData extends ChangeNotifier {
       }
     }
     if (!flag) {
-      await storage.write(key: clickedItem.tj_songNumber, value: memo);
       notes.add(note);
+      await storage.write(key: 'notes', value: jsonEncode(notes));
+      //await storage.write(key: clickedItem.tj_songNumber, value: memo);
     } else {
       emptyCheck = true;
     }
@@ -176,14 +188,21 @@ class NoteData extends ChangeNotifier {
 
   Future<void> editNote(Note note, String memo) async {
     note.memo = memo;
-    await storage.write(key: note.tj_songNumber, value: memo);
+    for (Note no in notes) {
+      if (note.tj_songNumber == no.tj_songNumber) {
+        no.memo = memo;
+      }
+    }
+    await storage.write(key: 'notes', value: jsonEncode(notes));
+    //await storage.write(key: note.tj_songNumber, value: memo);
     notifyListeners();
   }
 
   //local storage 에도 삭제 작업 필요
   Future<void> deleteNote(Note note) async {
-    await storage.delete(key: note.tj_songNumber);
     notes.remove(note);
+    await storage.write(key: 'notes', value: jsonEncode(notes));
+    //await storage.delete(key: note.tj_songNumber);
     notifyListeners();
   }
 
@@ -224,5 +243,9 @@ class NoteData extends ChangeNotifier {
   void changeKySongNumber(int idx, String kySongNumber) {
     notes[idx].ky_songNumber = kySongNumber;
     notifyListeners();
+  }
+
+  Future<void> reorderEvent() async {
+    await storage.write(key: 'notes', value: jsonEncode(notes));
   }
 }
