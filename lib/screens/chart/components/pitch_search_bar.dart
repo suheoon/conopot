@@ -15,17 +15,16 @@ class PitchSearchBar extends StatelessWidget {
         onChanged: (text) => {
           musicList.runHighFitchFilter(text),
         },
-        textAlign: TextAlign.center,
+        textAlign: TextAlign.left,
         keyboardType: TextInputType.name,
         decoration: InputDecoration(
           hintText: '제목 및 가수명을 입력하세요',
           contentPadding: EdgeInsets.all(0),
-          suffixIcon: Icon(Icons.search),
+          prefixIcon: Icon(Icons.search, color: Colors.grey),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(50.0)),
             borderSide: BorderSide(
               width: 1,
-              color: Color(0xFF7B61FF),
             ),
           ),
           enabledBorder: OutlineInputBorder(

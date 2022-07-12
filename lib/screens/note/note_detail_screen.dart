@@ -96,16 +96,21 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             Container(
               width: 80,
               alignment: Alignment.center,
-              child: IconButton(
-                  padding: EdgeInsets.only(right: 10),
-                  icon: SvgPicture.asset('assets/icons/youtube.svg'),
-                  onPressed: () async {
-                    final url = Uri.parse(
-                        'https://www.youtube.com/results?search_query=tj ${widget.note.tj_title} ${widget.note.tj_singer}');
-                    if (await canLaunchUrl(url)) {
-                      launchUrl(url, mode: LaunchMode.inAppWebView);
-                    }
-                  }),
+              child: Column(
+                children: [
+                  IconButton(
+                      padding: EdgeInsets.only(right: 10),
+                      icon: SvgPicture.asset('assets/icons/youtube.svg'),
+                      onPressed: () async {
+                        final url = Uri.parse(
+                            'https://www.\e.com/results?search_query=tj ${widget.note.tj_title} ${widget.note.tj_singer}');
+                        if (await canLaunchUrl(url)) {
+                          launchUrl(url, mode: LaunchMode.inAppWebView);
+                        }
+                      }),
+                  Align(alignment: Alignment(-0.3,0),child: Text("노래 듣기", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),)),
+                ],
+              ),
             ),
           ],
         ),
@@ -141,7 +146,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   SizedBox(width: 10),
                   Container(
                     width: 70,
-                    height: 20,
+                    height: 28,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                       color: Color(0x30826A6A),
@@ -157,10 +162,10 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   Container(
                     child: Text("최고음",
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                         )),
-                    width: 50,
+                    width: 60,
                   ),
                   SizedBox(width: 10),
                   _pitchInfo(widget.note.pitch),
@@ -185,7 +190,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                           },
                           child: Container(
                             width: 70,
-                            height: 20,
+                            height: 28,
                             decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5)),
@@ -199,7 +204,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                         )
                       : Container(
                           width: 70,
-                          height: 20,
+                          height: 28,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                             color: Color(0x30826A6A),
@@ -220,7 +225,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                           child: Text("최고음\n들어보기",
                               style: TextStyle(
                                   fontSize: 13, fontWeight: FontWeight.bold)),
-                          width: 50,
+                          width: 55,
                         ),
                         TextButton(
                           onPressed: () {
@@ -253,7 +258,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                           color: Color(0xFFF5F5FA)),
                     ),
-                    EditableTextField(note: widget.note)
+                  Container(child: EditableTextField(note: widget.note), padding: EdgeInsets.only(left: 15),)
                   ]),
                 ],
               ),
@@ -270,9 +275,9 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     );
   }
 
-  _showKySearchDialog(BuildContext context, List<Note> notes, int idx) {
+  _showKySearchDialog(BuildContext context, List<Note> notes, int idx) async {
     Provider.of<MusicSearchItemLists>(context, listen: false)
-        .runFilter(widget.note.tj_title, 2);
+        .runKYFilter(widget.note.tj_title);
     List<MusicSearchItem> kySearchSongList =
         Provider.of<MusicSearchItemLists>(context, listen: false).foundItems;
     showDialog(
@@ -290,15 +295,15 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   padding: EdgeInsets.only(top: 20),
                   child: DefaultTextStyle(
                     style: TextStyle(color: Colors.black, fontSize: 30),
-                    child: Text("금영 번호 추가"),
+                    child: Text("금영 번호 추가", style: TextStyle(fontWeight: FontWeight.bold),),
                   ),
                 ),
                 kySearchSongList.length == 0
                     ? Padding(
                         padding: EdgeInsets.only(top: 20),
                         child: DefaultTextStyle(
-                          style: TextStyle(fontSize: 13, color: Colors.black),
-                          child: Text("검색 결과가 없습니다"),
+                          style: TextStyle(fontSize: 15, color: Colors.black),
+                          child: Text("검색 결과가 없습니다 😪", style: TextStyle(fontWeight: FontWeight.bold, color: kPrimaryLightGreenColor),),
                         ),
                       )
                     : Expanded(
@@ -441,7 +446,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
           )
         : Container(
             width: 80,
-            height: 25,
+            height: 28,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(5)),
               color: Color(0xFFF54141),

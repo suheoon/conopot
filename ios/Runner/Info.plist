@@ -54,5 +54,7 @@
 		<string>https</string>
 		<string>http</string>
 	</array>
+	<key>NSMicrophoneUsageDescription</key>
+    <string>Need microphone access to capture audio</string>
 </dict>
 </plist>

@@ -9,31 +9,24 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(20.0),
+      padding: EdgeInsets.only(bottom: 10),
       child: TextField(
         onChanged: (text) => {
           musicList.runFilter(text, musicList.tabIndex),
         },
         enableInteractiveSelection: false,
         focusNode: FocusNode(),
-        textAlign: TextAlign.center,
+        textAlign: TextAlign.left,
         keyboardType: TextInputType.name,
         decoration: InputDecoration(
-          hintText: '제목 및 가수명을 입력하세요',
-          contentPadding: EdgeInsets.all(0),
-          suffixIcon: Icon(Icons.search),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(50.0)),
-            borderSide: BorderSide(
-              width: 1,
-              color: Color(0xFF7B61FF),
-            ),
+          hintText: '노래 제목 또는 가수명을 입력해주세요',
+          contentPadding: EdgeInsets.all(15),
+          prefixIcon: Icon(Icons.search, color: Colors.grey),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black, width: 0.1),
           ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(50.0)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(50.0)),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black, width: 0.1),
           ),
         ),
       ),
