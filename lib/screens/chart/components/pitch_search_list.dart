@@ -54,8 +54,8 @@ class PitchSearchList extends StatelessWidget {
                     ),
                     onTap: () {
                       if (musicList.tabIndex == 1) {
-                        _showDeleteDialog(
-                            context, musicList.foundItems[index].songNumber);
+                        _showDeleteDialog(context,
+                            musicList.highestFoundItems[index].tj_songNumber);
                       }
                     }),
               ),
