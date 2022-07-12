@@ -29,7 +29,7 @@ class PitchMeasure extends StatefulWidget {
 
 class _PitchMeasureState extends State<PitchMeasure> {
   final _audioRecorder = FlutterAudioCapture();
-  final pitchDetectorDart = PitchDetector(44100, 2000);
+  final pitchDetectorDart = PitchDetector(16000, 3000);
   final pitchupDart = PitchHandler(InstrumentType.guitar);
 
   var note = ""; //음정 알파벳
@@ -37,6 +37,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
   String ret = ""; //사용자가 측정한 음정
   int flag = 0; //음 측정 중인지 확인
   String nowPitchName = "";
+  bool playFlag = false;
 
   Future<void> _startCapture() async {
     //마이크 사용 권한 확인 (android)
@@ -46,7 +47,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
       //만약 있다면
       if (statuses[Permission.microphone]!.isGranted) {
         await _audioRecorder.start(listener, onError,
-            sampleRate: 44100, bufferSize: 3000);
+            sampleRate: 16000, bufferSize: 3000);
 
         setState(() {
           note = "";
@@ -56,7 +57,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
       }
     } else {
       await _audioRecorder.start(listener, onError,
-          sampleRate: 44100, bufferSize: 3000);
+          sampleRate: 16000, bufferSize: 3000);
 
       setState(() {
         note = "";
@@ -94,6 +95,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
       setState(() {
         note = handledPitchResult.note;
         frequency = handledPitchResult.expectedFrequency;
+        print(frequency);
         frequencyToPitch();
         if (ret == nowPitchName) flag = 2;
       });
@@ -103,13 +105,17 @@ class _PitchMeasureState extends State<PitchMeasure> {
   void play(String fitch) async {
     _stopCapture();
     final player = AudioCache(prefix: 'assets/fitches/');
-    await player.play('$fitch.mp3');
+
+    Timer(Duration(milliseconds: 50), () async {
+      await player.play('$fitch.mp3');
+    });
 
     setState(() {
       flag = 1;
+      playFlag = true;
     });
 
-    EasyDebounce.debounce('searching', Duration(milliseconds: 2500), () {
+    Timer(Duration(milliseconds: 3000), () {
       //누르고 2.5초 후 음 측정 시작
       _startCapture();
     });

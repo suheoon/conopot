@@ -290,7 +290,6 @@ class MusicSearchItemLists extends ChangeNotifier {
       results = [];
       //공백 제거 && 대문자 → 소문자 변경
       enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
-
       if (_tabIndex == 1) {
         //TJ
         if (enteredKeyword.isEmpty) {
@@ -335,6 +334,25 @@ class MusicSearchItemLists extends ChangeNotifier {
   }
 
   // 검색 필터링 기능(곡 추가 시 검색)
+  void runKYFilter(String enteredKeyword) {
+    results = [];
+    enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
+    if (enteredKeyword.isEmpty) {
+      results = kySongList;
+    } else {
+      results = kySongList
+          .where((string) =>
+              (string.title.replaceAll(' ', '').toLowerCase())
+                  .contains(enteredKeyword) ||
+              (string.singer.replaceAll(' ', '').toLowerCase())
+                  .contains(enteredKeyword))
+          .toList();
+    }
+    foundItems = results;
+    notifyListeners();
+  }
+
+  // 검색 필터링 기능(전체검색)
   void runCombinedFilter(String enteredKeyword) {
     EasyDebounce.debounce('searching', Duration(milliseconds: 500), () {
       highestResults = [];
