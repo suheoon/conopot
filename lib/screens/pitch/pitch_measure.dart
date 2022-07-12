@@ -97,7 +97,6 @@ class _PitchMeasureState extends State<PitchMeasure> {
         frequency = handledPitchResult.expectedFrequency;
         print(frequency);
         frequencyToPitch();
-        if (ret == nowPitchName) flag = 2;
       });
     }
   }
@@ -203,215 +202,250 @@ class _PitchMeasureState extends State<PitchMeasure> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-        appBar: AppBar(
-          leading: BackButton(color: Colors.black),
-          title: Text(
-            '음역대 측정',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
+      appBar: AppBar(
+        leading: BackButton(color: Colors.black),
+        title: Text(
+          '음역대 측정',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
-        body: Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: SizeConfig.screenHeight * 0.1,
+        centerTitle: true,
+      ),
+      body: (flag == 0 || flag == 1) ? _firstScreen() : _secondScreen()
+    );
+  }
+
+  // 측정 시작, 측정 중지
+  Widget _firstScreen() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '주의 사항',
+              style: TextStyle(
+                color: kPrimaryColor,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '주의 사항',
-                    style: TextStyle(
-                      color: kPrimaryColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+            ),
+            Icon(Icons.warning, color: Colors.yellow[800]),
+          ],
+        ),
+        SizedBox(
+          height: SizeConfig.defaultSize * 2,
+        ),
+        Text(
+          '1.  조용하고 크게 소리를 낼 수 있는 곳에서 테스트하세요.\n2. 가성이 아닌 진성으로 부르세요.',
+          style: TextStyle(
+            color: kTextColor,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(
+          height: SizeConfig.defaultSize,
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 16.0),
+          height: SizeConfig.screenHeight * 0.3,
+          width: SizeConfig.screenWidth * 0.8,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            border: Border.all(
+              color: Colors.grey,
+              width: 0.5,
+            ),
+          ),
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox(height: SizeConfig.defaultSize),
+                Text(
+                  "현재 측정 음",
+                  style: TextStyle(
+                    fontSize: 21.0,
+                    fontWeight: FontWeight.bold,
+                    color: kPrimaryBlackColor,
                   ),
-                  Icon(Icons.warning, color: Colors.yellow[800]),
-                ],
-              ),
-              SizedBox(
-                height: SizeConfig.defaultSize,
-              ),
-              Text(
-                '혼자 있는 곳 또는 노래방에서 테스트하세요',
-                style: TextStyle(
-                  color: kTextColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
                 ),
-              ),
-              SizedBox(
-                height: SizeConfig.defaultSize * 0.5,
-              ),
-              Text(
-                '가성이 아닌 진성으로 부르기!',
-                style: TextStyle(
-                  color: kTextColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: SizeConfig.screenHeight * 0.1,
-              ),
-              Container(
-                  margin: EdgeInsets.symmetric(vertical: 16.0),
-                  height: SizeConfig.screenHeight / 3,
-                  width: SizeConfig.screenWidth * 0.8,
-                  child: Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            border: Border.all(
-                              color: Colors.grey,
-                              width: 0.5,
-                            )),
-                      ),
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  pitchItemList[pitchIdx].pitchName,
-                                  style: TextStyle(
-                                    fontSize: 21.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: kPrimaryBlackColor,
-                                  ),
+                flag == 0
+                    ? Expanded(
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment(0, -0.4),
+                              child: Icon(
+                                Icons.remove,
+                              ),
+                            ),
+                            SizedBox(height: SizeConfig.screenHeight * 0.08),
+                            Align(
+                              alignment: Alignment(0, 0.8),
+                              child: GestureDetector(
+                                onTap: () {
+                                  _startCapture();
+                                  setState(() {
+                                    flag = 1;
+                                  });
+                                },
+                                child: Container(
+                                  width: 100,
+                                  height: 30,
+                                  child: Center(
+                                      child: Text(
+                                    "측정 시작",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.black, width: 1),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      color: Colors.blue),
                                 ),
-                                Text(
-                                  pitchItemList[pitchIdx].pitchCode,
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: kPrimaryLightBlackColor,
-                                  ),
-                                ),
-                                // SizedBox(
-                                //   height: SizeConfig.defaultSize,
-                                // ),
-                                (flag == 0)
-                                    ? Text(
-                                        "재생버튼을 눌러주세요",
-                                        style: TextStyle(
-                                          color: kPrimaryColor,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )
-                                    : (flag == 1)
-                                        ? Text(
-                                            "음을 측정 중입니다...",
-                                            style: TextStyle(
-                                                color: kPrimaryGreenColor,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 13),
-                                          )
-                                        : Column(
-                                            children: [
-                                              Text(
-                                                "성공입니다!",
-                                                style: TextStyle(
-                                                  color: kTitleColor,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              Text(
-                                                "아래 버튼을 눌러 다음 단계로 이동하세요!",
-                                                style: TextStyle(
-                                                  color: kSubTitleColor,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                SizedBox(
-                                  height: SizeConfig.defaultSize,
-                                ),
-                                Text(
-                                  "현재 측정되는 음",
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  frequencyToPitch(),
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: kTextColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: SizeConfig.defaultSize,
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      nowPitchName =
-                                          pitchItemList[pitchIdx].pitchName;
-                                    });
-                                    play(pitchItemList[pitchIdx].pitchCode);
-                                  },
-                                  child: Icon(
-                                    Icons.play_circle_outline_outlined,
-                                    color: Colors.black,
-                                    size: 40.0,
-                                  ),
-                                ),
-                                if (flag == 2)
-                                  TextButton(
-                                    onPressed: () {
-                                      _stopCapture();
-                                      setState(() {
-                                        ret = "";
-                                        pitchIdx++;
-                                        flag = 0;
-                                      });
-                                    },
-                                    child: Text(
-                                      '다음 음정',
-                                      style: TextStyle(
-                                        color: Color(0xFF7B61FF),
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                  ),
-                                if (flag == 1)
-                                  TextButton(
-                                    onPressed: () {
-                                      //최종결과 page route
-                                      Navigator.push(
-                                        context,
-                                        CustomPageRoute(
-                                          child: PitchResult(
-                                              fitchLevel:
-                                                  pitchItemList[pitchIdx].id),
-                                        ),
-                                      );
-                                    },
-                                    child: Text(
-                                      '더 이상 안올라가요!',
-                                      style: TextStyle(
-                                        color: Color(0xFF7B61FF),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ),
-                              ]),
+                              ),
+                            ),
+                          ],
                         ),
                       )
-                    ],
-                  )),
-            ],
+                    : Expanded(
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment(0, -0.4),
+                              child: Text(
+                                frequencyToPitch(),
+                                style: TextStyle(
+                                    fontSize: 30, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(height: SizeConfig.screenHeight * 0.08),
+                            Align(
+                              alignment: Alignment(0, 0.8),
+                              child: GestureDetector(
+                                onTap: () {
+                                  _stopCapture();
+                                  setState(() {
+                                    flag = 2;
+                                  });
+                                },
+                                child: Container(
+                                  width: 100,
+                                  height: 30,
+                                  child: Center(
+                                      child: Text(
+                                    "측정 중지",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.black, width: 1),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      color: Colors.red),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+              ],
+            ),
           ),
-        ));
+        ),
+      ],
+    );
+  }
+
+  //
+  Widget _secondScreen() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '최고음 선택하기',
+              style: TextStyle(
+                color: kPrimaryBlackColor,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: SizeConfig.defaultSize * 2,
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 16.0),
+          height: SizeConfig.screenHeight * 0.3,
+          width: SizeConfig.screenWidth * 0.8,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            border: Border.all(
+              color: Colors.grey,
+              width: 0.5,
+            ),
+          ),
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox(height: SizeConfig.defaultSize),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                        });
+                      },
+                      child: Container(
+                        width: 100,
+                        height: 30,
+                        child: Center(
+                            child: Text(
+                          "다시 측정하기",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        )),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black, width: 1),
+                            borderRadius: BorderRadius.circular(5.0),
+                            color: Colors.red),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {});
+                      },
+                      child: Container(
+                        width: 100,
+                        height: 30,
+                        child: Center(
+                            child: Text(
+                          "선택 완료",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        )),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black, width: 1),
+                            borderRadius: BorderRadius.circular(5.0),
+                            color: Colors.blue),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
