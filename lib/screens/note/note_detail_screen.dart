@@ -507,9 +507,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                 ),
               ),
               SizedBox(height: 10),
-              PitchSearchList(
-                  musicList: Provider.of<MusicSearchItemLists>(context,
-                      listen: false)),
+              PitchSearchList(),
             ],
           );
   }

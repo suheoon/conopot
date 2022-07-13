@@ -9,65 +9,68 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class PitchSearchList extends StatelessWidget {
-  final MusicSearchItemLists musicList;
-
-  const PitchSearchList({super.key, required this.musicList});
-
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: musicList.highestFoundItems.isNotEmpty
-          ? ListView.builder(
-              itemCount: musicList.highestFoundItems.length,
-              itemBuilder: (context, index) => Card(
-                color: Colors.white,
-                elevation: 1,
-                child: ListTile(
-                    leading: Container(
-                      width: 60,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            pitchNumToString[
-                                musicList.highestFoundItems[index].pitchNum],
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
+    return Consumer<MusicSearchItemLists>(
+      builder: (
+        context,
+        musicList,
+        child,
+      ) =>
+          Expanded(
+        child: musicList.highestFoundItems.isNotEmpty
+            ? ListView.builder(
+                itemCount: musicList.highestFoundItems.length,
+                itemBuilder: (context, index) => Card(
+                  color: Colors.white,
+                  elevation: 1,
+                  child: ListTile(
+                      leading: Container(
+                        width: 60,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              pitchNumToString[
+                                  musicList.highestFoundItems[index].pitchNum],
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    title: Text(
-                      musicList.highestFoundItems[index].tj_title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: kTitleColor,
+                      title: Text(
+                        musicList.highestFoundItems[index].tj_title,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: kTitleColor,
+                        ),
                       ),
-                    ),
-                    subtitle: Text(
-                      musicList.highestFoundItems[index].tj_singer,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: kSubTitleColor,
+                      subtitle: Text(
+                        musicList.highestFoundItems[index].tj_singer,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: kSubTitleColor,
+                        ),
                       ),
-                    ),
-                    onTap: () {
-                      // !event : 음역대 측정 결과 뷰 - 내 최고음 주변의 인기곡들
-                      Analytics_config.analytics
-                          .logEvent('음역대 측정 결과 뷰 - 내 최고음 주변의 인기곡들');
-                      if (musicList.tabIndex == 1) {
-                        _showDeleteDialog(context,
-                            musicList.highestFoundItems[index].tj_songNumber);
-                      }
-                    }),
+                      onTap: () {
+                        // !event : 음역대 측정 결과 뷰 - 내 최고음 주변의 인기곡들
+                        Analytics_config.analytics
+                            .logEvent('음역대 측정 결과 뷰 - 내 최고음 주변의 인기곡들');
+                        if (musicList.tabIndex == 1) {
+                          _showDeleteDialog(context,
+                              musicList.highestFoundItems[index].tj_songNumber);
+                        }
+                      }),
+                ),
+              )
+            : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(),
               ),
-            )
-          : Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(),
-            ),
+      ),
     );
   }
 }
