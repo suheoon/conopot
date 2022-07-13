@@ -78,7 +78,7 @@ class PitchChoice extends StatelessWidget {
                     ),
                     PitchSearchBar(musicList: musicList),
                     PitchDropdown(musicList: musicList),
-                    PitchCheckBox(musicList: musicList),
+                    PitchCheckBox(),
                   ],
                 ),
                 floatingActionButton: FloatingActionButton.extended(

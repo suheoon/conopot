@@ -32,7 +32,7 @@ class PitchMeasure extends StatefulWidget {
 class _PitchMeasureState extends State<PitchMeasure> {
   final _audioRecorder = FlutterAudioCapture();
   final pitchDetectorDartIos = PitchDetector(16000, 3000);
-  final pitchDetectorDartAos = PitchDetector(16000, 3000);
+  final pitchDetectorDartAos = PitchDetector(44100, 2000);
   final pitchupDart = PitchHandler(InstrumentType.guitar);
 
   var note = ""; //음정 알파벳
@@ -52,7 +52,8 @@ class _PitchMeasureState extends State<PitchMeasure> {
       //만약 있다면
       if (statuses[Permission.microphone]!.isGranted) {
         await _audioRecorder.start(listener, onError,
-            sampleRate: 16000, bufferSize: 3000);
+            sampleRate: 44100, bufferSize: 3000);
+        print("is start?");
 
         setState(() {
           note = "";

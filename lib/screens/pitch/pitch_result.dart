@@ -46,7 +46,6 @@ class _PitchResultState extends State<PitchResult> {
 
   @override
   Widget build(BuildContext context) {
-    
     SizeConfig().init(context);
     return Consumer<MusicSearchItemLists>(
       builder: (
@@ -143,7 +142,7 @@ class _PitchResultState extends State<PitchResult> {
               SizedBox(
                 height: SizeConfig.defaultSize,
               ),
-              PitchSearchList(musicList: musicList),
+              PitchSearchList(),
             ],
           ),
         ),
@@ -155,7 +154,8 @@ class _PitchResultState extends State<PitchResult> {
           },
           label: Text(
             '홈 화면으로 이동',
-            style: TextStyle(fontWeight: FontWeight.bold, color: kPrimaryCreamColor),
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: kPrimaryCreamColor),
           ),
           icon: Icon(Icons.home),
           backgroundColor: kPrimaryColor,
