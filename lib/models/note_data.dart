@@ -86,7 +86,6 @@ class NoteData extends ChangeNotifier {
   void viewNoteEvent(Note note) {
     Analytics_config.analytics
         .logEvent('애창곡 노트 뷰 - 곡 상세 정보 조회', eventProperties: {
-      '노트 개수': notes.length,
       '곡 이름': note.tj_title,
       '가수 이름': note.tj_singer,
       'TJ 번호': note.tj_songNumber,
@@ -100,7 +99,6 @@ class NoteData extends ChangeNotifier {
   //!event: 곡 추가 뷰 - 리스트 클릭 시
   void addSongClickEvent(FitchMusic fitchMusic) {
     Analytics_config.analytics.logEvent('곡 추가 뷰 - 리스트 클릭 시', eventProperties: {
-      '노트 개수': notes.length,
       '곡 이름': fitchMusic.tj_title,
       '가수 이름': fitchMusic.tj_singer,
       'TJ 번호': fitchMusic.tj_songNumber,
@@ -113,7 +111,6 @@ class NoteData extends ChangeNotifier {
   //!event: 곡 상세정보 뷰 - 노트 삭제
   void noteDeleteEvent(Note note) {
     Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 노트 삭제', eventProperties: {
-      '노트 개수': notes.length,
       '곡 이름': note.tj_title,
       '가수 이름': note.tj_singer,
       'TJ 번호': note.tj_songNumber,
@@ -125,50 +122,40 @@ class NoteData extends ChangeNotifier {
 
   //!event: 곡 상세정보 뷰 - 최고음 들어보기
   void pitchListenEvent(String pitch) {
-    Analytics_config.analytics
-        .logEvent('곡 상세정보 뷰 - 최고음 들어보기', eventProperties: {
-      '노트 개수': notes.length,
-      '최고음': pitch,
-    });
+    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 최고음 들어보기');
   }
 
   //!event: 곡 상세정보 뷰 - 유튜브 클릭
   void youtubeClickEvent(Note note) {
-    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 유튜브 클릭', eventProperties: {
-      '노트 개수': notes.length,
-      '곡 이름': note.tj_title,
-      '메모': note.memo
-    });
+    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 유튜브 클릭',
+        eventProperties: {'곡 이름': note.tj_title, '메모': note.memo});
   }
 
   //!event: 곡 상세정보 뷰 - 금영 검색
   void kySearchEvent(String tjNumber) {
-    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 금영 검색',
-        eventProperties: {'노트 개수': notes.length, 'TJ 번호': tjNumber});
+    Analytics_config.analytics
+        .logEvent('곡 상세정보 뷰 - 금영 검색', eventProperties: {'TJ 번호': tjNumber});
   }
 
   //!event: 곡 상세정보 뷰 - 메모 수정
   void songMemoEditEvent(String title) {
-    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 메모 수정',
-        eventProperties: {'노트 개수': notes.length, '곡 이름': title});
+    Analytics_config.analytics
+        .logEvent('곡 상세정보 뷰 - 메모 수정', eventProperties: {'곡 이름': title});
   }
 
   //!event: 일반 노래 검색 뷰 - 페이지뷰
   void musicBookScreenPageViewEvent() {
-    Analytics_config.analytics.logEvent('일반 노래 검색 뷰 - 페이지뷰',
-        eventProperties: {'노트 개수': notes.length});
+    Analytics_config.analytics.logEvent('일반 노래 검색 뷰 - 페이지뷰');
   }
 
   //!event: 인기 차트 검색 뷰 - 페이지뷰
   void popChartScreenPageViewEvent() {
-    Analytics_config.analytics.logEvent('인기 차트 검색 뷰 - 페이지뷰',
-        eventProperties: {'노트 개수': notes.length});
+    Analytics_config.analytics.logEvent('인기 차트 검색 뷰 - 페이지뷰');
   }
 
   //!event: 최고음 차트 검색 뷰 - 페이지뷰
   void pitchChartScreenPageViewEvent() {
-    Analytics_config.analytics.logEvent('최고음 차트 검색 뷰 - 페이지뷰',
-        eventProperties: {'노트 개수': notes.length});
+    Analytics_config.analytics.logEvent('최고음 차트 검색 뷰 - 페이지뷰');
   }
 
   //local storage 저장 (key : songNum, value : memo)
