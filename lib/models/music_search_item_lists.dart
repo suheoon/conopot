@@ -396,7 +396,9 @@ class MusicSearchItemLists extends ChangeNotifier {
       highestResults = List.from(highestSongList);
       //공백 제거 && 대문자 → 소문자 변경
       enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
-
+      // !event : 간접 음역대 측정뷰 - 페이지뷰
+      Analytics_config.analytics.logEvent('간접 음역대 측정뷰 - 검색',
+          eventProperties: {'검색 키워드': enteredKeyword});
       if (!enteredKeyword.isEmpty) {
         highestResults = highestResults
             .where((string) =>

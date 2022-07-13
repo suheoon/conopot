@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -20,13 +21,19 @@ class PitchDropdown extends StatelessWidget {
           elevation: 16,
           style: const TextStyle(color: Colors.black),
           onChanged: (String? newValue) {
+            // !event : 간접 음역대 측정뷰 - 페이지뷰
+            Analytics_config.analytics.logEvent('간접 음역대 측정뷰 - 정렬',
+                eventProperties: {'정렬 조건': newValue});
             musicList.changeSortOption(option: newValue);
           },
           items: <String>['정렬 조건', '높은 음정순', '낮은 음정순']
               .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
-              child: Text(value, style: TextStyle(fontWeight: FontWeight.bold),),
+              child: Text(
+                value,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             );
           }).toList(),
         ),
