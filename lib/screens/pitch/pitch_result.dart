@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/pitch_item.dart';
@@ -45,6 +46,7 @@ class _PitchResultState extends State<PitchResult> {
 
   @override
   Widget build(BuildContext context) {
+    
     SizeConfig().init(context);
     return Consumer<MusicSearchItemLists>(
       builder: (
@@ -147,6 +149,8 @@ class _PitchResultState extends State<PitchResult> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
+            // !event : 음역대 측정 결과뷰 - 홈화면으로 이동
+            Analytics_config.analytics.logEvent('음역대 측정 결과뷰 - 홈화면으로 이동');
             Navigator.of(context).popUntil((route) => route.isFirst);
           },
           label: Text(

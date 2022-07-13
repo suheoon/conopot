@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:conopot/components/custom_page_route.dart';
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/pitch_item.dart';
@@ -224,10 +225,20 @@ class _PitchMeasureState extends State<PitchMeasure> {
 
   @override
   Widget build(BuildContext context) {
+    //!event : 직접 음역대 측정 뷰  - 페이지뷰
+    Analytics_config.analytics.logEvent('직접 음역대 측정 뷰 - 페이지뷰');
     SizeConfig().init(context);
     return Scaffold(
         appBar: AppBar(
-          leading: BackButton(color: Colors.black),
+          leading: BackButton(
+            color: Colors.black,
+            onPressed: () {
+              //!event : 직접 음역대 측정 뷰  - 백 버튼
+              Analytics_config.analytics.logEvent('직접 음역대 측정 뷰 - 백 버튼',
+                  eventProperties: {'flag': flag});
+              Navigator.pop(context);
+            },
+          ),
           title: Text(
             '음역대 측정',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
@@ -342,6 +353,9 @@ class _PitchMeasureState extends State<PitchMeasure> {
                               alignment: Alignment(0, 0.8),
                               child: GestureDetector(
                                 onTap: () {
+                                  //!event : 직접 음역대 측정 뷰  - 측정 시작
+                                  Analytics_config.analytics
+                                      .logEvent('직접 음역대 측정 뷰 - 측정 시작');
                                   _startCapture();
                                   setState(() {
                                     flag = 1;
@@ -384,6 +398,9 @@ class _PitchMeasureState extends State<PitchMeasure> {
                               alignment: Alignment(0, 0.8),
                               child: GestureDetector(
                                 onTap: () {
+                                  //!event : 직접 음역대 측정 뷰  - 측정 중지
+                                  Analytics_config.analytics
+                                      .logEvent('직접 음역대 측정 뷰 - 측정 중지');
                                   _stopCapture();
                                   setState(() {
                                     flag = 2;
@@ -479,6 +496,9 @@ class _PitchMeasureState extends State<PitchMeasure> {
                     children: [
                       GestureDetector(
                         onTap: () {
+                          //!event : 직접 음역대 측정 뷰  - 다시 측정하기
+                          Analytics_config.analytics
+                              .logEvent('직접 음역대 측정 뷰 - 다시 측정하기');
                           setState(() {
                             flag = 0;
                           });
@@ -501,6 +521,9 @@ class _PitchMeasureState extends State<PitchMeasure> {
                       ),
                       GestureDetector(
                         onTap: () {
+                          //!event : 직접 음역대 측정 뷰  - 다시 측정하기
+                          Analytics_config.analytics.logEvent(
+                              '직접 음역대 측정 뷰 - 다시 측정하기');
                           Navigator.push(
                               context,
                               CustomPageRoute(

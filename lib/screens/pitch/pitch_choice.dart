@@ -1,4 +1,5 @@
 import 'package:conopot/components/custom_page_route.dart';
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/screens/chart/components/pitch_search_bar.dart';
@@ -14,13 +15,21 @@ class PitchChoice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // !event : 간접 음역대 측정뷰 - 페이지뷰
+    Analytics_config.analytics.logEvent('간접 음역대 측정뷰 - 페이지뷰');
     SizeConfig().init(context);
-
     return Consumer<MusicSearchItemLists>(
         builder: (context, musicList, child) => Container(
               child: Scaffold(
                 appBar: AppBar(
-                  leading: BackButton(color: Colors.black),
+                  leading: BackButton(
+                    color: Colors.black,
+                    onPressed: () {
+                      // !event : 간접 음역대 측정뷰 - 백버튼
+                      Analytics_config.analytics.logEvent('간접 음역대 측정뷰 - 백버튼');
+                      Navigator.pop(context);
+                    },
+                  ),
                   title: Text(
                     '음역대 측정',
                     style: TextStyle(
@@ -74,6 +83,13 @@ class PitchChoice extends StatelessWidget {
                 ),
                 floatingActionButton: FloatingActionButton.extended(
                   onPressed: () => {
+                    // !event : 간접 음역대 측정뷰 - 선택완료
+                    Analytics_config.analytics.logEvent('간접 음역대 측정뷰 - 선택완료',
+                        eventProperties: {
+                          '선택한 노래 리스트': musicList.checkedMusics
+                              .map((e) => e.tj_title)
+                              .toList()
+                        }),
                     musicList.getMaxPitch(),
                     if (musicList.userMaxPitch == -1)
                       {
