@@ -53,7 +53,7 @@ class SearchList extends StatelessWidget {
 _showDeleteDialog(BuildContext context, String songNumber) {
   Widget okButton = ElevatedButton(
     onPressed: () {
-      Provider.of<NoteData>(context, listen: false).addNodeBySongNumber(
+      Provider.of<NoteData>(context, listen: false).addNoteBySongNumber(
           songNumber,
           Provider.of<MusicSearchItemLists>(context, listen: false)
               .combinedSongList);

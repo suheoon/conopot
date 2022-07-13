@@ -29,12 +29,5 @@ class Analytics_config {
 
     // Log an event
     analytics.logEvent('앱 실행');
-
-    // Identify
-    // final Identify identify1 = Identify()
-    //   ..set('identify_test',
-    //       'identify sent at ${DateTime.now().millisecondsSinceEpoch}')
-    //   ..add('identify_count', 1);
-    // analytics.identify(identify1);
   }
 }
