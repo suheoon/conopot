@@ -1,6 +1,8 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/chart/pitch_screen.dart';
 import 'package:conopot/screens/musicBook/music_book.dart';
@@ -19,6 +21,12 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
+  @override
+  void initState() {
+    Analytics_config.analytics.logEvent("내 정보 뷰 - 페이지뷰");
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<MusicSearchItemLists>(
@@ -86,7 +94,11 @@ class _UserScreenState extends State<UserScreen> {
                                         Provider.of<MusicSearchItemLists>(
                                                 context,
                                                 listen: false)
-                                            .checkPitchMeasureEvent();
+                                            .checkPitchMeasureEvent(
+                                                Provider.of<NoteData>(context,
+                                                        listen: false)
+                                                    .notes
+                                                    .length);
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -114,7 +126,10 @@ class _UserScreenState extends State<UserScreen> {
                       onTap: () {
                         Provider.of<MusicSearchItemLists>(context,
                                 listen: false)
-                            .checkPitchMeasureEvent();
+                            .checkPitchMeasureEvent(
+                                Provider.of<NoteData>(context, listen: false)
+                                    .notes
+                                    .length);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -150,7 +165,10 @@ class _UserScreenState extends State<UserScreen> {
                       onTap: () {
                         Provider.of<MusicSearchItemLists>(context,
                                 listen: false)
-                            .checkPitchMeasureEvent();
+                            .checkPitchMeasureEvent(
+                                Provider.of<NoteData>(context, listen: false)
+                                    .notes
+                                    .length);
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (_) => PitchMainScreen()),
@@ -221,7 +239,10 @@ class _UserScreenState extends State<UserScreen> {
                       onTap: () {
                         Provider.of<MusicSearchItemLists>(context,
                                 listen: false)
-                            .checkPitchMeasureEvent();
+                            .checkPitchMeasureEvent(
+                                Provider.of<NoteData>(context, listen: false)
+                                    .notes
+                                    .length);
                         Future.delayed(Duration.zero, () {
                           musicList.initChart();
                         });
@@ -260,7 +281,10 @@ class _UserScreenState extends State<UserScreen> {
                       onTap: () {
                         Provider.of<MusicSearchItemLists>(context,
                                 listen: false)
-                            .checkPitchMeasureEvent();
+                            .checkPitchMeasureEvent(
+                                Provider.of<NoteData>(context, listen: false)
+                                    .notes
+                                    .length);
                         Future.delayed(Duration.zero, () {
                           musicList.initFitch();
                         });

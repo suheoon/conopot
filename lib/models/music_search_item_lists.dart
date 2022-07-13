@@ -4,6 +4,7 @@ import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:conopot/models/music_search_item.dart';
 import 'package:easy_debounce/easy_debounce.dart';
@@ -66,10 +67,11 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   void changeSortOption({required String? option}) {
     ///option에 따라 현재 리스트에서 보여지는 highestFoundItems를 정렬한다.
-    if (option == '높은 음정순') {
-      highestFoundItems.sort(((a, b) => b.pitchNum.compareTo(a.pitchNum)));
-    } else if (option == '낮은 음정순') {
-      highestFoundItems.sort(((a, b) => a.pitchNum.compareTo(b.pitchNum)));
+    if (option == '내 음역대의 노래' && userMaxPitch != -1) {
+      highestFoundItems = highestResults
+          .where((string) => (userPitch - 1 <= string.pitchNum &&
+              string.pitchNum <= userPitch + 1))
+          .toList();
     } else {
       highestFoundItems = List.from(highestSongList);
     }
@@ -139,6 +141,12 @@ class MusicSearchItemLists extends ChangeNotifier {
       userPitch = int.parse(value);
       userMaxPitch = userPitch;
     }
+
+    final Identify identify = Identify()
+      ..set('최고음 측정 여부', (userMaxPitch != -1))
+      ..set('최고음', pitchNumToString[userPitch]);
+
+    Analytics_config.analytics.identify(identify);
 
     value = await storage.read(key: 'userNoteSetting');
     if (value != null) {
@@ -453,9 +461,17 @@ class MusicSearchItemLists extends ChangeNotifier {
   }
 
   //!event: 내 정보 - 최고음 측정 여부
-  void checkPitchMeasureEvent() {
+  void checkPitchMeasureEvent(int noteCnt) {
     Analytics_config.analytics.logEvent('내 정보 - 최고음 측정 여부', eventProperties: {
       '사용자 최고음 등록 여부': (userMaxPitch != -1),
+      '노트 개수': noteCnt
+    });
+  }
+
+  //!event: 최고음 검색 뷰 - 정렬
+  void pitchSortEvent(String sortOptionStr) {
+    Analytics_config.analytics.logEvent('최고음 검색 뷰 - 정렬', eventProperties: {
+      '정렬 기준': sortOptionStr,
     });
   }
 }
