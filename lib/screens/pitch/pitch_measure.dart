@@ -64,16 +64,17 @@ class _PitchMeasureState extends State<PitchMeasure> {
     } else {
       Map<Permission, PermissionStatus> statuses =
           await [Permission.microphone].request();
+      print(statuses[Permission.microphone]);
       //만약 있다면
-      if (statuses[Permission.microphone]!.isGranted) {
+      if (statuses[Permission.microphone]!.isPermanentlyDenied) {
+        openAppSettings();
+      } else {
         await _audioRecorder.start(listener, onError,
             sampleRate: 16000, bufferSize: 3000);
 
         setState(() {
           note = "";
         });
-      } else {
-        openAppSettings();
       }
     }
   }
