@@ -31,7 +31,8 @@ class PitchMeasure extends StatefulWidget {
 
 class _PitchMeasureState extends State<PitchMeasure> {
   final _audioRecorder = FlutterAudioCapture();
-  final pitchDetectorDart = PitchDetector(16000, 3000);
+  final pitchDetectorDartIos = PitchDetector(16000, 3000);
+  final pitchDetectorDartAos = PitchDetector(16000, 3000);
   final pitchupDart = PitchHandler(InstrumentType.guitar);
 
   var note = ""; //음정 알파벳
@@ -60,12 +61,19 @@ class _PitchMeasureState extends State<PitchMeasure> {
         openAppSettings();
       }
     } else {
-      await _audioRecorder.start(listener, onError,
-          sampleRate: 16000, bufferSize: 3000);
+      Map<Permission, PermissionStatus> statuses =
+          await [Permission.microphone].request();
+      //만약 있다면
+      if (statuses[Permission.microphone]!.isGranted) {
+        await _audioRecorder.start(listener, onError,
+            sampleRate: 16000, bufferSize: 3000);
 
-      setState(() {
-        note = "";
-      });
+        setState(() {
+          note = "";
+        });
+      } else {
+        openAppSettings();
+      }
     }
   }
 
@@ -88,7 +96,12 @@ class _PitchMeasureState extends State<PitchMeasure> {
     final List<double> audioSample = buffer.toList();
 
     //Uses pitch_detector_dart library to detect a pitch from the audio sample
-    final result = pitchDetectorDart.getPitch(audioSample);
+    var result = pitchDetectorDartAos.getPitch(audioSample);
+    if (Platform.isAndroid) {
+      result = pitchDetectorDartAos.getPitch(audioSample);
+    } else {
+      result = pitchDetectorDartIos.getPitch(audioSample);
+    }
 
     //If there is a pitch - evaluate it
     if (result.pitched) {
@@ -522,8 +535,8 @@ class _PitchMeasureState extends State<PitchMeasure> {
                       GestureDetector(
                         onTap: () {
                           //!event : 직접 음역대 측정 뷰  - 다시 측정하기
-                          Analytics_config.analytics.logEvent(
-                              '직접 음역대 측정 뷰 - 다시 측정하기');
+                          Analytics_config.analytics
+                              .logEvent('직접 음역대 측정 뷰 - 다시 측정하기');
                           Navigator.push(
                               context,
                               CustomPageRoute(
