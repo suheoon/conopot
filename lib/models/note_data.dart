@@ -62,6 +62,10 @@ class NoteData extends ChangeNotifier {
       }
     }
 
+    final Identify identify = Identify()..set('노트 개수', notes.length);
+
+    Analytics_config.analytics.identify(identify);
+
     //!event : 노트 뷰 조회
     Analytics_config.analytics.logEvent('애창곡 노트 뷰 - 노트 뷰  조회',
         eventProperties: {'노트 개수': notes.length, '메모 노트 개수': memoCnt});
@@ -73,12 +77,16 @@ class NoteData extends ChangeNotifier {
   void addNoteEvent() {
     Analytics_config.analytics
         .logEvent('애창곡 노트 뷰 - 곡 추가', eventProperties: {'노트 개수': notes.length});
+    final Identify identify = Identify()..set('노트 개수', notes.length);
+
+    Analytics_config.analytics.identify(identify);
   }
 
   //!event : 애창곡 노트 뷰 - 곡 상세 정보 조회
   void viewNoteEvent(Note note) {
     Analytics_config.analytics
         .logEvent('애창곡 노트 뷰 - 곡 상세 정보 조회', eventProperties: {
+      '노트 개수': notes.length,
       '곡 이름': note.tj_title,
       '가수 이름': note.tj_singer,
       'TJ 번호': note.tj_songNumber,
@@ -119,14 +127,18 @@ class NoteData extends ChangeNotifier {
   void pitchListenEvent(String pitch) {
     Analytics_config.analytics
         .logEvent('곡 상세정보 뷰 - 최고음 들어보기', eventProperties: {
+      '노트 개수': notes.length,
       '최고음': pitch,
     });
   }
 
   //!event: 곡 상세정보 뷰 - 유튜브 클릭
   void youtubeClickEvent(Note note) {
-    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 유튜브 클릭',
-        eventProperties: {'곡 이름': note.tj_title, '메모': note.memo});
+    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 유튜브 클릭', eventProperties: {
+      '노트 개수': notes.length,
+      '곡 이름': note.tj_title,
+      '메모': note.memo
+    });
   }
 
   //!event: 곡 상세정보 뷰 - 금영 검색
@@ -137,8 +149,26 @@ class NoteData extends ChangeNotifier {
 
   //!event: 곡 상세정보 뷰 - 메모 수정
   void songMemoEditEvent(String title) {
-    Analytics_config.analytics
-        .logEvent('곡 상세정보 뷰 - 메모 수정', eventProperties: {'곡 이름': title});
+    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 메모 수정',
+        eventProperties: {'노트 개수': notes.length, '곡 이름': title});
+  }
+
+  //!event: 일반 노래 검색 뷰 - 페이지뷰
+  void musicBookScreenPageViewEvent() {
+    Analytics_config.analytics.logEvent('일반 노래 검색 뷰 - 페이지뷰',
+        eventProperties: {'노트 개수': notes.length});
+  }
+
+  //!event: 인기 차트 검색 뷰 - 페이지뷰
+  void popChartScreenPageViewEvent() {
+    Analytics_config.analytics.logEvent('인기 차트 검색 뷰 - 페이지뷰',
+        eventProperties: {'노트 개수': notes.length});
+  }
+
+  //!event: 최고음 차트 검색 뷰 - 페이지뷰
+  void pitchChartScreenPageViewEvent() {
+    Analytics_config.analytics.logEvent('최고음 차트 검색 뷰 - 페이지뷰',
+        eventProperties: {'노트 개수': notes.length});
   }
 
   //local storage 저장 (key : songNum, value : memo)
@@ -168,6 +198,10 @@ class NoteData extends ChangeNotifier {
       notes.add(note);
       await storage.write(key: 'notes', value: jsonEncode(notes));
 
+      final Identify identify = Identify()..set('노트 개수', notes.length);
+
+      Analytics_config.analytics.identify(identify);
+
       //!event: 곡 추가 뷰 - 노트 추가 이벤트
       Analytics_config.analytics
           .logEvent('곡 추가 뷰 - 노트 추가 이벤트', eventProperties: {
@@ -186,7 +220,7 @@ class NoteData extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addNodeBySongNumber(
+  Future<void> addNoteBySongNumber(
       String songNumber, List<FitchMusic> musicList) async {
     for (FitchMusic fitchMusic in musicList) {
       if (fitchMusic.tj_songNumber == songNumber) {
@@ -213,6 +247,10 @@ class NoteData extends ChangeNotifier {
         if (!flag) {
           notes.add(note);
           await storage.write(key: 'notes', value: jsonEncode(notes));
+
+          final Identify identify = Identify()..set('노트 개수', notes.length);
+
+          Analytics_config.analytics.identify(identify);
 
           //!event: 곡 추가 뷰 - 노트 추가 이벤트
           Analytics_config.analytics

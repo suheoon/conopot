@@ -1,5 +1,6 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/chart/components/pitch_search_bar.dart';
 import 'package:conopot/screens/chart/components/pitch_search_list.dart';
 import 'package:conopot/screens/pitch/components/pitch_dropdown_option.dart';
@@ -19,6 +20,8 @@ class _PitchScreenState extends State<PitchScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     double widthSize = SizeConfig.screenWidth / 10;
+    Provider.of<NoteData>(context, listen: false)
+        .pitchChartScreenPageViewEvent();
 
     return Consumer<MusicSearchItemLists>(
       builder: (

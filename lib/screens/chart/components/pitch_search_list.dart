@@ -77,6 +77,7 @@ _showDeleteDialog(BuildContext context, String songNumber) {
       // !event : 음역대 측정 결과 뷰 - 노트 추가
       Analytics_config.analytics.logEvent('음역대 측정 결과 뷰 - 노트추가');
       Provider.of<NoteData>(context, listen: false).addNodeBySongNumber(
+
           songNumber,
           Provider.of<MusicSearchItemLists>(context, listen: false)
               .combinedSongList);

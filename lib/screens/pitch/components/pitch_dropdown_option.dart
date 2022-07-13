@@ -1,5 +1,6 @@
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PitchDropdownOption extends StatefulWidget {
   PitchDropdownOption({Key? key, required this.musicList}) : super(key: key);
@@ -25,11 +26,16 @@ class _PitchDropdownOptionState extends State<PitchDropdownOption> {
           value: optionString,
           icon: const Icon(Icons.arrow_drop_down_sharp),
           elevation: 16,
-          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           onChanged: (String? newValue) {
+            Provider.of<MusicSearchItemLists>(context, listen: false)
+                .pitchSortEvent(newValue!);
             musicList.changeSortOption(option: newValue);
             setState(() {
-              optionString = newValue!;
+              if (newValue != null) {
+                optionString = newValue;
+              }
             });
           },
           items: <String>['모든 노래', '내 음역대의 노래']

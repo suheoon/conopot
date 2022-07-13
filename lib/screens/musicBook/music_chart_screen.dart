@@ -1,5 +1,6 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/musicBook/components/pop_search_list.dart';
 import 'package:conopot/screens/musicBook/components/search_list.dart';
 import 'package:conopot/config/size_config.dart';
@@ -13,6 +14,8 @@ class ChartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     double widthSize = SizeConfig.screenWidth / 10;
+
+    Provider.of<NoteData>(context, listen: false).popChartScreenPageViewEvent();
 
     return Consumer<MusicSearchItemLists>(
       builder: (
