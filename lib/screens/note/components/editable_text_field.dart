@@ -43,7 +43,7 @@ class _EditableTextFieldState extends State<EditableTextField> {
         child: TextField(
           autofocus: true,
           controller: _editingController,
-          maxLength: 30,
+          maxLength: 25,
           decoration: InputDecoration(
               hintText: "메모를 입력해 주세요",
               border: InputBorder.none,

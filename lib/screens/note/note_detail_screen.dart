@@ -133,10 +133,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "정보",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
               SizedBox(
                 height: 10,
               ),

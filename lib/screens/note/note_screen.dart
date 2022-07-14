@@ -4,6 +4,7 @@ import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
+import 'package:conopot/screens/musicBook/music_book.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
 import 'package:conopot/screens/pitch/pitch_measure.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
@@ -94,6 +95,9 @@ class _NoteScreenState extends State<NoteScreen> {
         height: MediaQuery.of(context).size.height * 0.12,
         enableInfiniteScroll: false,
         viewportFraction: 1,
+        autoPlay: true,
+        autoPlayInterval: Duration(seconds: 5),
+        autoPlayAnimationDuration: Duration(milliseconds: 800),
       ),
       items: [
         // banner 1
@@ -156,6 +160,67 @@ class _NoteScreenState extends State<NoteScreen> {
           ]),
         ),
         // banner 2
+        GestureDetector(
+          onTap: () {
+            Provider.of<MusicSearchItemLists>(context, listen: false)
+                .noteSettingBannerClickEvent(
+                    Provider.of<NoteData>(context, listen: false).notes.length);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => MusicBookScreen()),
+            );
+          },
+          child: Stack(
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  color: Color(0x406BDA68),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(7),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment(-0.8, 0.0),
+                child: SvgPicture.asset(
+                  'assets/icons/banner_music_book2.svg',
+                  height: 45,
+                  width: 45,
+                ),
+              ),
+              Align(
+                alignment: Alignment(0.1, 0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "불편한 노래방 반주기는 이제 그만! 😡",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFF4b5f7e),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      "앱에서 노래방 번호를 검색해보세요",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF1b1a5b),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        // banner 3
         GestureDetector(
           onTap: () {
             Provider.of<MusicSearchItemLists>(context, listen: false)
