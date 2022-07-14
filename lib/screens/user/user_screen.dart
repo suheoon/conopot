@@ -124,84 +124,6 @@ class _UserScreenState extends State<UserScreen> {
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
-                        Provider.of<MusicSearchItemLists>(context,
-                                listen: false)
-                            .checkPitchMeasureEvent(
-                                Provider.of<NoteData>(context, listen: false)
-                                    .notes
-                                    .length);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => noteSettingScreen()),
-                        );
-                      },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 20.0),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.settings,
-                              size: 25,
-                            ),
-                            SizedBox(
-                              width: SizeConfig.defaultSize,
-                            ),
-                            Text(
-                              '애창곡 노트 설정',
-                              style: TextStyle(
-                                color: kTextColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        Provider.of<MusicSearchItemLists>(context,
-                                listen: false)
-                            .checkPitchMeasureEvent(
-                                Provider.of<NoteData>(context, listen: false)
-                                    .notes
-                                    .length);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => PitchMainScreen()),
-                        );
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(left: 5),
-                        padding: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 20.0),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/measure.svg',
-                              height: 20,
-                            ),
-                            SizedBox(
-                              width: 15,
-                            ),
-                            Text(
-                              '최고 음역대 측정하기',
-                              style: TextStyle(
-                                color: kTextColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
                         Future.delayed(Duration.zero, () {
                           musicList.initBook();
                         });
@@ -276,6 +198,45 @@ class _UserScreenState extends State<UserScreen> {
                         ),
                       ),
                     ),
+                                        GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        Provider.of<MusicSearchItemLists>(context,
+                                listen: false)
+                            .checkPitchMeasureEvent(
+                                Provider.of<NoteData>(context, listen: false)
+                                    .notes
+                                    .length);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => PitchMainScreen()),
+                        );
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(left: 5),
+                        padding: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 20.0),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/measure.svg',
+                              height: 20,
+                            ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            Text(
+                              '최고 음역대 측정하기',
+                              style: TextStyle(
+                                color: kTextColor,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
@@ -313,9 +274,44 @@ class _UserScreenState extends State<UserScreen> {
                             SizedBox(
                               width: SizeConfig.defaultSize,
                             ),
-                            SvgPicture.asset(
-                              'assets/icons/betaTag.svg',
-                              height: 20,
+                          ],
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        Provider.of<MusicSearchItemLists>(context,
+                                listen: false)
+                            .checkPitchMeasureEvent(
+                                Provider.of<NoteData>(context, listen: false)
+                                    .notes
+                                    .length);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => noteSettingScreen()),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 20.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.settings,
+                              size: 25,
+                            ),
+                            SizedBox(
+                              width: SizeConfig.defaultSize,
+                            ),
+                            Text(
+                              '애창곡 노트 설정',
+                              style: TextStyle(
+                                color: kTextColor,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.left,
                             ),
                           ],
                         ),

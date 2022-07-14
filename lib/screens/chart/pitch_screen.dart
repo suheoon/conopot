@@ -32,7 +32,7 @@ class _PitchScreenState extends State<PitchScreen> {
           Scaffold(
         appBar: AppBar(
           title: Text(
-            '나만의 옥타브 차트',
+            '노래 최고음 검색',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           leading: BackButton(
