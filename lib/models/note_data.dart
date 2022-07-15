@@ -30,29 +30,6 @@ class NoteData extends ChangeNotifier {
           noteJson.map((noteIter) => Note.fromJson(noteIter)).toList();
 
       notes = savedNote;
-
-      //print(notes);
-
-      // //합친 곡 리스트 순회하며 노트에 있는 곡인지 체크
-      // for (int i = 0; i < combinedSongList.length; i++) {
-      //   if (savedNote.contains(combinedSongList[i].tj_songNumber)) {
-      //     String? memo =
-      //         await storage.read(key: combinedSongList[i].tj_songNumber);
-      //     Note note = Note(
-      //         combinedSongList[i].tj_title,
-      //         combinedSongList[i].tj_singer,
-      //         combinedSongList[i].tj_songNumber,
-      //         combinedSongList[i].ky_title,
-      //         combinedSongList[i].ky_singer,
-      //         combinedSongList[i].ky_songNumber,
-      //         combinedSongList[i].gender,
-      //         combinedSongList[i].pitch,
-      //         combinedSongList[i].pitchNum,
-      //         memo!,
-      //         0);
-      //     notes.add(note);
-      //   }
-      // }
     }
 
     int memoCnt = 0; //전체 노트 중 메모를 한 노트의 수

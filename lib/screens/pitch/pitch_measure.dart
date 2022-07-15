@@ -53,7 +53,6 @@ class _PitchMeasureState extends State<PitchMeasure> {
       if (statuses[Permission.microphone]!.isGranted) {
         await _audioRecorder.start(listener, onError,
             sampleRate: 44100, bufferSize: 3000);
-        print("is start?");
 
         setState(() {
           note = "";
@@ -64,7 +63,6 @@ class _PitchMeasureState extends State<PitchMeasure> {
     } else {
       Map<Permission, PermissionStatus> statuses =
           await [Permission.microphone].request();
-      print(statuses[Permission.microphone]);
       //만약 있다면
       if (statuses[Permission.microphone]!.isPermanentlyDenied) {
         openAppSettings();
@@ -114,7 +112,6 @@ class _PitchMeasureState extends State<PitchMeasure> {
       setState(() {
         note = handledPitchResult.note;
         frequency = handledPitchResult.expectedFrequency;
-        print(frequency);
         frequencyToPitch();
       });
     }

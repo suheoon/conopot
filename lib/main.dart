@@ -19,8 +19,6 @@ Future<void> main() async {
 
   Analytics_config().init();
 
-  Analytics_config.firebaseAnalytics.logEvent(name: "abc");
-
   /// firebase crashlytics init
   runZonedGuarded<Future<void>>(() async {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
