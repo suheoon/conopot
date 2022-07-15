@@ -47,7 +47,6 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   //유저가 노트 세팅을 바꿨을 때
   void changeUserNoteSetting(int settingNum) {
-    print(settingNum);
     userNoteSetting = settingNum;
     storage.write(key: 'userNoteSetting', value: settingNum.toString());
     notifyListeners();
@@ -66,22 +65,16 @@ class MusicSearchItemLists extends ChangeNotifier {
   }
 
   void changeSortOption({required String? option}) {
-    print(option);
-    print(userMaxPitch);
-
     ///option에 따라 현재 리스트에서 보여지는 highestFoundItems를 정렬한다.
     if (option == '내 음역대의 노래' && userMaxPitch != -1) {
       highestFoundItems = highestFoundItems
           .where((string) => (userPitch - 1 <= string.pitchNum &&
               string.pitchNum <= userPitch + 1))
           .toList();
-      print('내음역대');
     } else if (option == '높은 음정순') {
       highestFoundItems.sort(((a, b) => b.pitchNum.compareTo(a.pitchNum)));
-      print('높은 음정');
     } else if (option == '낮은 음정순') {
       highestFoundItems.sort(((a, b) => a.pitchNum.compareTo(b.pitchNum)));
-      print('낮은 음정');
     } else {
       highestFoundItems = List.from(highestSongList);
     }
