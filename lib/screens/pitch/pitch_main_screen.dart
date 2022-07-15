@@ -62,9 +62,14 @@ class _PitchMainScreenState extends State<PitchMainScreen> {
                   child: Center(
                     child: Column(
                       children: [
-                        SvgPicture.asset(
-                          'assets/icons/singer.svg',
-                          height: SizeConfig.screenHeight * 0.25 * 0.5,
+                        Container(
+                          width: SizeConfig.screenHeight * 0.15,
+                          height: SizeConfig.screenHeight * 0.15,
+                          child: FittedBox(
+                            child: SvgPicture.asset(
+                              'assets/icons/test2.svg',
+                            ),
+                          ),
                         ),
                         SizedBox(
                           height: SizeConfig.defaultSize,
@@ -76,9 +81,6 @@ class _PitchMainScreenState extends State<PitchMainScreen> {
                             fontSize: 13,
                             fontWeight: FontWeight.bold,
                           ),
-                        ),
-                        SizedBox(
-                          height: SizeConfig.defaultSize / 2,
                         ),
                         Text(
                           '직접 음역대 측정해보기',
@@ -122,9 +124,14 @@ class _PitchMainScreenState extends State<PitchMainScreen> {
                   child: Center(
                     child: Column(
                       children: [
-                        Image(
-                          image: AssetImage('assets/images/microphone.png'),
-                          height: SizeConfig.screenHeight * 0.25 * 0.5,
+                        Container(
+                          width: SizeConfig.screenHeight * 0.15,
+                          height: SizeConfig.screenHeight * 0.15,
+                          child: FittedBox(
+                            child: SvgPicture.asset(
+                              'assets/icons/test1.svg',
+                            ),
+                          ),
                         ),
                         SizedBox(
                           height: SizeConfig.defaultSize,
@@ -136,9 +143,6 @@ class _PitchMainScreenState extends State<PitchMainScreen> {
                             fontSize: 13,
                             fontWeight: FontWeight.bold,
                           ),
-                        ),
-                        SizedBox(
-                          height: SizeConfig.defaultSize / 2,
                         ),
                         Text(
                           '내 음역대 찾기',

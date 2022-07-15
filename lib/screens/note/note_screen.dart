@@ -93,9 +93,9 @@ class _NoteScreenState extends State<NoteScreen> {
     return CarouselSlider(
       options: CarouselOptions(
         height: MediaQuery.of(context).size.height * 0.12,
-        enableInfiniteScroll: false,
-        viewportFraction: 1,
-        autoPlay: true,
+        enableInfiniteScroll: true,
+        viewportFraction: 0.9,
+        autoPlay: false,
         autoPlayInterval: Duration(seconds: 5),
         autoPlayAnimationDuration: Duration(milliseconds: 800),
       ),
@@ -113,7 +113,7 @@ class _NoteScreenState extends State<NoteScreen> {
           },
           child: Stack(children: [
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 10),
+              margin: EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
                 color: Color(0x402F80ED),
                 borderRadius: BorderRadius.all(
@@ -121,41 +121,41 @@ class _NoteScreenState extends State<NoteScreen> {
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment(-0.8, 0.0),
-              child: SvgPicture.asset(
-                'assets/icons/banner_sound.svg',
-                height: 45,
-                width: 45,
-              ),
-            ),
-            Align(
-              alignment: Alignment(0, 0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "노래방 전투력 측정 😎",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF4b5f7e),
-                      fontWeight: FontWeight.bold,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/banner_sound.svg',
+                  height: 45,
+                  width: 45,
+                ),
+                SizedBox(width: SizeConfig.defaultSize * 2),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "노래방 전투력 측정 😎",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFF4b5f7e),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "당신의 최고음을 측정해보세요",
-                    style: TextStyle(
-                      fontSize: 17,
-                      color: Color(0xFF1b1a5b),
-                      fontWeight: FontWeight.bold,
+                    SizedBox(
+                      height: 5,
                     ),
-                  ),
-                ],
-              ),
+                    Text(
+                      "당신의 최고음을 측정해보세요",
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: Color(0xFF1b1a5b),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
           ]),
         ),
@@ -173,7 +173,7 @@ class _NoteScreenState extends State<NoteScreen> {
           child: Stack(
             children: [
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 10),
+                margin: EdgeInsets.symmetric(horizontal: 5),
                 decoration: BoxDecoration(
                   color: Color(0x406BDA68),
                   borderRadius: BorderRadius.all(
@@ -181,41 +181,41 @@ class _NoteScreenState extends State<NoteScreen> {
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment(-0.8, 0.0),
-                child: SvgPicture.asset(
-                  'assets/icons/banner_music_book2.svg',
-                  height: 45,
-                  width: 45,
-                ),
-              ),
-              Align(
-                alignment: Alignment(0.1, 0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "불편한 노래방 반주기는 이제 그만! 😡",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF4b5f7e),
-                        fontWeight: FontWeight.bold,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'assets/icons/banner_music_book2.svg',
+                    height: 45,
+                    width: 45,
+                  ),
+                  SizedBox(width: SizeConfig.defaultSize * 2),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "불편한 노래방 반주기는 이제 그만! 😡",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF4b5f7e),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "앱에서 노래방 번호를 검색해보세요",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Color(0xFF1b1a5b),
-                        fontWeight: FontWeight.bold,
+                      SizedBox(
+                        height: 5,
                       ),
-                    ),
-                  ],
-                ),
+                      Text(
+                        "앱에서 노래방 번호를 검색해보세요",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFF1b1a5b),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ],
           ),
@@ -231,28 +231,25 @@ class _NoteScreenState extends State<NoteScreen> {
               MaterialPageRoute(builder: (_) => noteSettingScreen()),
             );
           },
-          child: Stack(
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                  color: Color(0x40832FED),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(7),
-                  ),
-                ),
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 5),
+            width: SizeConfig.screenWidth * 0.9,
+            decoration: BoxDecoration(
+              color: Color(0x40832FED),
+              borderRadius: BorderRadius.all(
+                Radius.circular(7),
               ),
-              Align(
-                alignment: Alignment(-0.8, 0.0),
-                child: SvgPicture.asset(
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
                   'assets/icons/banner_music.svg',
                   height: 45,
                   width: 45,
                 ),
-              ),
-              Align(
-                alignment: Alignment(0.4, 0),
-                child: Column(
+                SizedBox(width: SizeConfig.defaultSize),
+                Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -267,18 +264,23 @@ class _NoteScreenState extends State<NoteScreen> {
                     SizedBox(
                       height: 5,
                     ),
-                    Text(
-                      "우측 상단 [내 정보] - [애창곡 노트 설정]",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Color(0xFF1b1a5b),
-                        fontWeight: FontWeight.bold,
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: SizedBox(
+                        child: Text(
+                          "우측 상단 [MY] - [애창곡 노트 설정]",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xFF1b1a5b),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
@@ -474,7 +476,7 @@ Widget UserSetWidget(int setNum, Note note, int userPitch) {
           TextSpan(
             text: 'TJ ',
             style: TextStyle(
-              color: kPrimaryColor,
+              color: Color(0xFFFF4B00),
               fontWeight: FontWeight.bold,
             ),
           ),

@@ -64,19 +64,53 @@ class _PitchMeasureState extends State<PitchMeasure> {
     } else {
       Map<Permission, PermissionStatus> statuses =
           await [Permission.microphone].request();
-      print(statuses[Permission.microphone]);
-      //만약 있다면
       if (statuses[Permission.microphone]!.isPermanentlyDenied) {
-        openAppSettings();
+        _showPermissionDialog();
       } else {
         await _audioRecorder.start(listener, onError,
             sampleRate: 16000, bufferSize: 3000);
-
         setState(() {
           note = "";
         });
       }
     }
+  }
+
+  _showPermissionDialog() {
+    Widget okButton = TextButton(
+      child: Text("설정으로 이동",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
+      onPressed: () {
+        openAppSettings();
+      },
+    );
+
+    Widget cancelButton = TextButton(
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+      child: Text(
+        "취소",
+        style: TextStyle(fontWeight: FontWeight.bold, color: kPrimaryBlackColor),
+      ),
+    );
+
+    AlertDialog alert = AlertDialog(
+      content: Text(
+        "마이크 서비스를 사용할 수 없습니다. 기기의 '설정> 개인정보 보호'에서 마이크 서비스를 켜주세요.(필수권한)",
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+      actions: [
+        cancelButton,
+        okButton,
+      ],
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(child: alert);
+        });
   }
 
   Future<void> _stopCapture() async {
