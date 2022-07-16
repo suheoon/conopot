@@ -58,7 +58,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
           note = "";
         });
       } else {
-        openAppSettings();
+        _showPermissionDialog();
       }
     } else {
       Map<Permission, PermissionStatus> statuses =
