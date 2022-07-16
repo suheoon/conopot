@@ -463,7 +463,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             ),
           )
         : Container(
-            width: 80,
+            width: 95,
             height: 28,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -471,7 +471,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             ),
             child: Center(
               child: Text(
-                pitch,
+                pitch[0] + "옥타브 " + pitch.substring(1, pitch.length),
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
