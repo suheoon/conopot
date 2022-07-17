@@ -137,7 +137,7 @@ _showAddDialog(BuildContext context, MusicSearchItem item) {
 
   AlertDialog alert = AlertDialog(
     content: Text(
-      "${item.title} 노래를 추가하시겠습니까?",
+      "'${item.title}' 노래를 추가하시겠습니까?",
       style: TextStyle(fontWeight: FontWeight.bold),
     ),
     actions: [

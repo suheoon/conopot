@@ -390,7 +390,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
       content: Text(
         "최고음이 표시 되지 않을 경우 정보를 요청해주세요 ☺️",
         style: TextStyle(
-          fontSize: 11,
+          fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
       ),
