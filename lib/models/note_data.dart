@@ -6,6 +6,7 @@ import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/pitch_music.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -30,6 +31,29 @@ class NoteData extends ChangeNotifier {
           noteJson.map((noteIter) => Note.fromJson(noteIter)).toList();
 
       notes = savedNote;
+
+      //print(notes);
+
+      // //합친 곡 리스트 순회하며 노트에 있는 곡인지 체크
+      // for (int i = 0; i < combinedSongList.length; i++) {
+      //   if (savedNote.contains(combinedSongList[i].tj_songNumber)) {
+      //     String? memo =
+      //         await storage.read(key: combinedSongList[i].tj_songNumber);
+      //     Note note = Note(
+      //         combinedSongList[i].tj_title,
+      //         combinedSongList[i].tj_singer,
+      //         combinedSongList[i].tj_songNumber,
+      //         combinedSongList[i].ky_title,
+      //         combinedSongList[i].ky_singer,
+      //         combinedSongList[i].ky_songNumber,
+      //         combinedSongList[i].gender,
+      //         combinedSongList[i].pitch,
+      //         combinedSongList[i].pitchNum,
+      //         memo!,
+      //         0);
+      //     notes.add(note);
+      //   }
+      // }
     }
 
     int memoCnt = 0; //전체 노트 중 메모를 한 노트의 수
@@ -47,6 +71,10 @@ class NoteData extends ChangeNotifier {
     Analytics_config.analytics.logEvent('애창곡 노트 뷰 - 노트 뷰  조회',
         eventProperties: {'노트 개수': notes.length, '메모 노트 개수': memoCnt});
 
+    FirebaseAnalytics.instance.logEvent(
+        name: 'noteView__view_notes',
+        parameters: {'noteCnt': notes.length, 'memoNoteCnt': memoCnt});
+
     notifyListeners();
   }
 
@@ -54,6 +82,10 @@ class NoteData extends ChangeNotifier {
   void addNoteEvent() {
     Analytics_config.analytics
         .logEvent('애창곡 노트 뷰 - 곡 추가', eventProperties: {'노트 개수': notes.length});
+
+    FirebaseAnalytics.instance.logEvent(
+        name: 'noteView__add_note', parameters: {'noteCnt': notes.length});
+
     final Identify identify = Identify()..set('노트 개수', notes.length);
 
     Analytics_config.analytics.identify(identify);
@@ -63,6 +95,7 @@ class NoteData extends ChangeNotifier {
   void viewNoteEvent(Note note) {
     Analytics_config.analytics
         .logEvent('애창곡 노트 뷰 - 곡 상세 정보 조회', eventProperties: {
+      '노트 개수': notes.length,
       '곡 이름': note.tj_title,
       '가수 이름': note.tj_singer,
       'TJ 번호': note.tj_songNumber,
@@ -71,11 +104,24 @@ class NoteData extends ChangeNotifier {
       '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
       '메모 여부': note.memo
     });
+
+    FirebaseAnalytics.instance
+        .logEvent(name: 'noteView__search_detail_note', parameters: {
+      'noteCnt': notes.length,
+      'title': note.tj_title,
+      'singer': note.tj_singer,
+      'TJ_number': note.tj_songNumber,
+      'KY_number': note.ky_songNumber,
+      'max_pitch': note.pitch,
+      'IsMatched': (note.tj_songNumber == note.ky_songNumber),
+      'Ismemo': note.memo
+    });
   }
 
   //!event: 곡 추가 뷰 - 리스트 클릭 시
   void addSongClickEvent(FitchMusic fitchMusic) {
     Analytics_config.analytics.logEvent('곡 추가 뷰 - 리스트 클릭 시', eventProperties: {
+      '노트 개수': notes.length,
       '곡 이름': fitchMusic.tj_title,
       '가수 이름': fitchMusic.tj_singer,
       'TJ 번호': fitchMusic.tj_songNumber,
@@ -83,11 +129,23 @@ class NoteData extends ChangeNotifier {
       '최고음': fitchMusic.pitch,
       '매칭 여부': (fitchMusic.tj_songNumber == fitchMusic.ky_songNumber),
     });
+
+    FirebaseAnalytics.instance
+        .logEvent(name: 'note_add_view__click_list', parameters: {
+      'noteCnt': notes.length,
+      'title': fitchMusic.tj_title,
+      'singer': fitchMusic.tj_singer,
+      'TJ_number': fitchMusic.tj_songNumber,
+      'KY_number': fitchMusic.ky_songNumber,
+      'max_pitch': fitchMusic.pitch,
+      'IsMatched': (fitchMusic.tj_songNumber == fitchMusic.ky_songNumber),
+    });
   }
 
   //!event: 곡 상세정보 뷰 - 노트 삭제
   void noteDeleteEvent(Note note) {
     Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 노트 삭제', eventProperties: {
+      '노트 개수': notes.length,
       '곡 이름': note.tj_title,
       '가수 이름': note.tj_singer,
       'TJ 번호': note.tj_songNumber,
@@ -95,44 +153,94 @@ class NoteData extends ChangeNotifier {
       '최고음': note.pitch,
       '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
     });
+
+    FirebaseAnalytics.instance
+        .logEvent(name: 'note_detail_view__delete_note', parameters: {
+      'noteCnt': notes.length,
+      'title': note.tj_title,
+      'singer': note.tj_singer,
+      'TJ_number': note.tj_songNumber,
+      'KY_number': note.ky_songNumber,
+      'max_pitch': note.pitch,
+      'IsMatched': (note.tj_songNumber == note.ky_songNumber),
+    });
   }
 
   //!event: 곡 상세정보 뷰 - 최고음 들어보기
   void pitchListenEvent(String pitch) {
-    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 최고음 들어보기');
+    Analytics_config.analytics
+        .logEvent('곡 상세정보 뷰 - 최고음 들어보기', eventProperties: {
+      '노트 개수': notes.length,
+      '최고음': pitch,
+    });
+
+    FirebaseAnalytics.instance
+        .logEvent(name: 'note_detail_view__listen_pitch', parameters: {
+      'noteCnt': notes.length,
+      'max_pitch': pitch,
+    });
   }
 
   //!event: 곡 상세정보 뷰 - 유튜브 클릭
   void youtubeClickEvent(Note note) {
-    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 유튜브 클릭',
-        eventProperties: {'곡 이름': note.tj_title, '메모': note.memo});
+    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 유튜브 클릭', eventProperties: {
+      '노트 개수': notes.length,
+      '곡 이름': note.tj_title,
+      '메모': note.memo
+    });
+
+    FirebaseAnalytics.instance.logEvent(
+        name: 'note_detail_view__click_youtube',
+        parameters: {
+          'noteCnt': notes.length,
+          'title': note.tj_title,
+          'memo': note.memo
+        });
   }
 
   //!event: 곡 상세정보 뷰 - 금영 검색
   void kySearchEvent(String tjNumber) {
-    Analytics_config.analytics
-        .logEvent('곡 상세정보 뷰 - 금영 검색', eventProperties: {'TJ 번호': tjNumber});
+    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 금영 검색',
+        eventProperties: {'노트 개수': notes.length, 'TJ 번호': tjNumber});
+    FirebaseAnalytics.instance.logEvent(
+        name: 'song_detail_view__KY_search',
+        parameters: {'noteCnt': notes.length, 'TJ_number': tjNumber});
   }
 
   //!event: 곡 상세정보 뷰 - 메모 수정
   void songMemoEditEvent(String title) {
-    Analytics_config.analytics
-        .logEvent('곡 상세정보 뷰 - 메모 수정', eventProperties: {'곡 이름': title});
+    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 메모 수정',
+        eventProperties: {'노트 개수': notes.length, '곡 이름': title});
+    FirebaseAnalytics.instance.logEvent(
+        name: 'song_detail_view__edit_memo',
+        parameters: {'noteCnt': notes.length, 'title': title});
   }
 
   //!event: 일반 노래 검색 뷰 - 페이지뷰
   void musicBookScreenPageViewEvent() {
-    Analytics_config.analytics.logEvent('일반 노래 검색 뷰 - 페이지뷰');
+    Analytics_config.analytics.logEvent('일반 노래 검색 뷰 - 페이지뷰',
+        eventProperties: {'노트 개수': notes.length});
+    FirebaseAnalytics.instance.logEvent(
+        name: 'normal_chart_search_view__pageView',
+        parameters: {'noteCnt': notes.length});
   }
 
   //!event: 인기 차트 검색 뷰 - 페이지뷰
   void popChartScreenPageViewEvent() {
-    Analytics_config.analytics.logEvent('인기 차트 검색 뷰 - 페이지뷰');
+    Analytics_config.analytics.logEvent('인기 차트 검색 뷰 - 페이지뷰',
+        eventProperties: {'노트 개수': notes.length});
+    FirebaseAnalytics.instance.logEvent(
+        name: 'pop_chart_search_view__pageView',
+        parameters: {'noteCnt': notes.length});
   }
 
   //!event: 최고음 차트 검색 뷰 - 페이지뷰
   void pitchChartScreenPageViewEvent() {
-    Analytics_config.analytics.logEvent('최고음 차트 검색 뷰 - 페이지뷰');
+    Analytics_config.analytics.logEvent('최고음 차트 검색 뷰 - 페이지뷰',
+        eventProperties: {'노트 개수': notes.length});
+    FirebaseAnalytics.instance.logEvent(
+        name: 'pitch_chart_search_view__pageView',
+        parameters: {'noteCnt': notes.length});
   }
 
   //local storage 저장 (key : songNum, value : memo)
@@ -169,6 +277,16 @@ class NoteData extends ChangeNotifier {
       //!event: 곡 추가 뷰 - 노트 추가 이벤트
       Analytics_config.analytics
           .logEvent('곡 추가 뷰 - 노트 추가 이벤트', eventProperties: {
+        '곡 이름': note.tj_title,
+        '가수 이름': note.tj_singer,
+        'TJ 번호': note.tj_songNumber,
+        '금영 번호': note.ky_songNumber,
+        '최고음': note.pitch,
+        '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
+        '메모 여부': note.memo
+      });
+      FirebaseAnalytics.instance
+          .logEvent(name: '곡 추가 뷰 - 노트 추가 이벤트', parameters: {
         '곡 이름': note.tj_title,
         '가수 이름': note.tj_singer,
         'TJ 번호': note.tj_songNumber,
@@ -226,6 +344,17 @@ class NoteData extends ChangeNotifier {
             '최고음': note.pitch,
             '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
             '메모 여부': note.memo
+          });
+          FirebaseAnalytics.instance
+              .logEvent(name: 'search__add_note_event', parameters: {
+            'noteCnt': notes.length,
+            'title': note.tj_title,
+            'singer': note.tj_singer,
+            'TJ_number': note.tj_songNumber,
+            'KY_number': note.ky_songNumber,
+            'max_pitch': note.pitch,
+            'IsMatched': (note.tj_songNumber == note.ky_songNumber),
+            'Ismemo': note.memo
           });
         } else {
           emptyCheck = true;
