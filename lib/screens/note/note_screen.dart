@@ -5,6 +5,7 @@ import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/musicBook/music_book.dart';
+import 'package:conopot/screens/musicBook/music_screen.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
 import 'package:conopot/screens/pitch/pitch_measure.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
@@ -39,6 +40,15 @@ class _NoteScreenState extends State<NoteScreen> {
                   ),
                 ),
                 actions: [
+                  IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MusicBookScreen()));
+                    },
+                  ),
                   IconButton(
                     icon: Icon(Icons.account_circle),
                     onPressed: () {
