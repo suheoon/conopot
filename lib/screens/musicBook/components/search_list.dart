@@ -1,4 +1,6 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/models/music_search_item.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:flutter/material.dart';
@@ -36,8 +38,8 @@ class SearchList extends StatelessWidget {
                     trailing: Text(musicList.foundItems[index].songNumber),
                     onTap: () {
                       if (musicList.tabIndex == 1) {
-                        _showDeleteDialog(
-                            context, musicList.foundItems[index].songNumber);
+                        _showAddDialog(
+                            context, musicList.foundItems[index]);
                       }
                     }),
               ),
@@ -50,11 +52,13 @@ class SearchList extends StatelessWidget {
   }
 }
 
-_showDeleteDialog(BuildContext context, String songNumber) {
+_showAddDialog(BuildContext context, MusicSearchItem item) {
   Widget okButton = ElevatedButton(
     onPressed: () {
+      // !event : 노래번호검색 뷰 - 노트 추가
+      Analytics_config.analytics.logEvent('노래번호 검색 뷰 - 노트추가');
       Provider.of<NoteData>(context, listen: false).addNoteBySongNumber(
-          songNumber,
+          item.songNumber,
           Provider.of<MusicSearchItemLists>(context, listen: false)
               .combinedSongList);
       Navigator.of(context).pop();
@@ -91,7 +95,7 @@ _showDeleteDialog(BuildContext context, String songNumber) {
 
   AlertDialog alert = AlertDialog(
     content: Text(
-      "노트를 추가하시겠습니까?",
+      "${item.title} 노래를 추가하시겠습니까?",
       style: TextStyle(fontWeight: FontWeight.bold),
     ),
     actions: [
