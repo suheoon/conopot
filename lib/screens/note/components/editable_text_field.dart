@@ -45,7 +45,6 @@ class _EditableTextFieldState extends State<EditableTextField> {
           controller: _editingController,
           maxLength: 25,
           decoration: InputDecoration(
-              hintText: "메모를 입력해 주세요",
               border: InputBorder.none,
               suffixIcon: TextButton(
                 child: Text(
@@ -78,9 +77,13 @@ class _EditableTextFieldState extends State<EditableTextField> {
           child: SizedBox(
             width: SizeConfig.screenWidth * 0.7,
             child: Text(
-              initialText,
+              initialText.length == 0 ? "메모를 입력해 주세요" : initialText,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
+              style: initialText.length == 0 ? TextStyle(
+                color: Colors.grey[600],
+                fontSize: 15.0,
+                fontWeight: FontWeight.bold,
+              ) :TextStyle(
                 color: Colors.black,
                 fontSize: 15.0,
                 fontWeight: FontWeight.bold,
