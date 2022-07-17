@@ -101,7 +101,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                       icon: SvgPicture.asset('assets/icons/youtube.svg'),
                       onPressed: () async {
                         final url = Uri.parse(
-                            'https://www.youtube.com/results?search_query=tj ${widget.note.tj_title} ${widget.note.tj_singer}');
+                            'https://www.youtube.com/results?search_query= ${widget.note.tj_title} ${widget.note.tj_singer}');
                         if (await canLaunchUrl(url)) {
                           launchUrl(url, mode: LaunchMode.inAppWebView);
                         }
