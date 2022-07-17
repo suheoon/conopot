@@ -144,6 +144,12 @@ class MusicSearchItemLists extends ChangeNotifier {
       ..set('최고음 측정 여부', (userMaxPitch != -1))
       ..set('최고음', pitchNumToString[userPitch]);
 
+    await FirebaseAnalytics.instance.setUserProperty(
+        name: 'isPitchMeasured', value: (userMaxPitch != -1).toString());
+
+    await FirebaseAnalytics.instance.setUserProperty(
+        name: 'max_pitch', value: pitchNumToString[userPitch].toString());
+
     Analytics_config.analytics.identify(identify);
 
     value = await storage.read(key: 'userNoteSetting');
@@ -451,49 +457,23 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   //!event: 애창곡 노트 뷰 - 최고음 배너 클릭 시
   void pitchBannerClickEvent(int noteCnt) {
-    Analytics_config.analytics.logEvent('애창곡 노트 뷰 - 최고음 배너 클릭',
-        eventProperties: {
-          '사용자 최고음 등록 여부': (userMaxPitch != -1),
-          '노트 개수': noteCnt
-        });
+    Analytics_config.analytics.logEvent('애창곡 노트 뷰 - 최고음 배너 클릭');
 
-    FirebaseAnalytics.instance.logEvent(
-        name: 'noteview__click_pitch_banner',
-        parameters: {
-          'IsMeasurePitch': (userMaxPitch != -1),
-          'noteCnt': noteCnt
-        });
+    FirebaseAnalytics.instance.logEvent(name: 'noteview__click_pitch_banner');
   }
 
   //!event: 애창곡 노트 뷰 - 노트 설정 배너 클릭 시
   void noteSettingBannerClickEvent(int noteCnt) {
-    Analytics_config.analytics.logEvent('애창곡 노트 뷰 - 노트 설정 배너 클릭',
-        eventProperties: {
-          '사용자 최고음 등록 여부': (userMaxPitch != -1),
-          '노트 개수': noteCnt
-        });
+    Analytics_config.analytics.logEvent('애창곡 노트 뷰 - 노트 설정 배너 클릭');
 
-    FirebaseAnalytics.instance.logEvent(
-        name: 'noteview__click_setting_banner',
-        parameters: {
-          'IsMeasurePitch': (userMaxPitch != -1),
-          'noteCnt': noteCnt
-        });
+    FirebaseAnalytics.instance.logEvent(name: 'noteview__click_setting_banner');
   }
 
   //!event: 내 정보 - 최고음 측정 여부
   void checkPitchMeasureEvent(int noteCnt) {
-    Analytics_config.analytics.logEvent('내 정보 - 최고음 측정 여부', eventProperties: {
-      '사용자 최고음 등록 여부': (userMaxPitch != -1),
-      '노트 개수': noteCnt
-    });
+    Analytics_config.analytics.logEvent('내 정보 - 최고음 측정 여부');
 
-    FirebaseAnalytics.instance.logEvent(
-        name: 'myInfo__IsMeasurePitch',
-        parameters: {
-          'IsMeasurePitch': (userMaxPitch != -1),
-          'noteCnt': noteCnt
-        });
+    FirebaseAnalytics.instance.logEvent(name: 'myInfo__IsMeasurePitch');
   }
 
   //!event: 최고음 검색 뷰 - 정렬

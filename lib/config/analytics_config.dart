@@ -28,7 +28,6 @@ class Analytics_config {
     // Log an event
     analytics.logEvent('앱 실행');
 
-    FirebaseAnalytics.instance.logEvent(name: "앱 실행");
     FirebaseAnalytics.instance.logEvent(name: "appOpen");
   }
 }
