@@ -118,7 +118,7 @@ _showAddDialog(BuildContext context, FitchMusic item) {
 
   AlertDialog alert = AlertDialog(
     content: Text(
-      "'${item.tj_title}' 노래를 추가하시겠습니까?",
+      "'${item.tj_title}' 노래를 애창곡 노트에 추가하시겠습니까?",
       style: TextStyle(fontWeight: FontWeight.bold),
     ),
     actions: [
