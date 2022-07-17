@@ -1,17 +1,15 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:conopot/models/music_search_item.dart';
 import 'package:easy_debounce/easy_debounce.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:provider/provider.dart';
 
 class MusicSearchItemLists extends ChangeNotifier {
   List<MusicSearchItem> foundItems = [];
@@ -47,6 +45,7 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   //유저가 노트 세팅을 바꿨을 때
   void changeUserNoteSetting(int settingNum) {
+    print(settingNum);
     userNoteSetting = settingNum;
     storage.write(key: 'userNoteSetting', value: settingNum.toString());
     notifyListeners();
@@ -134,10 +133,6 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   // 프로그램 실행 시, 노래방 책 List 초기화 (TJ, KY txt -> List)
   void init() async {
-    //!event : 앱 실행
-
-    Analytics_config.firebaseAnalytics.logAppOpen();
-
     //사용자 음정 불러오기
     String? value = await storage.read(key: 'userPitch');
     if (value != null) {
@@ -334,10 +329,9 @@ class MusicSearchItemLists extends ChangeNotifier {
       Analytics_config.analytics.logEvent('일반 검색 뷰 - 검색 키워드', eventProperties: {
         '검색 키워드': enteredKeyword,
       });
-
-      Analytics_config.firebaseAnalytics
-          .logEvent(name: '일반 검색 뷰 - 검색 키워드', parameters: {
-        '검색 키워드': enteredKeyword,
+      FirebaseAnalytics.instance
+          .logEvent(name: 'normal_search_view__search_keyword', parameters: {
+        'search_keyword': enteredKeyword,
       });
 
       notifyListeners();
@@ -389,6 +383,11 @@ class MusicSearchItemLists extends ChangeNotifier {
         '검색 키워드': enteredKeyword,
       });
 
+      FirebaseAnalytics.instance
+          .logEvent(name: 'song_add_view__search_keyword', parameters: {
+        'search_keyword': enteredKeyword,
+      });
+
       notifyListeners();
     });
   }
@@ -399,9 +398,7 @@ class MusicSearchItemLists extends ChangeNotifier {
       highestResults = List.from(highestSongList);
       //공백 제거 && 대문자 → 소문자 변경
       enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
-      // !event : 간접 음역대 측정뷰 - 페이지뷰
-      Analytics_config.analytics.logEvent('간접 음역대 측정뷰 - 검색',
-          eventProperties: {'검색 키워드': enteredKeyword});
+
       if (!enteredKeyword.isEmpty) {
         highestResults = highestResults
             .where((string) =>
@@ -417,6 +414,11 @@ class MusicSearchItemLists extends ChangeNotifier {
       Analytics_config.analytics
           .logEvent('최고음 검색 뷰 - 검색 키워드', eventProperties: {
         '검색 키워드': enteredKeyword,
+      });
+
+      FirebaseAnalytics.instance
+          .logEvent(name: 'pitch_search_view__search_keyword', parameters: {
+        'search_keyword': enteredKeyword,
       });
 
       notifyListeners();
@@ -454,6 +456,13 @@ class MusicSearchItemLists extends ChangeNotifier {
           '사용자 최고음 등록 여부': (userMaxPitch != -1),
           '노트 개수': noteCnt
         });
+
+    FirebaseAnalytics.instance.logEvent(
+        name: 'noteview__click_pitch_banner',
+        parameters: {
+          'IsMeasurePitch': (userMaxPitch != -1),
+          'noteCnt': noteCnt
+        });
   }
 
   //!event: 애창곡 노트 뷰 - 노트 설정 배너 클릭 시
@@ -463,6 +472,13 @@ class MusicSearchItemLists extends ChangeNotifier {
           '사용자 최고음 등록 여부': (userMaxPitch != -1),
           '노트 개수': noteCnt
         });
+
+    FirebaseAnalytics.instance.logEvent(
+        name: 'noteview__click_setting_banner',
+        parameters: {
+          'IsMeasurePitch': (userMaxPitch != -1),
+          'noteCnt': noteCnt
+        });
   }
 
   //!event: 내 정보 - 최고음 측정 여부
@@ -471,12 +487,24 @@ class MusicSearchItemLists extends ChangeNotifier {
       '사용자 최고음 등록 여부': (userMaxPitch != -1),
       '노트 개수': noteCnt
     });
+
+    FirebaseAnalytics.instance.logEvent(
+        name: 'myInfo__IsMeasurePitch',
+        parameters: {
+          'IsMeasurePitch': (userMaxPitch != -1),
+          'noteCnt': noteCnt
+        });
   }
 
   //!event: 최고음 검색 뷰 - 정렬
   void pitchSortEvent(String sortOptionStr) {
     Analytics_config.analytics.logEvent('최고음 검색 뷰 - 정렬', eventProperties: {
       '정렬 기준': sortOptionStr,
+    });
+
+    FirebaseAnalytics.instance
+        .logEvent(name: 'pitch_search_view__sorting', parameters: {
+      'sorting_condition': sortOptionStr,
     });
   }
 }

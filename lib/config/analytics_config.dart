@@ -1,5 +1,4 @@
 import 'package:amplitude_flutter/amplitude.dart';
-import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/firebase/firebase_options.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,7 +8,7 @@ class Analytics_config {
   static late Amplitude analytics =
       Amplitude.getInstance(instanceName: "conopot");
 
-  static late FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.instance;
+  static FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.instance;
 
   Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +16,6 @@ class Analytics_config {
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
-    firebaseAnalytics.logAppOpen();
     // Initialize SDK
     analytics.init('cf1298f461883c1cbf97daeb0393b987');
 
@@ -29,5 +27,8 @@ class Analytics_config {
 
     // Log an event
     analytics.logEvent('앱 실행');
+
+    FirebaseAnalytics.instance.logEvent(name: "앱 실행");
+    FirebaseAnalytics.instance.logEvent(name: "appOpen");
   }
 }
