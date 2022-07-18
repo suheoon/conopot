@@ -63,7 +63,6 @@ class _PitchMeasureState extends State<PitchMeasure> {
       if (statuses[Permission.microphone]!.isGranted) {
         await _audioRecorder.start(listener, onError,
             sampleRate: 44100, bufferSize: 3000);
-
         setState(() {
           note = "";
         });
