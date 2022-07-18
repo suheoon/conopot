@@ -105,7 +105,7 @@ class _NoteScreenState extends State<NoteScreen> {
         height: MediaQuery.of(context).size.height * 0.12,
         enableInfiniteScroll: true,
         viewportFraction: 0.9,
-        autoPlay: false,
+        autoPlay: true,
         autoPlayInterval: Duration(seconds: 5),
         autoPlayAnimationDuration: Duration(milliseconds: 800),
       ),

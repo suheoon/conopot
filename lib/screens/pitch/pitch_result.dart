@@ -65,44 +65,42 @@ class _PitchResultState extends State<PitchResult> {
           child: Column(
             children: [
               SizedBox(
-                height: SizeConfig.defaultSize,
-              ),
-              Text(
-                '내 최고음',
-                style: TextStyle(
-                  color: kTextColor,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: SizeConfig.defaultSize * 2,
-              ),
-
-              Container(
-                padding: EdgeInsets.all(6.0),
-                decoration: BoxDecoration(
-                  color: kTitleColor,
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Text(
-                  pitchNumToString[pitchLevel],
-                  style: TextStyle(
-                    color: kPrimaryCreamColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-
-              SizedBox(
-                height: SizeConfig.defaultSize * 2,
-              ),
-
-              SizedBox(
                 height: SizeConfig.defaultSize * 3,
               ),
-
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '내 최고음 :',
+                    style: TextStyle(
+                      color: kTextColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    width: SizeConfig.defaultSize,
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(6.0),
+                    decoration: BoxDecoration(
+                      color: kTitleColor,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Text(
+                      pitchNumToString[pitchLevel],
+                      style: TextStyle(
+                        color: kPrimaryCreamColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: SizeConfig.defaultSize * 5,
+              ),
               //내 음역대의 인기곡들
               RichText(
                 text: TextSpan(
@@ -124,7 +122,7 @@ class _PitchResultState extends State<PitchResult> {
                       ),
                     ),
                     TextSpan(
-                      text: ' 주변의 인기곡들',
+                      text: ' 근처의 인기곡',
                       style: TextStyle(
                         color: kTextColor,
                       ),
@@ -135,7 +133,6 @@ class _PitchResultState extends State<PitchResult> {
               SizedBox(
                 height: SizeConfig.defaultSize * 2,
               ),
-
               Divider(
                 height: 1,
               ),
