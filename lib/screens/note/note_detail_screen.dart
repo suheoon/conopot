@@ -364,6 +364,9 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
       children: [
         ElevatedButton(
           onPressed: () {
+            //!event
+            Provider.of<NoteData>(context, listen: false)
+                .pitchRequestEvent(widget.note);
             // 정보요청
             noteInfoPostRequest(widget.note);
             // 정보요청
