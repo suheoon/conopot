@@ -38,7 +38,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
 
   var note = ""; //음정 알파벳
   double frequency = 0; //진동수
-  double maxFreqency = 0;
+  double maxFrequency = 0;
   int flag = 0; //음 측정 중인지 확인
   String nowPitchName = "";
   bool playFlag = false;
@@ -149,7 +149,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
       setState(() {
         note = handledPitchResult.note;
         frequency = handledPitchResult.expectedFrequency;
-        maxFreqency = max(maxFreqency, frequency);
+        maxFrequency = max(maxFrequency, frequency);
       });
     }
   }
@@ -299,8 +299,18 @@ class _PitchMeasureState extends State<PitchMeasure> {
   }
 
   Widget _picker1() {
+    int initialIndex = 0;
+    if (maxFrequency > 0) {
+      String highestPitch = frequencyToPitch(maxFrequency);
+      String pitch1 = highestPitch.substring(0, 4);
+      for (var i = 0; i < octave1.length; i++) {
+        if (pitch1 == octave1[i]) initialIndex = i;
+      }
+    }
     return CupertinoPicker(
         itemExtent: 75,
+        scrollController:
+            FixedExtentScrollController(initialItem: initialIndex),
         onSelectedItemChanged: (i) {
           setState(() {
             selected1 = octave1[i];
@@ -316,8 +326,18 @@ class _PitchMeasureState extends State<PitchMeasure> {
   }
 
   Widget _picker2() {
+    int initialIndex = 0;
+    if (maxFrequency > 0) {
+      String highestPitch = frequencyToPitch(maxFrequency);
+      String pitch2 = highestPitch.substring(5, highestPitch.length);
+      for (var i = 0; i < octave2.length; i++) {
+        if (pitch2 == octave2[i]) initialIndex = i;
+      }
+    }
     return CupertinoPicker(
         itemExtent: 75,
+        scrollController:
+            FixedExtentScrollController(initialItem: initialIndex),
         onSelectedItemChanged: (i) {
           setState(() {
             selected2 = octave2[i];
@@ -370,81 +390,85 @@ class _PitchMeasureState extends State<PitchMeasure> {
                   Container(
                     width: SizeConfig.screenWidth * 0.8,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [Text(
-                        '1.  조용하고 크게 소리를 낼 수 있는 곳에서 테스트하세요.',
-                        style: TextStyle(
-                          color: kTextColor,
-                          fontSize: SizeConfig.screenWidth * 0.035,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: SizeConfig.defaultSize),
-                      Text(
-                        '2.  가성이 아닌 진성으로 부르세요.',
-                        style: TextStyle(
-                          color: kTextColor,
-                          fontSize: SizeConfig.screenWidth * 0.035,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ]),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '1.  조용하고 크게 소리를 낼 수 있는 곳에서 테스트하세요.',
+                            style: TextStyle(
+                              color: kTextColor,
+                              fontSize: SizeConfig.screenWidth * 0.035,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: SizeConfig.defaultSize),
+                          Text(
+                            '2.  가성이 아닌 진성으로 부르세요.',
+                            style: TextStyle(
+                              color: kTextColor,
+                              fontSize: SizeConfig.screenWidth * 0.035,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ]),
                   ),
                 ])
               : SizedBox(
-                width: SizeConfig.screenWidth * 0.8,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '노래를 불러 보세요 🎤',
-                      style: TextStyle(
-                        color: kTextColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: SizeConfig.defaultSize,
-                    ),
-                    Row(
+                  width: SizeConfig.screenWidth * 0.8,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '최고',
+                          '노래를 불러 보세요 🎤',
                           style: TextStyle(
                             color: kTextColor,
-                            fontSize: SizeConfig.screenWidth * 0.049,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 10),
-                          padding: EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8.0),
-                            border: Border.all(
-                              color: Colors.grey,
-                              width: 0.5,
+                        SizedBox(
+                          height: SizeConfig.defaultSize,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              '최고',
+                              style: TextStyle(
+                                color: kTextColor,
+                                fontSize: SizeConfig.screenWidth * 0.049,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          child: Text("${frequencyToPitch(maxFreqency)}",style: TextStyle(
-                            color: kTextColor,
-                            fontSize: SizeConfig.screenWidth * 0.049,
-                            fontWeight: FontWeight.bold,
-                          ),),
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 10),
+                              padding: EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.0),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 0.5,
+                                ),
+                              ),
+                              child: Text(
+                                "${frequencyToPitch(maxFrequency)}",
+                                style: TextStyle(
+                                  color: kTextColor,
+                                  fontSize: SizeConfig.screenWidth * 0.049,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '까지 올라갔어요!',
+                              style: TextStyle(
+                                color: kTextColor,
+                                fontSize: SizeConfig.screenWidth * 0.049,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          '까지 올라갔어요!',
-                          style: TextStyle(
-                            color: kTextColor,
-                            fontSize:  SizeConfig.screenWidth * 0.049,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ]),
-              ),
+                      ]),
+                ),
           Container(
             margin: const EdgeInsets.symmetric(vertical: 30.0),
             height: SizeConfig.screenHeight * 0.35,
