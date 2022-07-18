@@ -37,13 +37,22 @@ class _PitchMeasureState extends State<PitchMeasure> {
   final pitchupDart = PitchHandler(InstrumentType.guitar);
 
   var note = ""; //음정 알파벳
-  double frequency = 0; //진동수
-  double maxFrequency = 0;
-  int flag = 0; //음 측정 중인지 확인
-  String nowPitchName = "";
+  late double frequency; //진동수
+  late double maxFrequency;
+  late int flag; //음 측정 중인지 확인
+  late String nowPitchName;
+  late String selected1;
+  late String selected2;
   bool playFlag = false;
-  String selected1 = "1옥타브";
-  String selected2 = "도";
+
+  void initState() {
+    frequency = 0;
+    maxFrequency = 0;
+    flag = 0;
+    nowPitchName = "";
+    selected1 = "1옥타브";
+    selected2 = "도";
+  }
 
   Future<void> _startCapture() async {
     //마이크 사용 권한 확인 (android)
