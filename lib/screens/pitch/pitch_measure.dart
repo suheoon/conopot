@@ -303,6 +303,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
     if (maxFrequency > 0) {
       String highestPitch = frequencyToPitch(maxFrequency);
       String pitch1 = highestPitch.substring(0, 4);
+      selected1 = pitch1;
       for (var i = 0; i < octave1.length; i++) {
         if (pitch1 == octave1[i]) initialIndex = i;
       }
@@ -330,6 +331,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
     if (maxFrequency > 0) {
       String highestPitch = frequencyToPitch(maxFrequency);
       String pitch2 = highestPitch.substring(5, highestPitch.length);
+      selected2 = pitch2;
       for (var i = 0; i < octave2.length; i++) {
         if (pitch2 == octave2[i]) initialIndex = i;
       }
