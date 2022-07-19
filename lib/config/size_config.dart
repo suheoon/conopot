@@ -15,7 +15,7 @@ class SizeConfig {
     // On iPhone 11 the defaultSzie = 10 almost
     // So if the screen size increase or decrease then out defaultSize also vary
     defaultSize = orientation == Orientation.landscape
-        ? screenHeight * 0.024
-        : screenWidth * 0.024;
+        ? screenHeight * 0.0027
+        : screenWidth * 0.0027;
   }
 }

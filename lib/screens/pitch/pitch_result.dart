@@ -65,7 +65,7 @@ class _PitchResultState extends State<PitchResult> {
           child: Column(
             children: [
               SizedBox(
-                height: SizeConfig.defaultSize * 3,
+                height: SizeConfig.defaultSize * 30,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -79,7 +79,7 @@ class _PitchResultState extends State<PitchResult> {
                     ),
                   ),
                   SizedBox(
-                    width: SizeConfig.defaultSize,
+                    width: SizeConfig.defaultSize * 10,
                   ),
                   Container(
                     padding: EdgeInsets.all(6.0),
@@ -99,7 +99,7 @@ class _PitchResultState extends State<PitchResult> {
                 ],
               ),
               SizedBox(
-                height: SizeConfig.defaultSize * 5,
+                height: SizeConfig.defaultSize * 50,
               ),
               //내 음역대의 인기곡들
               RichText(
@@ -131,13 +131,13 @@ class _PitchResultState extends State<PitchResult> {
                 ),
               ),
               SizedBox(
-                height: SizeConfig.defaultSize * 2,
+                height: SizeConfig.defaultSize * 20,
               ),
               Divider(
                 height: 1,
               ),
               SizedBox(
-                height: SizeConfig.defaultSize,
+                height: SizeConfig.defaultSize * 10,
               ),
               PitchSearchList(),
             ],
