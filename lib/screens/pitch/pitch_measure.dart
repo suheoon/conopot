@@ -38,6 +38,8 @@ class _PitchMeasureState extends State<PitchMeasure> {
   late String nowPitchName;
   late String selected1;
   late String selected2;
+  bool initialSetting1 = false;
+  bool initialSetting2 = false;
   bool playFlag = false;
 
   void initState() {
@@ -303,13 +305,14 @@ class _PitchMeasureState extends State<PitchMeasure> {
 
   Widget _picker1() {
     int initialIndex = 0;
-    if (maxFrequency >= 130) {
+    if (maxFrequency >= 130 && initialSetting1 == false) {
       String highestPitch = frequencyToPitch(maxFrequency);
       String pitch1 = highestPitch.substring(0, 4);
       selected1 = pitch1;
       for (var i = 0; i < octave1.length; i++) {
         if (pitch1 == octave1[i]) initialIndex = i;
       }
+      initialSetting1 = true;
     }
     return CupertinoPicker(
         itemExtent: 75,
@@ -331,14 +334,16 @@ class _PitchMeasureState extends State<PitchMeasure> {
 
   Widget _picker2() {
     int initialIndex = 0;
-    if (maxFrequency >= 130) {
+    if (maxFrequency >= 130 && initialSetting2 == false) {
       String highestPitch = frequencyToPitch(maxFrequency);
       String pitch2 = highestPitch.substring(5, highestPitch.length);
       selected2 = pitch2;
       for (var i = 0; i < octave2.length; i++) {
         if (pitch2 == octave2[i]) initialIndex = i;
       }
+      initialSetting2 = true;
     }
+
     return CupertinoPicker(
         itemExtent: 75,
         scrollController:
@@ -660,6 +665,11 @@ class _PitchMeasureState extends State<PitchMeasure> {
                               .logEvent('직접 음역대 측정 뷰 - 다시 측정하기');
                           setState(() {
                             flag = 0;
+                            frequency = 0;
+                            maxFrequency = 0;
+                            nowPitchName = "";
+                            selected1 = "1옥타브";
+                            selected2 = "도";
                           });
                         },
                         child: Container(
