@@ -23133,6 +23133,16 @@ Jiggle Jiggle^Duke,Jones,Louis Theroux^23913^
 Love Me More^Sam Smith^23914^
 I Love You So^The Walters^23915^
 Big Energy^Latto^23916^
+Peter Pan Was Right^Anson Seabra^23917^
+Late Night Talking^Harry Styles^23918^
+Running Up That Hill (A Deal With God)(2018 Remaster)^Kate Bush^23919^
+Loving You^Michael Jackson^23920^
+WILD^Troye Sivan^23921^
+I Like You (A Happier Song)^Post Malone(Feat.Doja Cat)^23922^
+I Just Called^Neiked,Anne-Marie,Latto^23923^
+Until I Found You^Stephen Sanchez^23924^
+Drugs^UPSAHL^23925^
+The Nights^Avicii^23926^
 Seoul Blues^자우림^24001^
 가면^태진아^24002^
 아, 대한민국...^정태춘^24003^
@@ -43153,6 +43163,10 @@ Always^에이핑크^48999^
 친구야보성가자^명희^49165^
 방실이네^김미성^49166^
 사랑의할증^김현미^49167^
+꽃바람^김유희^49168^
+인생지게^최우진^49169^
+노난다노나^손주희^49170^
+나는당신의행복^손주희^49171^
 미운날^이해리^49481^
 그대가나를본다면^반하나^49482^
 어느봄날^이벼리,이준환^49483^
@@ -48050,6 +48064,12 @@ I will...(ソードアート・オンラインアリシゼーション War of Un
 陽はまた昇るから(クレヨンしんちゃん もののけニンジャ珍風伝 主題歌)^緑黄色社会^68622^
 星が泳ぐ(''サマータイムレンダ" OP)^マカロニえんぴつ^68623^
 惑う糸^菅田将暉^68624^
+正義^ずっと真夜中でいいのに。^68625^
+春ひさぎ^ヨルシカ^68626^
+I believewhat you said(ひぐらしのなく頃に 業 OP)^亜咲花^68627^
+快感*エブリディ^B-PROJECT^68628^
+Your Eyes^Stray Kids^68629^
+永遠に光れ(Everlasting Shine)^TOMORROW X TOGETHER^68630^
 AMOUR^张学友^70001^
 爱不爱我^零点乐队^70002^
 别爱我^郑中基^70005^
@@ -51495,6 +51515,7 @@ Baby I Know^刘雨昕^78376^
 伤痕^林忆莲^78400^
 就忘了吧^1K^78403^
 问心^就是南方凯^78404^
+长记心头^龙飘飘^78405^
 小秘密^张 行^78407^
 留什么给你^孙 楠^78409^
 无结局的爱^林玉英^78410^
@@ -51503,15 +51524,19 @@ Baby I Know^刘雨昕^78376^
 我的老班长^小 曾^78426^
 我愿意^王靖雯^78432^
 爱情电影^许茹芸 熊天平^78435^
+痴情泪^林玉英^78438^
 中产阶级^郑智化^78441^
 我悄悄蒙上你的眼睛^^78443^
 心声^^78444^
 篱笆墙的影子^^78447^
+仙儿^二手玫瑰乐队^78457^
 洪湖水,浪打浪^^78460^
 爱不完^刘德华^78470^
 大国民^郑智化^78487^
 失恋^草 蜢^78500^
 情难枕^高胜美^78504^
+爱你^王心凌^78506^
+春娇与志明^街道办,欧阳耀莹^78507^
 밤열차^이찬원^78519^
 고향무정^임영웅^78520^
 갈무리^임영웅^78521^
@@ -53879,14 +53904,91 @@ Color Me^JUNNY(주니)(Feat.청하)^81854^
 그날(The day)(세기말풋사과보습학원OST)^승희(오마이걸)^81855^
 엉덩이가시려^노윤하,CHERRY BOY 17(Feat.unofficialboyy,Lil tachi)^81856^
 Raw^Brown Tigger,조광일(Feat.김승민)^81857^
+NE♡N^오마이걸^81858^
+길^방탄소년단^81859^
 POP!^나연(TWICE)^81860^
 Life's Too Short(English Ver.)^에스파(aespa)^81861^
 Left and Right^Charlie Puth,정국,방탄소년단^81862^
+흔한거짓말^정승환^81863^
+비가오는밤이면^임한별^81864^
+달이될게(유미의세포들시즌2 OST)^진영(GOT7)^81865^
+Butter-Fly(디지몬어드벤처OST)^전영호^81866^
 Stay This Way^프로미스나인^81867^
 Alone^쿠기(Feat.이하이)^81868^
+BOOM^이민혁(HUTA)^81869^
 짠짠짠^김희재^81870^
+상처는아름다운흔적이되어(환혼OST)^카더가든^81871^
+NO PROBLEM^나연(TWICE)(Feat.필릭스(스트레이키즈))^81872^
+FREE SMILE(서울체크인OST)^이효리,이찬혁(AKMU(악뮤))^81873^
+금지된사랑^이승기^81874^
 Pit a Pat(링크:먹고사랑하라, 죽이게OST)^승관(세븐틴)^81875^
 Blue & Black^효정,아린(오마이걸),장원영,이서(IVE),세림,정모(CRAVITY)^81876^
+LOVE COUNTDOWN^나연(TWICE)(Feat.원슈타인)^81877^
+CANDYFLOSS^나연(TWICE)^81878^
+ALL OR NOTHING^나연(TWICE)^81879^
+풍악^김희재^81880^
+BMW^UNEDUCATED KID(Feat.Northfacegawd)^81881^
+내가사랑할게요(왜오수재인가OST)^K.Will^81882^
+열이올라요(Heart Burn)^선미^81883^
+DDKD^허성현(Huh!)(Feat.저스디스,다이나믹듀오)^81884^
+노을만예쁘다^나연(TWICE)^81885^
+HAPPY BIRTHDAY TO YOU^나연(TWICE)^81886^
+그대있어행복합니다^조항조^81887^
+그이름어머니^진성^81888^
+Amazing^UNEDUCATED KID(Feat.Paul Blanco,재키와이)^81889^
+없었던일로^헤이즈^81890^
+비오는날듣기좋은노래^윤하^81891^
+Blue Flame^LE SSERAFIM(르세라핌)^81892^
+내눈물이하는말(웹툰'연애의발견' X 황치열)^황치열^81893^
+알아채줘요(징크스의연인OST)^이솔로몬^81894^
+사랑은유사과학^Mudd the student(Feat.장기하)^81895^
+있어주라^Kid Wine(Feat.릴러말즈,뱃사공,The Quiett)^81896^
+MORE^j-hope^81897^
+그라데이션^10cm^81898^
+할것(Remix)^Royal 44(with Chin,Uneducated Kid,Paul Blanco)^81899^
+잊지마, 기억해, 늦지마^이승기,캡틴플래닛^81900^
+처음사랑해^적재^81901^
+거리마다^헤이즈(Feat.I.M(아이엠))^81902^
+풋사랑(Childhood)^선미^81903^
+신사답게(MMM)^영탁^81904^
+Future Perfect(Pass the MIC)^ENHYPEN^81905^
+아리운(환혼OST)^케이시^81906^
+담(The Wall)^영탁^81907^
+도둑놈^헤이즈(Feat.민니((여자)아이들))^81908^
+I Don't Lie^헤이즈(Feat.기리보이)^81909^
+My You^정국^81910^
+갈길을못가네^김연자^81911^
+I LOVE U^위너(WINNER)^81912^
+Last Sequence^우주소녀^81913^
+어쩌면우리^헤이즈(Feat.죠지)^81914^
+이건내가처음쓰는사랑노래^KIXO(키조)(Feat.빅나티(서동현))^81915^
+한량가(Hallyang-ga)^영탁^81916^
+LOVEADE^VIVIZ(비비지)^81917^
+Ring The Alarm^KARD^81918^
+HOLIDAY^위너(WINNER)^81919^
+머선 129(What Happened?)^영탁^81920^
+Love is 홀로^헤이즈^81922^
+Ruby^우지(세븐틴)^81923^
+High-Five^디노(세븐틴)^81924^
+If with U^몬스타엑스^81925^
+10분^위너(WINNER)^81926^
+로맨스의왕^잔나비^81927^
+Girls^에스파(aespa)^81930^
+그때그순간그대로(그그그)^WSG워너비(가야G)^81931^
+보고싶었어^WSG워너비(4FIRE)^81932^
+Clink Clink(클링클링)^WSG워너비(오아시소)^81933^
+Life's Too Short^에스파(aespa)^81934^
+Lingo^에스파(aespa)^81935^
+고향집(HOMETOWN)^양지원^81936^
+자취방^이무진^81937^
+고맙소^황우림^81938^
+기도합니다^진성^81939^
+Sparkling^청하^81940^
+바보에게바보가(웹툰'연애의발견' X 이석훈)^이석훈^81941^
+Mango^슈퍼주니어^81948^
+Need To Know^박재범^81949^
+삭제^김재환^81958^
+SCREAM^에스에프나인^81959^
 特务^陈晓东^81968^
 多好^黄品源^81978^
 十年^陈奕迅^82002^
