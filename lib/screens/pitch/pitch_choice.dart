@@ -41,7 +41,7 @@ class PitchChoice extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: SizeConfig.defaultSize * 3,
+                      height: SizeConfig.defaultSize * 30,
                     ),
                     RichText(
                       text: TextSpan(
@@ -66,7 +66,7 @@ class PitchChoice extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      height: SizeConfig.defaultSize * 2,
+                      height: SizeConfig.defaultSize * 20,
                     ),
                     Text(
                       '전 구간 부를 수 있는 노래만 선택해주세요!',

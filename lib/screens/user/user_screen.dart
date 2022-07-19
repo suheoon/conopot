@@ -64,7 +64,7 @@ class _UserScreenState extends State<UserScreen> {
                             height: 70,
                           ),
                           SizedBox(
-                            width: SizeConfig.defaultSize,
+                            width: SizeConfig.defaultSize * 10,
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,7 +78,7 @@ class _UserScreenState extends State<UserScreen> {
                                 textAlign: TextAlign.left,
                               ),
                               SizedBox(
-                                height: SizeConfig.defaultSize / 2,
+                                height: SizeConfig.defaultSize * 10 / 2,
                               ),
                               (musicList.userMaxPitch != -1)
                                   ? Text(
@@ -141,7 +141,7 @@ class _UserScreenState extends State<UserScreen> {
                               size: 25,
                             ),
                             SizedBox(
-                              width: SizeConfig.defaultSize,
+                              width: SizeConfig.defaultSize * 10,
                             ),
                             Text(
                               '노래 검색',
@@ -183,7 +183,7 @@ class _UserScreenState extends State<UserScreen> {
                               size: 25,
                             ),
                             SizedBox(
-                              width: SizeConfig.defaultSize,
+                              width: SizeConfig.defaultSize * 10,
                             ),
                             Text(
                               '노래방 인기 차트',
@@ -260,7 +260,7 @@ class _UserScreenState extends State<UserScreen> {
                           children: [
                             Icon(Icons.music_note),
                             SizedBox(
-                              width: SizeConfig.defaultSize,
+                              width: SizeConfig.defaultSize * 10,
                             ),
                             Text(
                               '노래 최고음 검색',
@@ -272,7 +272,7 @@ class _UserScreenState extends State<UserScreen> {
                               textAlign: TextAlign.left,
                             ),
                             SizedBox(
-                              width: SizeConfig.defaultSize,
+                              width: SizeConfig.defaultSize * 10,
                             ),
                           ],
                         ),
@@ -302,7 +302,7 @@ class _UserScreenState extends State<UserScreen> {
                               size: 25,
                             ),
                             SizedBox(
-                              width: SizeConfig.defaultSize,
+                              width: SizeConfig.defaultSize * 10,
                             ),
                             Text(
                               '애창곡 노트 설정',

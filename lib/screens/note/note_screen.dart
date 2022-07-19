@@ -139,7 +139,7 @@ class _NoteScreenState extends State<NoteScreen> {
                   height: 45,
                   width: 45,
                 ),
-                SizedBox(width: SizeConfig.defaultSize * 2),
+                SizedBox(width: SizeConfig.defaultSize * 20),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,7 +199,7 @@ class _NoteScreenState extends State<NoteScreen> {
                     height: 45,
                     width: 45,
                   ),
-                  SizedBox(width: SizeConfig.defaultSize * 2),
+                  SizedBox(width: SizeConfig.defaultSize * 20),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,7 +258,7 @@ class _NoteScreenState extends State<NoteScreen> {
                   height: 45,
                   width: 45,
                 ),
-                SizedBox(width: SizeConfig.defaultSize),
+                SizedBox(width: SizeConfig.defaultSize * 10),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -335,7 +335,7 @@ class _NoteScreenState extends State<NoteScreen> {
           ),
         ),
         SizedBox(
-          height: SizeConfig.defaultSize * 3,
+          height: SizeConfig.defaultSize * 30,
         ),
         Container(
           height: SizeConfig.screenHeight * 0.2,
@@ -347,7 +347,7 @@ class _NoteScreenState extends State<NoteScreen> {
               onPressed: () {
                 Future.delayed(Duration.zero, () {
                   Provider.of<MusicSearchItemLists>(context, listen: false)
-                      .initBook();
+                      .initCombinedBook();
                 });
                 Provider.of<NoteData>(context, listen: false)
                     .setSelectedIndex(-1);

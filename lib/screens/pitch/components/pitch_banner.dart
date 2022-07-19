@@ -50,7 +50,7 @@ class PitchBanner extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                          height: SizeConfig.defaultSize,
+                          height: SizeConfig.defaultSize * 10,
                         ),
                         TextButton(
                           onPressed: () {

@@ -72,7 +72,7 @@ class _PitchMainScreenState extends State<PitchMainScreen> {
                           ),
                         ),
                         SizedBox(
-                          height: SizeConfig.defaultSize,
+                          height: SizeConfig.defaultSize * 10,
                         ),
                         Text(
                           '크게 소리낼 수 있는 환경에서',
@@ -134,7 +134,7 @@ class _PitchMainScreenState extends State<PitchMainScreen> {
                           ),
                         ),
                         SizedBox(
-                          height: SizeConfig.defaultSize,
+                          height: SizeConfig.defaultSize * 10,
                         ),
                         Text(
                           '불러 본 노래 바탕으로',

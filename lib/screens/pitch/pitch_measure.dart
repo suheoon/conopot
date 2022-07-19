@@ -7,13 +7,9 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:conopot/components/custom_page_route.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
-import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/pitch_item.dart';
-import 'package:conopot/screens/pitch/components/indicator.dart';
-import 'package:conopot/screens/pitch/components/pitch_banner.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/screens/pitch/pitch_result.dart';
-import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_capture/flutter_audio_capture.dart';
@@ -21,7 +17,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:pitch_detector_dart/pitch_detector.dart';
 import 'package:pitchupdart/instrument_type.dart';
 import 'package:pitchupdart/pitch_handler.dart';
-import 'package:provider/provider.dart';
 
 class PitchMeasure extends StatefulWidget {
   PitchMeasure({Key? key}) : super(key: key);
@@ -308,7 +303,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
 
   Widget _picker1() {
     int initialIndex = 0;
-    if (maxFrequency > 0) {
+    if (maxFrequency >= 130) {
       String highestPitch = frequencyToPitch(maxFrequency);
       String pitch1 = highestPitch.substring(0, 4);
       selected1 = pitch1;
@@ -336,7 +331,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
 
   Widget _picker2() {
     int initialIndex = 0;
-    if (maxFrequency > 0) {
+    if (maxFrequency >= 130) {
       String highestPitch = frequencyToPitch(maxFrequency);
       String pitch2 = highestPitch.substring(5, highestPitch.length);
       selected2 = pitch2;
@@ -375,7 +370,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                     '노래를 부르면 최고음 측정을 해드릴게요! 🤗',
                     style: TextStyle(
                       color: kPrimaryBlackColor,
-                      fontSize: SizeConfig.screenWidth * 0.045,
+                      fontSize: SizeConfig.defaultSize * 17,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -387,7 +382,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                         '주의 사항',
                         style: TextStyle(
                           color: kPrimaryColor,
-                          fontSize: 20,
+                          fontSize: SizeConfig.defaultSize * 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -395,10 +390,10 @@ class _PitchMeasureState extends State<PitchMeasure> {
                     ],
                   ),
                   SizedBox(
-                    height: SizeConfig.defaultSize * 2,
+                    height: SizeConfig.defaultSize * 20,
                   ),
                   Container(
-                    width: SizeConfig.screenWidth * 0.8,
+                    width: SizeConfig.screenWidth * 0.9,
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -406,7 +401,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                             '1.  조용하고 크게 소리를 낼 수 있는 곳에서 테스트하세요.',
                             style: TextStyle(
                               color: kTextColor,
-                              fontSize: SizeConfig.screenWidth * 0.035,
+                              fontSize: SizeConfig.defaultSize * 13,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -415,7 +410,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                             '2.  가성이 아닌 진성으로 부르세요.',
                             style: TextStyle(
                               color: kTextColor,
-                              fontSize: SizeConfig.screenWidth * 0.035,
+                              fontSize: SizeConfig.defaultSize * 13,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -423,7 +418,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                   ),
                 ])
               : SizedBox(
-                  width: SizeConfig.screenWidth * 0.8,
+                  width: SizeConfig.screenWidth * 0.9,
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -431,12 +426,12 @@ class _PitchMeasureState extends State<PitchMeasure> {
                           '노래를 불러 보세요 🎤',
                           style: TextStyle(
                             color: kTextColor,
-                            fontSize: 20,
+                            fontSize: SizeConfig.defaultSize * 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         SizedBox(
-                          height: SizeConfig.defaultSize,
+                          height: SizeConfig.defaultSize * 10,
                         ),
                         Row(
                           children: [
@@ -444,7 +439,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                               '최고',
                               style: TextStyle(
                                 color: kTextColor,
-                                fontSize: SizeConfig.screenWidth * 0.049,
+                                fontSize: SizeConfig.defaultSize * 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -462,7 +457,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                                 "${frequencyToPitch(maxFrequency)}",
                                 style: TextStyle(
                                   color: kTextColor,
-                                  fontSize: SizeConfig.screenWidth * 0.049,
+                                  fontSize: SizeConfig.defaultSize * 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -471,7 +466,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                               '까지 올라갔어요!',
                               style: TextStyle(
                                 color: kTextColor,
-                                fontSize: SizeConfig.screenWidth * 0.049,
+                                fontSize: SizeConfig.defaultSize * 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -482,7 +477,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 30.0),
             height: SizeConfig.screenHeight * 0.35,
-            width: SizeConfig.screenWidth * 0.8,
+            width: SizeConfig.screenWidth * 0.9,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0),
               border: Border.all(
@@ -493,7 +488,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
             child: Center(
               child: Column(
                 children: [
-                  SizedBox(height: SizeConfig.defaultSize),
+                  SizedBox(height: SizeConfig.defaultSize * 10),
                   Text(
                     "현재 측정 음",
                     style: TextStyle(
@@ -536,8 +531,6 @@ class _PitchMeasureState extends State<PitchMeasure> {
                                           fontWeight: FontWeight.bold),
                                     )),
                                     decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Colors.black, width: 1),
                                         borderRadius:
                                             BorderRadius.circular(5.0),
                                         color: Colors.blue),
@@ -583,8 +576,6 @@ class _PitchMeasureState extends State<PitchMeasure> {
                                           fontWeight: FontWeight.bold),
                                     )),
                                     decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Colors.black, width: 1),
                                         borderRadius:
                                             BorderRadius.circular(5.0),
                                         color: Colors.red),
@@ -622,12 +613,12 @@ class _PitchMeasureState extends State<PitchMeasure> {
           ],
         ),
         SizedBox(
-          height: SizeConfig.defaultSize * 2,
+          height: SizeConfig.defaultSize * 20,
         ),
         Container(
           margin: const EdgeInsets.symmetric(vertical: 16.0),
           height: SizeConfig.screenHeight * 0.3,
-          width: SizeConfig.screenWidth * 0.8,
+          width: SizeConfig.screenWidth * 0.9,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -657,10 +648,10 @@ class _PitchMeasureState extends State<PitchMeasure> {
                         child: _picker2()),
                   ],
                 ),
-                SizedBox(height: SizeConfig.defaultSize),
+                SizedBox(height: SizeConfig.defaultSize * 10),
                 Expanded(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       GestureDetector(
                         onTap: () {
@@ -682,7 +673,6 @@ class _PitchMeasureState extends State<PitchMeasure> {
                                 fontWeight: FontWeight.bold),
                           )),
                           decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black, width: 1),
                               borderRadius: BorderRadius.circular(5.0),
                               color: Colors.red),
                         ),
@@ -711,7 +701,6 @@ class _PitchMeasureState extends State<PitchMeasure> {
                                 fontWeight: FontWeight.bold),
                           )),
                           decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black, width: 1),
                               borderRadius: BorderRadius.circular(5.0),
                               color: Colors.blue),
                         ),

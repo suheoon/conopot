@@ -1,6 +1,5 @@
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
-import 'package:conopot/models/music_search_item.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
@@ -69,45 +68,48 @@ class PitchSearchList extends StatelessWidget {
                             }),
                       ),
                     )
-                  : Column(
-                      children: [
-                        Text(
-                          "텅",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: kSubTitleColor,
-                              fontSize: 200),
-                        ),
-                        Text(
-                          "내 최고음 근처 인기곡들이 없어요",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey[600],
-                              fontSize: 15),
-                        ),
-                        SizedBox(height: SizeConfig.defaultSize),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PitchMeasure()));
-                          },
-                          child: Text(
-                            "다시 측정하기",
-                            style: TextStyle(color: Colors.black),
+                  : SingleChildScrollView(
+                    child: Column(
+                        children: [
+                          Text(
+                            "텅",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: kSubTitleColor,
+                                fontSize: 200),
                           ),
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.white,
-                              side: BorderSide(color: Colors.black),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      new BorderRadius.circular(20.0))),
-                        ),
-                      ],
-                    )),
+                          SizedBox(height: SizeConfig.defaultSize * 10),
+                          Text(
+                            "내 최고음 근처 인기곡들이 없어요",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[600],
+                                fontSize: 15),
+                          ),
+                          SizedBox(height: SizeConfig.defaultSize * 10),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PitchMeasure()));
+                            },
+                            child: Text(
+                              "다시 측정하기",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.white,
+                                side: BorderSide(color: Colors.black),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(20.0))),
+                          ),
+                        ],
+                      ),
+                  )),
     );
   }
 }
