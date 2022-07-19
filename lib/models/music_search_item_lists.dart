@@ -45,7 +45,6 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   //유저가 노트 세팅을 바꿨을 때
   void changeUserNoteSetting(int settingNum) {
-    print(settingNum);
     userNoteSetting = settingNum;
     storage.write(key: 'userNoteSetting', value: settingNum.toString());
     notifyListeners();

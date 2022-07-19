@@ -670,6 +670,8 @@ class _PitchMeasureState extends State<PitchMeasure> {
                             nowPitchName = "";
                             selected1 = "1옥타브";
                             selected2 = "도";
+                            initialSetting1 = false;
+                            initialSetting2 = false;
                           });
                         },
                         child: Container(
