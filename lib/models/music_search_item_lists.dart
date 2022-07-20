@@ -187,13 +187,21 @@ class MusicSearchItemLists extends ChangeNotifier {
     late String gender, fitch;
     late int fitchNum;
 
+    bool errFlag = false;
+
     //문자열 파싱 -> MusicSearchItem
     for (String str in contents) {
       int start = 0, end = 0;
+      errFlag = false;
 
       for (int i = 0; i < 9; i++) {
         end = str.indexOf('^', start);
         if (start == end) continue;
+        if (end == -1) {
+          errFlag = true;
+          print(str);
+          break;
+        }
         String tmp = str.substring(start, end);
         start = end + 1;
 
@@ -217,6 +225,8 @@ class MusicSearchItemLists extends ChangeNotifier {
           fitchNum = int.parse(tmp);
       }
 
+      if (errFlag) continue;
+
       highestSongList.add(FitchMusic(
           tj_title: tj_title,
           tj_singer: tj_singer,
@@ -239,10 +249,15 @@ class MusicSearchItemLists extends ChangeNotifier {
     //문자열 파싱 -> MusicSearchItem
     for (String str in contents) {
       int start = 0, end = 0;
+      errFlag = false;
 
       for (int i = 0; i < 9; i++) {
         end = str.indexOf('^', start);
         if (start == end) continue;
+        if (end == -1) {
+          errFlag = true;
+          break;
+        }
         String tmp = str.substring(start, end);
         start = end + 1;
 
@@ -265,6 +280,8 @@ class MusicSearchItemLists extends ChangeNotifier {
         else
           fitchNum = (tmp != '?') ? int.parse(tmp) : 0;
       }
+
+      if (errFlag) continue;
 
       combinedSongList.add(FitchMusic(
           tj_title: tj_title,
@@ -435,9 +452,14 @@ class MusicSearchItemLists extends ChangeNotifier {
     //문자열 파싱 -> MusicSearchItem
     for (String str in contents) {
       int start = 0, end = 0;
+      bool errFlag = false;
 
       for (int i = 0; i < 3; i++) {
         end = str.indexOf('^', start);
+        if (end == -1) {
+          errFlag = true;
+          break;
+        }
         if (start == end) continue;
         String tmp = str.substring(start, end);
         start = end + 1;
@@ -449,6 +471,8 @@ class MusicSearchItemLists extends ChangeNotifier {
         else
           songNumber = tmp;
       }
+      if (errFlag) continue;
+
       musicList.add(MusicSearchItem(
           title: title, singer: singer, songNumber: songNumber));
     }
