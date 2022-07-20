@@ -335,6 +335,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                                   Provider.of<NoteData>(context, listen: false)
                                       .changeKySongNumber(widget.note,
                                           kySearchSongList[index].songNumber);
+                                  setState(() {});
                                   Navigator.of(context).pop();
                                 },
                                 child: ListTile(
