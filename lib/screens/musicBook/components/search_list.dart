@@ -111,7 +111,6 @@ _showAddDialog(BuildContext context, MusicSearchItem item) {
       okButton,
     ],
   );
-
   showDialog(
       context: context,
       builder: (BuildContext context) {
