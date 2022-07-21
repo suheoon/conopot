@@ -40,6 +40,7 @@ class MusicSearchItemLists extends ChangeNotifier {
   //측정 결과 페이지 (유저의 최고음이 바뀐 경우)
   void changeUserPitch({required int pitch}) {
     userPitch = pitch;
+    userMaxPitch = pitch;
     notifyListeners();
   }
 
