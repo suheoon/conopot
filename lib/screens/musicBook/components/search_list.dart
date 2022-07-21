@@ -7,39 +7,47 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-class SearchList extends StatelessWidget {
+class SearchList extends StatefulWidget {
   final MusicSearchItemLists musicList;
   final int tabIdx;
 
   const SearchList({super.key, required this.musicList, required this.tabIdx});
 
   @override
+  State<SearchList> createState() => _SearchListState();
+}
+
+class _SearchListState extends State<SearchList> {
+  void initState() {
+    widget.musicList.initBook();
+  }
+  @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: musicList.foundItems.isNotEmpty
+      child: widget.musicList.foundItems.isNotEmpty
           ? ListView.builder(
-              itemCount: musicList.foundItems.length,
+              itemCount: widget.musicList.foundItems.length,
               itemBuilder: (context, index) => Card(
                 color: Colors.white,
                 elevation: 1,
                 child: ListTile(
                     title: Text(
-                      musicList.foundItems[index].title,
+                      widget.musicList.foundItems[index].title,
                       style: TextStyle(
                           color: kTitleColor,
                           fontWeight: FontWeight.bold,
                           fontSize: 18),
                     ),
-                    subtitle: Text(musicList.foundItems[index].singer,
+                    subtitle: Text(widget.musicList.foundItems[index].singer,
                         style: TextStyle(
                           color: kSubTitleColor,
                           fontWeight: FontWeight.bold,
                         )),
-                    trailing: Text(musicList.foundItems[index].songNumber),
+                    trailing: Text(widget.musicList.foundItems[index].songNumber),
                     onTap: () {
-                      if (musicList.tabIndex == 1) {
+                      if (widget.musicList.tabIndex == 1) {
                         _showAddDialog(
-                            context, musicList.foundItems[index]);
+                            context, widget.musicList.foundItems[index]);
                       }
                     }),
               ),
