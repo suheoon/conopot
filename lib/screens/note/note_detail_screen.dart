@@ -288,6 +288,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
         .runKYFilter(widget.note.tj_title);
     List<MusicSearchItem> kySearchSongList =
         Provider.of<MusicSearchItemLists>(context, listen: false).foundItems;
+        
     showDialog(
       context: context,
       builder: (BuildContext context) {
