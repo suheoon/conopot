@@ -250,7 +250,8 @@ class _PitchMeasureState extends State<PitchMeasure> {
       ret = "3옥타브 라";
     else if (931 <= frequency && frequency <= 933)
       ret = "3옥타브 라#";
-    else if (985 <= frequency && frequency <= 990) ret = "3옥타브 시";
+    else if (985 <= frequency && frequency <= 990) 
+      ret = "3옥타브 시";
 
     return ret;
   }
@@ -307,10 +308,9 @@ class _PitchMeasureState extends State<PitchMeasure> {
     int initialIndex = 0;
     if (maxFrequency >= 130 && initialSetting1 == false) {
       String highestPitch = frequencyToPitch(maxFrequency);
-      String pitch1 = highestPitch.substring(0, 4);
-      selected1 = pitch1;
+      selected1 = highestPitch == "" ? selected1 : highestPitch.substring(0, 4);
       for (var i = 0; i < octave1.length; i++) {
-        if (pitch1 == octave1[i]) initialIndex = i;
+        if (selected1 == octave1[i]) initialIndex = i;
       }
       initialSetting1 = true;
     }
@@ -336,10 +336,9 @@ class _PitchMeasureState extends State<PitchMeasure> {
     int initialIndex = 0;
     if (maxFrequency >= 130 && initialSetting2 == false) {
       String highestPitch = frequencyToPitch(maxFrequency);
-      String pitch2 = highestPitch.substring(5, highestPitch.length);
-      selected2 = pitch2;
+      selected2 = highestPitch == "" ? selected2 : highestPitch.substring(5, highestPitch.length);
       for (var i = 0; i < octave2.length; i++) {
-        if (pitch2 == octave2[i]) initialIndex = i;
+        if (selected2 == octave2[i]) initialIndex = i;
       }
       initialSetting2 = true;
     }
