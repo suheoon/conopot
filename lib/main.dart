@@ -1,26 +1,31 @@
 import 'dart:async';
 import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/firebase/firebase_config.dart';
-import 'package:conopot/firebase/firebase_options.dart';
+import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/note_data.dart';
-import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/splash/splash_screen.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
   await Analytics_config().init();
+  // 세로 화면 고정
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   /// firebase crashlytics init
-  runZonedGuarded<Future<void>>(() async {
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-    runApp(const MyApp());
-  },
-      (error, stack) =>
-          FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
+  runZonedGuarded<Future<void>>(
+    () async {
+      FlutterError.onError =
+          FirebaseCrashlytics.instance.recordFlutterFatalError;
+      runApp(const MyApp());
+    },
+    (error, stack) =>
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -44,16 +49,19 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'conopot',
           theme: ThemeData(
-            fontFamily: 'pretendard',
-            scaffoldBackgroundColor: Colors.white,
-            appBarTheme: const AppBarTheme(
-              centerTitle: true,
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.black,
-              elevation: 0,
-            ),
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
+              fontFamily: 'pretendard',
+              scaffoldBackgroundColor: kBackgroundColor,
+              appBarTheme: const AppBarTheme(
+                centerTitle: false,
+                backgroundColor: kBackgroundColor,
+                foregroundColor: kPrimaryWhiteColor,
+                elevation: 0,
+              ),
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+              cupertinoOverrideTheme: CupertinoThemeData(
+                  textTheme: CupertinoTextThemeData(
+                pickerTextStyle: TextStyle(color: kPrimaryWhiteColor, fontSize: 20, fontWeight: FontWeight.w500),
+              ))),
           home: const SplashScreen(),
           navigatorObservers: [
             FirebaseAnalyticsObserver(
