@@ -11,16 +11,17 @@ class Note {
   int keyAdjustment;
 
   Note(
-      this.tj_title,
-      this.tj_singer,
-      this.tj_songNumber,
-      this.ky_title,
-      this.ky_singer,
-      this.ky_songNumber,
-      this.gender,
-      this.pitchNum,
-      this.memo,
-      this.keyAdjustment);
+    this.tj_title,
+    this.tj_singer,
+    this.tj_songNumber,
+    this.ky_title,
+    this.ky_singer,
+    this.ky_songNumber,
+    this.gender,
+    this.pitchNum,
+    this.memo,
+    this.keyAdjustment,
+  );
 
   //object -> json 변환 장치 (local storage 사용 목적)
   Map toJson() => {

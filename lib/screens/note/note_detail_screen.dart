@@ -135,17 +135,16 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                                     fontWeight: FontWeight.w500,
                                     fontSize: defaultSize * 1.7))
                             ? Container(
-                              width: double.maxFinite,
-                              height: defaultSize * 2.5,
-                              child: Marquee(
+                                width: double.maxFinite,
+                                height: defaultSize * 2.5,
+                                child: Marquee(
                                   text: '${widget.note.tj_title}',
                                   style: TextStyle(
                                       color: kPrimaryWhiteColor,
                                       fontWeight: FontWeight.w500,
                                       fontSize: defaultSize * 1.7),
                                   scrollAxis: Axis.horizontal,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   blankSpace: 20.0,
                                   velocity: 20.0,
                                   pauseAfterRound: Duration(seconds: 10),
@@ -156,7 +155,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                                       Duration(milliseconds: 1000),
                                   decelerationCurve: Curves.easeOut,
                                 ),
-                            )
+                              )
                             : Text('${widget.note.tj_title}',
                                 style: TextStyle(
                                     color: kPrimaryWhiteColor,
@@ -171,17 +170,16 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                                     fontWeight: FontWeight.w400,
                                     fontSize: defaultSize * 1.3))
                             ? Container(
-                              width: double.maxFinite,
-                              height: defaultSize * 2.5,
-                              child: Marquee(
+                                width: double.maxFinite,
+                                height: defaultSize * 2.5,
+                                child: Marquee(
                                   text: '${widget.note.tj_singer}',
                                   style: TextStyle(
                                       color: kPrimaryLightWhiteColor,
                                       fontWeight: FontWeight.w400,
                                       fontSize: defaultSize * 1.3),
                                   scrollAxis: Axis.horizontal,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   blankSpace: 20.0,
                                   velocity: 20.0,
                                   pauseAfterRound: Duration(seconds: 10),
@@ -192,7 +190,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                                       Duration(milliseconds: 1000),
                                   decelerationCurve: Curves.easeOut,
                                 ),
-                            )
+                              )
                             : Text('${widget.note.tj_singer}',
                                 style: TextStyle(
                                     color: kPrimaryLightWhiteColor,
@@ -367,7 +365,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                               ),
                               SizedBox(height: defaultSize * 0.2),
                               Text(
-                                widget.note.pitchNum == 0 ? "-" : "상",
+                                pitchToLevel(widget.note.pitchNum),
                                 style: TextStyle(
                                     color: kPrimaryWhiteColor,
                                     fontSize: defaultSize * 1.5,
@@ -560,4 +558,21 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
 void play(String fitch) async {
   final player = AudioCache(prefix: 'assets/fitches/');
   await player.play('$fitch.mp3');
+}
+
+//최고음 -> 난이도 변환
+String pitchToLevel(int pitchNum) {
+  if (pitchNum == 0) {
+    return '-';
+  } else if (pitchNum < 21) {
+    return '하';
+  } else if (pitchNum < 23) {
+    return '중하';
+  } else if (pitchNum < 25) {
+    return '중';
+  } else if (pitchNum < 29) {
+    return '중상';
+  } else {
+    return '상';
+  }
 }

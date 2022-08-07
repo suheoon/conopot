@@ -8,14 +8,18 @@ class FitchMusic {
   final String gender;
   final int pitchNum;
 
-  FitchMusic({
-    required this.tj_title,
-    required this.tj_singer,
-    required this.tj_songNumber,
-    required this.ky_title,
-    required this.ky_singer,
-    required this.ky_songNumber,
-    required this.gender,
-    required this.pitchNum,
-  });
+  final String search_keyword_title_singer;
+  final String search_keyword_singer_title;
+
+  FitchMusic(
+      {required this.tj_title,
+      required this.tj_singer,
+      required this.tj_songNumber,
+      required this.ky_title,
+      required this.ky_singer,
+      required this.ky_songNumber,
+      required this.gender,
+      required this.pitchNum,
+      required this.search_keyword_title_singer,
+      required this.search_keyword_singer_title});
 }

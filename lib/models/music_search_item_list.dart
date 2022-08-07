@@ -369,7 +369,9 @@ class MusicSearchItemLists extends ChangeNotifier {
             ky_singer: ky_singer,
             ky_songNumber: ky_songNumber,
             gender: gender,
-            pitchNum: pitchNum));
+            pitchNum: pitchNum,
+            search_keyword_title_singer: tj_title + tj_singer,
+            search_keyword_singer_title: tj_singer + tj_title));
 
         combinedSongList.add(FitchMusic(
             tj_title: tj_title,
@@ -379,7 +381,9 @@ class MusicSearchItemLists extends ChangeNotifier {
             ky_singer: ky_singer,
             ky_songNumber: ky_songNumber,
             gender: gender,
-            pitchNum: pitchNum));
+            pitchNum: pitchNum,
+            search_keyword_title_singer: tj_title + tj_singer,
+            search_keyword_singer_title: tj_singer + tj_title));
       } else {
         combinedSongList.add(FitchMusic(
             tj_title: tj_title,
@@ -389,7 +393,9 @@ class MusicSearchItemLists extends ChangeNotifier {
             ky_singer: ky_singer,
             ky_songNumber: ky_songNumber,
             gender: '?',
-            pitchNum: 0));
+            pitchNum: 0,
+            search_keyword_title_singer: tj_title + tj_singer,
+            search_keyword_singer_title: tj_singer + tj_title));
       }
     }
 
@@ -429,6 +435,14 @@ class MusicSearchItemLists extends ChangeNotifier {
                   (string.title.replaceAll(' ', '').toLowerCase())
                       .contains(enteredKeyword) ||
                   (string.singer.replaceAll(' ', '').toLowerCase())
+                      .contains(enteredKeyword) ||
+                  (string.search_keyword_singer_title
+                          .replaceAll(' ', '')
+                          .toLowerCase())
+                      .contains(enteredKeyword) ||
+                  (string.search_keyword_title_singer
+                          .replaceAll(' ', '')
+                          .toLowerCase())
                       .contains(enteredKeyword))
               .toList();
         }
@@ -442,6 +456,14 @@ class MusicSearchItemLists extends ChangeNotifier {
                   (string.title.replaceAll(' ', '').toLowerCase())
                       .contains(enteredKeyword) ||
                   (string.singer.replaceAll(' ', '').toLowerCase())
+                      .contains(enteredKeyword) ||
+                  (string.search_keyword_singer_title
+                          .replaceAll(' ', '')
+                          .toLowerCase())
+                      .contains(enteredKeyword) ||
+                  (string.search_keyword_title_singer
+                          .replaceAll(' ', '')
+                          .toLowerCase())
                       .contains(enteredKeyword))
               .toList();
         }
@@ -467,6 +489,14 @@ class MusicSearchItemLists extends ChangeNotifier {
               (string.title.replaceAll(' ', '').toLowerCase())
                   .contains(enteredKeyword) ||
               (string.singer.replaceAll(' ', '').toLowerCase())
+                  .contains(enteredKeyword) ||
+              (string.search_keyword_singer_title
+                      .replaceAll(' ', '')
+                      .toLowerCase())
+                  .contains(enteredKeyword) ||
+              (string.search_keyword_title_singer
+                      .replaceAll(' ', '')
+                      .toLowerCase())
                   .contains(enteredKeyword))
           .toList();
     }
@@ -489,6 +519,14 @@ class MusicSearchItemLists extends ChangeNotifier {
                 (string.tj_title.replaceAll(' ', '').toLowerCase())
                     .contains(enteredKeyword) ||
                 (string.tj_singer.replaceAll(' ', '').toLowerCase())
+                    .contains(enteredKeyword) ||
+                (string.search_keyword_singer_title
+                        .replaceAll(' ', '')
+                        .toLowerCase())
+                    .contains(enteredKeyword) ||
+                (string.search_keyword_title_singer
+                        .replaceAll(' ', '')
+                        .toLowerCase())
                     .contains(enteredKeyword))
             .toList();
       }
@@ -515,6 +553,14 @@ class MusicSearchItemLists extends ChangeNotifier {
                 (string.tj_title.replaceAll(' ', '').toLowerCase())
                     .contains(enteredKeyword) ||
                 (string.tj_singer.replaceAll(' ', '').toLowerCase())
+                    .contains(enteredKeyword) ||
+                (string.search_keyword_singer_title
+                        .replaceAll(' ', '')
+                        .toLowerCase())
+                    .contains(enteredKeyword) ||
+                (string.search_keyword_title_singer
+                        .replaceAll(' ', '')
+                        .toLowerCase())
                     .contains(enteredKeyword))
             .toList();
       }
@@ -554,7 +600,11 @@ class MusicSearchItemLists extends ChangeNotifier {
       if (errFlag) continue;
 
       musicList.add(MusicSearchItem(
-          title: title, singer: singer, songNumber: songNumber));
+          title: title,
+          singer: singer,
+          songNumber: songNumber,
+          search_keyword_title_singer: title + singer,
+          search_keyword_singer_title: singer + title));
     }
   }
 

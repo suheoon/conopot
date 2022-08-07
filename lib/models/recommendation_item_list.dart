@@ -110,7 +110,11 @@ class RecommendationItemList {
       if (errFlag) continue;
 
       musicList.add(MusicSearchItem(
-          title: title, singer: singer, songNumber: songNumber));
+          title: title,
+          singer: singer,
+          songNumber: songNumber,
+          search_keyword_title_singer: title + singer,
+          search_keyword_singer_title: singer + title));
     }
   }
 }
