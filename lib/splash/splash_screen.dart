@@ -15,37 +15,55 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState () {
-    super.initState();
+  /// 앱 실행 시 얻어야 하는 정보들 수집
+  void init() async {
+    //print(DateTime.now().millisecondsSinceEpoch);
+
     /// 노래방 곡 관련 초기화
-    Future.delayed(Duration.zero, () {
-      Provider.of<MusicSearchItemLists>(context, listen: false).init();
-    });
+    await Provider.of<MusicSearchItemLists>(context, listen: false)
+        .initVersion();
+
+    //print(DateTime.now().millisecondsSinceEpoch);
+
+    /// 사용자 노트 초기화 (local storage)
+    await Provider.of<NoteData>(context, listen: false).initNotes();
 
     /// 2초 후 MainScreen 전환 (replace)
-    Timer(Duration(milliseconds: 2000), () {
-      /// 사용자 노트 초기화 (local storage)
-      Provider.of<NoteData>(context, listen: false).initNotes();
-      RecommendationItemList().initRecommendationList();
+    Timer(const Duration(milliseconds: 2000), () {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => MainScreen()));
     });
   }
 
   @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Image(
-              image: const AssetImage('assets/images/splash.png'),
-              height: SizeConfig.screenWidth * 0.3,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image(
+                image: const AssetImage('assets/images/splash.png'),
+                height: SizeConfig.screenWidth * 0.3,
+              ),
             ),
-          ),
+            SizedBox(
+              height: SizeConfig.defaultSize * 5,
+            ),
+            const CircularProgressIndicator(
+              color: Color(0xFFFF9A62),
+              backgroundColor: Color(0x4DFF9A62),
+            ),
+          ],
         ),
       ),
     );

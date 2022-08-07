@@ -22,7 +22,7 @@ class NoteData extends ChangeNotifier {
 
   final storage = new FlutterSecureStorage();
 
-  void initNotes() async {
+  initNotes() async {
     // Read all values
     String? allValues = await storage.read(key: 'notes');
     if (allValues != null) {
