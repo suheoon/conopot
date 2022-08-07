@@ -156,16 +156,17 @@ class NoteData extends ChangeNotifier {
     for (FitchMusic fitchMusic in musicList) {
       if (fitchMusic.tj_songNumber == songNumber) {
         Note note = Note(
-            fitchMusic.tj_title,
-            fitchMusic.tj_singer,
-            fitchMusic.tj_songNumber,
-            fitchMusic.ky_title,
-            fitchMusic.ky_singer,
-            fitchMusic.ky_songNumber,
-            fitchMusic.gender,
-            fitchMusic.pitchNum,
-            "",
-            0);
+          fitchMusic.tj_title,
+          fitchMusic.tj_singer,
+          fitchMusic.tj_songNumber,
+          fitchMusic.ky_title,
+          fitchMusic.ky_singer,
+          fitchMusic.ky_songNumber,
+          fitchMusic.gender,
+          fitchMusic.pitchNum,
+          "",
+          0,
+        );
 
         bool flag = false;
         for (Note iter_note in notes) {

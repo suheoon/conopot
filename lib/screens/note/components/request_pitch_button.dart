@@ -5,6 +5,7 @@ import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -13,6 +14,8 @@ class RequestPitchInfoButton extends StatelessWidget {
   late Note note;
   double defaultSize = SizeConfig.defaultSize;
   RequestPitchInfoButton({Key? key, required this.note}) : super(key: key);
+
+  final storage = new FlutterSecureStorage();
 
   // 최고음 요청 api
   void _requestPitchInfo(Note note) async {
@@ -40,22 +43,39 @@ class RequestPitchInfoButton extends StatelessWidget {
   // 최고음 정보요청 다이어로그 창 팝업 함수
   void _showRequestInfoDialog(BuildContext context) {
     Widget requestButton = ElevatedButton(
-      onPressed: () {
-        //!event
-        Provider.of<NoteData>(context, listen: false).pitchRequestEvent(note);
-        // 정보요청
-        _requestPitchInfo(note);
+      onPressed: () async {
+        String? value = await storage.read(key: "request${note.tj_songNumber}");
+
+        //이미 요청된 노래인 경우
+        if (value != null) {
+          Fluttertoast.showToast(
+              msg: "이미 최고음을 요청하신 노래입니다 :)",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: kMainColor,
+              textColor: kPrimaryWhiteColor,
+              fontSize: defaultSize * 1.6);
+        } else {
+          //!event
+          Provider.of<NoteData>(context, listen: false).pitchRequestEvent(note);
+          // 정보요청
+          _requestPitchInfo(note);
+          storage.write(
+              key: "request${note.tj_songNumber}", value: "requested");
+
+          Fluttertoast.showToast(
+              msg: "최고음 정보가 요청되었습니다 :)",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: kMainColor,
+              textColor: kPrimaryWhiteColor,
+              fontSize: defaultSize * 1.6);
+        }
+
         // 정보요청
         Navigator.of(context).pop();
-
-        Fluttertoast.showToast(
-            msg: "최고음 정보가 요청되었습니다 :)",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: kMainColor,
-            textColor: kPrimaryWhiteColor,
-            fontSize: defaultSize * 1.6);
       },
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(kMainColor),
