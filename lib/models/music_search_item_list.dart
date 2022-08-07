@@ -1,7 +1,9 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:amplitude_flutter/identify.dart';
+import 'package:archive/archive.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/models/pitch_music.dart';
@@ -9,8 +11,9 @@ import 'package:conopot/models/music_search_item.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
 class MusicSearchItemLists extends ChangeNotifier {
   List<MusicSearchItem> foundItems = [];
@@ -33,6 +36,92 @@ class MusicSearchItemLists extends ChangeNotifier {
   int userNoteSetting = 0; //(0: 번호, 1: 최고음, 2: 최고음 차이)
 
   final storage = new FlutterSecureStorage();
+  static var httpClient = new HttpClient();
+
+  late String dir;
+
+  Future<Directory> get _localDirectory async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory;
+  }
+
+  //유저 음악 버전 체크 (true: 최신버전, false: 버전 업데이트 필요)
+  Future<int> checkVersionUpdate() async {
+    //사용자의 music file 버전을 가져온다.
+    String? userVersionStr = await storage.read(key: 'userVersion');
+
+    //사용자의 music version을 쿼리 파라미터로 전달
+    String url =
+        'https://ix108hjjtk.execute-api.ap-northeast-2.amazonaws.com/default/Conopot_Music_Version?type=get';
+
+    final response = await http.get(
+      Uri.parse(url),
+    );
+
+    int s3Version = int.parse(response.body);
+
+    //버전 정보가 없는 첫 설치 이용자라면 -> 파일 내려받기
+    if (userVersionStr == null) {
+      print("신규 사용자");
+      await fileUpdate();
+      storage.write(key: 'userVersion', value: s3Version.toString());
+    } else {
+      int userVersion = int.parse(userVersionStr);
+      //만약 s3에 있는 버전이 더 신 버전이라면 다운로드가 필요하다.
+      if (s3Version > userVersion) {
+        print("업데이트가 필요한 사용자");
+        await fileUpdate();
+        storage.write(key: 'userVersion', value: s3Version.toString());
+      } else {
+        print("이미 업데이트된 버전을 갖고 있는 사용자");
+      }
+    }
+
+    return 1;
+  }
+
+  // Download the ZIP file using the HTTP library //
+  Future<File> _downloadFile(String url, String fileName) async {
+    //print("download file in");
+    var req = await http.Client().get(Uri.parse(url));
+    var file = File('$dir/$fileName');
+    //print(file.path);
+    return file.writeAsBytes(req.bodyBytes);
+  }
+
+  unarchiveAndSave(var zippedFile) async {
+    //print("unarchiveAndSave in");
+
+    var bytes = zippedFile.readAsBytesSync();
+    var archive = ZipDecoder().decodeBytes(bytes);
+
+    //print(archive);
+    for (var file in archive) {
+      var fileName = '$dir/${file.name}';
+      //print(fileName);
+      if (file.isFile) {
+        var outFile = File(fileName);
+        outFile = await outFile.create(recursive: true);
+        await outFile.writeAsBytes(file.content);
+      }
+    }
+  }
+
+  fileUpdate() async {
+    //print("fileUpdate in");
+    final doc = await _localDirectory;
+
+    //aws cloud front url (Musics.zip in S3)
+    String url = "https://d26jfubr2fa7sp.cloudfront.net/Musics.zip";
+
+    //zip file download
+    var zippedFile = await _downloadFile(url, "Musics.zip");
+
+    //print("??");
+
+    //unzip and save in path provider(device storage)
+    await unarchiveAndSave(zippedFile);
+  }
 
   //측정 결과 페이지 (유저의 최고음이 바뀐 경우)
   void changeUserPitch({required int pitch}) {
@@ -79,27 +168,33 @@ class MusicSearchItemLists extends ChangeNotifier {
   }
 
   Future<String> getTJMusics() async {
-    return await rootBundle.loadString('assets/musics/musicbook_TJ.txt');
+    final file = File('$dir/musicbook_TJ.txt');
+    return file.readAsString();
   }
 
   Future<String> getTJMusicChart() async {
-    return await rootBundle.loadString('assets/musics/chart_TJ.txt');
+    final file = File('$dir/chart_TJ.txt');
+    return file.readAsString();
   }
 
   Future<String> getKYMusics() async {
-    return await rootBundle.loadString('assets/musics/musicbook_KY.txt');
+    final file = File('$dir/musicbook_KY.txt');
+    return file.readAsString();
   }
 
   Future<String> getKYMusicChart() async {
-    return await rootBundle.loadString('assets/musics/chart_KY.txt');
+    final file = File('$dir/chart_KY.txt');
+    return file.readAsString();
   }
 
   Future<String> getHighMusics() async {
-    return await rootBundle.loadString('assets/musics/highest_Pitch.txt');
+    final file = File('$dir/highest_Pitch.txt');
+    return file.readAsString();
   }
 
   Future<String> getCombinedMusics() async {
-    return await rootBundle.loadString('assets/musics/matching_Musics.txt');
+    final file = File('$dir/matching_Musics.txt');
+    return file.readAsString();
   }
 
   void initFitch() {
@@ -126,6 +221,14 @@ class MusicSearchItemLists extends ChangeNotifier {
             string.pitchNum <= pitchNum + 1))
         .toList();
     highestFoundItems = highestResults;
+  }
+
+  initVersion() async {
+    dir = (await getApplicationDocumentsDirectory()).path;
+
+    await checkVersionUpdate();
+
+    init();
   }
 
   // 프로그램 실행 시, 노래방 책 List 초기화 (TJ, KY txt -> List)
@@ -345,14 +448,8 @@ class MusicSearchItemLists extends ChangeNotifier {
       }
       foundItems = results;
 
-      //!event : 일반 검색 뷰 - 검색 키워드
-      Analytics_config.analytics.logEvent('일반 검색 뷰 - 검색 키워드', eventProperties: {
-        '검색 키워드': enteredKeyword,
-      });
-      FirebaseAnalytics.instance
-          .logEvent(name: 'normal_search_view__search_keyword', parameters: {
-        'search_keyword': enteredKeyword,
-      });
+      //!event : 일반_검색_뷰__검색_키워드
+      Analytics_config().event('일반_검색_뷰__검색_키워드', {'검색_키워드': enteredKeyword});
 
       notifyListeners();
     });
@@ -399,14 +496,7 @@ class MusicSearchItemLists extends ChangeNotifier {
       combinedFoundItems = highestResults;
 
       //!event : 곡 추가 뷰 - 검색 키워드
-      Analytics_config.analytics.logEvent('곡 추가 뷰 - 검색 키워드', eventProperties: {
-        '검색 키워드': enteredKeyword,
-      });
-
-      FirebaseAnalytics.instance
-          .logEvent(name: 'song_add_view__search_keyword', parameters: {
-        'search_keyword': enteredKeyword,
-      });
+      Analytics_config().event('곡_추가_뷰__검색_키워드', {'검색_키워드': enteredKeyword});
 
       notifyListeners();
     });
@@ -431,15 +521,7 @@ class MusicSearchItemLists extends ChangeNotifier {
       highestFoundItems = highestResults;
 
       //!event : 최고음 검색 뷰 - 검색 키워드
-      Analytics_config.analytics
-          .logEvent('최고음 검색 뷰 - 검색 키워드', eventProperties: {
-        '검색 키워드': enteredKeyword,
-      });
-
-      FirebaseAnalytics.instance
-          .logEvent(name: 'pitch_search_view__search_keyword', parameters: {
-        'search_keyword': enteredKeyword,
-      });
+      Analytics_config().event('최고음_검색_뷰__검색_키워드', {'검색_키워드': enteredKeyword});
 
       notifyListeners();
     });
@@ -478,34 +560,21 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   //!event: 애창곡 노트 뷰 - 최고음 배너 클릭 시
   void pitchBannerClickEvent(int noteCnt) {
-    Analytics_config.analytics.logEvent('애창곡 노트 뷰 - 최고음 배너 클릭');
-
-    FirebaseAnalytics.instance.logEvent(name: 'noteview__click_pitch_banner');
+    Analytics_config().event('애창곡_노트_뷰__최고음_배너_클릭', {});
   }
 
   //!event: 애창곡 노트 뷰 - 노트 설정 배너 클릭 시
   void noteSettingBannerClickEvent(int noteCnt) {
-    Analytics_config.analytics.logEvent('애창곡 노트 뷰 - 노트 설정 배너 클릭');
-
-    FirebaseAnalytics.instance.logEvent(name: 'noteview__click_setting_banner');
+    Analytics_config().event('애창곡_노트_뷰__노트설정_배너_클릭', {});
   }
 
   //!event: 내 정보 - 최고음 측정 여부
   void checkPitchMeasureEvent(int noteCnt) {
-    Analytics_config.analytics.logEvent('내 정보 - 최고음 측정 여부');
-
-    FirebaseAnalytics.instance.logEvent(name: 'myInfo__IsMeasurePitch');
+    Analytics_config().event('내_정보__최고음_측정_여부', {});
   }
 
   //!event: 최고음 검색 뷰 - 정렬
   void pitchSortEvent(String sortOptionStr) {
-    Analytics_config.analytics.logEvent('최고음 검색 뷰 - 정렬', eventProperties: {
-      '정렬 기준': sortOptionStr,
-    });
-
-    FirebaseAnalytics.instance
-        .logEvent(name: 'pitch_search_view__sorting', parameters: {
-      'sorting_condition': sortOptionStr,
-    });
+    Analytics_config().event('최고음_검색_뷰__정렬', {'정렬_기준': sortOptionStr});
   }
 }

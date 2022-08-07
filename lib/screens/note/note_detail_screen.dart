@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:conopot/config/constants.dart';
-import 'package:conopot/models/lylic.dart';
+import 'package:conopot/models/lyric.dart';
 import 'package:conopot/models/music_search_item.dart';
 import 'package:conopot/models/note.dart';
 import 'package:conopot/screens/note/components/editable_text_field.dart';
@@ -47,13 +47,13 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
           //크롤링한 가사가 비어있는 경우
           if (lyric == "") {
             lyric =
-                "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
+                "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n설정 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
           }
         });
       } else {
         setState(() {
           lyric =
-              "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
+              "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n설정 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
         });
       }
     } else {
@@ -357,7 +357,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                             fontWeight: FontWeight.w600)),
                     SizedBox(height: defaultSize * 2),
                     Center(
-                      child: Text(lyric.isEmpty ? "로딩중 입니다": lyric.trim(),
+                      child: Text(lyric.isEmpty ? "로딩중 입니다" : lyric.trim(),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: kPrimaryLightWhiteColor,
