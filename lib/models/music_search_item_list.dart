@@ -345,14 +345,8 @@ class MusicSearchItemLists extends ChangeNotifier {
       }
       foundItems = results;
 
-      //!event : 일반 검색 뷰 - 검색 키워드
-      Analytics_config.analytics.logEvent('일반 검색 뷰 - 검색 키워드', eventProperties: {
-        '검색 키워드': enteredKeyword,
-      });
-      FirebaseAnalytics.instance
-          .logEvent(name: 'normal_search_view__search_keyword', parameters: {
-        'search_keyword': enteredKeyword,
-      });
+      //!event : 일반_검색_뷰__검색_키워드
+      Analytics_config().event('일반_검색_뷰__검색_키워드', {'검색_키워드': enteredKeyword});
 
       notifyListeners();
     });
@@ -399,14 +393,7 @@ class MusicSearchItemLists extends ChangeNotifier {
       combinedFoundItems = highestResults;
 
       //!event : 곡 추가 뷰 - 검색 키워드
-      Analytics_config.analytics.logEvent('곡 추가 뷰 - 검색 키워드', eventProperties: {
-        '검색 키워드': enteredKeyword,
-      });
-
-      FirebaseAnalytics.instance
-          .logEvent(name: 'song_add_view__search_keyword', parameters: {
-        'search_keyword': enteredKeyword,
-      });
+      Analytics_config().event('곡_추가_뷰__검색_키워드', {'검색_키워드': enteredKeyword});
 
       notifyListeners();
     });
@@ -431,15 +418,7 @@ class MusicSearchItemLists extends ChangeNotifier {
       highestFoundItems = highestResults;
 
       //!event : 최고음 검색 뷰 - 검색 키워드
-      Analytics_config.analytics
-          .logEvent('최고음 검색 뷰 - 검색 키워드', eventProperties: {
-        '검색 키워드': enteredKeyword,
-      });
-
-      FirebaseAnalytics.instance
-          .logEvent(name: 'pitch_search_view__search_keyword', parameters: {
-        'search_keyword': enteredKeyword,
-      });
+      Analytics_config().event('최고음_검색_뷰__검색_키워드', {'검색_키워드': enteredKeyword});
 
       notifyListeners();
     });
@@ -478,34 +457,21 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   //!event: 애창곡 노트 뷰 - 최고음 배너 클릭 시
   void pitchBannerClickEvent(int noteCnt) {
-    Analytics_config.analytics.logEvent('애창곡 노트 뷰 - 최고음 배너 클릭');
-
-    FirebaseAnalytics.instance.logEvent(name: 'noteview__click_pitch_banner');
+    Analytics_config().event('애창곡_노트_뷰__최고음_배너_클릭', {});
   }
 
   //!event: 애창곡 노트 뷰 - 노트 설정 배너 클릭 시
   void noteSettingBannerClickEvent(int noteCnt) {
-    Analytics_config.analytics.logEvent('애창곡 노트 뷰 - 노트 설정 배너 클릭');
-
-    FirebaseAnalytics.instance.logEvent(name: 'noteview__click_setting_banner');
+    Analytics_config().event('애창곡_노트_뷰__노트설정_배너_클릭', {});
   }
 
   //!event: 내 정보 - 최고음 측정 여부
   void checkPitchMeasureEvent(int noteCnt) {
-    Analytics_config.analytics.logEvent('내 정보 - 최고음 측정 여부');
-
-    FirebaseAnalytics.instance.logEvent(name: 'myInfo__IsMeasurePitch');
+    Analytics_config().event('내_정보__최고음_측정_여부', {});
   }
 
   //!event: 최고음 검색 뷰 - 정렬
   void pitchSortEvent(String sortOptionStr) {
-    Analytics_config.analytics.logEvent('최고음 검색 뷰 - 정렬', eventProperties: {
-      '정렬 기준': sortOptionStr,
-    });
-
-    FirebaseAnalytics.instance
-        .logEvent(name: 'pitch_search_view__sorting', parameters: {
-      'sorting_condition': sortOptionStr,
-    });
+    Analytics_config().event('최고음_검색_뷰__정렬', {'정렬_기준': sortOptionStr});
   }
 }

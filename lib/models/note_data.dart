@@ -48,21 +48,15 @@ class NoteData extends ChangeNotifier {
     Analytics_config.analytics.identify(identify);
 
     //!event : 노트 뷰 조회
-    Analytics_config.analytics.logEvent('애창곡 노트 뷰 - 노트 뷰  조회',
-        eventProperties: {'노트 개수': notes.length, '메모 노트 개수': memoCnt});
-
-    FirebaseAnalytics.instance.logEvent(
-        name: 'noteView__view_notes',
-        parameters: {'noteCnt': notes.length, 'memoNoteCnt': memoCnt});
+    Analytics_config()
+        .event('애창곡_노트_뷰__페이지뷰', {'노트_개수': notes.length, '메모_노트_개수': memoCnt});
 
     notifyListeners();
   }
 
   //!event : 애창곡 노트 뷰 - 곡 추가
   Future<void> addNoteEvent() async {
-    Analytics_config.analytics.logEvent('애창곡 노트 뷰 - 곡 추가');
-
-    FirebaseAnalytics.instance.logEvent(name: 'noteView__add_note');
+    Analytics_config().event('애창곡_노트_뷰__곡_추가_버튼클릭', {});
 
     final Identify identify = Identify()..set('노트 개수', notes.length);
 
@@ -74,147 +68,86 @@ class NoteData extends ChangeNotifier {
 
   //!event : 애창곡 노트 뷰 - 곡 상세 정보 조회
   void viewNoteEvent(Note note) {
-    Analytics_config.analytics
-        .logEvent('애창곡 노트 뷰 - 곡 상세 정보 조회', eventProperties: {
-      '곡 이름': note.tj_title,
-      '가수 이름': note.tj_singer,
-      'TJ 번호': note.tj_songNumber,
-      '금영 번호': note.ky_songNumber,
+    Analytics_config().event('애창곡_노트_뷰__노트_상세_정보_조회', {
+      '곡_이름': note.tj_title,
+      '가수_이름': note.tj_singer,
+      'TJ_번호': note.tj_songNumber,
+      '금영_번호': note.ky_songNumber,
       '최고음': pitchNumToString[note.pitchNum],
-      '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
-      '메모 여부': note.memo
-    });
-
-    FirebaseAnalytics.instance
-        .logEvent(name: 'noteView__search_detail_note', parameters: {
-      'title': note.tj_title,
-      'singer': note.tj_singer,
-      'TJ_number': note.tj_songNumber,
-      'KY_number': note.ky_songNumber,
-      'max_pitch': pitchNumToString[note.pitchNum],
-      'IsMatched': (note.tj_songNumber == note.ky_songNumber),
-      'Ismemo': note.memo
+      '매칭_여부': (note.tj_songNumber == note.ky_songNumber),
+      '메모_여부': note.memo
     });
   }
 
   //!event: 곡 추가 뷰 - 리스트 클릭 시
   void addSongClickEvent(FitchMusic fitchMusic) {
-    Analytics_config.analytics.logEvent('곡 추가 뷰 - 리스트 클릭 시', eventProperties: {
-      '곡 이름': fitchMusic.tj_title,
-      '가수 이름': fitchMusic.tj_singer,
-      'TJ 번호': fitchMusic.tj_songNumber,
-      '금영 번호': fitchMusic.ky_songNumber,
+    Analytics_config().event('노트_추가_뷰__노래선택', {
+      '곡_이름': fitchMusic.tj_title,
+      '가수_이름': fitchMusic.tj_singer,
+      'TJ_번호': fitchMusic.tj_songNumber,
+      '금영_번호': fitchMusic.ky_songNumber,
       '최고음': fitchMusic.pitchNum,
-      '매칭 여부': (fitchMusic.tj_songNumber == fitchMusic.ky_songNumber),
-    });
-
-    FirebaseAnalytics.instance
-        .logEvent(name: 'note_add_view__click_list', parameters: {
-      'title': fitchMusic.tj_title,
-      'singer': fitchMusic.tj_singer,
-      'TJ_number': fitchMusic.tj_songNumber,
-      'KY_number': fitchMusic.ky_songNumber,
-      'max_pitch': fitchMusic.pitchNum,
-      'IsMatched': (fitchMusic.tj_songNumber == fitchMusic.ky_songNumber),
+      '매칭_여부': (fitchMusic.tj_songNumber == fitchMusic.ky_songNumber),
     });
   }
 
   //!event: 곡 상세정보 뷰 - 노트 삭제
   void noteDeleteEvent(Note note) {
-    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 노트 삭제', eventProperties: {
-      '곡 이름': note.tj_title,
-      '가수 이름': note.tj_singer,
-      'TJ 번호': note.tj_songNumber,
-      '금영 번호': note.ky_songNumber,
+    Analytics_config().event('노트_상세정보_뷰__노트_삭제', {
+      '곡_이름': note.tj_title,
+      '가수_이름': note.tj_singer,
+      'TJ_번호': note.tj_songNumber,
+      '금영_번호': note.ky_songNumber,
       '최고음': pitchNumToString[note.pitchNum],
-      '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
-    });
-
-    FirebaseAnalytics.instance
-        .logEvent(name: 'note_detail_view__delete_note', parameters: {
-      'title': note.tj_title,
-      'singer': note.tj_singer,
-      'TJ_number': note.tj_songNumber,
-      'KY_number': note.ky_songNumber,
-      'max_pitch': pitchNumToString[note.pitchNum],
-      'IsMatched': (note.tj_songNumber == note.ky_songNumber),
+      '매칭_여부': (note.tj_songNumber == note.ky_songNumber),
     });
   }
 
   //!event: 곡 상세정보 뷰 - 최고음 들어보기
   void pitchListenEvent() {
-    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 최고음 들어보기');
-
-    FirebaseAnalytics.instance.logEvent(name: 'note_detail_view__listen_pitch');
+    Analytics_config().event('노트_상세정보_뷰__최고음_들어보기', {});
   }
 
   //!event: 곡 상세정보 뷰 - 유튜브 클릭
   void youtubeClickEvent(Note note) {
-    Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 유튜브 클릭',
-        eventProperties: {'곡 이름': note.tj_title, '메모': note.memo});
-
-    FirebaseAnalytics.instance.logEvent(
-        name: 'note_detail_view__click_youtube',
-        parameters: {'title': note.tj_title, 'memo': note.memo});
+    Analytics_config()
+        .event('노트_상세정보_뷰__유튜브_클릭', {'곡_이름': note.tj_title, '메모': note.memo});
   }
 
   //!event: 곡 상세정보 뷰 - 금영 검색
   void kySearchEvent(String tjNumber) {
-    Analytics_config.analytics
-        .logEvent('곡 상세정보 뷰 - 금영 검색', eventProperties: {'TJ 번호': tjNumber});
-    FirebaseAnalytics.instance.logEvent(
-        name: 'song_detail_view__KY_search',
-        parameters: {'TJ_number': tjNumber});
+    Analytics_config().event('노트_상세정보_뷰__금영_검색', {'TJ_번호': tjNumber});
   }
 
   //!event: 곡 상세정보 뷰 - 메모 수정
   void songMemoEditEvent(String title) {
-    Analytics_config.analytics
-        .logEvent('곡 상세정보 뷰 - 메모 수정', eventProperties: {'곡 이름': title});
-    FirebaseAnalytics.instance.logEvent(
-        name: 'song_detail_view__edit_memo', parameters: {'title': title});
+    Analytics_config().event('노트_상세정보_뷰__메모_수정', {'곡_이름': title});
   }
 
   //!event: 일반 노래 검색 뷰 - 페이지뷰
   void musicBookScreenPageViewEvent() {
-    Analytics_config.analytics.logEvent('일반 노래 검색 뷰 - 페이지뷰');
-    FirebaseAnalytics.instance
-        .logEvent(name: 'normal_chart_search_view__pageView');
+    Analytics_config().event('일반_노래_검색_뷰__페이지뷰', {});
   }
 
   //!event: 인기 차트 검색 뷰 - 페이지뷰
   void popChartScreenPageViewEvent() {
-    Analytics_config.analytics.logEvent('인기 차트 검색 뷰 - 페이지뷰');
-    FirebaseAnalytics.instance
-        .logEvent(name: 'pop_chart_search_view__pageView');
+    Analytics_config().event('인기_차트_검색_뷰__페이지뷰', {});
   }
 
   //!event: 최고음 차트 검색 뷰 - 페이지뷰
   void pitchChartScreenPageViewEvent() {
-    Analytics_config.analytics.logEvent('최고음 차트 검색 뷰 - 페이지뷰');
-    FirebaseAnalytics.instance
-        .logEvent(name: 'pitch_chart_search_view__pageView');
+    Analytics_config().event('최고음_차트_검색_뷰__페이지뷰', {});
   }
 
   //!event: 곡 상세정보 - 최고음 요청
   void pitchRequestEvent(Note note) {
-    Analytics_config.analytics
-        .logEvent('곡 상세 정보 - 최고음 요청 이벤트', eventProperties: {
-      '곡 이름': note.tj_title,
-      '가수 이름': note.tj_singer,
-      'TJ 번호': note.tj_songNumber,
-      '금영 번호': note.ky_songNumber,
-      '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
-      '메모 여부': note.memo
-    });
-    FirebaseAnalytics.instance
-        .logEvent(name: 'song_detail_view__pitch_request', parameters: {
-      'title': note.tj_title,
-      'singer': note.tj_singer,
-      'TJ_number': note.tj_songNumber,
-      'KY_number': note.ky_songNumber,
-      'IsMatched': (note.tj_songNumber == note.ky_songNumber),
-      'Ismemo': note.memo
+    Analytics_config().event('노트_상세_정보__최고음_요청_이벤트', {
+      '곡_이름': note.tj_title,
+      '가수_이름': note.tj_singer,
+      'TJ_번호': note.tj_songNumber,
+      '금영_번호': note.ky_songNumber,
+      '매칭_여부': (note.tj_songNumber == note.ky_songNumber),
+      '메모_여부': note.memo
     });
   }
 
@@ -252,25 +185,14 @@ class NoteData extends ChangeNotifier {
 
           Analytics_config.analytics.identify(identify);
 
-          //!event: 곡 추가 뷰 - 노트 추가 이벤트
-          Analytics_config.analytics
-              .logEvent('검색 - 노트 추가 이벤트', eventProperties: {
-            '곡 이름': note.tj_title,
-            '가수 이름': note.tj_singer,
-            'TJ 번호': note.tj_songNumber,
-            '금영 번호': note.ky_songNumber,
-            '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
-            '메모 여부': note.memo
-          });
-          FirebaseAnalytics.instance
-              .logEvent(name: 'search__add_note_event', parameters: {
-            'noteCnt': notes.length,
-            'title': note.tj_title,
-            'singer': note.tj_singer,
-            'TJ_number': note.tj_songNumber,
-            'KY_number': note.ky_songNumber,
-            'IsMatched': (note.tj_songNumber == note.ky_songNumber),
-            'Ismemo': note.memo
+          //!event: 인기 차트 - 노트 추가 이벤트
+          Analytics_config().event('인기_차트__노트_추가_이벤트', {
+            '곡_이름': note.tj_title,
+            '가수_이름': note.tj_singer,
+            'TJ_번호': note.tj_songNumber,
+            '금영_번호': note.ky_songNumber,
+            '매칭_여부': (note.tj_songNumber == note.ky_songNumber),
+            '메모_여부': note.memo
           });
         } else {
           emptyCheck = true;
@@ -319,7 +241,8 @@ class NoteData extends ChangeNotifier {
   }
 
   // 노트추가 다이어로그 팝업 함수
-  void showAddNoteDialog(BuildContext context, String songNumber, String title) {
+  void showAddNoteDialog(
+      BuildContext context, String songNumber, String title) {
     double defaultSize = SizeConfig.defaultSize;
 
     Widget okButton = ElevatedButton(
@@ -401,7 +324,10 @@ class NoteData extends ChangeNotifier {
   }
 
   // 간단한 정보를 보여주고 애창곡노트 추가버튼이 있는 다이어로그 팝업 함수
-  void showAddNoteDialogWithInfo(BuildContext context, {required String songNumber, required String title, required String singer}) {
+  void showAddNoteDialogWithInfo(BuildContext context,
+      {required String songNumber,
+      required String title,
+      required String singer}) {
     double defaultSize = SizeConfig.defaultSize;
 
     Widget okButton = ElevatedButton(
@@ -449,8 +375,7 @@ class NoteData extends ChangeNotifier {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(
             children: [
-              Text("${songNumber}",
-                  style: TextStyle(color: kMainColor)),
+              Text("${songNumber}", style: TextStyle(color: kMainColor)),
               Spacer(),
               IconButton(
                 onPressed: () async {

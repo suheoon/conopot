@@ -24,10 +24,14 @@ class Analytics_config {
 
     // Turn on automatic session events
     analytics.trackingSessionEvents(true);
+  }
 
-    // Log an event
-    analytics.logEvent('앱 실행');
+  void event(String eventName, Map<String, dynamic> properties) {
+    //Amplitude
+    analytics.logEvent(eventName, eventProperties: properties);
 
-    FirebaseAnalytics.instance.logEvent(name: "appOpen");
+    //Google Analytics
+    FirebaseAnalytics.instance
+        .logEvent(name: eventName, parameters: properties);
   }
 }

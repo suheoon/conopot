@@ -18,13 +18,17 @@ class PitchDropdown extends StatelessWidget {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: '정렬 조건',
-          icon: const Icon(Icons.arrow_drop_down_sharp, color: kPrimaryLightWhiteColor,),
+          icon: const Icon(
+            Icons.arrow_drop_down_sharp,
+            color: kPrimaryLightWhiteColor,
+          ),
           elevation: 0,
-          style: const TextStyle(color: kPrimaryWhiteColor, fontWeight: FontWeight.w300),
+          style: const TextStyle(
+              color: kPrimaryWhiteColor, fontWeight: FontWeight.w300),
           onChanged: (String? newValue) {
             // !event : 간접 음역대 측정뷰 - 페이지뷰
-            Analytics_config.analytics.logEvent('간접 음역대 측정뷰 - 정렬',
-                eventProperties: {'정렬 조건': newValue});
+            Analytics_config().event('간접_음역대_측정뷰__정렬', {'정렬_조건': newValue});
+
             musicList.changeSortOption(option: newValue);
           },
           dropdownColor: kDialogColor,

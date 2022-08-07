@@ -17,7 +17,7 @@ class PitchChoice extends StatelessWidget {
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
     // !event : 간접 음역대 측정뷰 - 페이지뷰
-    Analytics_config.analytics.logEvent('간접 음역대 측정뷰 - 페이지뷰');
+    Analytics_config().event('간접_음역대_측정뷰__페이지뷰', {});
     SizeConfig().init(context);
 
     return Consumer<MusicSearchItemLists>(
@@ -28,20 +28,20 @@ class PitchChoice extends StatelessWidget {
                   child: AppBar(
                     automaticallyImplyLeading: false,
                     title: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                      BackButton(
-                        color: kPrimaryWhiteColor,
-                        onPressed: () {
-                          // !event : 간접 음역대 측정뷰 - 백버튼
-                          Analytics_config.analytics
-                              .logEvent('간접 음역대 측정뷰 - 백버튼');
-                          Navigator.pop(context);
-                        },
-                      ),
-                      Expanded(child: PitchSearchBar(musicList: musicList))
-                    ]),
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          BackButton(
+                            color: kPrimaryWhiteColor,
+                            onPressed: () {
+                              // !event : 간접 음역대 측정뷰 - 백버튼
+                              Analytics_config()
+                                  .event('간접_음역대_측정뷰__백버튼_클릭', {});
+                              Navigator.pop(context);
+                            },
+                          ),
+                          Expanded(child: PitchSearchBar(musicList: musicList))
+                        ]),
                     centerTitle: false,
                   ),
                 ),
@@ -96,12 +96,11 @@ class PitchChoice extends StatelessWidget {
                 floatingActionButton: FloatingActionButton.extended(
                   onPressed: () => {
                     // !event : 간접 음역대 측정뷰 - 선택완료
-                    Analytics_config.analytics.logEvent('간접 음역대 측정뷰 - 선택완료',
-                        eventProperties: {
-                          '선택한 노래 리스트': musicList.checkedMusics
-                              .map((e) => e.tj_title)
-                              .toList()
-                        }),
+                    Analytics_config().event('간접_음역대_측정뷰__선택완료', {
+                      '선택한_노래_리스트': musicList.checkedMusics
+                          .map((e) => e.tj_title)
+                          .toList()
+                    }),
                     musicList.getMaxPitch(),
                     if (musicList.userMaxPitch == -1)
                       {

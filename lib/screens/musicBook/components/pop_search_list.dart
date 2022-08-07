@@ -80,8 +80,7 @@ class PopSearchList extends StatelessWidget {
                     ),
                     onTap: () {
                       if (musicList.tabIndex == 1) {
-                        _showAddDialog(
-                            context, musicList.foundItems[index]);
+                        _showAddDialog(context, musicList.foundItems[index]);
                       }
                     }),
               ),
@@ -98,7 +97,7 @@ _showAddDialog(BuildContext context, MusicSearchItem item) {
   Widget okButton = ElevatedButton(
     onPressed: () {
       // !event : 인기차트 뷰 - 노트 추가
-      Analytics_config.analytics.logEvent('인기차트 뷰 - 노트추가');
+      Analytics_config().event('인기차트_뷰__노트추가', {});
       Provider.of<NoteData>(context, listen: false).addNoteBySongNumber(
           item.songNumber,
           Provider.of<MusicSearchItemLists>(context, listen: false)

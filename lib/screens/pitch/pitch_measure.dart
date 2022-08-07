@@ -286,7 +286,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
   @override
   Widget build(BuildContext context) {
     //!event : 직접 음역대 측정 뷰  - 페이지뷰
-    Analytics_config.analytics.logEvent('직접 음역대 측정 뷰 - 페이지뷰');
+    Analytics_config().event('직접_음역대_측정_뷰__페이지뷰', {});
     SizeConfig().init(context);
     return Scaffold(
         appBar: AppBar(
@@ -295,14 +295,13 @@ class _PitchMeasureState extends State<PitchMeasure> {
           ),
           centerTitle: true,
           leading: BackButton(
-              color: kPrimaryWhiteColor,
-              onPressed: () {
-                _stopCapture();
-                Navigator.pop(context); //뒤로가기
-              },
-            ),
+            color: kPrimaryWhiteColor,
+            onPressed: () {
+              _stopCapture();
+              Navigator.pop(context); //뒤로가기
+            },
+          ),
         ),
-        
         body: SafeArea(
             child: flag == 0 || flag == 1 ? _firstScreen() : _secondScreen()));
   }
@@ -373,61 +372,59 @@ class _PitchMeasureState extends State<PitchMeasure> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-              Container(
-                  margin: EdgeInsets.only(left: defaultSize * 3),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '노래를 불러 보세요 🎤',
-                          style: TextStyle(
-                            color: kPrimaryWhiteColor,
-                            fontSize: defaultSize * 2,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(
-                          height: SizeConfig.defaultSize * 1.5,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '최고',
-                              style: TextStyle(
-                                color: kPrimaryWhiteColor,
-                                fontSize: defaultSize * 2,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Container(
-                              margin:
-                                  EdgeInsets.symmetric(horizontal: defaultSize),
-                              padding: EdgeInsets.all(defaultSize),
-                              decoration: BoxDecoration(
-                                color: kPrimaryLightBlackColor,
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              child: Text(
-                                "${frequencyToPitch(maxFrequency)}",
-                                style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontSize: defaultSize * 2,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              '까지 올라갔어요!',
-                              style: TextStyle(
-                                color: kPrimaryWhiteColor,
-                                fontSize: defaultSize * 2,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ]),
+          Container(
+            margin: EdgeInsets.only(left: defaultSize * 3),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                '노래를 불러 보세요 🎤',
+                style: TextStyle(
+                  color: kPrimaryWhiteColor,
+                  fontSize: defaultSize * 2,
+                  fontWeight: FontWeight.w500,
                 ),
+              ),
+              SizedBox(
+                height: SizeConfig.defaultSize * 1.5,
+              ),
+              Row(
+                children: [
+                  Text(
+                    '최고',
+                    style: TextStyle(
+                      color: kPrimaryWhiteColor,
+                      fontSize: defaultSize * 2,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: defaultSize),
+                    padding: EdgeInsets.all(defaultSize),
+                    decoration: BoxDecoration(
+                      color: kPrimaryLightBlackColor,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Text(
+                      "${frequencyToPitch(maxFrequency)}",
+                      style: TextStyle(
+                        color: kPrimaryWhiteColor,
+                        fontSize: defaultSize * 2,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    '까지 올라갔어요!',
+                    style: TextStyle(
+                      color: kPrimaryWhiteColor,
+                      fontSize: defaultSize * 2,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ]),
+          ),
           Container(
             width: double.infinity,
             margin: EdgeInsets.all(defaultSize * 3),
@@ -462,8 +459,8 @@ class _PitchMeasureState extends State<PitchMeasure> {
                               GestureDetector(
                                 onTap: () {
                                   //!event : 직접 음역대 측정 뷰  - 측정 시작
-                                  Analytics_config.analytics
-                                      .logEvent('직접 음역대 측정 뷰 - 측정 시작');
+                                  Analytics_config()
+                                      .event('직접_음역대_측정_뷰__측정_시작', {});
                                   _startCapture();
                                   setState(() {
                                     flag = 1;
@@ -506,8 +503,8 @@ class _PitchMeasureState extends State<PitchMeasure> {
                               GestureDetector(
                                 onTap: () {
                                   // !event : 직접 음역대 측정 뷰  - 측정 중지
-                                  Analytics_config.analytics
-                                      .logEvent('직접 음역대 측정 뷰 - 측정 중지');
+                                  Analytics_config()
+                                      .event('직접_음역대_측정_뷰__측정_중지', {});
                                   _stopCapture();
                                   setState(() {
                                     flag = 2;
@@ -597,8 +594,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                   GestureDetector(
                     onTap: () {
                       //!event : 직접 음역대 측정 뷰  - 다시 측정하기
-                      Analytics_config.analytics
-                          .logEvent('직접 음역대 측정 뷰 - 다시 측정하기');
+                      Analytics_config().event('직접_음역대_측정_뷰__다시_측정하기', {});
                       setState(() {
                         flag = 0;
                         frequency = 0;
@@ -627,8 +623,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                   GestureDetector(
                     onTap: () {
                       //!event : 직접 음역대 측정 뷰  - 다시 측정하기
-                      Analytics_config.analytics
-                          .logEvent('직접 음역대 측정 뷰 - 다시 측정하기');
+                      Analytics_config().event('직접_음역대_측정_뷰__다시_측정하기', {});
                       Navigator.push(
                           context,
                           CustomPageRoute(

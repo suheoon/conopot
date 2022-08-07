@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:conopot/config/constants.dart';
-import 'package:conopot/models/lylic.dart';
+import 'package:conopot/models/lyric.dart';
 import 'package:conopot/models/music_search_item.dart';
 import 'package:conopot/models/note.dart';
 import 'package:conopot/screens/note/components/editable_text_field.dart';
@@ -357,7 +357,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                             fontWeight: FontWeight.w600)),
                     SizedBox(height: defaultSize * 2),
                     Center(
-                      child: Text(lyric.isEmpty ? "로딩중 입니다": lyric.trim(),
+                      child: Text(lyric.isEmpty ? "로딩중 입니다" : lyric.trim(),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: kPrimaryLightWhiteColor,
