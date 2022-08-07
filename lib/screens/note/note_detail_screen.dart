@@ -12,6 +12,7 @@ import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:marquee/marquee.dart';
@@ -30,6 +31,8 @@ class NoteDetailScreen extends StatefulWidget {
 class _NoteDetailScreenState extends State<NoteDetailScreen> {
   double defaultSize = SizeConfig.defaultSize;
   String lyric = "";
+
+  final storage = new FlutterSecureStorage();
 
   void getLyrics(String songNum) async {
     //인터넷 연결 확인
