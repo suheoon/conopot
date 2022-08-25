@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 class EmptyNoteList extends StatelessWidget {
   double defaultSize = SizeConfig.defaultSize;
+  
   @override
   Widget build(BuildContext context) {
     return Expanded(
