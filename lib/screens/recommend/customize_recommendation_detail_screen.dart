@@ -36,6 +36,45 @@ class CustomizeRecommendationDetailScreen extends StatefulWidget {
 class _CustomizeRecommendationDetailScreenState
     extends State<CustomizeRecommendationDetailScreen> {
   final storage = new FlutterSecureStorage();
+  double defaultSize = SizeConfig.defaultSize;
+
+  bool isLoaded1 = false, isLoaded2 = false;
+
+  Map<String, String> Search_Native_UNIT_ID_ODD = kReleaseMode
+      ? {
+          //release 모드일때 (실기기 사용자)
+          'android': 'ca-app-pub-7139143792782560/3104068385',
+          'ios': 'ca-app-pub-7139143792782560/9111358943',
+        }
+      : {
+          'android': 'ca-app-pub-3940256099942544/2247696110',
+          'ios': 'ca-app-pub-3940256099942544/3986624511',
+        };
+
+  Map<String, String> Search_Native_UNIT_ID_EVEN = kReleaseMode
+      ? {
+          //release 모드일때 (실기기 사용자)
+          'android': 'ca-app-pub-7139143792782560/3200544377',
+          'ios': 'ca-app-pub-7139143792782560~4000301361',
+        }
+      : {
+          'android': 'ca-app-pub-3940256099942544/2247696110',
+          'ios': 'ca-app-pub-3940256099942544/3986624511',
+        };
+
+  // Native 광고 위치
+  static final _kAdIndex = 15;
+  // TODO: Add a native ad instance
+  NativeAd? _ad_odd, _ad_even;
+
+  // TODO: Add _getDestinationItemIndex()
+  int _getDestinationItemIndex(int rawIndex) {
+    // native 광고 index가 포함되어 있기 때문에, 그 이후 인덱스는 -1씩 줄여줘야 한다.
+    if (isLoaded1 == true && isLoaded2 == true) {
+      return rawIndex - 1 - (rawIndex ~/ _kAdIndex);
+    }
+    return rawIndex;
+  }
 
   Map<String, String> AI_Recommand_Interstitial_UNIT_ID = kReleaseMode
       ? {
@@ -134,10 +173,64 @@ class _CustomizeRecommendationDetailScreenState
     });
   }
 
+  Widget nativeAdWidget(int idx) {
+    return Container(
+      height: 80.0,
+      margin:
+          EdgeInsets.fromLTRB(defaultSize, 0, defaultSize, defaultSize * 0.5),
+      decoration: BoxDecoration(
+          color: kPrimaryLightBlackColor,
+          borderRadius: BorderRadius.all(Radius.circular(8))),
+      child: AdWidget(
+        ad: (idx % 2 == 0) ? _ad_even! : _ad_odd!,
+      ),
+    );
+  }
+
   @override
   void initState() {
     _interstitialAd = createInterstitialAd();
     super.initState();
+    // TODO: Create a NativeAd instance
+    _ad_odd = NativeAd(
+      adUnitId: Search_Native_UNIT_ID_ODD[Platform.isIOS ? 'ios' : 'android']!,
+      factoryId: 'listTile',
+      request: AdRequest(),
+      listener: NativeAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _ad_odd = ad as NativeAd;
+            isLoaded1 = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          print('Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+    );
+
+    _ad_even = NativeAd(
+      adUnitId: Search_Native_UNIT_ID_EVEN[Platform.isIOS ? 'ios' : 'android']!,
+      factoryId: 'listTile',
+      request: AdRequest(),
+      listener: NativeAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _ad_even = ad as NativeAd;
+            isLoaded2 = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          // Releases an ad resource when it fails to load
+          ad.dispose();
+          print('Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+    );
+
+    _ad_odd!.load();
+    _ad_even!.load();
   }
 
   @override
@@ -185,67 +278,95 @@ class _CustomizeRecommendationDetailScreenState
       body: SafeArea(
         child: ListView.builder(
           padding: EdgeInsets.only(bottom: screenHeight * 0.3),
-          itemCount: widget.songList.length,
+          itemCount: widget.songList.length +
+              ((isLoaded1 && isLoaded2)
+                  ? (widget.songList.length ~/ _kAdIndex) + 1
+                  : 0),
           itemBuilder: (context, index) {
-            String songNumber = widget.songList[index].tj_songNumber;
-            String title = widget.songList[index].tj_title;
-            String singer = widget.songList[index].tj_singer;
-            int pitchNum = widget.songList[index].pitchNum;
-
-            return ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              child: Card(
+            if ((index % _kAdIndex == 0) && (isLoaded1 && isLoaded2)) {
+              return Container(
+                height: 80.0,
                 margin: EdgeInsets.fromLTRB(
                     defaultSize, 0, defaultSize, defaultSize * 0.5),
-                color: kPrimaryLightBlackColor,
-                elevation: 1,
-                child: ListTile(
-                    leading: SizedBox(
-                      width: defaultSize * 6.5,
-                      child: Center(
-                        child: Text(
-                          songNumber,
-                          style: TextStyle(
-                            color: kMainColor,
-                            fontSize: defaultSize * 1.1,
-                            fontWeight: FontWeight.w500,
+                decoration: BoxDecoration(
+                    color: kPrimaryLightBlackColor,
+                    borderRadius: BorderRadius.all(Radius.circular(8))),
+                child: nativeAdWidget(index),
+              );
+            } else {
+              String songNumber = widget
+                  .songList[_getDestinationItemIndex(index)].tj_songNumber;
+              String title =
+                  widget.songList[_getDestinationItemIndex(index)].tj_title;
+              String singer =
+                  widget.songList[_getDestinationItemIndex(index)].tj_singer;
+              int pitchNum =
+                  widget.songList[_getDestinationItemIndex(index)].pitchNum;
+
+              return ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                child: Card(
+                  margin: EdgeInsets.fromLTRB(
+                      defaultSize, 0, defaultSize, defaultSize * 0.5),
+                  color: kPrimaryLightBlackColor,
+                  elevation: 1,
+                  child: ListTile(
+                      leading: SizedBox(
+                        width: defaultSize * 6.5,
+                        child: Center(
+                          child: Text(
+                            songNumber,
+                            style: TextStyle(
+                              color: kMainColor,
+                              fontSize: defaultSize * 1.1,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    title: Text(
-                      title,
-                      style: TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        color: kPrimaryWhiteColor,
-                        fontSize: defaultSize * 1.4,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    subtitle: Text(
-                      singer,
-                      style: TextStyle(
+                      title: Text(
+                        title,
+                        style: TextStyle(
                           overflow: TextOverflow.ellipsis,
-                          color: kPrimaryLightWhiteColor,
-                          fontWeight: FontWeight.w300,
-                          fontSize: defaultSize * 1.2),
-                    ),
-                    onTap: () {
-                      //!event: 추천_뷰__맞춤_추천_리스트_아이템_클릭
-                      Analytics_config()
-                          .clickCustomizeRecommendationListItemEvent();
-                      Provider.of<NoteData>(context, listen: false)
-                          .showAddNoteDialogWithInfo(context,
-                              isTj: true,
-                              songNumber: songNumber,
-                              title: title,
-                              singer: singer);
-                    }),
-              ),
-            );
+                          color: kPrimaryWhiteColor,
+                          fontSize: defaultSize * 1.4,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      subtitle: Text(
+                        singer,
+                        style: TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            color: kPrimaryLightWhiteColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: defaultSize * 1.2),
+                      ),
+                      onTap: () {
+                        //!event: 추천_뷰__맞춤_추천_리스트_아이템_클릭
+                        Analytics_config()
+                            .clickCustomizeRecommendationListItemEvent();
+                        Provider.of<NoteData>(context, listen: false)
+                            .showAddNoteDialogWithInfo(context,
+                                isTj: true,
+                                songNumber: songNumber,
+                                title: title,
+                                singer: singer);
+                      }),
+                ),
+              );
+            }
           },
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: Dispose a NativeAd object
+    _ad_odd?.dispose();
+    _ad_even?.dispose();
+
+    super.dispose();
   }
 }

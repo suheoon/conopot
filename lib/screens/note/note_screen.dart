@@ -26,51 +26,41 @@ class NoteScreen extends StatefulWidget {
 class _NoteScreenState extends State<NoteScreen> {
   double defaultSize = SizeConfig.defaultSize;
 
-  // Map<String, String> Search_Native_UNIT_ID = {
-  //   'android': 'ca-app-pub-1461012385298546/5670829461',
-  //   'ios': 'ca-app-pub-1461012385298546/4166176101',
-  // };
+  Map<String, String> Search_Native_UNIT_ID = {
+    'android': 'ca-app-pub-1461012385298546/5670829461',
+    'ios': 'ca-app-pub-1461012385298546/4166176101',
+  };
 
-  // // TODO: Add _kAdIndex
-  // static final _kAdIndex = 2;
+  bool isLoaded = false;
 
-  // // TODO: Add a native ad instance
-  // NativeAd? _ad;
-
-  // // TODO: Add _getDestinationItemIndex()
-  // int _getDestinationItemIndex(int rawIndex) {
-  //   if (rawIndex >= _kAdIndex && _ad != null) {
-  //     return rawIndex - 1;
-  //   }
-  //   return rawIndex;
-  // }
+  // TODO: Add a native ad instance
+  NativeAd? _ad;
 
   @override
   void initState() {
     super.initState();
 
-    // TODO: Create a NativeAd instance
-    // _ad = NativeAd(
-    //   adUnitId: Search_Native_UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
-    //   factoryId: 'listTile',
-    //   request: AdRequest(),
-    //   listener: NativeAdListener(
-    //     onAdLoaded: (ad) {
-    //       print('Native Ad load Success ${ad.responseInfo}');
-    //       print('Native Ad load Success ${ad.adUnitId}');
-    //       setState(() {
-    //         _ad = ad as NativeAd;
-    //       });
-    //     },
-    //     onAdFailedToLoad: (ad, error) {
-    //       // Releases an ad resource when it fails to load
-    //       ad.dispose();
-    //       print('Ad load failed (code=${error.code} message=${error.message})');
-    //     },
-    //   ),
-    // );
+    //TODO: Create a NativeAd instance
+    _ad = NativeAd(
+      adUnitId: Search_Native_UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
+      factoryId: 'listTile',
+      request: AdRequest(),
+      listener: NativeAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _ad = ad as NativeAd;
+            isLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          // Releases an ad resource when it fails to load
+          ad.dispose();
+          print('Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+    );
 
-    // if (_ad != null) _ad!.load();
+    if (_ad != null) _ad!.load();
   }
 
   @override
@@ -118,7 +108,7 @@ class _NoteScreenState extends State<NoteScreen> {
             : null,
         body: Column(
           children: [
-            CarouselSliderBanner(),
+            CarouselSliderBanner(_ad, isLoaded),
             if (noteData.notes.isEmpty) ...[
               EmptyNoteList()
             ] else ...[
