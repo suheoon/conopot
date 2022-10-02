@@ -1285,6 +1285,7 @@ class NoteData extends ChangeNotifier {
       temp_notes.add(notes[i]);
       temp_userMusics.add(notes[i].tj_songNumber);
     }
+    deleteSet = {};
     notes = temp_notes;
     userMusics = temp_userMusics;
     await storage.write(key: 'notes', value: jsonEncode(notes));
