@@ -12,9 +12,9 @@ import 'package:provider/provider.dart';
 
 class CarouselSliderBanner extends StatelessWidget {
   final double defaultSize = SizeConfig.defaultSize;
-  // CarouselSliderBanner(this._nativeAd, this._kAdIndex);
-  // NativeAd? _nativeAd;
-  // int _kAdIndex;
+  CarouselSliderBanner(this._nativeAd, this.isLoaded);
+  NativeAd? _nativeAd;
+  bool isLoaded;
 
   final imageIcons = [
     "assets/icons/banner_cat.svg",
@@ -121,14 +121,6 @@ class CarouselSliderBanner extends StatelessWidget {
     );
   }
 
-  // TODO: Add _getDestinationItemIndex()
-  // int _getDestinationItemIndex(int rawIndex) {
-  //   if (rawIndex >= _kAdIndex && _nativeAd != null) {
-  //     return rawIndex - 1;
-  //   }
-  //   return rawIndex;
-  // }
-
   @override
   Widget build(BuildContext context) {
     return CarouselSlider.builder(
@@ -140,10 +132,26 @@ class CarouselSliderBanner extends StatelessWidget {
         autoPlayInterval: Duration(seconds: 5),
         autoPlayAnimationDuration: Duration(milliseconds: 800),
       ),
-      itemCount: 3,
+      itemCount: (isLoaded == true) ? 4 : 3,
       itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) =>
-          _bannerItem(context, itemIndex, imageIcons[itemIndex],
-              sentence1[itemIndex], sentence2[itemIndex], screen[itemIndex]),
+          (isLoaded == true && itemIndex == 3)
+              ? Container(
+                  height: defaultSize * 8.5,
+                  margin: EdgeInsets.fromLTRB(
+                      defaultSize, 0, defaultSize, defaultSize),
+                  padding: EdgeInsets.all(defaultSize * 1.5),
+                  decoration: BoxDecoration(
+                      color: kPrimaryLightBlackColor,
+                      borderRadius: BorderRadius.all(Radius.circular(8))),
+                  child: AdWidget(ad: _nativeAd!),
+                )
+              : _bannerItem(
+                  context,
+                  itemIndex,
+                  imageIcons[itemIndex],
+                  sentence1[itemIndex],
+                  sentence2[itemIndex],
+                  screen[itemIndex]),
     );
   }
 }

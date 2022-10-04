@@ -21,128 +21,195 @@ class _SearchListState extends State<SearchList> {
   double defaultSize = SizeConfig.defaultSize;
   double screenHeight = SizeConfig.screenHeight;
 
-  // Map<String, String> Search_Native_UNIT_ID = {
-  //   'android': 'ca-app-pub-1461012385298546/5670829461',
-  //   'ios': 'ca-app-pub-1461012385298546/4166176101',
-  // };
+  bool isLoaded1 = false, isLoaded2 = false;
 
-  // // TODO: Add _kAdIndex
-  // static final _kAdIndex = 4;
+  Map<String, String> Search_Native_UNIT_ID_ODD = kReleaseMode
+      ? {
+          //release 모드일때 (실기기 사용자)
+          'android': 'ca-app-pub-7139143792782560/3104068385',
+          'ios': 'ca-app-pub-7139143792782560/9111358943',
+        }
+      : {
+          'android': 'ca-app-pub-3940256099942544/2247696110',
+          'ios': 'ca-app-pub-3940256099942544/3986624511',
+        };
 
-  // // TODO: Add a native ad instance
-  // NativeAd? _ad;
+  Map<String, String> Search_Native_UNIT_ID_EVEN = kReleaseMode
+      ? {
+          //release 모드일때 (실기기 사용자)
+          'android': 'ca-app-pub-7139143792782560/3200544377',
+          'ios': 'ca-app-pub-7139143792782560~4000301361',
+        }
+      : {
+          'android': 'ca-app-pub-3940256099942544/2247696110',
+          'ios': 'ca-app-pub-3940256099942544/3986624511',
+        };
 
-  // // TODO: Add _getDestinationItemIndex()
-  // int _getDestinationItemIndex(int rawIndex) {
-  //   if (rawIndex >= _kAdIndex && _ad != null) {
-  //     return rawIndex - 1;
-  //   }
-  //   return rawIndex;
-  // }
+  // Native 광고 위치
+  static final _kAdIndex = 15;
+  // TODO: Add a native ad instance
+  NativeAd? _ad_odd, _ad_even;
+
+  // TODO: Add _getDestinationItemIndex()
+  int _getDestinationItemIndex(int rawIndex) {
+    // native 광고 index가 포함되어 있기 때문에, 그 이후 인덱스는 -1씩 줄여줘야 한다.
+    if (isLoaded1 == true && isLoaded2 == true) {
+      return rawIndex - 1 - (rawIndex ~/ _kAdIndex);
+    }
+    return rawIndex;
+  }
+
+  Widget nativeAdWidget(int idx) {
+    return Container(
+      height: 80.0,
+      margin:
+          EdgeInsets.fromLTRB(defaultSize, 0, defaultSize, defaultSize * 0.5),
+      decoration: BoxDecoration(
+          color: kPrimaryLightBlackColor,
+          borderRadius: BorderRadius.all(Radius.circular(8))),
+      child: AdWidget(
+        ad: (idx % 2 == 0) ? _ad_even! : _ad_odd!,
+      ),
+    );
+  }
 
   @override
   void initState() {
     super.initState();
 
     // TODO: Create a NativeAd instance
-    // _ad = NativeAd(
-    //   adUnitId: Search_Native_UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
-    //   factoryId: 'listTile',
-    //   request: AdRequest(),
-    //   listener: NativeAdListener(
-    //     onAdLoaded: (ad) {
-    //       print('Native Ad load Success ${ad.responseInfo}');
-    //       print('Native Ad load Success ${ad.adUnitId}');
-    //       setState(() {
-    //         _ad = ad as NativeAd;
-    //       });
-    //     },
-    //     onAdFailedToLoad: (ad, error) {
-    //       // Releases an ad resource when it fails to load
-    //       ad.dispose();
-    //       print('Ad load failed (code=${error.code} message=${error.message})');
-    //     },
-    //   ),
-    // );
+    _ad_odd = NativeAd(
+      adUnitId: Search_Native_UNIT_ID_ODD[Platform.isIOS ? 'ios' : 'android']!,
+      factoryId: 'listTile',
+      request: AdRequest(),
+      listener: NativeAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _ad_odd = ad as NativeAd;
+            isLoaded1 = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          print('Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+    );
 
-    // if (_ad != null) _ad!.load();
+    _ad_even = NativeAd(
+      adUnitId: Search_Native_UNIT_ID_EVEN[Platform.isIOS ? 'ios' : 'android']!,
+      factoryId: 'listTile',
+      request: AdRequest(),
+      listener: NativeAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _ad_even = ad as NativeAd;
+            isLoaded2 = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          // Releases an ad resource when it fails to load
+          ad.dispose();
+          print('Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+    );
+
+    _ad_odd!.load();
+    _ad_even!.load();
   }
 
   @override
   Widget build(BuildContext context) {
     return widget.musicList.foundItems.isNotEmpty
         ? ListView.builder(
-            itemCount: widget.musicList.foundItems.length,
+            itemCount: widget.musicList.foundItems.length +
+                ((isLoaded1 && isLoaded2)
+                    ? (widget.musicList.foundItems.length ~/ _kAdIndex) + 1
+                    : 0),
             itemBuilder: (context, index) {
-              // TODO: Get adjusted item index from _getDestinationItemIndex()
-              final item = widget.musicList.foundItems[index];
-              String songNumber = item.songNumber;
-              String title = item.title;
-              String singer = item.singer;
-
-              return GestureDetector(
-                onTap: () {
-                  if (widget.musicList.tabIndex == 1) {
-                    Provider.of<NoteData>(context, listen: false)
-                        .showAddNoteDialogWithInfo(context,
-                            isTj: true,
-                            songNumber: songNumber,
-                            title: title,
-                            singer: singer);
-                  } else {
-                    Provider.of<NoteData>(context, listen: false)
-                        .showAddNoteDialogWithInfo(context,
-                            isTj: false,
-                            songNumber: songNumber,
-                            title: title,
-                            singer: singer);
-                  }
-                },
-                child: Container(
+              if ((index % _kAdIndex == 0) && (isLoaded1 && isLoaded2)) {
+                return Container(
+                  height: 80.0,
                   margin: EdgeInsets.fromLTRB(
-                      defaultSize, 0, defaultSize, defaultSize),
-                  padding: EdgeInsets.all(defaultSize * 1.5),
+                      defaultSize, 0, defaultSize, defaultSize * 0.5),
                   decoration: BoxDecoration(
                       color: kPrimaryLightBlackColor,
                       borderRadius: BorderRadius.all(Radius.circular(8))),
-                  child: Row(children: [
-                    SizedBox(
-                      width: defaultSize * 6,
-                      child: Center(
-                          child: Text("${songNumber}",
-                              style: TextStyle(
-                                  color: kMainColor,
-                                  fontSize: defaultSize * 1.4,
-                                  fontWeight: FontWeight.w500))),
-                    ),
-                    SizedBox(width: defaultSize),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${title}",
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: kPrimaryWhiteColor,
-                                fontSize: defaultSize * 1.4,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(height: defaultSize * 0.5),
-                          Text(
-                            "${singer}",
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: kPrimaryLightWhiteColor,
-                                fontSize: defaultSize * 1.2,
-                                fontWeight: FontWeight.w300),
-                          )
-                        ],
+                  child: nativeAdWidget(index),
+                );
+              } else {
+                // TODO: Get adjusted item index from _getDestinationItemIndex()
+                final item = widget
+                    .musicList.foundItems[_getDestinationItemIndex(index)];
+                String songNumber = item.songNumber;
+                String title = item.title;
+                String singer = item.singer;
+
+                return GestureDetector(
+                  onTap: () {
+                    if (widget.musicList.tabIndex == 1) {
+                      Provider.of<NoteData>(context, listen: false)
+                          .showAddNoteDialogWithInfo(context,
+                              isTj: true,
+                              songNumber: songNumber,
+                              title: title,
+                              singer: singer);
+                    } else {
+                      Provider.of<NoteData>(context, listen: false)
+                          .showAddNoteDialogWithInfo(context,
+                              isTj: false,
+                              songNumber: songNumber,
+                              title: title,
+                              singer: singer);
+                    }
+                  },
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(
+                        defaultSize, 0, defaultSize, defaultSize),
+                    padding: EdgeInsets.all(defaultSize * 1.5),
+                    decoration: BoxDecoration(
+                        color: kPrimaryLightBlackColor,
+                        borderRadius: BorderRadius.all(Radius.circular(8))),
+                    child: Row(children: [
+                      SizedBox(
+                        width: defaultSize * 6,
+                        child: Center(
+                            child: Text("${songNumber}",
+                                style: TextStyle(
+                                    color: kMainColor,
+                                    fontSize: defaultSize * 1.4,
+                                    fontWeight: FontWeight.w500))),
                       ),
-                    )
-                  ]),
-                ),
-              );
+                      SizedBox(width: defaultSize),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${title}",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: kPrimaryWhiteColor,
+                                  fontSize: defaultSize * 1.4,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(height: defaultSize * 0.5),
+                            Text(
+                              "${singer}",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: kPrimaryLightWhiteColor,
+                                  fontSize: defaultSize * 1.2,
+                                  fontWeight: FontWeight.w300),
+                            )
+                          ],
+                        ),
+                      )
+                    ]),
+                  ),
+                );
+              }
             })
         : Center(
             child: Text(
@@ -154,5 +221,14 @@ class _SearchListState extends State<SearchList> {
               ),
             ),
           );
+  }
+
+  @override
+  void dispose() {
+    // TODO: Dispose a NativeAd object
+    _ad_odd?.dispose();
+    _ad_even?.dispose();
+
+    super.dispose();
   }
 }

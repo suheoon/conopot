@@ -58,7 +58,7 @@
                 android:ellipsize="end"
                 android:lines="1"
                 android:maxLines="1"
-                android:textColor="#000000"
+                android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 tools:text="Headline" />
 
@@ -69,7 +69,7 @@
                 android:ellipsize="end"
                 android:lines="1"
                 android:maxLines="1"
-                android:textColor="#828282"
+                android:textColor="#FFFFFF"
                 android:textSize="14sp"
                 tools:text="body" />
 
