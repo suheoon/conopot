@@ -37,7 +37,7 @@
 		<key>CFBundleVersion</key>
 		<string>$(CURRENT_PROJECT_VERSION)</string>
 		<key>GADApplicationIdentifier</key>
-		<string>ca-app-pub-1461012385298546~8357342216</string>
+		<string>ca-app-pub-7139143792782560~4000301361</string>
 		<key>LSApplicationQueriesSchemes</key>
 		<array>
 			<string>kakaokompassauth</string>
