@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/config/analytics_config.dart';
@@ -27,10 +28,12 @@ import 'note.dart';
 
 class NoteData extends ChangeNotifier {
   List<Note> notes = [];
+  List<bool> isChecked = []; // 노트 편집 체크여부 확인
+  Set<Note> deleteSet = {}; // 노트 여러개 삭제를 위한 set
   List<String> userMusics = [];
   bool emptyCheck = false;
   GlobalKey globalKey = GlobalKey(); // 배너 클릭시 추천탭으로 이동시키기 위한 globalKey
-  TextEditingController controller = TextEditingController();
+  late TextEditingController controller;
   late int noteCount;
   late bool _isSubmitted; // 리뷰 또는 채널톡 의견 제출 여부
   late final _currentTime; // 현재 시간
@@ -294,7 +297,7 @@ class NoteData extends ChangeNotifier {
     notifyListeners();
   }
 
-  //local storage 에도 삭제 작업 필요
+  // 노트 삭제 함수
   Future<void> deleteNote(Note note) async {
     noteCount -= 1;
     notes.remove(note);
@@ -459,7 +462,7 @@ class NoteData extends ChangeNotifier {
               fontSize: defaultSize * 1.6);
         }
       },
-      child: Text("애창곡 노트에 추가",
+      child: Text("애창곡 노트에 추가하기",
           style: TextStyle(
             fontWeight: FontWeight.w600,
           )),
@@ -468,7 +471,7 @@ class NoteData extends ChangeNotifier {
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
             side: const BorderSide(width: 0.0),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(30),
           ))),
     );
 
@@ -477,18 +480,21 @@ class NoteData extends ChangeNotifier {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(
             children: [
-              Text("${songNumber}", style: TextStyle(color: kMainColor)),
+              Text("${songNumber}", style: TextStyle(color: kMainColor, fontSize: defaultSize * 1.7)),
               Spacer(),
-              IconButton(
-                onPressed: () async {
+              GestureDetector(
+                onTap: () async {
                   final url = Uri.parse(
                       'https://www.youtube.com/results?search_query= ${title} ${singer}');
                   if (await canLaunchUrl(url)) {
                     launchUrl(url, mode: LaunchMode.inAppWebView);
                   }
                 },
-                icon: SvgPicture.asset("assets/icons/youtube.svg"),
-              )
+                child: Column(children: [
+                  SvgPicture.asset("assets/icons/youtube.svg"),
+                  Text("유튜브 검색", style: TextStyle(color: kPrimaryWhiteColor, fontSize: defaultSize * 0.9)),
+                ]),
+              ),
             ],
           ),
           SizedBox(height: defaultSize * 2),
@@ -893,8 +899,8 @@ class NoteData extends ChangeNotifier {
               borderRadius: BorderRadius.circular(8),
             ))),
         onPressed: () {
-          saveNotes();
           Navigator.of(context).pop();
+          showBackupAlertDialog(context);
         },
         child: Text("백업하기", style: TextStyle(fontWeight: FontWeight.w600)),
       ),
@@ -928,7 +934,7 @@ class NoteData extends ChangeNotifier {
                       color: kPrimaryWhiteColor, fontSize: defaultSize * 1.6))),
           SizedBox(height: defaultSize * 2),
           Text(
-            "현재 애창곡 노트에 저장한 애창곡들을 서버에 백업하고 핸드폰이 바뀌거나 앱을 삭제 하더라도 편리하게 다시 가져올 수 있어요!",
+            "현재 애창곡 노트에 저장한 애창곡들을 서버에 백업하고 핸드폰이 바뀌거나 앱을 삭제 하더라도 편리하게 다시 가져올 수 있어요",
             style: TextStyle(
                 color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4),
           )
@@ -949,8 +955,83 @@ class NoteData extends ChangeNotifier {
         });
   }
 
+  //노트 백업 전 경고 다이어로그
+  void showBackupAlertDialog(BuildContext context) {
+    double defaultSize = SizeConfig.defaultSize;
+    double screenWidth = SizeConfig.screenWidth;
+    Widget backupButton = Container(
+      width: screenWidth * 0.3,
+      child: ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(kMainColor),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              side: const BorderSide(width: 0.0),
+              borderRadius: BorderRadius.circular(8),
+            ))),
+        onPressed: () {
+          saveNotes();
+          Navigator.of(context).pop();
+        },
+        child: Text("백업 계속하기", style: TextStyle(fontWeight: FontWeight.w600)),
+      ),
+    );
+
+    Widget cancelButton = Container(
+      width: screenWidth * 0.3,
+      child: ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                side: const BorderSide(width: 0.0),
+                borderRadius: BorderRadius.circular(8),
+              ))),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text("취소",
+              style:
+                  TextStyle(fontWeight: FontWeight.w600, color: kMainColor))),
+    );
+
+    AlertDialog alert = AlertDialog(
+      content: IntrinsicHeight(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Center(
+              child: Text("데이터 백업시 주의사항 ⚠️",
+                  style: TextStyle(
+                      color: kPrimaryWhiteColor, fontSize: defaultSize * 1.6))),
+          SizedBox(height: defaultSize * 2),
+          Text("애창곡 노트에 저장한 노래 개수 : ${notes.length}",
+              style: TextStyle(
+                  color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4)),
+          SizedBox(height: defaultSize),
+          Text(
+            "현재 애창곡 노트에 저장된 곡을 기준으로 백업이 되어 기존에 서버에 저장된 곡들은 사라지므로 백업한 노래가 있다면 가져오기 이후 백업을 진행해 주세요 🤓",
+            style: TextStyle(
+                color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4),
+          )
+        ]),
+      ),
+      actionsAlignment: MainAxisAlignment.center,
+      actions: [
+        cancelButton,
+        backupButton,
+      ],
+      backgroundColor: kDialogColor,
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(child: alert);
+        });
+  }
+
   // 저장한 노트들 백업하기
   Future<void> saveNotes() async {
+    await EasyLoading.show(status: "백업 진행 중");
     //!event: 내정보_뷰__백업하기
     Analytics_config().backUpNoteEvent();
     String? serverURL = dotenv.env['USER_SERVER_URL'];
@@ -971,23 +1052,24 @@ class NoteData extends ChangeNotifier {
         //백업 날짜 기록
         backUpDate = DateFormat("yyyy-MM-dd hh:mm:ss a").format(DateTime.now());
         await storage.write(key: 'backupdate', value: backUpDate);
-
+        EasyLoading.showSuccess("백업에 성공했습니다");
         notifyListeners();
-      } catch (err) {
-        throw HttpException('$err');
+      } on HttpException {
+        // 인터넷 연결 예외처리
+        EasyLoading.showError("백업이 실패했습니다 인터넷 연결을 확인해주세요 😢");
       }
     }
   }
 
-  // 저장한 노트들 가져오기
+  // 저장한 노트를 가져오는 함수
   Future<void> loadNotes(BuildContext context) async {
     //!event: 내정보_뷰__가져오기
     Analytics_config().loadNoteEvent();
     String? serverURL = dotenv.env['USER_SERVER_URL'];
     String url = '$serverURL/user/backup/load';
     String? jwtToken = await storage.read(key: 'jwt');
-    if (jwtToken != null) {
-      try {
+    try {
+      if (jwtToken != null) {
         final response = await http.get(
           Uri.parse(url),
           headers: <String, String>{
@@ -1009,6 +1091,9 @@ class NoteData extends ChangeNotifier {
             }
           }
         }
+        if (songNumberList.isEmpty) {
+          throw FormatException();
+        }
         Set<Note> entireNote =
             Provider.of<MusicSearchItemLists>(context, listen: false)
                 .entireNote;
@@ -1027,9 +1112,11 @@ class NoteData extends ChangeNotifier {
           }
         }
         await storage.write(key: 'notes', value: jsonEncode(notes));
-      } catch (err) {
-        throw HttpException('$err');
+        EasyLoading.showSuccess("${songNumberList.length}개의 곡을 가져왔습니다");
       }
+    } on FormatException {
+      // 백업된 곡이 하나도 없을 때 예외처리
+      EasyLoading.showError("백업된 곡이 없습니다!!");
     }
     notifyListeners();
   }
@@ -1151,5 +1238,120 @@ class NoteData extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  // 노트 편집시 전체 선택
+  checkAllSongs() {
+    isChecked = List<bool>.filled(isChecked.length, true);
+    for (int i = 0; i < isChecked.length; i++) {
+      deleteSet.add(notes[i]);
+    }
+    notifyListeners();
+  }
+
+  // 노트 편집시 전체 해제
+  unCheckAllSongs() {
+    isChecked = List<bool>.filled(isChecked.length, false);
+    deleteSet.clear();
+    notifyListeners();
+  }
+
+  // 노래 한곡 체크
+  checkSong(Note note) {
+    deleteSet.add(note);
+    notifyListeners();
+  }
+
+  // 노래 한곡 체크해제
+  unCheckSong(Note note) {
+    deleteSet.remove(note);
+    notifyListeners();
+  }
+
+  // 편집시 사용되는 리스트 초기화
+  initEditNote() {
+    deleteSet = {}; // deleteSet 초기화
+    isChecked = List<bool>.filled(notes.length, false);
+    notifyListeners();
+  }
+
+  // 노트 여러개 삭제 함수
+  Future<void> deleteMultipleNote() async {
+    noteCount -= deleteSet.length;
+    List<Note> temp_notes = [];
+    List<String> temp_userMusics = [];
+    for (int i = 0; i < notes.length; i++) {
+      if (deleteSet.contains(notes[i])) continue;
+      temp_notes.add(notes[i]);
+      temp_userMusics.add(notes[i].tj_songNumber);
+    }
+    deleteSet = {};
+    notes = temp_notes;
+    userMusics = temp_userMusics;
+    await storage.write(key: 'notes', value: jsonEncode(notes));
+
+    Identify identify = Identify()
+      ..set('노트 개수', notes.length)
+      ..set('유저 노트 리스트', userMusics);
+
+    Analytics_config().userProps(identify);
+    notifyListeners();
+  }
+
+  //노트여러개 삭제여부 확인 팝업 함수
+  void showDeleteMultipleNoteDialog(context) {
+    Widget deleteButton = ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(kMainColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
+            borderRadius: BorderRadius.circular(8),
+          ))),
+      onPressed: () async {
+        await deleteMultipleNote();
+        if (isChecked.isNotEmpty) {
+          isChecked = List<bool>.filled(isChecked.length, false);
+        }
+        Navigator.pop(context);
+      },
+      child: Text("삭제",
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+          )),
+    );
+
+    Widget cancelButton = ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              side: const BorderSide(width: 0.0),
+              borderRadius: BorderRadius.circular(8),
+            ))),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text("취소",
+            style: TextStyle(fontWeight: FontWeight.w600, color: kMainColor)));
+
+    AlertDialog alert = AlertDialog(
+      content: Text(
+        "정말 총 ${deleteSet.length}개의 노래를 삭제하시겠습니까?",
+        style:
+            TextStyle(fontWeight: FontWeight.w400, color: kPrimaryWhiteColor),
+      ),
+      actions: [
+        cancelButton,
+        deleteButton,
+      ],
+      backgroundColor: kDialogColor,
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(child: alert);
+        });
   }
 }

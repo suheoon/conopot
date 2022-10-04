@@ -514,8 +514,7 @@ class MusicSearchItemLists extends ChangeNotifier {
   }
 
   // 검색 필터링 기능(일반검색)
-  void runFilter(String enteredKeyword, int _tabIndex) {
-    EasyDebounce.debounce('searching', Duration(milliseconds: 500), () {
+  void runFilter(String enteredKeyword, int _tabIndex, String _dropdwonValue) {
       results = [];
       //공백 제거 && 대문자 → 소문자 변경
       enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
@@ -524,42 +523,38 @@ class MusicSearchItemLists extends ChangeNotifier {
         if (enteredKeyword.isEmpty) {
           results = tjSongList;
         } else {
-          results = tjSongList
-              .where((string) =>
-                  (string.title.replaceAll(' ', '').toLowerCase())
-                      .contains(enteredKeyword) ||
-                  (string.singer.replaceAll(' ', '').toLowerCase())
-                      .contains(enteredKeyword) ||
-                  (string.search_keyword_singer_title
-                          .replaceAll(' ', '')
-                          .toLowerCase())
-                      .contains(enteredKeyword) ||
-                  (string.search_keyword_title_singer
-                          .replaceAll(' ', '')
-                          .toLowerCase())
-                      .contains(enteredKeyword))
-              .toList();
+          if (_dropdwonValue == '제목') {
+            // 제목 검색
+            results = tjSongList.where((string) => (string.title.replaceAll(' ', '').toLowerCase())
+                      .contains(enteredKeyword)).toList();
+          } else if (_dropdwonValue == '가수') {
+            // 가수 검색
+            results = tjSongList.where((string) => (string.singer.replaceAll(' ', '').toLowerCase())
+                      .contains(enteredKeyword)).toList();
+          } else if (_dropdwonValue == '번호') {
+            // 번호 검색
+            results = tjSongList.where((string) => (string.songNumber.replaceAll(' ', '').toLowerCase())
+                      == (enteredKeyword)).toList();
+          }
         }
       } else {
         //KY
         if (enteredKeyword.isEmpty) {
           results = kySongList;
         } else {
-          results = kySongList
-              .where((string) =>
-                  (string.title.replaceAll(' ', '').toLowerCase())
-                      .contains(enteredKeyword) ||
-                  (string.singer.replaceAll(' ', '').toLowerCase())
-                      .contains(enteredKeyword) ||
-                  (string.search_keyword_singer_title
-                          .replaceAll(' ', '')
-                          .toLowerCase())
-                      .contains(enteredKeyword) ||
-                  (string.search_keyword_title_singer
-                          .replaceAll(' ', '')
-                          .toLowerCase())
-                      .contains(enteredKeyword))
-              .toList();
+          if (_dropdwonValue == '제목') {
+            // 제목 검색
+            results = kySongList.where((string) => (string.title.replaceAll(' ', '').toLowerCase())
+                      .contains(enteredKeyword)).toList();
+          } else if (_dropdwonValue == '가수') {
+            // 가수 검색
+            results = kySongList.where((string) => (string.singer.replaceAll(' ', '').toLowerCase())
+                      .contains(enteredKeyword)).toList();
+          } else if (_dropdwonValue == '번호') {
+            // 번호 검색
+            results = kySongList.where((string) => (string.songNumber.replaceAll(' ', '').toLowerCase())
+                      == (enteredKeyword)).toList();
+          }
         }
       }
       foundItems = results;
@@ -569,7 +564,6 @@ class MusicSearchItemLists extends ChangeNotifier {
       Analytics_config().musicSearchKeywordEvent(enteredKeyword);
 
       notifyListeners();
-    });
   }
 
   // 검색 필터링 기능(금영 곡 추가 시 검색)
