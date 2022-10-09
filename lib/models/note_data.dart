@@ -430,7 +430,6 @@ class NoteData extends ChangeNotifier {
     Analytics_config().clickYoutubeButtonOnSearchView();
     double defaultSize = SizeConfig.defaultSize;
     var noteAddIconChange = Firebase_Remote_Config().remoteConfig.getString('noteAddIconChange');
-    print("여기2: ${noteAddIconChange}");
 
     Widget okButton = ElevatedButton(
       onPressed: () {

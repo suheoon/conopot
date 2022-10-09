@@ -180,6 +180,11 @@ class Analytics_config {
     event('네비게이션__추천탭', {});
   }
 
+  // !event: 네비게이션__내정보탭
+  void clickMyTapEvent() {
+    event('네비게이션__내정보탭', {});
+  }
+
   // !event: 일반_검색_뷰__노래_유튜브
   void clickYoutubeButtonOnSearchView() {
     event('일반_검색_뷰__노래_유튜브', {});
