@@ -17,7 +17,9 @@ class Firebase_Remote_Config {
       'appopenadSetting': false,
       'pitchMeasureInterstitialSetting': false,
       'aaTest': 'A',
-      'noteAddIconChange' : 'A'
+      'noteAddIconChange' : 'A',
+      'navigationOrderChange' : 'A',
+      'noteAddMentChange' : 'A'
     });
     RemoteConfigValue(null, ValueSource.valueStatic);
     await remoteConfig.fetchAndActivate();
