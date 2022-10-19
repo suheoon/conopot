@@ -8,6 +8,7 @@ import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/screens/feed/feed_screen.dart';
 import 'package:conopot/screens/musicBook/music_book.dart';
 import 'package:conopot/screens/note/note_screen.dart';
 import 'package:conopot/screens/recommend/recommend_screen.dart';
@@ -62,12 +63,14 @@ class _MainScreenState extends State<MainScreen>
             NoteScreen(),
             MusicBookScreen(),
             RecommendScreen(),
+            FeedScreen(),
             UserScreen(),
           ]
         : <Widget>[
             NoteScreen(),
             RecommendScreen(),
             MusicBookScreen(),
+            FeedScreen(),
             UserScreen(),
           ];
 
@@ -239,6 +242,17 @@ class _MainScreenState extends State<MainScreen>
                               width: 17)),
                     ),
                     BottomNavigationBarItem(
+                      icon: Icon(
+                        Icons.forum,
+                        color: kPrimaryWhiteColor,
+                      ),
+                      label: "피드",
+                      activeIcon: Icon(
+                        Icons.forum,
+                        color: kMainColor,
+                      ),
+                    ),
+                    BottomNavigationBarItem(
                       icon:
                           Icon(Icons.perm_identity, color: kPrimaryWhiteColor),
                       label: "내 정보",
@@ -281,6 +295,17 @@ class _MainScreenState extends State<MainScreen>
                       label: "노래방 책",
                       activeIcon: Icon(
                         Icons.book,
+                        color: kMainColor,
+                      ),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(
+                        Icons.forum,
+                        color: kPrimaryWhiteColor,
+                      ),
+                      label: "피드",
+                      activeIcon: Icon(
+                        Icons.forum,
                         color: kMainColor,
                       ),
                     ),

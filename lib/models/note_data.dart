@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:amplitude_flutter/identify.dart';
@@ -23,11 +24,13 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart' as tt;
 import 'package:url_launcher/url_launcher.dart';
 import 'note.dart';
 
 class NoteData extends ChangeNotifier {
   List<Note> notes = [];
+  List<Note> lists = [];
   List<bool> isChecked = []; // 노트 편집 체크여부 확인
   Set<Note> deleteSet = {}; // 노트 여러개 삭제를 위한 set
   List<String> userMusics = [];
@@ -39,6 +42,8 @@ class NoteData extends ChangeNotifier {
   late final _currentTime; // 현재 시간
   DateTime? _preRequestTime; // 이전 요청 시간
   late bool isSubscribed; // 구독 여부
+  List<bool> feedDetailCheckList = []; // 피드 노래추가 체크여부 확인
+  Set<Note> addSet = {}; // 피드 노래 여러개 추가를 위한 set
 
   bool isAppOpenBanner = true; //앱 오픈 배너 로드 여부
 
@@ -51,6 +56,7 @@ class NoteData extends ChangeNotifier {
   String userNickname = "사용자 ID";
   String backUpDate = "없음";
   String userImage = "";
+  int userId = 0;
 
   // AdMob
   int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
@@ -278,6 +284,42 @@ class NoteData extends ChangeNotifier {
     notifyListeners();
   }
 
+  // 곡 번호로 리스트에 추가하는 함수
+  Future<void> addSongBySongNumber(BuildContext context, String songNumber,
+      List<FitchMusic> musicList) async {
+    for (FitchMusic fitchMusic in musicList) {
+      if (fitchMusic.tj_songNumber == songNumber) {
+        Note note = Note(
+          fitchMusic.tj_title,
+          fitchMusic.tj_singer,
+          fitchMusic.tj_songNumber,
+          fitchMusic.ky_title,
+          fitchMusic.ky_singer,
+          fitchMusic.ky_songNumber,
+          fitchMusic.gender,
+          fitchMusic.pitchNum,
+          "",
+          0,
+        );
+
+        bool flag = false;
+        for (Note iter_list in lists) {
+          if (iter_list.tj_songNumber == fitchMusic.tj_songNumber) {
+            flag = true;
+            break;
+          }
+        }
+        if (!flag) {
+          lists.add(note);
+        } else {
+          emptyCheck = true;
+        }
+        break;
+      }
+    }
+    notifyListeners();
+  }
+
   Future<void> editNote(Note note, String memo) async {
     note.memo = memo;
     int memoCnt = 0;
@@ -296,6 +338,96 @@ class NoteData extends ChangeNotifier {
     Analytics_config().userProps(identify);
 
     notifyListeners();
+  }
+
+  // 리스트 노래 추가 다이어로그 팝업 함수
+  void showAddListSongDialog(
+      BuildContext context, String songNumber, String title) {
+    double defaultSize = SizeConfig.defaultSize;
+
+    Widget okButton = ElevatedButton(
+      onPressed: () {
+        addSongBySongNumber(
+            context,
+            songNumber,
+            Provider.of<MusicSearchItemLists>(context, listen: false)
+                .combinedSongList);
+        Navigator.of(context).pop();
+        Fluttertoast.cancel();
+        if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
+          Fluttertoast.showToast(
+              msg: "이미 등록된 곡입니다 😢",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Color(0xFFFF7878),
+              textColor: kPrimaryWhiteColor,
+              fontSize: defaultSize * 1.6);
+          Provider.of<NoteData>(context, listen: false).initEmptyCheck();
+        } else {
+          Analytics_config().addViewSongAddEvent(title);
+          Analytics_config().musicAddEvent(title);
+          Fluttertoast.showToast(
+              msg: "노래가 추가 되었습니다 🎉",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: kMainColor,
+              textColor: kPrimaryWhiteColor,
+              fontSize: defaultSize * 1.6);
+        }
+      },
+      child: Text("추가",
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+          )),
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(kMainColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
+            borderRadius: BorderRadius.circular(8),
+          ))),
+    );
+
+    Widget cancelButton = ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
+            borderRadius: BorderRadius.circular(8),
+          ))),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+      child: Text(
+        "취소",
+        style: TextStyle(fontWeight: FontWeight.w600, color: kMainColor),
+      ),
+    );
+
+    AlertDialog alert = AlertDialog(
+      content: Text(
+        "'${title}' 노래를 리스트에 추가하시겠습니까?",
+        style:
+            TextStyle(fontWeight: FontWeight.w400, color: kPrimaryWhiteColor),
+      ),
+      actions: [
+        cancelButton,
+        okButton,
+      ],
+      backgroundColor: kDialogColor,
+      shape: const RoundedRectangleBorder(
+          side: BorderSide(width: 0.0),
+          borderRadius: BorderRadius.all(Radius.circular(8))),
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(child: alert);
+        });
   }
 
   // 노트 삭제 함수
@@ -1246,7 +1378,6 @@ class NoteData extends ChangeNotifier {
 
   initAccountInfo() async {
     String? jwtToken = await storage.read(key: 'jwt');
-
     if (jwtToken != null) {
       Map<String, dynamic> payload = Jwt.parseJwt(jwtToken);
       if (payload["username"] != null) {
@@ -1257,6 +1388,9 @@ class NoteData extends ChangeNotifier {
       if (payload["userimage"] != null) {
         userImage = payload["userimage"];
       }
+      if (payload["userId"] != null) {
+        userId = payload["userId"];
+      }
     }
 
     String? storage_backupdate = await storage.read(key: 'backupdate');
@@ -1265,6 +1399,22 @@ class NoteData extends ChangeNotifier {
       backUpDate = storage_backupdate;
     }
 
+    notifyListeners();
+  }
+
+  // 피드 노트에 추가 전체 선택
+  checkAllFeedSongs(List<Note> postList) {
+    feedDetailCheckList = List<bool>.filled(feedDetailCheckList.length, true);
+    for (int i = 0; i < postList.length; i++) {
+      addSet.add(postList[i]);
+    }
+    notifyListeners();
+  }
+
+  // 피드 노트에 추가 전체 해제
+  uncheckAllFeedSongs() {
+    feedDetailCheckList = List<bool>.filled(feedDetailCheckList.length, false);
+    addSet.clear();
     notifyListeners();
   }
 
@@ -1303,6 +1453,13 @@ class NoteData extends ChangeNotifier {
     notifyListeners();
   }
 
+  // 피드 노래추가에 사용되는 리스트 초기화
+  initAddFeedSong(List<String> postList) {
+    addSet = {};
+    feedDetailCheckList = List<bool>.filled(postList.length, false);
+    notifyListeners();
+  }
+
   // 노트 여러개 삭제 함수
   Future<void> deleteMultipleNote() async {
     noteCount -= deleteSet.length;
@@ -1323,6 +1480,28 @@ class NoteData extends ChangeNotifier {
       ..set('유저 노트 리스트', userMusics);
 
     Analytics_config().userProps(identify);
+    notifyListeners();
+  }
+
+  // 피드에 올라온 노래 내 애창곡 리스트에 여러개 추가 함수
+  Future<void> addMultipleFeedSongs() async {
+    double defaultSize = SizeConfig.defaultSize;
+    double screenWidth = SizeConfig.screenWidth;
+    int overlap = 0;
+    for (Note note in addSet) {
+      if (notes.contains(note)) {
+        overlap++;
+      } else {
+        notes.add(note);
+      }
+    }
+    if (overlap > 0) {
+      tt.Toast.show("중복을 제외한 ${addSet.length - overlap}개의 곡이 추가되었습니다.",
+        duration: 2, backgroundColor: kDialogColor.withOpacity(0.8));
+    } else {
+      tt.Toast.show("${addSet.length}개의 곡이 추가되었습니다.",
+        duration: 2, backgroundColor: kDialogColor.withOpacity(0.8));
+    }
     notifyListeners();
   }
 

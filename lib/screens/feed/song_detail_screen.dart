@@ -11,6 +11,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
+import 'package:conopot/screens/note/components/request_pitch_button.dart';
 import 'package:conopot/screens/note/components/song_by_same_singer_list.dart';
 import 'package:conopot/screens/note/components/youtube_player.dart';
 import 'package:flutter/material.dart';
@@ -20,18 +21,15 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
-import 'components/editable_text_field.dart';
-import 'components/request_pitch_button.dart';
-
-class NoteDetailScreen extends StatefulWidget {
+class SongDetailScreen extends StatefulWidget {
   late Note note;
-  NoteDetailScreen({Key? key, required this.note}) : super(key: key);
+  SongDetailScreen({Key? key, required this.note}) : super(key: key);
 
   @override
-  State<NoteDetailScreen> createState() => _NoteDetailScreenState();
+  State<SongDetailScreen> createState() => _SongDetailScreenState();
 }
 
-class _NoteDetailScreenState extends State<NoteDetailScreen>
+class _SongDetailScreenState extends State<SongDetailScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   var scrollController = ScrollController();
@@ -114,7 +112,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "애창곡 노트",
+            "상세정보",
             style: TextStyle(
                 fontWeight: FontWeight.w700, fontSize: defaultSize * 1.5),
           ),
@@ -122,11 +120,11 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
           actions: [
             TextButton(
                 onPressed: () {
-                  Provider.of<NoteData>(context, listen: false)
-                      .showDeleteDialog(context, widget.note);
+                  // 애창곡 노트에 추가
+                  Provider.of<NoteData>(context, listen: false).showAddNoteDialog(context, widget.note.tj_songNumber, widget.note.tj_title);
                 },
                 child: Text(
-                  "삭제",
+                  "추가",
                   style: TextStyle(
                       color: kMainColor,
                       fontWeight: FontWeight.w300,
@@ -418,16 +416,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                           )
                         ],
                       ),
-                    ),
-                    SizedBox(height: defaultSize),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: defaultSize),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: kPrimaryLightBlackColor,
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      padding: EdgeInsets.all(defaultSize * 1.5),
-                      child: EditableTextField(note: widget.note),
                     ),
                     SizedBox(height: defaultSize),
                     Container(
@@ -810,18 +798,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                 )
                               ],
                             ),
-                          ),
-                          SizedBox(height: defaultSize),
-                          Container(
-                            margin:
-                                EdgeInsets.symmetric(horizontal: defaultSize),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                color: kPrimaryLightBlackColor,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8))),
-                            padding: EdgeInsets.all(defaultSize * 1.5),
-                            child: EditableTextField(note: widget.note),
                           ),
                           SizedBox(height: defaultSize),
                           SongBySameSingerList(note: widget.note)
