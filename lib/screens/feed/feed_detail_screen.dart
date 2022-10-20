@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:conopot/screens/feed/feed_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
@@ -300,6 +301,8 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                     style: TextStyle(color: kPrimaryLightWhiteColor, fontSize: defaultSize * 1.5),
                     overflow: TextOverflow.ellipsis),
                 Spacer(),
+                (widget.post.postAuthorId == Provider.of<NoteData>(context, listen: false).userId) ?
+                SizedBox.shrink() :
                 (_isEditting == false)
                     ? Row(
                         children: [
@@ -453,6 +456,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
             // 에러처리 (인터넷 연결 등등)
             EasyLoading.showError("인터넷 연결을 확인해주세요");
           }
+          Navigator.popUntil(context, (route) => route is FeedScreen);
         },
         child: Text("네, 차단할게요", style: TextStyle(fontWeight: FontWeight.w600)),
       ),

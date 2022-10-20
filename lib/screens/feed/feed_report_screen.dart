@@ -34,7 +34,7 @@ class _FeedReportScreenState extends State<FeedReportScreen> {
               SizedBox(height: defaultSize),
               Text("'${widget.post.postTitle}'",
                   style: TextStyle(color: kPrimaryWhiteColor)),
-              Text("피드를 신고하는 이유를 알려주세요",
+              Text("플레이 리스트를 신고하는 이유를 알려주세요",
                   style: TextStyle(color: kPrimaryWhiteColor)),
               Text("신속하게 해당 게시물에 대해서 조치를 취하겠습니다."),
               TextField(
