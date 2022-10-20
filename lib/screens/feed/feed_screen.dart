@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:conopot/config/constants.dart';
@@ -61,6 +60,14 @@ class _FeedScreenState extends State<FeedScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _loadAd();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    // TODO: Dispose a BannerAd object
+    _bannerAd?.dispose();
   }
 
   Future<void> _loadAd() async {
@@ -140,23 +147,23 @@ class _FeedScreenState extends State<FeedScreen> {
       ),
       body: SafeArea(
         child: ListView(controller: _controller, children: [
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (_anchoredAdaptiveAd != null && _isLoaded)
-                Container(
-                  color: Colors.transparent,
-                  width: _anchoredAdaptiveAd!.size.width.toDouble(),
-                  height: _anchoredAdaptiveAd!.size.height.toDouble(),
-                  child: AdWidget(ad: _anchoredAdaptiveAd!),
-                )
-              ],
-            ),
-            decoration: BoxDecoration(
-                color: kPrimaryLightBlackColor,
-                borderRadius: BorderRadius.all(Radius.circular(8))),
-          ),
+          // Container(
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     children: [
+          //       if (_anchoredAdaptiveAd != null && _isLoaded)
+          //         Container(
+          //           color: Colors.transparent,
+          //           width: _anchoredAdaptiveAd!.size.width.toDouble(),
+          //           height: _anchoredAdaptiveAd!.size.height.toDouble(),
+          //           child: AdWidget(ad: _anchoredAdaptiveAd!),
+          //         )
+          //     ],
+          //   ),
+          //   decoration: BoxDecoration(
+          //       color: kPrimaryLightBlackColor,
+          //       borderRadius: BorderRadius.all(Radius.circular(8))),
+          // ),
           SizedBox(height: defaultSize),
           Container(
             padding: EdgeInsets.fromLTRB(
@@ -195,13 +202,5 @@ class _FeedScreenState extends State<FeedScreen> {
         ]),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    // TODO: Dispose a BannerAd object
-    _bannerAd?.dispose();
   }
 }

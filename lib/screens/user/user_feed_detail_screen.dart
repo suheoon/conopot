@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:conopot/screens/user/user_feed_edit_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
@@ -17,15 +17,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
-class FeedDetailScreen extends StatefulWidget {
+class UserFeedDetailScreen extends StatefulWidget {
   Post post;
-  FeedDetailScreen({super.key, required this.post});
+  UserFeedDetailScreen({super.key, required this.post});
 
   @override
-  State<FeedDetailScreen> createState() => _FeedDetailScreenState();
+  State<UserFeedDetailScreen> createState() => _UserFeedDetailScreenState();
 }
 
-class _FeedDetailScreenState extends State<FeedDetailScreen> {
+class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
   String? videoId;
   int _index = 0;
   bool _like = false; // 좋아요 여부
@@ -362,11 +362,12 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
+                    Provider.of<NoteData>(context, listen: false).lists = postList;
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            FeedReportScreen(post: widget.post),
+                            UserFeedEditScreen(post: widget.post),
                       ),
                     );
                   },
@@ -374,7 +375,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                     children: [
                       SizedBox(width: defaultSize),
                       Text(
-                        "신고하기",
+                        "수정하기",
                         style: TextStyle(color: kPrimaryWhiteColor),
                       ),
                       Spacer(),
@@ -390,13 +391,13 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
                     // 차단하기
-                    showBlockDialog(context);
+                    showDeleteDialog(context);
                   },
                   child: Row(
                     children: [
                       SizedBox(width: defaultSize),
                       Text(
-                        "차단하기",
+                        "삭제하기",
                         style: TextStyle(color: kPrimaryWhiteColor),
                       ),
                     ],
@@ -411,8 +412,8 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
         });
   }
 
-  // 차단 여부 확인 다이어로그
-  void showBlockDialog(BuildContext context) {
+  // 삭제 여부 확인 다이어로그
+  void showDeleteDialog(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
     double screenWidth = SizeConfig.screenWidth;
 
@@ -446,15 +447,14 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
             ))),
         onPressed: () async {
           try {
-            String URL = 'http://10.0.2.2:3000/playlist/block';
-            final response = await http.post(
+            String URL = 'http://10.0.2.2:3000/playlist/delete';
+            final response = await http.delete(
               Uri.parse(URL),
               headers: <String, String>{
                 'Content-Type': 'application/json; charset=UTF-8',
               },
               body: jsonEncode({
-                "userId": Provider.of<NoteData>(context, listen: false).userId,
-                "blockUserId": widget.post.postAuthorId
+                "postId": widget.post.postId,
               }),
             );
           } on SocketException {
@@ -463,15 +463,15 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
           }
           for (int i = 0; i < 3; i++) Navigator.of(context).pop();
         },
-        child: Text("네, 차단할게요", style: TextStyle(fontWeight: FontWeight.w600)),
+        child: Text("삭제", style: TextStyle(fontWeight: FontWeight.w600)),
       ),
     );
 
     AlertDialog alert = AlertDialog(
       content: IntrinsicHeight(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Text(
-            "${widget.post.userName}님의 모든 게시글을 보지 않으시겠어요?\n피드 목록에서 ${widget.post.userName}님의 게시글이 더는 보이지 않아요.",
+            "삭제하시겠습니까?",
             style: TextStyle(
                 color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4),
           )

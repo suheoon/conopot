@@ -11,6 +11,7 @@ import 'package:conopot/screens/user/etc_screen.dart';
 import 'package:conopot/screens/user/login_screen.dart';
 import 'package:conopot/screens/user/profile_modification_screen.dart';
 import 'package:conopot/screens/user/user_liked_playlist_screen.dart';
+import 'package:conopot/screens/user/user_share_playlist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
@@ -165,7 +166,13 @@ class _UserScreenState extends State<UserScreen> {
                               children: [
                                 SizedBox(height: defaultSize * 1.5),
                                 InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                UserSharePlaylistScreen()));
+                                  },
                                   splashColor: Colors.transparent,
                                   child: Container(
                                     child: Row(children: [
@@ -184,10 +191,11 @@ class _UserScreenState extends State<UserScreen> {
                                 SizedBox(height: defaultSize * 1.5),
                                 InkWell(
                                   onTap: () {
-                                     Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => UserLikedPlaylistScreen()));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                UserLikedPlaylistScreen()));
                                   },
                                   splashColor: Colors.transparent,
                                   child: Container(

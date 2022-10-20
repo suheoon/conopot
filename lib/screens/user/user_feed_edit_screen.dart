@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/debounce.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/post.dart';
 import 'package:conopot/screens/feed/components/search_song_list.dart';
 import 'package:conopot/screens/feed/components/added_song_list.dart';
 import 'package:flutter/material.dart';
@@ -13,20 +13,33 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
-class CreateFeedScreen extends StatefulWidget {
-  const CreateFeedScreen({super.key});
+class UserFeedEditScreen extends StatefulWidget {
+  Post post;
+  UserFeedEditScreen({super.key, required this.post});
 
   @override
-  State<CreateFeedScreen> createState() => _CreateFeedScreenState();
+  State<UserFeedEditScreen> createState() => _UserFeedEditScreenState();
 }
 
-class _CreateFeedScreenState extends State<CreateFeedScreen> {
+class _UserFeedEditScreenState extends State<UserFeedEditScreen> {
   int _emotionIndex = 0; // 😀, 🥲, 😡, 😳, 🫠
   var _emotionList = ["😀", "🥲", "😡", "😳", "🫠"];
   bool _iseditting = false;
   String _listName = "";
   String _explanation = "";
   final Debounce _debounce = Debounce(delay: Duration(milliseconds: 500));
+  late TextEditingController listTitleController;
+  late TextEditingController listSubscriptionController;
+
+  @override
+  void initState() {
+    _emotionIndex = widget.post.postIconId;
+    _listName = widget.post.postTitle;
+    _explanation = widget.post.postSubscription;
+    listTitleController = TextEditingController(text: "${widget.post.postTitle}");
+    listSubscriptionController = TextEditingController(text: "${widget.post.postSubscription}");
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -39,7 +52,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
     double defaultSize = SizeConfig.defaultSize;
     return Scaffold(
       appBar: AppBar(
-        title: Text("리스트 생성", style: TextStyle(color: kPrimaryWhiteColor)),
+        title: Text("리스트 수정", style: TextStyle(color: kPrimaryWhiteColor)),
         centerTitle: true,
         actions: [
           TextButton(
@@ -50,18 +63,22 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                         .lists
                         .length <
                     3) {
-                      EasyLoading.showError("노래를 3개이상 추가해 주세요");
+                  EasyLoading.showError("노래를 3개이상 추가해 주세요");
                 } else {
-                  List<String> songList = Provider.of<NoteData>(context, listen: false)
-                        .lists.map((e) => e.tj_songNumber).toList();
+                  List<String> songList =
+                      Provider.of<NoteData>(context, listen: false)
+                          .lists
+                          .map((e) => e.tj_songNumber)
+                          .toList();
                   try {
-                    String URL = "http://10.0.2.2:3000/playlist/create";
+                    String URL = "http://10.0.2.2:3000/playlist/update";
                     final response = await http.post(
                       Uri.parse(URL),
                       headers: <String, String>{
                         'Content-Type': 'application/json; charset=UTF-8',
                       },
                       body: jsonEncode({
+                        "postId": widget.post.postId,
                         "postTitle": _listName,
                         "postIconId": _emotionIndex,
                         "postSubscription": _explanation,
@@ -71,7 +88,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                         "postMusicList": jsonEncode(songList)
                       }),
                     );
-                    Navigator.of(context).pop();
+                    for (int i = 0; i < 3; i++) Navigator.of(context).pop();
                   } on HttpException {
                     // 인터넷 연결 예외처리
                     EasyLoading.showError("인터넷 연결을 확인해주세요");
@@ -86,7 +103,8 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                   decoration: BoxDecoration(
                       color: kMainColor.withOpacity(0.8),
                       borderRadius: BorderRadius.all(Radius.circular(30))),
-                  child: Text("완료", style: TextStyle(color: kPrimaryWhiteColor))))
+                  child:
+                      Text("수정", style: TextStyle(color: kPrimaryWhiteColor))))
         ],
       ),
       body: Consumer<MusicSearchItemLists>(
@@ -157,6 +175,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(0)),
               ),
               child: TextField(
+                controller: listTitleController,
                 style: TextStyle(color: kPrimaryWhiteColor),
                 onChanged: (text) => {
                   setState(() {
@@ -194,6 +213,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                     _explanation = text;
                   })
                 },
+                controller: listSubscriptionController,
                 textAlign: TextAlign.left,
                 textAlignVertical: TextAlignVertical.center,
                 keyboardType: TextInputType.multiline,

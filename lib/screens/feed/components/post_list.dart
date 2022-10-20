@@ -9,7 +9,6 @@ import 'package:conopot/screens/feed/feed_detail_screen.dart';
 import 'package:conopot/screens/feed/feed_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
@@ -184,16 +183,16 @@ class _PostListViewState extends State<PostListView> {
                             child: Row(children: [
                               (_posts[index].userImage == null)
                                   ? Container(
-                                      width: defaultSize * 2.8,
-                                      height: defaultSize * 2.8,
-                                      child: SvgPicture.asset(
-                                          "assets/icons/profile.svg"),
+                                      width: defaultSize * 4,
+                                      height: defaultSize * 4,
+                                      child: Image.asset(
+                                          "assets/images/profile.png"),
                                     )
                                   : ClipRRect(
                                       borderRadius: BorderRadius.circular(100),
                                       child: SizedBox(
-                                          width: defaultSize * 2.8,
-                                          height: defaultSize * 2.8,
+                                          width: defaultSize * 3.5,
+                                          height: defaultSize * 3.5,
                                           child: Image.network(
                                               _posts[index].userImage!,
                                               fit: BoxFit.cover))),
@@ -328,15 +327,13 @@ class _PostListViewState extends State<PostListView> {
         for (var e in data['posts']) {
           _posts.add(Post.fromJson(e));
         }
+        _isFirstLoadRunning = false;
       });
-    } on SocketException {
+    } on SocketException catch (e) {
       // 에러처리 (인터넷 연결 등등)
+      print(e);
       EasyLoading.showError("인터넷 연결을 확인해주세요");
-    }
-
-    setState(() {
-      _isFirstLoadRunning = false;
-    });
+    } 
   }
 
   // 추가적인 게시물을 불러오는 함수
