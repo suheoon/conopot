@@ -113,6 +113,12 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
           child: Text(
               "${_emotionList[widget.post.postIconId]} ${widget.post.postTitle}"),
         ),
+        leading: BackButton(
+            color: kPrimaryLightWhiteColor,
+            onPressed: () {
+              Navigator.pop(context, _like); //뒤로가기
+            },
+          ),
         actions: [
           IconButton(
               onPressed: () {

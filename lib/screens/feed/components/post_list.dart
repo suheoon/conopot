@@ -41,6 +41,7 @@ class _PostListViewState extends State<PostListView> {
   @override
   void initState() {
     super.initState();
+    userId = Provider.of<NoteData>(context, listen: false).userId;
     _firstLoad(_option);
     _controller = ScrollController()
       ..addListener(() {
@@ -52,7 +53,6 @@ class _PostListViewState extends State<PostListView> {
           _loadMore(_option);
         }
       });
-      userId = Provider.of<NoteData>(context, listen: false).userId;
   }
 
   @override
@@ -83,11 +83,8 @@ class _PostListViewState extends State<PostListView> {
                 },
                 child: _option == 1
                     ? Container(
-                        padding: EdgeInsets.fromLTRB(
-                            defaultSize,
-                            defaultSize * 0.5,
-                            defaultSize,
-                            defaultSize * 0.5),
+                        padding: EdgeInsets.fromLTRB(defaultSize,
+                            defaultSize * 0.5, defaultSize, defaultSize * 0.5),
                         decoration: BoxDecoration(
                             color: kMainColor.withOpacity(0.8),
                             borderRadius:
@@ -98,11 +95,8 @@ class _PostListViewState extends State<PostListView> {
                         ),
                       )
                     : Container(
-                        padding: EdgeInsets.fromLTRB(
-                            defaultSize,
-                            defaultSize * 0.5,
-                            defaultSize,
-                            defaultSize * 0.5),
+                        padding: EdgeInsets.fromLTRB(defaultSize,
+                            defaultSize * 0.5, defaultSize, defaultSize * 0.5),
                         child: Text(
                           "인기",
                           style: TextStyle(color: kPrimaryWhiteColor),
@@ -125,11 +119,8 @@ class _PostListViewState extends State<PostListView> {
                 },
                 child: _option == 2
                     ? Container(
-                        padding: EdgeInsets.fromLTRB(
-                            defaultSize,
-                            defaultSize * 0.5,
-                            defaultSize,
-                            defaultSize * 0.5),
+                        padding: EdgeInsets.fromLTRB(defaultSize,
+                            defaultSize * 0.5, defaultSize, defaultSize * 0.5),
                         decoration: BoxDecoration(
                             color: kMainColor.withOpacity(0.8),
                             borderRadius:
@@ -140,11 +131,8 @@ class _PostListViewState extends State<PostListView> {
                         ),
                       )
                     : Container(
-                        padding: EdgeInsets.fromLTRB(
-                            defaultSize,
-                            defaultSize * 0.5,
-                            defaultSize,
-                            defaultSize * 0.5),
+                        padding: EdgeInsets.fromLTRB(defaultSize,
+                            defaultSize * 0.5, defaultSize, defaultSize * 0.5),
                         child: Text(
                           "최신",
                           style: TextStyle(color: kPrimaryWhiteColor),
@@ -157,136 +145,150 @@ class _PostListViewState extends State<PostListView> {
         SizedBox(height: defaultSize * 1.5),
         _isFirstLoadRunning
             ? const Center(
-                child: const CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  backgroundColor: kMainColor,
+                  valueColor: AlwaysStoppedAnimation<Color>(kBackgroundColor),
+                  value: 0.4,
+                ),
               )
             : ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              controller: _controller,
-              itemCount: _posts.length,
-              itemBuilder: (context, index) => GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => FeedDetailScreen(
-                                post: _posts[index],
-                              )));
-                },
-                child: IntrinsicHeight(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      IntrinsicWidth(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: defaultSize * 1.2),
-                          child: Row(children: [
-                            (_posts[index].userImage == null)
-                                ? Container(
-                                    width: defaultSize * 2.8,
-                                    height: defaultSize * 2.8,
-                                    child: SvgPicture.asset(
-                                        "assets/icons/profile.svg"),
-                                  )
-                                : ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: SizedBox(
-                                        width: defaultSize * 2.8,
-                                        height: defaultSize * 2.8,
-                                        child: Image.network(
-                                            _posts[index].userImage!, fit: BoxFit.cover))),
-                            SizedBox(width: defaultSize * 0.5),
-                            Text(
-                              "${_posts[index].userName}",
-                              style: TextStyle(color: kPrimaryWhiteColor),
-                            ),
-                            Text("님의 노래방")
-                          ]),
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                controller: _controller,
+                itemCount: _posts.length,
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () async {
+                    final result = await
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => FeedDetailScreen(
+                                  post: _posts[index],
+                                )));
+                    if (result) {
+                      _posts[index].postLikeCount += 1;
+                      setState(() {});
+                    } else {
+                      _posts[index].postLikeCount -= 1;
+                      setState(() {});
+                    }
+                  },
+                  child: IntrinsicHeight(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        IntrinsicWidth(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: defaultSize * 1.2),
+                            child: Row(children: [
+                              (_posts[index].userImage == null)
+                                  ? Container(
+                                      width: defaultSize * 2.8,
+                                      height: defaultSize * 2.8,
+                                      child: SvgPicture.asset(
+                                          "assets/icons/profile.svg"),
+                                    )
+                                  : ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: SizedBox(
+                                          width: defaultSize * 2.8,
+                                          height: defaultSize * 2.8,
+                                          child: Image.network(
+                                              _posts[index].userImage!,
+                                              fit: BoxFit.cover))),
+                              SizedBox(width: defaultSize * 0.5),
+                              Text(
+                                "${_posts[index].userName}",
+                                style: TextStyle(color: kPrimaryWhiteColor),
+                              ),
+                              Text("님의 노래방")
+                            ]),
+                          ),
                         ),
-                      ),
-                      SizedBox(height: defaultSize),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(
-                            defaultSize, 0, defaultSize, defaultSize),
-                        padding: EdgeInsets.all(defaultSize * 1.5),
-                        decoration: BoxDecoration(
-                            color: kPrimaryLightBlackColor,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8))),
-                        child: IntrinsicHeight(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: defaultSize),
-                                Row(
-                                  children: [
-                                    Text(
-                                        "${_emotionList[_posts[index].postIconId]}",
-                                        style: TextStyle(
-                                            fontSize: defaultSize * 3)),
-                                    SizedBox(width: defaultSize),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(_posts[index].postTitle,
+                        SizedBox(height: defaultSize),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(
+                              defaultSize, 0, defaultSize, defaultSize),
+                          padding: EdgeInsets.all(defaultSize * 1.5),
+                          decoration: BoxDecoration(
+                              color: kPrimaryLightBlackColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8))),
+                          child: IntrinsicHeight(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: defaultSize),
+                                  Row(
+                                    children: [
+                                      Text(
+                                          "${_emotionList[_posts[index].postIconId]}",
+                                          style: TextStyle(
+                                              fontSize: defaultSize * 3)),
+                                      SizedBox(width: defaultSize),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(_posts[index].postTitle,
+                                              style: TextStyle(
+                                                  color: kPrimaryWhiteColor,
+                                                  overflow:
+                                                      TextOverflow.ellipsis)),
+                                          SizedBox(height: defaultSize * 0.25),
+                                          Text(
+                                            _posts[index].postSubscription ==
+                                                    null
+                                                ? ""
+                                                : _posts[index]
+                                                    .postSubscription!,
                                             style: TextStyle(
                                                 color: kPrimaryWhiteColor,
                                                 overflow:
-                                                    TextOverflow.ellipsis)),
-                                        SizedBox(
-                                            height: defaultSize * 0.25),
-                                        Text(
-                                          _posts[index].postSubscription ==
-                                                  null
-                                              ? ""
-                                              : _posts[index]
-                                                  .postSubscription!,
-                                          style: TextStyle(
-                                              color: kPrimaryWhiteColor,
-                                              overflow:
-                                                  TextOverflow.ellipsis),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                SizedBox(height: defaultSize),
-                                Container(
-                                  margin: EdgeInsets.only(
-                                      left: defaultSize * 0.5),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.favorite,
-                                          color: kMainColor),
-                                      SizedBox(width: defaultSize * 0.5),
-                                      Text(
-                                        "${_posts[index].postLikeCount}",
-                                        style: TextStyle(color: kMainColor),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                          "${_posts[index].postMusicList.length}개의 노래",
-                                          style: TextStyle(
-                                              color:
-                                                  kPrimaryLightGreyColor))
+                                                    TextOverflow.ellipsis),
+                                          )
+                                        ],
+                                      )
                                     ],
                                   ),
-                                )
-                              ]),
+                                  SizedBox(height: defaultSize),
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        left: defaultSize * 0.5),
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.favorite, color: kMainColor),
+                                        SizedBox(width: defaultSize * 0.5),
+                                        Text(
+                                          "${_posts[index].postLikeCount}",
+                                          style: TextStyle(color: kMainColor),
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                            "${_posts[index].postMusicList.length}개의 노래",
+                                            style: TextStyle(
+                                                color: kPrimaryLightGreyColor))
+                                      ],
+                                    ),
+                                  )
+                                ]),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
         if (_isLoadMoreRunning == true)
           const Padding(
             padding: EdgeInsets.only(top: 10, bottom: 40),
             child: Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                  backgroundColor: kMainColor,
+                  valueColor: AlwaysStoppedAnimation<Color>(kBackgroundColor),
+                  value: 0.4,
+                ),
             ),
           ),
         if (_hasNextPage == false)
@@ -320,6 +322,7 @@ class _PostListViewState extends State<PostListView> {
         },
       );
       var data = json.decode(response.body);
+      print(data);
       setState(() {
         _lastPostId = data['lastPostId'];
         for (var e in data['posts']) {

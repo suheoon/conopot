@@ -6,7 +6,7 @@ class Post {
   final int postIconId;
   final String postTitle;
   final String postSubscription;
-  final int postLikeCount;
+  int postLikeCount;
   final int? postAuthorId;
   final List<String> postMusicList;
   final String? userName;

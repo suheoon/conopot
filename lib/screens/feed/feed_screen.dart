@@ -144,15 +144,13 @@ class _FeedScreenState extends State<FeedScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (_anchoredAdaptiveAd != null && _isLoaded)...[
+                if (_anchoredAdaptiveAd != null && _isLoaded)
                 Container(
                   color: Colors.transparent,
                   width: _anchoredAdaptiveAd!.size.width.toDouble(),
                   height: _anchoredAdaptiveAd!.size.height.toDouble(),
                   child: AdWidget(ad: _anchoredAdaptiveAd!),
-                )] else ...[
-                  CircularProgressIndicator()
-                ]
+                )
               ],
             ),
             decoration: BoxDecoration(
@@ -173,7 +171,7 @@ class _FeedScreenState extends State<FeedScreen> {
                 "🎤 싱스타그램",
                 style: TextStyle(
                     color: kMainColor,
-                    fontSize: defaultSize * 1.4,
+                    fontSize: defaultSize * 1.6,
                     fontWeight: FontWeight.w600),
               ),
               SizedBox(height: defaultSize * 0.5),

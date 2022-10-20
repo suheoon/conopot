@@ -49,7 +49,10 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
                       MaterialPageRoute(
                           builder: (_) => FeedDetailScreen(
                                 post: _posts[index],
-                              )));
+                              )))..then((value) {
+                                _posts = [];
+                                _firstLoad();
+                              });
                 },
                 child: IntrinsicHeight(
                   child: Column(

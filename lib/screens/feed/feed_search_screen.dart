@@ -56,12 +56,10 @@ class _FeedSearchScrrenState extends State<FeedSearchScrren> {
     return Scaffold(
       appBar: AppBar(title: feedSearchBar()),
       body: (_posts.isEmpty) ? Center(child:Text("검색 결과가 없습니다.", style: TextStyle(color: kPrimaryWhiteColor, fontSize: defaultSize * 2),),) :ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
         controller: _controller,
         itemCount: _posts.length,
         itemBuilder: (context, index) => GestureDetector(
-          onTap: () {
+          onTap: () async {
             Navigator.push(
                 context,
                 MaterialPageRoute(
