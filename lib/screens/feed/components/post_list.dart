@@ -10,6 +10,7 @@ import 'package:conopot/screens/feed/feed_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
@@ -56,11 +57,8 @@ class _PostListViewState extends State<PostListView> {
     _firstLoad(_option);
     _controller = ScrollController()
       ..addListener(() {
-        if (_hasNextPage == true &&
-            _isFirstLoadRunning == false &&
-            _isLoadMoreRunning == false &&
-            _controller.position.maxScrollExtent ==
-                _controller.position.pixels) {
+        if (_controller.position.maxScrollExtent ==
+            _controller.position.pixels) {
           _loadMore();
         }
       });
@@ -74,6 +72,167 @@ class _PostListViewState extends State<PostListView> {
 
   @override
   Widget build(BuildContext context) {
+    var items = _posts.map(
+      (e) {
+        return GestureDetector(
+          onTap: () async {
+            final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => FeedDetailScreen(
+                          post: _posts[_posts.indexOf(e)],
+                        )));
+            if (result == 1) {
+              _posts[_posts.indexOf(e)].postLikeCount += 1;
+              setState(() {});
+            } else if (result == -1) {
+              _posts[_posts.indexOf(e)].postLikeCount -= 1;
+              setState(() {});
+            }
+          },
+          child: IntrinsicHeight(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: defaultSize * 1.2),
+                  child: Row(children: [
+                    (_posts[_posts.indexOf(e)].userImage == null)
+                        ? Container(
+                            width: defaultSize * 3.5,
+                            height: defaultSize * 3.5,
+                            child: Image.asset("assets/images/profile.png"),
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: SizedBox(
+                                width: defaultSize * 3.5,
+                                height: defaultSize * 3.5,
+                                child: Image.network(
+                                    _posts[_posts.indexOf(e)].userImage!,
+                                    fit: BoxFit.cover))),
+                    SizedBox(width: defaultSize * 0.5),
+                    Expanded(
+                      child: RichText(
+                          overflow: TextOverflow.ellipsis,
+                          text: TextSpan(children: [
+                            TextSpan(
+                                text: "${_posts[_posts.indexOf(e)].userName}",
+                                style: TextStyle(
+                                  color: kPrimaryWhiteColor,
+                                )),
+                            TextSpan(
+                                text: "님의 노래방 플레이리스트",
+                                style: TextStyle(
+                                  color: kPrimaryLightGreyColor,
+                                )),
+                          ])),
+                    ),
+                    Icon(Icons.chevron_right, color: kPrimaryWhiteColor)
+                  ]),
+                ),
+                SizedBox(height: defaultSize),
+                Container(
+                  margin: EdgeInsets.fromLTRB(
+                      defaultSize, 0, defaultSize, defaultSize),
+                  padding: EdgeInsets.all(defaultSize * 1.5),
+                  decoration: BoxDecoration(
+                      color: kPrimaryLightBlackColor,
+                      borderRadius: BorderRadius.all(Radius.circular(8))),
+                  child: IntrinsicHeight(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: defaultSize),
+                          Row(
+                            children: [
+                              Text(
+                                  "${_emotionList[_posts[_posts.indexOf(e)].postIconId]}",
+                                  style: TextStyle(fontSize: defaultSize * 3)),
+                              SizedBox(width: defaultSize),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(_posts[_posts.indexOf(e)].postTitle,
+                                        style: TextStyle(
+                                            color: kPrimaryWhiteColor,
+                                            fontSize: defaultSize * 1.4,
+                                            overflow: TextOverflow.ellipsis)),
+                                    SizedBox(height: defaultSize * 0.25),
+                                    Text(
+                                      _posts[_posts.indexOf(e)]
+                                                  .postSubscription ==
+                                              null
+                                          ? ""
+                                          : _posts[_posts.indexOf(e)]
+                                              .postSubscription
+                                              .trim()
+                                              .replaceAll("\n", " "),
+                                      style: TextStyle(
+                                          color: kPrimaryLightWhiteColor,
+                                          fontSize: defaultSize * 1.2,
+                                          overflow: TextOverflow.ellipsis),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: defaultSize),
+                          Container(
+                            margin: EdgeInsets.only(left: defaultSize * 0.5),
+                            child: Row(
+                              children: [
+                                Icon(Icons.favorite,
+                                    color: kMainColor, size: defaultSize * 1.8),
+                                SizedBox(width: defaultSize * 0.5),
+                                Text(
+                                  "${_posts[_posts.indexOf(e)].postLikeCount}",
+                                  style: TextStyle(
+                                      color: kMainColor,
+                                      fontSize: defaultSize * 1.3),
+                                ),
+                                Spacer(),
+                                Text(
+                                    "${_posts[_posts.indexOf(e)].postMusicList.length}개의 노래",
+                                    style: TextStyle(
+                                        fontSize: defaultSize * 1.3,
+                                        color: kPrimaryLightGreyColor))
+                              ],
+                            ),
+                          )
+                        ]),
+                  ),
+                ),
+                SizedBox(height: defaultSize * 0.5)
+              ],
+            ),
+          ),
+        );
+      },
+    ).toList();
+    if (_isLoadMoreRunning == true)
+      items.add(GestureDetector(
+        onTap: () {},
+        child: Center(
+          child: SpinKitFadingCircle(
+            color: kPrimaryWhiteColor,
+            size: defaultSize * 3,
+          ) 
+          ),
+        ),
+      );
+    if (_hasNextPage == false && _isFirstLoadRunning == false)
+      items.add(GestureDetector(
+        onTap: () {},
+        child: Center(
+          child: Text(
+            "더 이상 게시물이 없습니다.",
+            style: TextStyle(color: kPrimaryLightWhiteColor),
+          ),
+        ),
+      ));
     return Column(
       children: [
         Container(
@@ -85,6 +244,7 @@ class _PostListViewState extends State<PostListView> {
                 onTap: () async {
                   setState(() {
                     if (_option == 2) {
+                      _hasNextPage = true;
                       _option = 1;
                       _posts = [];
                       _lastPostId = 0;
@@ -125,6 +285,7 @@ class _PostListViewState extends State<PostListView> {
                 onTap: () async {
                   setState(() {
                     if (_option == 1) {
+                      _hasNextPage = true;
                       _option = 2;
                       _posts = [];
                       _lastPostId = 0;
@@ -162,170 +323,13 @@ class _PostListViewState extends State<PostListView> {
           ),
         ),
         SizedBox(height: defaultSize * 1.5),
-        ListView.builder(
+        ListView(
+          padding: EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.1),
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           controller: _controller,
-          itemCount: _posts.length,
-          itemBuilder: (context, index) => GestureDetector(
-            onTap: () async {
-              final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => FeedDetailScreen(
-                            post: _posts[index],
-                          )));
-              if (result == 1) {
-                _posts[index].postLikeCount += 1;
-                setState(() {});
-              } else if (result == -1) {
-                _posts[index].postLikeCount -= 1;
-                setState(() {});
-              }
-            },
-            child: IntrinsicHeight(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: defaultSize * 1.2),
-                    child: Row(children: [
-                      (_posts[index].userImage == null)
-                          ? Container(
-                              width: defaultSize * 3.5,
-                              height: defaultSize * 3.5,
-                              child: Image.asset("assets/images/profile.png"),
-                            )
-                          : ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: SizedBox(
-                                  width: defaultSize * 3.5,
-                                  height: defaultSize * 3.5,
-                                  child: Image.network(_posts[index].userImage!,
-                                      fit: BoxFit.cover))),
-                      SizedBox(width: defaultSize * 0.5),
-                      Expanded(
-                        child: RichText(
-                            overflow: TextOverflow.ellipsis,
-                            text: TextSpan(children: [
-                              TextSpan(
-                                  text: "${_posts[index].userName}",
-                                  style: TextStyle(
-                                    color: kPrimaryWhiteColor,
-                                  )),
-                              TextSpan(
-                                  text: "님의 노래방 플레이리스트",
-                                  style: TextStyle(
-                                    color: kPrimaryLightGreyColor,
-                                  )),
-                            ])),
-                      ),
-                      Icon(Icons.chevron_right, color: kPrimaryWhiteColor)
-                    ]),
-                  ),
-                  SizedBox(height: defaultSize),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(
-                        defaultSize, 0, defaultSize, defaultSize),
-                    padding: EdgeInsets.all(defaultSize * 1.5),
-                    decoration: BoxDecoration(
-                        color: kPrimaryLightBlackColor,
-                        borderRadius: BorderRadius.all(Radius.circular(8))),
-                    child: IntrinsicHeight(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: defaultSize),
-                            Row(
-                              children: [
-                                Text(
-                                    "${_emotionList[_posts[index].postIconId]}",
-                                    style:
-                                        TextStyle(fontSize: defaultSize * 3)),
-                                SizedBox(width: defaultSize),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(_posts[index].postTitle,
-                                          style: TextStyle(
-                                              color: kPrimaryWhiteColor,
-                                              fontSize: defaultSize * 1.4,
-                                              overflow: TextOverflow.ellipsis)),
-                                      SizedBox(height: defaultSize * 0.25),
-                                      Text(
-                                        _posts[index].postSubscription == null
-                                            ? ""
-                                            : _posts[index]
-                                                .postSubscription
-                                                .trim()
-                                                .replaceAll("\n", " "),
-                                        style: TextStyle(
-                                            color: kPrimaryLightWhiteColor,
-                                            fontSize: defaultSize * 1.2,
-                                            overflow: TextOverflow.ellipsis),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(height: defaultSize),
-                            Container(
-                              margin: EdgeInsets.only(left: defaultSize * 0.5),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.favorite,
-                                      color: kMainColor,
-                                      size: defaultSize * 1.8),
-                                  SizedBox(width: defaultSize * 0.5),
-                                  Text(
-                                    "${_posts[index].postLikeCount}",
-                                    style: TextStyle(
-                                        color: kMainColor,
-                                        fontSize: defaultSize * 1.3),
-                                  ),
-                                  Spacer(),
-                                  Text(
-                                      "${_posts[index].postMusicList.length}개의 노래",
-                                      style: TextStyle(
-                                          fontSize: defaultSize * 1.3,
-                                          color: kPrimaryLightGreyColor))
-                                ],
-                              ),
-                            )
-                          ]),
-                    ),
-                  ),
-                  SizedBox(height: defaultSize * 0.5)
-                ],
-              ),
-            ),
-          ),
+          children: items,
         ),
-        if (_isLoadMoreRunning == true)
-          const Padding(
-            padding: EdgeInsets.only(top: 10, bottom: 40),
-            child: Center(
-              child: CircularProgressIndicator(
-                backgroundColor: kMainColor,
-                valueColor: AlwaysStoppedAnimation<Color>(kBackgroundColor),
-                value: 0.4,
-              ),
-            ),
-          ),
-        if (_hasNextPage == false)
-          Container(
-            color: kPrimaryLightBlackColor,
-            child: const Center(
-              child: Text(
-                "더 이상 게시물이 없습니다",
-                style: TextStyle(color: kPrimaryLightWhiteColor),
-              ),
-            ),
-          ),
       ],
     );
   }
@@ -363,7 +367,9 @@ class _PostListViewState extends State<PostListView> {
 
   // 추가적인 게시물을 불러오는 함수
   void _loadMore() async {
-    if (_isLoadMoreRunning == true) return;
+    if (_isFirstLoadRunning == true ||
+        _isLoadMoreRunning == true ||
+        _hasNextPage == false) return;
     setState(() {
       // api 호출시 List Veiew의 하단에 Loading Indicator를 띄운다.
       _isLoadMoreRunning = true;

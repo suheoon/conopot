@@ -51,7 +51,6 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
                 String songNumber = songList[index].songNumber;
                 String songTitle = songList[index].title;
                 String singer = songList[index].singer;
-
                 return ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                   child: Card(
