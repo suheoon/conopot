@@ -20,6 +20,7 @@ class _FeedDetailSongListState extends State<FeedDetailSongList> {
     double defaultSize = SizeConfig.defaultSize;
     return Expanded(
       child: ListView.builder(
+          padding: EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.3),
           itemCount: widget.postList.length,
           itemBuilder: (context, index) {
             String songNumber = widget.postList[index].tj_songNumber;
