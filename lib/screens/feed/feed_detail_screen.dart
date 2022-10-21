@@ -428,7 +428,6 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                           style: TextStyle(
                               color: kPrimaryWhiteColor,
                               fontSize: defaultSize * 1.5)),
-                      SizedBox(height: defaultSize * 0.5),
                       Text("${widget.post.postSubscription}",
                           style: TextStyle(
                               color: kPrimaryLightWhiteColor,
