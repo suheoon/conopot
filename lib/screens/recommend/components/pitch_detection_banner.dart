@@ -119,8 +119,8 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
                         ],
                       ),
                       Spacer(),
-                      SvgPicture.asset(
-                        "assets/icons/ai.svg",
+                      Image.asset(
+                        "assets/images/ai.png",
                         width: defaultSize * 10,
                         height: defaultSize * 10,
                       )
