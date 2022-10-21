@@ -6,8 +6,10 @@ import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_music.dart';
+import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -143,7 +145,15 @@ class _CustomizeRecommendationDetailScreenState
             String title = widget.songList[(index)].tj_title;
             String singer = widget.songList[(index)].tj_singer;
             int pitchNum = widget.songList[(index)].pitchNum;
-
+            Set<Note> entireNote =
+                Provider.of<MusicSearchItemLists>(context, listen: false)
+                    .entireNote;
+            Note? note;
+            for (Note e in entireNote) {
+              if (e.tj_songNumber == songNumber) {
+                note = e;
+              }
+            }
             return ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(8)),
               child: Card(
@@ -182,16 +192,26 @@ class _CustomizeRecommendationDetailScreenState
                           fontWeight: FontWeight.w300,
                           fontSize: defaultSize * 1.2),
                     ),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.chevron_right, color: kPrimaryWhiteColor),
+                        Text("상세정보",
+                            style: TextStyle(
+                                color: kPrimaryWhiteColor,
+                                fontSize: defaultSize))
+                      ],
+                    ),
                     onTap: () {
                       //!event: 추천_뷰__맞춤_추천_리스트_아이템_클릭
                       Analytics_config()
                           .clickCustomizeRecommendationListItemEvent();
-                      Provider.of<NoteData>(context, listen: false)
-                          .showAddNoteDialogWithInfo(context,
-                              isTj: true,
-                              songNumber: songNumber,
-                              title: title,
-                              singer: singer);
+                      if (note != null)
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    NoteDetailScreen(note: note!)));
                     }),
               ),
             );

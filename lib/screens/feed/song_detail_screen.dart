@@ -497,6 +497,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                     children: [
                       // 정보 탭
                       ListView(
+                        padding: EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.3),
                         children: [
                           Container(
                             padding: EdgeInsets.all(defaultSize * 1.5),

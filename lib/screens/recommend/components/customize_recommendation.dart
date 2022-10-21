@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -289,14 +290,23 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                 String singer =
                     widget.musicList.aiRecommendationList[index].tj_singer;
 
+                Set<Note> entireNote =
+                    Provider.of<MusicSearchItemLists>(context, listen: false)
+                        .entireNote;
+                Note? note;
+                for (Note e in entireNote) {
+                  if (e.tj_songNumber == songNumber) {
+                    note = e;
+                  }
+                }
                 return GestureDetector(
                   onTap: () {
-                    Provider.of<NoteData>(context, listen: false)
-                        .showAddNoteDialogWithInfo(context,
-                            isTj: true,
-                            songNumber: songNumber,
-                            title: title,
-                            singer: singer);
+                    if (note != null)
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  NoteDetailScreen(note: note!)));
                   },
                   child: GridTile(
                     child: Container(
