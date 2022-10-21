@@ -28,7 +28,6 @@ class EtcScreen extends StatelessWidget {
                     onTap: () {
                       Provider.of<NoteData>(context, listen: false)
                           .showAccountDialog(context, "logout");
-                      Navigator.of(context).pop();
                     },
                     splashColor: Colors.transparent,
                     child: Container(
@@ -54,7 +53,6 @@ class EtcScreen extends StatelessWidget {
                     onTap: () {
                       Provider.of<NoteData>(context, listen: false)
                           .showAccountDialog(context, "delete");
-                      Navigator.of(context).pop();
                     },
                     splashColor: Colors.transparent,
                     child: Container(

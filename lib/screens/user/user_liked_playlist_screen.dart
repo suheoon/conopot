@@ -130,14 +130,11 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
                     MaterialPageRoute(
                         builder: (_) => FeedDetailScreen(
                               post: _posts[index],
-                            )));
-                if (result == 1) {
-                  _posts[index].postLikeCount += 1;
-                  setState(() {});
-                } else if (result == -1) {
-                  _posts[index].postLikeCount -= 1;
-                  setState(() {});
-                }
+                            ))).then((value) {
+                              _posts = [];
+                              _firstLoad();
+                              setState(() {});
+                            });
               },
               child: IntrinsicHeight(
                 child: Column(

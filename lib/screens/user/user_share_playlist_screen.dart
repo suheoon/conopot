@@ -70,15 +70,12 @@ class _UserSharePlaylistScreenState extends State<UserSharePlaylistScreen> {
             MediaQuery.of(context).size.width.truncate());
 
     _anchoredAdaptiveAd = BannerAd(
-      // TODO: replace with your own ad unit.
       adUnitId: App_Quit_Banner_UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
       size: size!,
       request: AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (Ad ad) {
           setState(() {
-            // When the ad is loaded, get the ad size and use it to set
-            // the height of the ad container.
             _anchoredAdaptiveAd = ad as BannerAd;
             _isLoaded = true;
           });
@@ -130,14 +127,11 @@ ListView.builder(
                         MaterialPageRoute(
                             builder: (_) => UserFeedDetailScreen(
                                   post: _posts[index],
-                                )));
-                    if (result == 1) {
-                      _posts[index].postLikeCount += 1;
-                      setState(() {});
-                    } else if (result == -1) {
-                      _posts[index].postLikeCount -= 1;
-                      setState(() {});
-                    }
+                                ))).then((value) {
+                                  _posts = [];
+                                  _firstLoad();
+                                  setState(() {});
+                                });
                   },
                   child: IntrinsicHeight(
                     child: Column(

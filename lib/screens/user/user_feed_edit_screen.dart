@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/debounce.dart';
-import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/post.dart';
-import 'package:conopot/screens/feed/components/search_song_list.dart';
+import 'package:conopot/screens/feed/components/added_playlist.dart';
 import 'package:conopot/screens/feed/components/editing_playlist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -24,26 +24,27 @@ class UserFeedEditScreen extends StatefulWidget {
 class _UserFeedEditScreenState extends State<UserFeedEditScreen> {
   int _emotionIndex = 0; // 😀, 🥲, 😡, 😳, 🫠
   var _emotionList = ["😀", "🥲", "😡", "😳", "🫠"];
-  bool _iseditting = false;
+  bool _isIconEditting = false;
+  bool _isListEditting = false;
   String _listName = "";
   String _explanation = "";
-  final Debounce _debounce = Debounce(delay: Duration(milliseconds: 500));
-  late TextEditingController listTitleController;
-  late TextEditingController listSubscriptionController;
+  late TextEditingController _titleController;
+  late TextEditingController _subscriptionController;
 
   @override
   void initState() {
     _emotionIndex = widget.post.postIconId;
     _listName = widget.post.postTitle;
     _explanation = widget.post.postSubscription;
-    listTitleController = TextEditingController(text: "${widget.post.postTitle}");
-    listSubscriptionController = TextEditingController(text: "${widget.post.postSubscription}");
+    _titleController = TextEditingController(text: "${widget.post.postTitle}");
+    _subscriptionController = TextEditingController(text: "${widget.post.postSubscription}");
     super.initState();
   }
 
   @override
   void dispose() {
-    _debounce.dispose();
+    _titleController.dispose();
+    _subscriptionController.dispose();
     super.dispose();
   }
 
@@ -52,18 +53,18 @@ class _UserFeedEditScreenState extends State<UserFeedEditScreen> {
     double defaultSize = SizeConfig.defaultSize;
     return Scaffold(
       appBar: AppBar(
-        title: Text("리스트 수정", style: TextStyle(color: kPrimaryWhiteColor)),
+        title: Text("플레이리스트 수정", style: TextStyle(color: kPrimaryWhiteColor)),
         centerTitle: true,
         actions: [
           TextButton(
               onPressed: () async {
                 if (_listName.isEmpty) {
-                  EasyLoading.showError("리스트명을 입력해주세요");
+                  EasyLoading.showToast("리스트명을 입력해주세요");
                 } else if (Provider.of<NoteData>(context, listen: false)
                         .lists
                         .length <
                     3) {
-                  EasyLoading.showError("노래를 3개이상 추가해 주세요");
+                  EasyLoading.showToast("노래를 세곡 이상 추가해주세요");
                 } else {
                   List<String> songList =
                       Provider.of<NoteData>(context, listen: false)
@@ -78,7 +79,7 @@ class _UserFeedEditScreenState extends State<UserFeedEditScreen> {
                         'Content-Type': 'application/json; charset=UTF-8',
                       },
                       body: jsonEncode({
-                        "postId": widget.post.postId,
+                        "postId" : widget.post.postId,
                         "postTitle": _listName,
                         "postIconId": _emotionIndex,
                         "postSubscription": _explanation,
@@ -88,12 +89,11 @@ class _UserFeedEditScreenState extends State<UserFeedEditScreen> {
                         "postMusicList": jsonEncode(songList)
                       }),
                     );
-                    for (int i = 0; i < 3; i++) Navigator.of(context).pop();
-                  } on HttpException {
+                    for(int i = 0; i < 3; i++) Navigator.of(context).pop();
+                    EasyLoading.showToast("수정이 완료되었습니다.");
+                  } on SocketException {
                     // 인터넷 연결 예외처리
-                    EasyLoading.showError("인터넷 연결을 확인해주세요");
-                  } catch (e) {
-                    print(e);
+                    EasyLoading.showToast("인터넷 연결을 확인해주세요");
                   }
                 }
               },
@@ -104,213 +104,170 @@ class _UserFeedEditScreenState extends State<UserFeedEditScreen> {
                       color: kMainColor.withOpacity(0.8),
                       borderRadius: BorderRadius.all(Radius.circular(30))),
                   child:
-                      Text("수정", style: TextStyle(color: kPrimaryWhiteColor))))
+                      Text("완료", style: TextStyle(color: kPrimaryWhiteColor, fontWeight: FontWeight.w600, fontSize: defaultSize * 1.2))))
         ],
       ),
-      body: Consumer<MusicSearchItemLists>(
-        builder: (
-          context,
-          musicList,
-          child,
-        ) =>
-            Padding(
-          padding: EdgeInsets.symmetric(horizontal: defaultSize),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    Text("느낌 아이콘",
-                        style: TextStyle(color: kPrimaryLightWhiteColor)),
-                    SizedBox(height: defaultSize),
-                    Text(
-                      "${_emotionList[_emotionIndex]}",
-                      style: TextStyle(fontSize: defaultSize * 4),
-                    ),
-                    SizedBox(height: defaultSize * 1.25),
-                    (_iseditting == false)
-                        ? GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _iseditting = true;
-                              });
-                            },
-                            child: Text("변경하기",
-                                style: TextStyle(color: kMainColor)))
-                        : Container(
-                            child: IntrinsicWidth(
-                                child: Row(
-                                    children: _emotionList
-                                        .map((e) => Container(
-                                              margin: EdgeInsets.only(
-                                                  left: defaultSize),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    _emotionIndex =
-                                                        _emotionList.indexOf(e);
-                                                    _iseditting = false;
-                                                  });
-                                                },
-                                                child: Text(e,
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                            defaultSize * 2)),
-                                              ),
-                                            ))
-                                        .toList())),
-                          ),
-                  ],
-                ),
-              ],
-            ),
-            Text("리스트명 (필수)", style: TextStyle(color: kPrimaryWhiteColor)),
-            SizedBox(height: defaultSize * 0.5),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: defaultSize),
-              decoration: BoxDecoration(
-                color: kPrimaryLightBlackColor,
-                borderRadius: BorderRadius.all(Radius.circular(0)),
-              ),
-              child: TextField(
-                controller: listTitleController,
-                style: TextStyle(color: kPrimaryWhiteColor),
-                onChanged: (text) => {
-                  setState(() {
-                    _listName = text;
-                  })
-                },
-                textAlign: TextAlign.left,
-                textAlignVertical: TextAlignVertical.center,
-                keyboardType: TextInputType.text,
-                cursorColor: kMainColor,
-                decoration: InputDecoration(
-                  hintText: '리스트명을 입력해주세요',
-                  hintStyle: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: defaultSize * 1.5,
-                    color: kPrimaryLightGreyColor,
-                  ),
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-            SizedBox(height: defaultSize * 2),
-            Text("추가설명 (선택)", style: TextStyle(color: kPrimaryWhiteColor)),
-            SizedBox(height: defaultSize * 0.5),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: defaultSize),
-              decoration: BoxDecoration(
-                color: kPrimaryLightBlackColor,
-                borderRadius: BorderRadius.all(Radius.circular(0)),
-              ),
-              child: TextField(
-                style: TextStyle(color: kPrimaryWhiteColor),
-                onChanged: (text) => {
-                  setState(() {
-                    _explanation = text;
-                  })
-                },
-                controller: listSubscriptionController,
-                textAlign: TextAlign.left,
-                textAlignVertical: TextAlignVertical.center,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                cursorColor: kMainColor,
-                decoration: InputDecoration(
-                  hintText: '추가설명을 입력해주세요',
-                  hintStyle: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: defaultSize * 1.5,
-                    color: kPrimaryLightGreyColor,
-                  ),
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-            SizedBox(height: defaultSize * 2),
+      body:
             GestureDetector(
-              behavior: HitTestBehavior.translucent,
               onTap: () {
-                addSongDialog(context, musicList);
+                FocusScope.of(context).requestFocus(new FocusNode());
               },
-              child: Row(
+              child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: defaultSize),
+                      child:
+                ListView(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("애창곡 추가",
-                      style: TextStyle(color: kPrimaryLightWhiteColor)),
-                  Spacer(),
-                  Icon(Icons.chevron_right, color: kPrimaryWhiteColor)
+                  SizedBox(
+                    height: defaultSize * 14,
+                    child: Column(
+                      children: [
+                        Text("감정 이모지",
+                            style: TextStyle(color: kPrimaryLightWhiteColor, fontSize: defaultSize * 1.6, fontWeight: FontWeight.w500)),
+                        SizedBox(height: defaultSize),
+                        Text(
+                          "${_emotionList[_emotionIndex]}",
+                          style: TextStyle(fontSize: defaultSize * 4),
+                        ),
+                        SizedBox(height: defaultSize * 1.25),
+                        (_isIconEditting == false)
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _isIconEditting = true;
+                                  });
+                                },
+                                child: Text("변경하기",
+                                    style: TextStyle(color: kMainColor, fontSize: defaultSize * 1.3)))
+                            : Container(
+                                child: IntrinsicWidth(
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                            children: _emotionList
+                                                .map((e) => Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: defaultSize),
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            _emotionIndex =
+                                                                _emotionList.indexOf(e);
+                                                            _isIconEditting = false;
+                                                          });
+                                                        },
+                                                        child: Text(e,
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    defaultSize * 2)),
+                                                      ),
+                                                    ))
+                                                .toList()),
+                                        SizedBox(height: defaultSize * 0.5),
+                                        GestureDetector(onTap: () {
+                                          setState(() {
+                                            _isIconEditting = false;
+                                          });
+                                        },child: Icon(Icons.close, color: kPrimaryWhiteColor, size: defaultSize * 1.8,))
+                                      ],
+                                    )),
+                              ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
-            ),
-          ]),
-        ),
-      ),
-    );
-  }
-
-  // 노래 추가 다이어로그 팝업 함수
-  void addSongDialog(
-      BuildContext context, MusicSearchItemLists musicList) async {
-    double defaultSize = SizeConfig.defaultSize;
-    showDialog(
-        context: context,
-        builder: (context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return Center(
-              child: Container(
-                width: SizeConfig.screenWidth * 0.8,
-                height: SizeConfig.screenHeight * 0.75,
-                color: kDialogColor,
-                child: Column(
-                  children: [
-                    SizedBox(height: defaultSize),
-                    // 검색 창
-                    Container(
-                      margin: EdgeInsets.fromLTRB(
-                          defaultSize, 0, defaultSize, defaultSize),
-                      decoration: BoxDecoration(
-                          color: kPrimaryLightBlackColor,
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
-                          border: Border.all(
-                              width: 0.5, color: kPrimaryWhiteColor)),
-                      child: TextField(
-                        style: TextStyle(color: kPrimaryWhiteColor),
-                        onChanged: (text) => {
-                          _debounce.call(() {
-                            musicList.runCombinedFilter(text);
-                            setState(() {});
-                          })
-                        },
-                        textAlign: TextAlign.left,
-                        textAlignVertical: TextAlignVertical.center,
-                        keyboardType: TextInputType.name,
-                        cursorColor: kMainColor,
-                        decoration: InputDecoration(
-                          hintText: '노래, 가수 검색',
-                          hintStyle: TextStyle(
-                            fontWeight: FontWeight.w300,
-                            fontSize: defaultSize * 1.5,
-                            color: kPrimaryLightGreyColor,
-                          ),
-                          border: InputBorder.none,
-                          prefixIcon: Icon(
-                            Icons.search,
-                            color: kPrimaryWhiteColor,
-                          ),
-                        ),
-                      ),
+              SizedBox(height: defaultSize * 2),
+              Text("리스트명 (필수)", style: TextStyle(color: kPrimaryWhiteColor, fontWeight: FontWeight.w500, fontSize: defaultSize * 1.5)),
+              SizedBox(height: defaultSize * 0.5),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: defaultSize),
+                decoration: BoxDecoration(
+                  color: kPrimaryLightBlackColor,
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
+                ),
+                child: TextField(
+                  controller: _titleController,
+                  style: TextStyle(color: kPrimaryWhiteColor),
+                  onChanged: (text) => {
+                    setState(() {
+                      _listName = text;
+                    })
+                  },
+                  maxLength: 50,
+                  textAlign: TextAlign.left,
+                  textAlignVertical: TextAlignVertical.center,
+                  keyboardType: TextInputType.text,
+                  cursorColor: kMainColor,
+                  decoration: InputDecoration(
+                    counter: SizedBox.shrink(),
+                    hintText: '리스트명을 입력해주세요',
+                    hintStyle: TextStyle(
+                      fontWeight: FontWeight.w300,
+                      fontSize: defaultSize * 1.5,
+                      color: kPrimaryLightGreyColor,
                     ),
-                    SearchSongList(
-                      musicList: musicList,
-                    )
-                  ],
+                    border: InputBorder.none,
+                  ),
                 ),
               ),
-            );
-          });
-        });
+              SizedBox(height: defaultSize * 2),
+              Text("추가설명 (선택)", style: TextStyle(color: kPrimaryWhiteColor, fontWeight: FontWeight.w500, fontSize: defaultSize * 1.5)),
+              SizedBox(height: defaultSize * 0.5),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: defaultSize),
+                decoration: BoxDecoration(
+                  color: kPrimaryLightBlackColor,
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
+                ),
+                child: TextField(
+                  controller: _subscriptionController,
+                  style: TextStyle(color: kPrimaryWhiteColor),
+                  onChanged: (text) => {
+                    setState(() {
+                      _explanation = text;
+                    })
+                  },
+                  textAlign: TextAlign.left,
+                  textAlignVertical: TextAlignVertical.center,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  maxLength: 200,
+                  cursorColor: kMainColor,
+                  decoration: InputDecoration(
+                    counter: SizedBox.shrink(),
+                    hintText: '추가설명을 입력해주세요',
+                    hintStyle: TextStyle(
+                      fontWeight: FontWeight.w300,
+                      fontSize: defaultSize * 1.5,
+                      color: kPrimaryLightGreyColor,
+                    ),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+              SizedBox(height: defaultSize * 5),
+              Row(
+                children: [
+                  Text("플레이리스트",
+                      style: TextStyle(color: kPrimaryLightWhiteColor, fontSize: defaultSize * 1.5, fontWeight: FontWeight.w500)),
+                  Spacer(),
+                  if (Provider.of<NoteData>(context, listen: true).lists.isNotEmpty || _isListEditting == true)
+                  GestureDetector(onTap: () {
+                    setState(() {
+                      _isListEditting = !_isListEditting;
+                    });
+                  },child: Text((_isListEditting) ? "완료" : "편집하기", style: TextStyle(color: kMainColor, fontWeight: FontWeight.w500)))
+                ],
+              ),
+              SizedBox(height: defaultSize),
+              (_isListEditting) ?
+              EditingPlayList():
+              AddedPlaylist(),
+                      ]),
+                    ),
+            ),
+    );
   }
 }
