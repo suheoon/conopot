@@ -41,6 +41,7 @@ class GenreRecommendation extends StatelessWidget {
     'assets/icons/3-4.svg',
     'assets/icons/3-5.svg',
     'assets/icons/3-6.svg',
+    'assets/icons/3-7.svg',
   ];
 
     return Container(

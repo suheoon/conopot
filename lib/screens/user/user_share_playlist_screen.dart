@@ -296,7 +296,7 @@ class _UserSharePlaylistScreenState extends State<UserSharePlaylistScreen> {
       });
     } on SocketException {
       // 에러처리 (인터넷 연결 등등)
-      EasyLoading.showError("인터넷 연결을 확인해주세요");
+      EasyLoading.showToast("인터넷 연결을 확인해주세요");
     }
     setState(() {
       _isLoading = false;

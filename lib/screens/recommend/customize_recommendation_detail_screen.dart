@@ -41,7 +41,7 @@ class _CustomizeRecommendationDetailScreenState
   void requestCFApi() async {
     widget.musicList.recommendRequest = true;
     storage.write(key: "recommendRequest", value: 'true');
-    await EasyLoading.show(status: '분석중 입니다...');
+    await EasyLoading.show();
     String url = 'https://recommendcf-pfenq2lbpq-du.a.run.app/recommendCF';
     List<String> musicArr =
         Provider.of<NoteData>(context, listen: false).userMusics;
