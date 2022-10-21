@@ -14,7 +14,6 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/recommendation_item_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,6 +37,13 @@ class _SplashScreenState extends State<SplashScreen> {
       final result = await InternetAddress.lookup('example.com');
       //("인터넷 연결 성공");
 
+      int sessionCnt = Provider.of<MusicSearchItemLists>(context, listen: false)
+          .sessionCount;
+
+      if (sessionCnt == 0) {
+        Analytics_config().firstSessionEvent();
+      }
+
       //firebase remote config 초기화
       await Firebase_Remote_Config().init();
       //이때 remote config - musicUpdateSetting 이 false 라면, 하지 않기
@@ -58,15 +64,16 @@ class _SplashScreenState extends State<SplashScreen> {
       await SizeConfig().init(context);
       await RecommendationItemList().initRecommendationList();
 
-      //첫 세션일때 광고 띄우지 않기
-      if (Provider.of<MusicSearchItemLists>(context, listen: false)
-              .sessionCount >
-          0) {
-        // 앱 실행 광고
-        await appOpenAds(context);
-      } else {
+      //앱 오픈 광고
+      //리워드가 존재하는지 체크
+      bool rewardFlag =
+          await Provider.of<NoteData>(context, listen: false).isUserRewarded();
+      //존재한다면 광고 없이 넘어가기
+      if (rewardFlag) {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => MainScreen()));
+      } else {
+        await appOpenAds(context);
       }
     }
     //인터넷 연결이 안 되어있다면
@@ -106,7 +113,8 @@ class _SplashScreenState extends State<SplashScreen> {
     await Provider.of<MusicSearchItemLists>(context, listen: false)
         .checkSessionCount();
     //Admob 전면광고 캐싱
-    await Provider.of<NoteData>(context, listen: false).createInterstitialAd();
+    await Provider.of<NoteData>(context, listen: false)
+        .createInterstitialAd("noteAdd");
 
     // 첫 설치 사용자라면, 로컬 스토리지를 비운다.
     final prefs = await SharedPreferences.getInstance();
@@ -136,12 +144,9 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   appOpenAds(BuildContext context) async {
-    if (Firebase_Remote_Config().remoteConfig.getBool('appopenadSetting') ==
-        true) {
-      AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd(context);
-      WidgetsBinding.instance.addObserver(AppLifecycleReactor(
-          appOpenAdManager: appOpenAdManager, context: context));
-    }
+    AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd(context);
+    WidgetsBinding.instance.addObserver(AppLifecycleReactor(
+        appOpenAdManager: appOpenAdManager, context: context));
   }
 
   @override

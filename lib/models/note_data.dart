@@ -59,10 +59,22 @@ class NoteData extends ChangeNotifier {
 
   // AdMob
   int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
+  int detailDisposeCount = 0; //광고를 위해, 노트 상세정보에서 나간 횟수를 기록
+
   Map<String, String> Note_Add_Interstitial_UNIT_ID = kReleaseMode
       ? {
           'android': 'ca-app-pub-7139143792782560/4800293433',
           'ios': 'ca-app-pub-7139143792782560/4696066245',
+        }
+      : {
+          'android': 'ca-app-pub-3940256099942544/1033173712',
+          'ios': 'ca-app-pub-3940256099942544/4411468910',
+        };
+
+  Map<String, String> AI_Recommand_Interstitial_UNIT_ID = kReleaseMode
+      ? {
+          'android': 'ca-app-pub-7139143792782560/8456175834',
+          'ios': 'ca-app-pub-7139143792782560/1894351507',
         }
       : {
           'android': 'ca-app-pub-3940256099942544/1033173712',
@@ -82,43 +94,50 @@ class NoteData extends ChangeNotifier {
     notifyListeners();
   }
 
-  createInterstitialAd() {
+  createInterstitialAd(String command) {
     InterstitialAd.load(
-        adUnitId:
-            Note_Add_Interstitial_UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
+        adUnitId: (command == "noteAdd")
+            ? Note_Add_Interstitial_UNIT_ID[Platform.isIOS ? 'ios' : 'android']!
+            : AI_Recommand_Interstitial_UNIT_ID[
+                Platform.isIOS ? 'ios' : 'android']!,
         request: AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
+            print("onAdLoaded!");
             _interstitialAd = ad;
             _numInterstitialLoadAttempts = 0;
             _interstitialAd!.setImmersiveMode(true);
+            Analytics_config().adNoteAddInterstitialSuccess();
           },
           onAdFailedToLoad: (LoadAdError error) {
+            print("onAdFaildToLoaded! : ${error}");
             _numInterstitialLoadAttempts += 1;
             _interstitialAd = null;
             if (_numInterstitialLoadAttempts < maxFailedLoadAttempts) {
-              createInterstitialAd();
+              createInterstitialAd(command);
             }
+            Analytics_config().adNoteAddInterstitialFail();
           },
         ));
   }
 
-  void _showInterstitialAd() {
-    if (_interstitialAd == null) {
+  void _showInterstitialAd(String command) async {
+    bool rewardFlag = await isUserRewarded();
+    if (_interstitialAd == null || rewardFlag) {
       return;
     }
     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdShowedFullScreenContent: (InterstitialAd ad) =>
           print('ad onAdShowedFullScreenContent.'),
       onAdDismissedFullScreenContent: (InterstitialAd ad) {
-        //print('$ad onAdDismissedFullScreenContent.');
+        // print('$ad onAdDismissedFullScreenContent.');
         ad.dispose();
-        createInterstitialAd();
+        createInterstitialAd(command);
       },
       onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-        //print('$ad onAdFailedToShowFullScreenContent: $error');
+        // print('$ad onAdFailedToShowFullScreenContent: $error');
         ad.dispose();
-        createInterstitialAd();
+        createInterstitialAd(command);
       },
     );
     _interstitialAd!.show();
@@ -200,6 +219,12 @@ class NoteData extends ChangeNotifier {
     notifyListeners();
   }
 
+  aiInterstitialAd() {
+    if (_interstitialAd != null) {
+      _showInterstitialAd("AI");
+    }
+  }
+
   Future<void> addNoteBySongNumber(BuildContext context, String songNumber,
       List<FitchMusic> musicList) async {
     noteCount += 1;
@@ -267,7 +292,7 @@ class NoteData extends ChangeNotifier {
     if (noteAddCount % 5 == 0 &&
         noteAddInterstitialSetting &&
         _interstitialAd != null) {
-      _showInterstitialAd();
+      _showInterstitialAd("noteAdd");
       isOverlapping = true;
     }
     if (isOverlapping == false &&
@@ -552,8 +577,6 @@ class NoteData extends ChangeNotifier {
     //!event: 일반_검색_뷰__노래_유튜브
     Analytics_config().clickYoutubeButtonOnSearchView();
     double defaultSize = SizeConfig.defaultSize;
-    var noteAddIconChange =
-        Firebase_Remote_Config().remoteConfig.getString('noteAddIconChange');
 
     Widget okButton = ElevatedButton(
       onPressed: () {
@@ -592,11 +615,6 @@ class NoteData extends ChangeNotifier {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            (noteAddIconChange == 'A')
-                ? SizedBox.shrink()
-                : Icon(
-                    Icons.add,
-                  ),
             Text("애창곡 노트에 추가하기",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
@@ -725,7 +743,7 @@ class NoteData extends ChangeNotifier {
   }
 
   // 리뷰 요청 다이어로그
-  Future<bool> showReviewDialog(context) async {
+  showReviewDialog(context) async {
     // !event: 리뷰요청_뷰__페이지뷰
     Analytics_config().reviewRequestPageVeiwEvent();
     double defaultSize = SizeConfig.defaultSize;
@@ -1551,5 +1569,42 @@ class NoteData extends ChangeNotifier {
         builder: (BuildContext context) {
           return Container(child: alert);
         });
+  }
+
+  //해당 사용자가 현재 리워드 보상(광고 제거)이 유지되어있는지 검사하는 함수
+  Future<bool> isUserRewarded() async {
+    String? rewardHoldTimeString = await storage.read(key: 'rewardTime');
+    print('rewardHoldTimeString : ${rewardHoldTimeString}');
+    if (rewardHoldTimeString == null) return false;
+    int rewardHoldTime = int.parse(rewardHoldTimeString);
+    int nowTime = DateTime.now().millisecondsSinceEpoch;
+
+    //현재 시각이 리워드 시각 이후라면
+    if (nowTime > rewardHoldTime) {
+      print('리워드 미적용');
+      return false;
+    } else {
+      print('리워드 적용');
+      return true;
+    }
+  }
+
+  Future<String> userRewardedTime() async {
+    String? rewardHoldTimeString = await storage.read(key: 'rewardTime');
+    print('rewardHoldTimeString : ${rewardHoldTimeString}');
+    if (rewardHoldTimeString == null) return "0초";
+    int rewardHoldTime = int.parse(rewardHoldTimeString);
+    int nowTime = DateTime.now().millisecondsSinceEpoch;
+
+    int distTime = rewardHoldTime - nowTime;
+
+    int minute = (distTime) ~/ 60000;
+    int second = (distTime - (minute * 60000)) ~/ 1000;
+
+    if (minute >= 1) {
+      return "${minute} 분 ${second} 초";
+    } else {
+      return "${second} 초";
+    }
   }
 }

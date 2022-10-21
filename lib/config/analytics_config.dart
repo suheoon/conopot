@@ -90,6 +90,11 @@ class Analytics_config {
     event('노래검색__검색키워드', {'검색_키워드': keyword});
   }
 
+  //!event : 노래검색__가사검색
+  musicSearchLyricEvent() {
+    event('노래검색__가사검색', {});
+  }
+
   //!event : 노래리스트__노트추가
   musicAddEvent(String songTitle) {
     event('노래리스트__노트추가', {'곡명': songTitle});
@@ -418,5 +423,65 @@ class Analytics_config {
   //!event: 내정보_뷰__탈퇴하기
   userunregisterEvent() {
     event('내정보_뷰__탈퇴하기', {});
+  }
+
+  //!event: 광고__앱오픈_성공
+  adAppOpenSuccess() {
+    event('광고__앱오픈_성공', {});
+  }
+
+  //!event: 광고__앱오픈_실패
+  adAppOpenFail() {
+    event('광고__앱오픈_실패', {});
+  }
+
+  //!event: 광고__종료_배너_성공
+  adQuitBannerSuccess() {
+    event('광고__종료_배너_성공', {});
+  }
+
+  //!event: 광고__종료_배너_실패
+  adQuitBannerFail() {
+    event('광고__종료_배너_실패', {});
+  }
+
+  //!event: 광고__노트추가_전면광고_성공
+  adNoteAddInterstitialSuccess() {
+    event('광고__노트추가_전면광고_성공', {});
+  }
+
+  //!event: 광고__노트추가_전면광고_실패
+  adNoteAddInterstitialFail() {
+    event('광고__노트추가_전면광고_실패', {});
+  }
+
+  //!event: 광고__음역대측정_전면광고_성공
+  adPitchInterstitialSuccess() {
+    event('광고__음역대측정_전면광고_성공', {});
+  }
+
+  //!event: 광고__음역대측정_전면광고_실패
+  adPitchInterstitialFail() {
+    event('광고__음역대측정_전면광고_실패', {});
+  }
+
+  //!event: 광고__AI추천_전면광고_성공
+  adAiInterstitialSuccess() {
+    event('광고__AI추천_전면광고_성공', {});
+  }
+
+  //!event: 광고__AI추천_전면광고_실패
+  adAiInterstitialFail() {
+    event('광고__AI추천_전면광고_실패', {});
+  }
+
+  //!event: 첫세션
+  firstSessionEvent() {
+    event('첫세션', {});
+  }
+
+  //!event: 노트가 없는 사용자
+  emptyNoteUserEvent() {
+    event('노트없는사용자', {});
   }
 }

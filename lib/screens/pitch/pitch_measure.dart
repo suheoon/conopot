@@ -78,6 +78,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
             _interstitialAd = ad;
             _numInterstitialLoadAttempts = 0;
             _interstitialAd!.setImmersiveMode(true);
+            Analytics_config().adPitchInterstitialSuccess();
           },
           onAdFailedToLoad: (LoadAdError error) {
             _numInterstitialLoadAttempts += 1;
@@ -85,6 +86,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
             if (_numInterstitialLoadAttempts < maxFailedLoadAttempts) {
               createInterstitialAd();
             }
+            Analytics_config().adPitchInterstitialFail();
           },
         ));
   }
@@ -109,8 +111,17 @@ class _PitchMeasureState extends State<PitchMeasure> {
     _interstitialAd = null;
   }
 
+  //리워드가 존재하는지 체크
+  bool rewardFlag = false;
+
+  rewardCheck() async {
+    rewardFlag =
+        await Provider.of<NoteData>(context, listen: false).isUserRewarded();
+  }
+
   @override
   void initState() {
+    rewardCheck();
     _interstitialAd = createInterstitialAd();
     super.initState();
     frequency = 0;
@@ -696,7 +707,8 @@ class _PitchMeasureState extends State<PitchMeasure> {
                               .remoteConfig
                               .getBool('pitchMeasureInterstitialSetting');
                       if (pitchMeasureInterstitialSetting == true &&
-                          _interstitialAd != null) _showInterstitialAd();
+                          _interstitialAd != null &&
+                          rewardFlag != true) _showInterstitialAd();
 
                       //!event : 직접 음역대 측정 뷰  - 다시 측정하기
                       Analytics_config().event('직접_음역대_측정_뷰__선택_완료', {});
