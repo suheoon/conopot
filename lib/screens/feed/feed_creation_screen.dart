@@ -7,6 +7,7 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/feed/components/added_playlist.dart';
 import 'package:conopot/screens/feed/components/editing_playlist.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -275,7 +276,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                 color: kPrimaryLightBlackColor,
                 borderRadius: BorderRadius.all(Radius.circular(0)),
               ),
-              child: TextField(
+              child: TextFormField(
                 style: TextStyle(color: kPrimaryWhiteColor),
                 onChanged: (text) => {
                   setState(() {
@@ -285,6 +286,9 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                 textAlign: TextAlign.left,
                 textAlignVertical: TextAlignVertical.center,
                 keyboardType: TextInputType.multiline,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(10),
+                ],
                 maxLines: 5,
                 maxLength: 200,
                 cursorColor: kMainColor,
