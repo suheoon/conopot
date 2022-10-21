@@ -112,7 +112,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "상세정보",
+            "${widget.note.tj_title}",
             style: TextStyle(
                 fontWeight: FontWeight.w700, fontSize: defaultSize * 1.5),
           ),

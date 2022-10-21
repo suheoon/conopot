@@ -285,7 +285,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                 textAlign: TextAlign.left,
                 textAlignVertical: TextAlignVertical.center,
                 keyboardType: TextInputType.multiline,
-                maxLines: null,
+                maxLines: 5,
                 maxLength: 200,
                 cursorColor: kMainColor,
                 decoration: InputDecoration(

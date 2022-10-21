@@ -151,6 +151,7 @@ class _FeedScreenState extends State<FeedScreen> {
       ),
       body: SafeArea(
         child: RawScrollbar(
+          controller: _controller,
           thumbColor: Colors.grey,
           radius: Radius.circular(20),
           thickness: 5,
