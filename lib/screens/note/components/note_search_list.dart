@@ -82,7 +82,6 @@ class _NoteSearchListState extends State<NoteSearchList> {
         },
         onAdFailedToLoad: (ad, error) {
           ad.dispose();
-          print('Ad load failed (code=${error.code} message=${error.message})');
         },
       ),
     );

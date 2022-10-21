@@ -111,7 +111,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
           padding: EdgeInsets.all(defaultSize * 0.5),
           decoration: BoxDecoration(color: kPrimaryGreyColor, borderRadius: BorderRadius.all(Radius.circular(8))),
           child: Text(
-              "${_emotionList[widget.post.postIconId]} ${widget.post.postTitle}"),
+              "${_emotionList[widget.post.postIconId]} ${widget.post.postTitle}", overflow: TextOverflow.ellipsis,),
         ),
         leading: BackButton(
             color: kPrimaryLightWhiteColor,

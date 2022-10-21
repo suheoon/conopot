@@ -85,12 +85,14 @@ class _PostListViewState extends State<PostListView> {
                         padding: EdgeInsets.fromLTRB(defaultSize,
                             defaultSize * 0.5, defaultSize, defaultSize * 0.5),
                         decoration: BoxDecoration(
-                            color: kMainColor.withOpacity(0.8),
+                            color: kMainColor.withOpacity(0.9),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(25))),
                         child: Text(
                           "인기",
-                          style: TextStyle(color: kPrimaryWhiteColor),
+                          style: TextStyle(
+                              color: kPrimaryWhiteColor,
+                              fontWeight: FontWeight.w600),
                         ),
                       )
                     : Container(
@@ -98,7 +100,9 @@ class _PostListViewState extends State<PostListView> {
                             defaultSize * 0.5, defaultSize, defaultSize * 0.5),
                         child: Text(
                           "인기",
-                          style: TextStyle(color: kPrimaryWhiteColor),
+                          style: TextStyle(
+                              color: kPrimaryWhiteColor,
+                              fontWeight: FontWeight.w600),
                         ),
                       ),
               ),
@@ -121,12 +125,14 @@ class _PostListViewState extends State<PostListView> {
                         padding: EdgeInsets.fromLTRB(defaultSize,
                             defaultSize * 0.5, defaultSize, defaultSize * 0.5),
                         decoration: BoxDecoration(
-                            color: kMainColor.withOpacity(0.8),
+                            color: kMainColor.withOpacity(0.9),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(25))),
                         child: Text(
                           "최신",
-                          style: TextStyle(color: kPrimaryWhiteColor),
+                          style: TextStyle(
+                              color: kPrimaryWhiteColor,
+                              fontWeight: FontWeight.w600),
                         ),
                       )
                     : Container(
@@ -134,7 +140,9 @@ class _PostListViewState extends State<PostListView> {
                             defaultSize * 0.5, defaultSize, defaultSize * 0.5),
                         child: Text(
                           "최신",
-                          style: TextStyle(color: kPrimaryWhiteColor),
+                          style: TextStyle(
+                              color: kPrimaryWhiteColor,
+                              fontWeight: FontWeight.w600),
                         ),
                       ),
               ),
@@ -175,40 +183,44 @@ class _PostListViewState extends State<PostListView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        IntrinsicWidth(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: defaultSize * 1.2),
-                            child: Row(children: [
-                              (_posts[index].userImage == null)
-                                  ? Container(
-                                      width: defaultSize * 3.5,
-                                      height: defaultSize * 3.5,
-                                      child: Image.asset(
-                                          "assets/images/profile.png"),
-                                    )
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(100),
-                                      child: SizedBox(
-                                          width: defaultSize * 3.5,
-                                          height: defaultSize * 3.5,
-                                          child: Image.network(
-                                              _posts[index].userImage!,
-                                              fit: BoxFit.cover))),
-                              SizedBox(width: defaultSize * 0.5),
-                              SizedBox(
-                                width: SizeConfig.screenWidth * 0.8,
-                                child: RichText(
-                                    overflow: TextOverflow.ellipsis,
-                                    text: TextSpan(children: [TextSpan(text:"${_posts[index].userName}",
-                                  style: TextStyle(
-                                      color: kPrimaryWhiteColor,)),
-                                      TextSpan(text:"님의 노래방 플레이리스트",
-                                  style: TextStyle(
-                                      color: kPrimaryLightGreyColor,))])),
-                              ),
-                            ]),
-                          ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: defaultSize * 1.2),
+                          child: Row(children: [
+                            (_posts[index].userImage == null)
+                                ? Container(
+                                    width: defaultSize * 3.5,
+                                    height: defaultSize * 3.5,
+                                    child: Image.asset(
+                                        "assets/images/profile.png"),
+                                  )
+                                : ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: SizedBox(
+                                        width: defaultSize * 3.5,
+                                        height: defaultSize * 3.5,
+                                        child: Image.network(
+                                            _posts[index].userImage!,
+                                            fit: BoxFit.cover))),
+                            SizedBox(width: defaultSize * 0.5),
+                            Expanded(
+                              child: RichText(
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(children: [
+                                    TextSpan(
+                                        text: "${_posts[index].userName}",
+                                        style: TextStyle(
+                                          color: kPrimaryWhiteColor,
+                                        )),
+                                    TextSpan(
+                                        text: "님의 노래방 플레이리스트",
+                                        style: TextStyle(
+                                          color: kPrimaryLightGreyColor,
+                                        )),
+                                  ])),
+                            ),
+                            Icon(Icons.chevron_right, color: kPrimaryWhiteColor)
+                          ]),
                         ),
                         SizedBox(height: defaultSize),
                         Container(
@@ -292,6 +304,7 @@ class _PostListViewState extends State<PostListView> {
                                 ]),
                           ),
                         ),
+                        SizedBox(height: defaultSize * 0.5)
                       ],
                     ),
                   ),
@@ -339,7 +352,6 @@ class _PostListViewState extends State<PostListView> {
         },
       );
       var data = json.decode(response.body);
-      print(data);
       setState(() {
         _lastPostId = data['lastPostId'];
         for (var e in data['posts']) {
@@ -349,7 +361,6 @@ class _PostListViewState extends State<PostListView> {
       });
     } on SocketException catch (e) {
       // 에러처리 (인터넷 연결 등등)
-      print(e);
       EasyLoading.showError("인터넷 연결을 확인해주세요");
     }
   }

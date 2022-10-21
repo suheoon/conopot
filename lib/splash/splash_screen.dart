@@ -71,7 +71,6 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     //인터넷 연결이 안 되어있다면
     on SocketException {
-      print("인터넷 연결 실패");
       //버전이 없다면 (첫 설치 이용자라면) -> 인터넷 연결 알림 문구 띄우기
       if (userVersionStr == null) {
         //기존에 있는 txt 파일 사용

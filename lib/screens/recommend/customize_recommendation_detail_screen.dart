@@ -194,7 +194,6 @@ class _CustomizeRecommendationDetailScreenState
         },
         onAdFailedToLoad: (ad, error) {
           ad.dispose();
-          print('Ad load failed (code=${error.code} message=${error.message})');
         },
       ),
     );

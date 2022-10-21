@@ -188,7 +188,7 @@ class _UserScreenState extends State<UserScreen> {
                                     ]),
                                   ),
                                 ),
-                                SizedBox(height: defaultSize * 1.5),
+                                SizedBox(height: defaultSize * 2),
                                 InkWell(
                                   onTap: () {
                                     Navigator.push(

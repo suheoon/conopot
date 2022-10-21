@@ -82,7 +82,6 @@ class _FeedScreenState extends State<FeedScreen> {
       request: AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (Ad ad) {
-          print('$ad loaded: ${ad.responseInfo}');
           setState(() {
             // When the ad is loaded, get the ad size and use it to set
             // the height of the ad container.
@@ -91,7 +90,6 @@ class _FeedScreenState extends State<FeedScreen> {
           });
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          print('Anchored adaptive banner failedToLoad: $error');
           ad.dispose();
         },
       ),
