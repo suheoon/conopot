@@ -52,7 +52,6 @@ class _SongBySameSingerListState extends State<SongBySameSingerList> {
           ),
           SizedBox(height: defaultSize),
           ListView.builder(
-              padding: EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.3),
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
               itemCount: list.length > 10 ? 10 : list.length,

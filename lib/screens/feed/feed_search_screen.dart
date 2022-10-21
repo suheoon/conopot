@@ -42,6 +42,7 @@ class _FeedSearchScrrenState extends State<FeedSearchScrren> {
   int userId = 0;
   late ScrollController _controller;
   String _searchKeyword = "";
+  bool _isResult = true;
   TextEditingController _textController = TextEditingController();
 
   @override
@@ -68,7 +69,7 @@ class _FeedSearchScrrenState extends State<FeedSearchScrren> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: feedSearchBar()),
-      body: (_posts.isEmpty)
+      body: (!_isResult)
           ? Center(
               child: Text(
                 "검색 결과가 없습니다.",
@@ -240,6 +241,11 @@ class _FeedSearchScrrenState extends State<FeedSearchScrren> {
           });
           load();
         },
+        onChanged: ((value) {
+          setState(() {
+            _isResult = true;
+          });
+        }),
         controller: _textController,
         enableInteractiveSelection: false,
         textAlign: TextAlign.left,
@@ -264,6 +270,7 @@ class _FeedSearchScrrenState extends State<FeedSearchScrren> {
                   icon: const Icon(Icons.clear),
                   onPressed: () {
                     setState(() {
+                      _isResult = true;
                       _clearTextField();
                     });
                   },
@@ -306,6 +313,7 @@ class _FeedSearchScrrenState extends State<FeedSearchScrren> {
         // 게시물이 더 이상 없을 때
         setState(() {
           _hasNextPage = false;
+          _isResult = false;
         });
       }
     } on SocketException {
