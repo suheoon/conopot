@@ -179,92 +179,82 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
               ),
             )
           : IntrinsicHeight(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+              child: Stack(
                 children: [
-                  if (_checkCount > 0) ...[
-                    Text("${_checkCount}개의 곡을 선택했습니다.",
-                        style: TextStyle(
-                            color: kMainColor, fontSize: defaultSize * 1.3),
-                        key: ValueKey(_checkCount))
-                  ],
-                  SizedBox(height: defaultSize * 0.5),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(defaultSize * 2,
-                        defaultSize * 0.5, defaultSize * 2, defaultSize * 0.5),
-                    decoration: BoxDecoration(
-                        color: kPrimaryGreyColor,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    child: IntrinsicHeight(
-                      child: IntrinsicWidth(
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _checkCount = postList.length;
-                                });
-                                Provider.of<NoteData>(context, listen: false)
-                                    .checkAllFeedSongs(postList);
-                              },
-                              child: Column(children: [
-                                Icon(Icons.list, color: kMainColor),
-                                Text(
-                                  "전체 선택",
-                                  style: TextStyle(
-                                      color: kMainColor,
-                                      fontSize: defaultSize * 1.1),
-                                )
-                              ]),
-                            ),
-                            SizedBox(width: defaultSize),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _checkCount = 0;
-                                });
-                                Provider.of<NoteData>(context, listen: false)
-                                    .uncheckAllFeedSongs();
-                              },
-                              child: Column(children: [
-                                Icon(Icons.playlist_remove, color: kMainColor),
-                                Text(
-                                  "전체 해제",
-                                  style: TextStyle(
-                                      color: kMainColor,
-                                      fontSize: defaultSize * 1.1),
-                                )
-                              ]),
-                            ),
-                            SizedBox(width: defaultSize),
-                            GestureDetector(
-                              onTap: () {
-                                if (_checkCount > 0) {
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(
+                          defaultSize * 2,
+                          defaultSize * 0.5,
+                          defaultSize * 2,
+                          defaultSize * 0.5),
+                      decoration: BoxDecoration(
+                          color: kPrimaryGreyColor,
+                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                      child: IntrinsicHeight(
+                        child: IntrinsicWidth(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _checkCount = postList.length;
+                                  });
                                   Provider.of<NoteData>(context, listen: false)
-                                      .addMultipleFeedSongs();
-                                }
-                              },
-                              child: Column(children: [
-                                Icon(Icons.list,
-                                    color: (_checkCount == 0)
-                                        ? kPrimaryLightGreyColor
-                                        : kPrimaryWhiteColor),
-                                Text(
-                                  "추가",
-                                  style: TextStyle(
-                                    color: (_checkCount == 0)
-                                        ? kPrimaryLightGreyColor
-                                        : kPrimaryWhiteColor,
-                                    fontSize: defaultSize * 1.1,
-                                  ),
-                                )
-                              ]),
-                            ),
-                          ],
+                                      .checkAllFeedSongs(postList);
+                                },
+                                child: Column(children: [
+                                  Icon(Icons.list, color: kMainColor),
+                                  Text(
+                                    "전체 선택",
+                                    style: TextStyle(
+                                        color: kMainColor,
+                                        fontSize: defaultSize * 1.1),
+                                  )
+                                ]),
+                              ),
+                              SizedBox(width: defaultSize),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _checkCount = 0;
+                                  });
+                                  Provider.of<NoteData>(context, listen: false)
+                                      .uncheckAllFeedSongs();
+                                },
+                                child: Column(children: [
+                                  Icon(Icons.playlist_remove,
+                                      color: kMainColor),
+                                  Text(
+                                    "전체 해제",
+                                    style: TextStyle(
+                                        color: kMainColor,
+                                        fontSize: defaultSize * 1.1),
+                                  )
+                                ]),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
+                  Align(
+                    alignment: Alignment(0, -1.7),
+                    child: Container(
+                      padding:
+                          EdgeInsets.fromLTRB(defaultSize * 0.8, defaultSize * 0.4, defaultSize * 0.8, defaultSize * 0.4),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(90)), color: kMainColor),
+                      child: Text("${_checkCount}",
+                          style: TextStyle(
+                              color: kPrimaryWhiteColor,
+                              fontSize: defaultSize),
+                          key: ValueKey(_checkCount)),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -366,12 +356,30 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                           )
                         : GestureDetector(
                             onTap: () {
+                              if (_checkCount > 0) {
+                                Provider.of<NoteData>(context, listen: false)
+                                    .addMultipleFeedSongs();
+                              }
                               setState(() {
                                 _isEditting = false;
                               });
                             },
-                            child: Text("완료",
-                                style: TextStyle(color: kMainColor))),
+                            child: Container(
+                              padding: EdgeInsets.fromLTRB(
+                                  defaultSize,
+                                  defaultSize * 0.5,
+                                  defaultSize,
+                                  defaultSize * 0.5),
+                              decoration: BoxDecoration(
+                                  color: kMainColor,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30))),
+                              child: Text("추가",
+                                  style: TextStyle(
+                                      color: kPrimaryWhiteColor,
+                                      fontSize: defaultSize * 1.2,
+                                      fontWeight: FontWeight.w600)),
+                            )),
               ],
             ),
           ),

@@ -25,6 +25,7 @@ class _EditFeedDetailSongListState extends State<EditFeedDetailSongList> {
       child: Consumer<NoteData>(
         builder: (context, noteData, child) {
         return ListView.builder(
+            padding: EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.3),
             itemCount: widget.postList.length,
             itemBuilder: (context, index) {
               String songNumber = widget.postList[index].tj_songNumber;

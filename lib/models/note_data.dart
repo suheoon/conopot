@@ -1505,11 +1505,10 @@ class NoteData extends ChangeNotifier {
       }
     }
     if (overlap > 0) {
-      tt.Toast.show("중복을 제외한 ${addSet.length - overlap}개의 곡이 추가되었습니다.",
-        duration: 2, backgroundColor: kDialogColor.withOpacity(0.8));
+      EasyLoading.instance..fontSize = defaultSize * 1.25;
+      EasyLoading.showToast("중복을 제외한 ${addSet.length - overlap}개의 곡이 추가되었습니다.");
     } else {
-      tt.Toast.show("${addSet.length}개의 곡이 추가되었습니다.",
-        duration: 2, backgroundColor: kDialogColor.withOpacity(0.8));
+      EasyLoading.showToast("${addSet.length}개의 곡이 추가되었습니다.");
     }
     await storage.write(key: 'notes', value: jsonEncode(notes));
     notifyListeners();
