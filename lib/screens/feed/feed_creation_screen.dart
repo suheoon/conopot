@@ -36,6 +36,12 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
       appBar: AppBar(
         title: Text("플레이리스트 공유", style: TextStyle(color: kPrimaryWhiteColor)),
         centerTitle: true,
+        leading: BackButton(
+          color: kPrimaryLightWhiteColor,
+          onPressed: () {
+            showExitDialog(context);
+          },
+        ),
         actions: [
           TextButton(
               onPressed: () async {
@@ -289,5 +295,57 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
         ),
       ),
     );
+  }
+
+  void showExitDialog(context) {
+    Widget exitButton = ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(kMainColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
+            borderRadius: BorderRadius.circular(8),
+          ))),
+      onPressed: () async {
+        for (int i = 0; i < 2; i++) Navigator.of(context).pop();
+      },
+      child: Text("나가기",
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+          )),
+    );
+
+    Widget cancelButton = ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              side: const BorderSide(width: 0.0),
+              borderRadius: BorderRadius.circular(8),
+            ))),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text("취소",
+            style: TextStyle(fontWeight: FontWeight.w600, color: kMainColor)));
+
+    AlertDialog alert = AlertDialog(
+      content: Text(
+        "플레이리스트 공유를 중단하고 나가시겠습니까?",
+        style:
+            TextStyle(fontWeight: FontWeight.w400, color: kPrimaryWhiteColor),
+      ),
+      actions: [
+        cancelButton,
+        exitButton,
+      ],
+      backgroundColor: kDialogColor,
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(child: alert);
+        });
   }
 }

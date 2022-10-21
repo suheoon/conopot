@@ -122,6 +122,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
         leading: BackButton(
           color: kPrimaryLightWhiteColor,
           onPressed: () {
+            
             Navigator.pop(context, _state); //뒤로가기
           },
         ),
