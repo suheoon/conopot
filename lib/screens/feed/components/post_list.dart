@@ -31,7 +31,7 @@ class _PostListViewState extends State<PostListView> {
   int _option = 1; // 인기 or 최신
   late ScrollController _controller;
   int userId = 0;
-  var _emotionList = ["😀", "🥲", "😡", "😳", "🫠"];
+  var _emotionList = ["😀", "🥲", "😡", "😳", "😎"];
 
   _PostListViewState(FeedScrrenController _controller) {
     _controller.lastPostId = _lastPostId;
@@ -369,6 +369,7 @@ class _PostListViewState extends State<PostListView> {
 
   // 추가적인 게시물을 불러오는 함수
   void _loadMore() async {
+    if (_isLoadMoreRunning == true) return;
     setState(() {
       // api 호출시 List Veiew의 하단에 Loading Indicator를 띄운다.
       _isLoadMoreRunning = true;
@@ -387,7 +388,6 @@ class _PostListViewState extends State<PostListView> {
       var data = json.decode(response.body);
       // 새로 받아온 게시물
       final List fetchedPosts = data['posts'];
-      print(data['posts']);
       if (fetchedPosts.isNotEmpty) {
         setState(() {
           _lastPostId = data['lastPostId'];

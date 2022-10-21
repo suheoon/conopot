@@ -31,7 +31,7 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
   int _index = 0;
   bool _like = false; // 좋아요 여부
   int? _userId;
-  var _emotionList = ["😀", "🥲", "😡", "😳", "🫠"];
+  var _emotionList = ["😀", "🥲", "😡", "😳", "😎"];
   bool _isEditting = false;
   List<Note> postList = [];
   int _checkCount = 0;

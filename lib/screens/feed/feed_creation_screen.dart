@@ -23,7 +23,7 @@ class CreateFeedScreen extends StatefulWidget {
 
 class _CreateFeedScreenState extends State<CreateFeedScreen> {
   int _emotionIndex = 0; // 😀, 🥲, 😡, 😳, 🫠
-  var _emotionList = ["😀", "🥲", "😡", "😳", "🫠"];
+  var _emotionList = ["😀", "🥲", "😡", "😳", "😎"];
   bool _isIconEditting = false;
   bool _isListEditting = false;
   String _listName = "";

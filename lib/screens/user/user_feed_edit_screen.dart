@@ -24,7 +24,7 @@ class UserFeedEditScreen extends StatefulWidget {
 
 class _UserFeedEditScreenState extends State<UserFeedEditScreen> {
   int _emotionIndex = 0; // 😀, 🥲, 😡, 😳, 🫠
-  var _emotionList = ["😀", "🥲", "😡", "😳", "🫠"];
+  var _emotionList = ["😀", "🥲", "😡", "😳", "😎"];
   bool _isIconEditting = false;
   bool _isListEditting = false;
   String _listName = "";
