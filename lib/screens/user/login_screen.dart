@@ -11,7 +11,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -148,7 +150,7 @@ void kakaoRegister(BuildContext context, OAuthToken token) async {
   }
 }
 
-// 토큰을 이용해 kakao 정보를 백엔드로 넘겨준다(등록)
+// 애플 로그인
 void appleRegister(
     BuildContext context, AuthorizationCredentialAppleID credential) async {
   String? serverURL = dotenv.env['USER_SERVER_URL'];
@@ -169,10 +171,6 @@ void appleRegister(
 
     //서버측에서 토큰 검증을 성공한 경우 (서버에 사용자 정보 저장)
     if (response.statusCode == 200) {
-      //print("애플 로그인 성공");
-      //print("응답 헤더 : ${response.headers}");
-      //print("응답 바디 : ${response.body}");
-
       //jwt 토큰 반환
       String? jwtToken = response.headers['authorization'];
       //print("jwt 토큰 : ${jwtToken}");
@@ -193,6 +191,19 @@ void appleRegister(
 void loginSuccess(String? jwtToken, BuildContext context) {
   //로컬 스토리지에 jwt 토큰 저장
   Provider.of<NoteData>(context, listen: false).writeJWT(jwtToken);
-
   Provider.of<NoteData>(context, listen: false).initAccountInfo();
+  // 로그인 성공 후 userId를 OneSignal의 externalUserId로 지정
+  if (jwtToken != null) {
+    Map<String, dynamic> payload = Jwt.parseJwt(jwtToken);
+    int userId = payload["userId"];
+    String externalUserId = userId.toString();
+    if (userId != 0) {
+      OneSignal.shared
+          .setExternalUserId(externalUserId)
+          .then((results) {})
+          .catchError((error) {
+        print(error.toString());
+      });
+    }
+  }
 }

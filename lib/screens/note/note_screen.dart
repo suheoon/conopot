@@ -461,7 +461,7 @@ class _NoteScreenState extends State<NoteScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: defaultSize * 8,
+                  height: defaultSize * 6.5,
                 ),
               ]),
             ),

@@ -7,8 +7,11 @@ import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/user/components/channel_talk.dart';
 import 'package:conopot/screens/user/components/notice.dart';
+import 'package:conopot/screens/user/etc_screen.dart';
 import 'package:conopot/screens/user/login_screen.dart';
 import 'package:conopot/screens/user/profile_modification_screen.dart';
+import 'package:conopot/screens/user/user_liked_playlist_screen.dart';
+import 'package:conopot/screens/user/user_share_playlist_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -217,9 +220,18 @@ class _UserScreenState extends State<UserScreen> {
                       )),
                     ),
                     SizedBox(height: defaultSize * 1.5),
+                    if (loginState == true)
                     Container(
                       color: kPrimaryLightBlackColor,
                       child: IntrinsicHeight(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: defaultSize * 1.5),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: defaultSize * 1.5),
+                                InkWell(
                         child: Column(children: [
                           SizedBox(height: defaultSize * 2),
                           InkWell(
@@ -553,60 +565,172 @@ class _UserScreenState extends State<UserScreen> {
                           (loginState == true)
                               ? InkWell(
                                   onTap: () {
-                                    setState(() {
-                                      Provider.of<NoteData>(context,
-                                              listen: false)
-                                          .showAccountDialog(context, "logout");
-                                    });
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                UserSharePlaylistScreen()));
                                   },
                                   splashColor: Colors.transparent,
                                   child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: defaultSize * 1.5),
                                     child: Row(children: [
-                                      Text("로그아웃",
+                                      Text("내가 공유한 플레이리스트",
                                           style: TextStyle(
                                             color: kPrimaryWhiteColor,
                                             fontSize: defaultSize * 1.5,
                                             fontWeight: FontWeight.w500,
                                           )),
+                                      Spacer(),
+                                      Icon(Icons.chevron_right,
+                                          color: kPrimaryWhiteColor)
                                     ]),
                                   ),
-                                )
-                              : SizedBox.shrink(),
-                          (loginState == true)
-                              ? SizedBox(height: defaultSize * 3)
-                              : SizedBox.shrink(),
-                          //회원탈퇴 버튼
-                          (loginState == true)
-                              ? InkWell(
+                                ),
+                                SizedBox(height: defaultSize * 2),
+                                InkWell(
                                   onTap: () {
-                                    Provider.of<NoteData>(context,
-                                            listen: false)
-                                        .showAccountDialog(context, "delete");
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                UserLikedPlaylistScreen()));
                                   },
                                   splashColor: Colors.transparent,
                                   child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: defaultSize * 1.5),
                                     child: Row(children: [
-                                      Text("탈퇴하기",
+                                      Text("내가 좋아요한 플레이리스트",
                                           style: TextStyle(
                                             color: kPrimaryWhiteColor,
                                             fontSize: defaultSize * 1.5,
                                             fontWeight: FontWeight.w500,
                                           )),
-                                      SizedBox(height: defaultSize * 1.5),
+                                      Spacer(),
+                                      Icon(Icons.chevron_right,
+                                          color: kPrimaryWhiteColor)
                                     ]),
                                   ),
-                                )
-                              : SizedBox.shrink(),
-                          (loginState == true)
-                              ? SizedBox(height: defaultSize * 2)
-                              : SizedBox(height: defaultSize)
-                        ]),
+                                ),
+                                SizedBox(height: defaultSize * 1.5),
+                              ]),
+                        ),
                       ),
                     ),
+                    if (loginState == true)
+                    SizedBox(height: defaultSize * 1.5),
+                    Container(
+                      color: kPrimaryLightBlackColor,
+                      child: IntrinsicHeight(
+                        child: Column(
+                          children: [
+                            SwitchListTile(
+                                activeColor: kMainColor,
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: defaultSize * 1.5),
+                                title: Text(
+                                  "알림 설정",
+                                  style: TextStyle(
+                                    color: kPrimaryWhiteColor,
+                                    fontSize: defaultSize * 1.5,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                value: Provider.of<NoteData>(context,
+                                        listen: false)
+                                    .isSubscribed,
+                                onChanged: (bool value) async {
+                                  await OneSignal.shared.disablePush(!value);
+                                  if (value == true) {
+                                    await storage.write(
+                                        key: 'isSubscribed', value: 'yes');
+                                  } else {
+                                    await storage.write(
+                                        key: 'isSubscribed', value: 'no');
+                                  }
+                                  setState(() {
+                                    Provider.of<NoteData>(context,
+                                            listen: false)
+                                        .isSubscribed = value;
+                                  });
+                                }),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      color: kPrimaryLightBlackColor,
+                      child: IntrinsicHeight(
+                        child: Column(
+                          children: [
+                            SizedBox(height: defaultSize * 1.5),
+                            InkWell(
+                              onTap: () {
+                                Analytics_config().settingNotice();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => NoticeScreen()));
+                              },
+                              splashColor: Colors.transparent,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: defaultSize * 1.5),
+                                child: Row(children: [
+                                  Text("공지사항",
+                                      style: TextStyle(
+                                        color: kPrimaryWhiteColor,
+                                        fontSize: defaultSize * 1.5,
+                                        fontWeight: FontWeight.w500,
+                                      )),
+                                  Spacer(),
+                                  Icon(
+                                    Icons.chevron_right,
+                                    color: kPrimaryWhiteColor,
+                                  ),
+                                ]),
+                              ),
+                            ),
+                            SizedBox(height: defaultSize * 1.5),
+                          ],
+                        ),
+                      ),
+                    ),
+                    (loginState == true)
+                        ? Container(
+                            color: kPrimaryLightBlackColor,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EtcScreen()));
+                              },
+                              splashColor: Colors.transparent,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: defaultSize * 1.5),
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: defaultSize * 1.5),
+                                    Row(children: [
+                                      Text("기타",
+                                          style: TextStyle(
+                                            color: kPrimaryWhiteColor,
+                                            fontSize: defaultSize * 1.5,
+                                            fontWeight: FontWeight.w500,
+                                          )),
+                                      Spacer(),
+                                      Icon(
+                                        Icons.chevron_right_outlined,
+                                        color: kPrimaryWhiteColor,
+                                      )
+                                    ]),
+                                    SizedBox(height: defaultSize * 1.5),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        : SizedBox.shrink(),
                   ],
                 ),
               ),
