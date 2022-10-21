@@ -164,10 +164,10 @@ class _PostListViewState extends State<PostListView> {
                             builder: (_) => FeedDetailScreen(
                                   post: _posts[index],
                                 )));
-                    if (result) {
+                    if (result == 1) {
                       _posts[index].postLikeCount += 1;
                       setState(() {});
-                    } else {
+                    } else if (result == -1) {
                       _posts[index].postLikeCount -= 1;
                       setState(() {});
                     }

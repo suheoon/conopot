@@ -134,7 +134,7 @@ class _FeedScreenState extends State<FeedScreen> {
                 Icon(Icons.library_music, color: kPrimaryWhiteColor),
                 SizedBox(width: defaultSize),
                 Text(
-                  "내 플레이리스트 자랑하기",
+                  "내 플레이리스트 공유하기",
                   style: TextStyle(
                       color: kPrimaryWhiteColor,
                       fontSize: defaultSize * 1.3,
@@ -147,23 +147,23 @@ class _FeedScreenState extends State<FeedScreen> {
       ),
       body: SafeArea(
         child: ListView(controller: _controller, children: [
-          // Container(
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     children: [
-          //       if (_anchoredAdaptiveAd != null && _isLoaded)
-          //         Container(
-          //           color: Colors.transparent,
-          //           width: _anchoredAdaptiveAd!.size.width.toDouble(),
-          //           height: _anchoredAdaptiveAd!.size.height.toDouble(),
-          //           child: AdWidget(ad: _anchoredAdaptiveAd!),
-          //         )
-          //     ],
-          //   ),
-          //   decoration: BoxDecoration(
-          //       color: kPrimaryLightBlackColor,
-          //       borderRadius: BorderRadius.all(Radius.circular(8))),
-          // ),
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (_anchoredAdaptiveAd != null && _isLoaded)
+                  Container(
+                    color: Colors.transparent,
+                    width: _anchoredAdaptiveAd!.size.width.toDouble(),
+                    height: _anchoredAdaptiveAd!.size.height.toDouble(),
+                    child: AdWidget(ad: _anchoredAdaptiveAd!),
+                  )
+              ],
+            ),
+            decoration: BoxDecoration(
+                color: kPrimaryLightBlackColor,
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+          ),
           SizedBox(height: defaultSize),
           Container(
             padding: EdgeInsets.fromLTRB(

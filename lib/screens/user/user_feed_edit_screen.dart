@@ -7,7 +7,7 @@ import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/post.dart';
 import 'package:conopot/screens/feed/components/search_song_list.dart';
-import 'package:conopot/screens/feed/components/added_song_list.dart';
+import 'package:conopot/screens/feed/components/editing_playlist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
@@ -245,7 +245,6 @@ class _UserFeedEditScreenState extends State<UserFeedEditScreen> {
                 ],
               ),
             ),
-            AddedSongListView()
           ]),
         ),
       ),

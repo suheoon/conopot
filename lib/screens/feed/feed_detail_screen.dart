@@ -29,6 +29,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
   String? videoId;
   int _index = 0;
   bool _like = false; // 좋아요 여부
+  int _state = 0;
   int? _userId;
   var _emotionList = ["😀", "🥲", "😡", "😳", "🫠"];
   bool _isEditting = false;
@@ -115,7 +116,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
         leading: BackButton(
             color: kPrimaryLightWhiteColor,
             onPressed: () {
-              Navigator.pop(context, _like); //뒤로가기
+              Navigator.pop(context, _state); //뒤로가기
             },
           ),
         actions: [
@@ -269,9 +270,11 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
               setState(() {
                 if (_like == false) {
                   _like = true;
+                  _state = 1;
                   URL = 'http://10.0.2.2:3000/playlist/heart';
                 } else {
                   _like = false;
+                  _state = -1;
                   URL = 'http://10.0.2.2:3000/playlist/hate';
                 }
               });

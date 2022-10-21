@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:amplitude_flutter/identify.dart';
@@ -355,26 +354,12 @@ class NoteData extends ChangeNotifier {
         Navigator.of(context).pop();
         Fluttertoast.cancel();
         if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
-          Fluttertoast.showToast(
-              msg: "이미 등록된 곡입니다 😢",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Color(0xFFFF7878),
-              textColor: kPrimaryWhiteColor,
-              fontSize: defaultSize * 1.6);
+          tt.Toast.show("이미 리스트에 추가된 노래입니다.",backgroundColor: kDialogColor.withOpacity(0.8));
           Provider.of<NoteData>(context, listen: false).initEmptyCheck();
         } else {
           Analytics_config().addViewSongAddEvent(title);
           Analytics_config().musicAddEvent(title);
-          Fluttertoast.showToast(
-              msg: "노래가 추가 되었습니다 🎉",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: kMainColor,
-              textColor: kPrimaryWhiteColor,
-              fontSize: defaultSize * 1.6);
+          tt.Toast.show("리스트에 노래가 추가 되었습니다.",backgroundColor: kDialogColor.withOpacity(0.8));
         }
       },
       child: Text("추가",
@@ -409,7 +394,7 @@ class NoteData extends ChangeNotifier {
 
     AlertDialog alert = AlertDialog(
       content: Text(
-        "'${title}' 노래를 리스트에 추가하시겠습니까?",
+        "'${title}' 노래를 플레이리스트에 추가하시겠습니까?",
         style:
             TextStyle(fontWeight: FontWeight.w400, color: kPrimaryWhiteColor),
       ),
@@ -449,6 +434,12 @@ class NoteData extends ChangeNotifier {
 
   void initEmptyCheck() {
     emptyCheck = false;
+    notifyListeners();
+  }
+
+  // 플레이리스트 삭제 함수
+  Future<void> deleteList(Note note) async {
+    lists.remove(note);
     notifyListeners();
   }
 
