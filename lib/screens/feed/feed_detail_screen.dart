@@ -109,16 +109,20 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
       appBar: AppBar(
         title: Container(
           padding: EdgeInsets.all(defaultSize * 0.5),
-          decoration: BoxDecoration(color: kPrimaryGreyColor, borderRadius: BorderRadius.all(Radius.circular(8))),
+          decoration: BoxDecoration(
+              color: kPrimaryGreyColor,
+              borderRadius: BorderRadius.all(Radius.circular(8))),
           child: Text(
-              "${_emotionList[widget.post.postIconId]} ${widget.post.postTitle}", overflow: TextOverflow.ellipsis,),
+            "${_emotionList[widget.post.postIconId]} ${widget.post.postTitle}",
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
         leading: BackButton(
-            color: kPrimaryLightWhiteColor,
-            onPressed: () {
-              Navigator.pop(context, _state); //뒤로가기
-            },
-          ),
+          color: kPrimaryLightWhiteColor,
+          onPressed: () {
+            Navigator.pop(context, _state); //뒤로가기
+          },
+        ),
         actions: [
           IconButton(
               onPressed: () {
@@ -266,33 +270,47 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
           padding: EdgeInsets.symmetric(horizontal: defaultSize),
           child: GestureDetector(
             onTap: () async {
-              String URL = "";
-              setState(() {
-                if (_like == false) {
-                  _like = true;
-                  _state = 1;
-                  URL = 'http://10.0.2.2:3000/playlist/heart';
-                } else {
-                  _like = false;
-                  _state = -1;
-                  URL = 'http://10.0.2.2:3000/playlist/hate';
+              if (Provider.of<NoteData>(context, listen: false).isLogined ==
+                  false) {
+                EasyLoading.showToast("로그인 이후 이용가능합니다.");
+              } else {
+                String URL = "";
+                String body = "";
+                setState(() {
+                  if (_like == false) {
+                    _like = true;
+                    _state = 1;
+                    URL = 'http://10.0.2.2:3000/playlist/heart';
+                    body = jsonEncode({
+                      "postId": widget.post.postId,
+                      "userId":
+                          Provider.of<NoteData>(context, listen: false).userId,
+                      "postAuthorId": widget.post.postAuthorId,
+                      "postTitle": widget.post.postTitle,
+                      "username": Provider.of<NoteData>(context, listen: false)
+                          .userNickname
+                    });
+                  } else {
+                    _like = false;
+                    _state = -1;
+                    URL = 'http://10.0.2.2:3000/playlist/hate';
+                    body = jsonEncode({
+                      "postId": widget.post.postId,
+                      "userId":
+                          Provider.of<NoteData>(context, listen: false).userId,
+                    });
+                  }
+                });
+                try {
+                  final response = await http.post(Uri.parse(URL),
+                      headers: <String, String>{
+                        'Content-Type': 'application/json; charset=UTF-8',
+                      },
+                      body: body);
+                } on SocketException {
+                  // 에러처리 (인터넷 연결 등등)
+                  EasyLoading.showToast("인터넷 연결을 확인해주세요.");
                 }
-              });
-              try {
-                final response = await http.post(
-                  Uri.parse(URL),
-                  headers: <String, String>{
-                    'Content-Type': 'application/json; charset=UTF-8',
-                  },
-                  body: jsonEncode({
-                    "postId": widget.post.postId,
-                    "userId":
-                        Provider.of<NoteData>(context, listen: false).userId,
-                  }),
-                );
-              } on SocketException {
-                // 에러처리 (인터넷 연결 등등)
-                EasyLoading.showToast("인터넷 연결을 확인해주세요.");
               }
             },
             child: Row(
@@ -306,28 +324,35 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                             fit: BoxFit.cover))),
                 SizedBox(width: defaultSize),
                 Text("${widget.post.userName}",
-                    style: TextStyle(color: kPrimaryLightWhiteColor, fontSize: defaultSize * 1.5),
+                    style: TextStyle(
+                        color: kPrimaryLightWhiteColor,
+                        fontSize: defaultSize * 1.5),
                     overflow: TextOverflow.ellipsis),
                 Spacer(),
-                (widget.post.postAuthorId == Provider.of<NoteData>(context, listen: false).userId && _isEditting == false) ?
-                SizedBox.shrink() :
-                (_isEditting == false)
-                    ? Row(
-                        children: [
-                          (_like == true)
-                              ? Icon(Icons.favorite, color: kMainColor)
-                              : Icon(Icons.favorite_border, color: kMainColor),
-                          SizedBox(width: defaultSize * 0.3),
-                          Text("좋아요", style: TextStyle(color: kMainColor))
-                        ],
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _isEditting = false;
-                          });
-                        },
-                        child: Text("완료", style: TextStyle(color: kMainColor))),
+                (widget.post.postAuthorId ==
+                            Provider.of<NoteData>(context, listen: false)
+                                .userId &&
+                        _isEditting == false)
+                    ? SizedBox.shrink()
+                    : (_isEditting == false)
+                        ? Row(
+                            children: [
+                              (_like == true)
+                                  ? Icon(Icons.favorite, color: kMainColor)
+                                  : Icon(Icons.favorite_border,
+                                      color: kMainColor),
+                              SizedBox(width: defaultSize * 0.3),
+                              Text("좋아요", style: TextStyle(color: kMainColor))
+                            ],
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _isEditting = false;
+                              });
+                            },
+                            child: Text("완료",
+                                style: TextStyle(color: kMainColor))),
               ],
             ),
           ),

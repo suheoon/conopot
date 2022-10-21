@@ -8,6 +8,7 @@ import 'package:conopot/screens/feed/feed_creation_screen.dart';
 import 'package:conopot/screens/feed/feed_search_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
@@ -102,7 +103,7 @@ class _FeedScreenState extends State<FeedScreen> {
     double defaultSize = SizeConfig.defaultSize;
     return Scaffold(
       appBar: AppBar(
-        title: Text("피드"),
+        title: Text("싱스타그램"),
         centerTitle: false,
         actions: [
           IconButton(
@@ -116,9 +117,13 @@ class _FeedScreenState extends State<FeedScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: GestureDetector(
         onTap: () {
-          Provider.of<NoteData>(context, listen: false).lists = [];
-          Navigator.push(
-              context, MaterialPageRoute(builder: (_) => CreateFeedScreen()));
+          if (Provider.of<NoteData>(context, listen: false).isLogined == false) {
+            EasyLoading.showToast("로그인 이후 이용가능합니다.");
+          } else {
+            Provider.of<NoteData>(context, listen: false).lists = [];
+            Navigator.push(
+                context, MaterialPageRoute(builder: (_) => CreateFeedScreen()));
+          }
         },
         child: Container(
           padding: EdgeInsets.fromLTRB(

@@ -246,7 +246,7 @@ class _MainScreenState extends State<MainScreen>
                         Icons.forum,
                         color: kPrimaryWhiteColor,
                       ),
-                      label: "피드",
+                      label: "싱스타그램",
                       activeIcon: Icon(
                         Icons.forum,
                         color: kMainColor,
@@ -303,7 +303,7 @@ class _MainScreenState extends State<MainScreen>
                         Icons.forum,
                         color: kPrimaryWhiteColor,
                       ),
-                      label: "피드",
+                      label: "싱스타그램",
                       activeIcon: Icon(
                         Icons.forum,
                         color: kMainColor,

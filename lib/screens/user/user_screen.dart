@@ -155,6 +155,7 @@ class _UserScreenState extends State<UserScreen> {
                       )),
                     ),
                     SizedBox(height: defaultSize * 1.5),
+                    if (loginState == true)
                     Container(
                       color: kPrimaryLightBlackColor,
                       child: IntrinsicHeight(
@@ -217,6 +218,7 @@ class _UserScreenState extends State<UserScreen> {
                         ),
                       ),
                     ),
+                    if (loginState == true)
                     SizedBox(height: defaultSize * 1.5),
                     Container(
                       color: kPrimaryLightBlackColor,
