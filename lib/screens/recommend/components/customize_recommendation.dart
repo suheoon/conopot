@@ -123,7 +123,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                         style: TextStyle(
                             color: kPrimaryWhiteColor,
                             fontSize: defaultSize,
-                            fontWeight: FontWeight.w400)),
+                            fontWeight: FontWeight.w600)),
                   ),
                 ),
             ],

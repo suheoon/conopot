@@ -1215,9 +1215,9 @@ class NoteData extends ChangeNotifier {
         await storage.write(key: 'backupdate', value: backUpDate);
         EasyLoading.showSuccess("백업에 성공했습니다");
         notifyListeners();
-      } on HttpException {
+      } on SocketException {
         // 인터넷 연결 예외처리
-        EasyLoading.showError("백업이 실패했습니다 인터넷 연결을 확인해주세요 😢");
+        EasyLoading.showToast("백업이 실패했습니다 인터넷 연결을 확인해주세요.");
       }
     }
   }

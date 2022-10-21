@@ -14,6 +14,7 @@ import 'package:conopot/screens/user/user_liked_playlist_screen.dart';
 import 'package:conopot/screens/user/user_share_playlist_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -749,14 +750,7 @@ class _UserScreenState extends State<UserScreen> {
       //("인터넷 연결 성공");
       Provider.of<NoteData>(context, listen: false).showBackupDialog(context);
     } on SocketException {
-      Fluttertoast.showToast(
-          msg: "인터넷 연결 후 이용가능합니다",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Color(0xFFFF7878),
-          textColor: kPrimaryWhiteColor,
-          fontSize: defaultSize * 1.6);
+      EasyLoading.showToast("인터넷 연결 후 이용가능합니다");
     }
   }
 
@@ -769,14 +763,7 @@ class _UserScreenState extends State<UserScreen> {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => LoginScreen()));
     } on SocketException {
-      Fluttertoast.showToast(
-          msg: "인터넷 연결 후 이용가능합니다",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Color(0xFFFF7878),
-          textColor: kPrimaryWhiteColor,
-          fontSize: defaultSize * 1.6);
+      EasyLoading.showToast("인터넷 연결 후 이용가능합니다");
     }
   }
 
