@@ -779,7 +779,7 @@ class _UserScreenState extends State<UserScreen> {
   userProfile() {
     if (Provider.of<NoteData>(context, listen: true).userImage == "") {
       // 기본 이미지
-      return Image.asset("assets/images/profile.png");
+      return SvgPicture.asset("assets/icons/profile.svg");
     }
     String? serverURL = dotenv.env['USER_SERVER_URL'];
     return ClipRRect(
