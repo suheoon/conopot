@@ -27,7 +27,7 @@ class _FeedSearchScrrenState extends State<FeedSearchScrren> {
   int _lastPostId = 0;
   bool _isLoadMoreRunning = false;
   bool _hasNextPage = true;
-  var _emotionList = ["😀", "🥲", "😡", "😳", "🫠"];
+  var _emotionList = ["😀", "🥲", "😡", "😳", "😎"];
   int userId = 0;
   late ScrollController _controller;
   String _searchKeyword = "";
