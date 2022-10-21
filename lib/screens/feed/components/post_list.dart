@@ -157,8 +157,7 @@ class _PostListViewState extends State<PostListView> {
                 itemCount: _posts.length,
                 itemBuilder: (context, index) => GestureDetector(
                   onTap: () async {
-                    final result = await
-                    Navigator.push(
+                    final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (_) => FeedDetailScreen(
@@ -183,8 +182,8 @@ class _PostListViewState extends State<PostListView> {
                             child: Row(children: [
                               (_posts[index].userImage == null)
                                   ? Container(
-                                      width: defaultSize * 4,
-                                      height: defaultSize * 4,
+                                      width: defaultSize * 3.5,
+                                      height: defaultSize * 3.5,
                                       child: Image.asset(
                                           "assets/images/profile.png"),
                                     )
@@ -197,11 +196,17 @@ class _PostListViewState extends State<PostListView> {
                                               _posts[index].userImage!,
                                               fit: BoxFit.cover))),
                               SizedBox(width: defaultSize * 0.5),
-                              Text(
-                                "${_posts[index].userName}",
-                                style: TextStyle(color: kPrimaryWhiteColor),
+                              SizedBox(
+                                width: SizeConfig.screenWidth * 0.8,
+                                child: RichText(
+                                    overflow: TextOverflow.ellipsis,
+                                    text: TextSpan(children: [TextSpan(text:"${_posts[index].userName}",
+                                  style: TextStyle(
+                                      color: kPrimaryWhiteColor,)),
+                                      TextSpan(text:"님의 노래방 플레이리스트",
+                                  style: TextStyle(
+                                      color: kPrimaryLightGreyColor,))])),
                               ),
-                              Text("님의 노래방")
                             ]),
                           ),
                         ),
@@ -226,28 +231,36 @@ class _PostListViewState extends State<PostListView> {
                                           style: TextStyle(
                                               fontSize: defaultSize * 3)),
                                       SizedBox(width: defaultSize),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(_posts[index].postTitle,
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(_posts[index].postTitle,
+                                                style: TextStyle(
+                                                    color: kPrimaryWhiteColor,
+                                                    fontSize: defaultSize * 1.4,
+                                                    overflow:
+                                                        TextOverflow.ellipsis)),
+                                            SizedBox(
+                                                height: defaultSize * 0.25),
+                                            Text(
+                                              _posts[index].postSubscription ==
+                                                      null
+                                                  ? ""
+                                                  : _posts[index]
+                                                      .postSubscription!
+                                                      .trim()
+                                                      .replaceAll("\n", " "),
                                               style: TextStyle(
-                                                  color: kPrimaryWhiteColor,
+                                                  color:
+                                                      kPrimaryLightWhiteColor,
+                                                  fontSize: defaultSize * 1.2,
                                                   overflow:
-                                                      TextOverflow.ellipsis)),
-                                          SizedBox(height: defaultSize * 0.25),
-                                          Text(
-                                            _posts[index].postSubscription ==
-                                                    null
-                                                ? ""
-                                                : _posts[index]
-                                                    .postSubscription!,
-                                            style: TextStyle(
-                                                color: kPrimaryWhiteColor,
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                          )
-                                        ],
+                                                      TextOverflow.ellipsis),
+                                            )
+                                          ],
+                                        ),
                                       )
                                     ],
                                   ),
@@ -257,16 +270,21 @@ class _PostListViewState extends State<PostListView> {
                                         left: defaultSize * 0.5),
                                     child: Row(
                                       children: [
-                                        Icon(Icons.favorite, color: kMainColor),
+                                        Icon(Icons.favorite,
+                                            color: kMainColor,
+                                            size: defaultSize * 1.8),
                                         SizedBox(width: defaultSize * 0.5),
                                         Text(
                                           "${_posts[index].postLikeCount}",
-                                          style: TextStyle(color: kMainColor),
+                                          style: TextStyle(
+                                              color: kMainColor,
+                                              fontSize: defaultSize * 1.3),
                                         ),
                                         Spacer(),
                                         Text(
                                             "${_posts[index].postMusicList.length}개의 노래",
                                             style: TextStyle(
+                                                fontSize: defaultSize * 1.3,
                                                 color: kPrimaryLightGreyColor))
                                       ],
                                     ),
@@ -284,10 +302,10 @@ class _PostListViewState extends State<PostListView> {
             padding: EdgeInsets.only(top: 10, bottom: 40),
             child: Center(
               child: CircularProgressIndicator(
-                  backgroundColor: kMainColor,
-                  valueColor: AlwaysStoppedAnimation<Color>(kBackgroundColor),
-                  value: 0.4,
-                ),
+                backgroundColor: kMainColor,
+                valueColor: AlwaysStoppedAnimation<Color>(kBackgroundColor),
+                value: 0.4,
+              ),
             ),
           ),
         if (_hasNextPage == false)
@@ -333,7 +351,7 @@ class _PostListViewState extends State<PostListView> {
       // 에러처리 (인터넷 연결 등등)
       print(e);
       EasyLoading.showError("인터넷 연결을 확인해주세요");
-    } 
+    }
   }
 
   // 추가적인 게시물을 불러오는 함수
