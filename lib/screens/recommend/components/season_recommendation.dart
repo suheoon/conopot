@@ -5,6 +5,7 @@ import 'package:conopot/models/music_search_item.dart';
 import 'package:conopot/models/recommendation_item_list.dart';
 import 'package:conopot/screens/recommend/recommendation_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SeasonRecommendation extends StatelessWidget {
   double defaultSize = SizeConfig.defaultSize;
@@ -17,10 +18,10 @@ class SeasonRecommendation extends StatelessWidget {
   ];
 
     List<String> _images = [
-    'assets/images/5-1.png',
-    'assets/images/5-2.png',
-    'assets/images/5-3.png',
-    'assets/images/5-4.png',
+    'assets/icons/5-1.svg',
+    'assets/icons/5-2.svg',
+    'assets/icons/5-3.svg',
+    'assets/icons/5-4.svg',
   ];
 
   @override
@@ -79,7 +80,7 @@ class SeasonRecommendation extends StatelessWidget {
                           borderRadius: BorderRadius.all(Radius.circular(8)),
                           child: FittedBox(
                               fit: BoxFit.fill,
-                              child: Image.asset(
+                              child: SvgPicture.asset(
                                 _images[index],
                                 width: defaultSize * 11,
                                 height: defaultSize * 11,

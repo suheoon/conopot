@@ -1511,6 +1511,7 @@ class NoteData extends ChangeNotifier {
       tt.Toast.show("${addSet.length}개의 곡이 추가되었습니다.",
         duration: 2, backgroundColor: kDialogColor.withOpacity(0.8));
     }
+    await storage.write(key: 'notes', value: jsonEncode(notes));
     notifyListeners();
   }
 
