@@ -32,7 +32,18 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
   bool _like = false; // 좋아요 여부
   int _state = 0;
   int? _userId;
-  var _emotionList = ["😀", "🥲", "😡", "😳", "😎"];
+  var _emotionList = [
+    "😀",
+    "🥲",
+    "😡",
+    "😳",
+    "😎",
+    "🎤",
+    "🎁",
+    "🧸",
+    "🎧",
+    "💌"
+  ];
   bool _isEditting = false;
   List<Note> postList = [];
   int _checkCount = 0;
@@ -122,7 +133,6 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
         leading: BackButton(
           color: kPrimaryLightWhiteColor,
           onPressed: () {
-            
             Navigator.pop(context, _state); //뒤로가기
           },
         ),

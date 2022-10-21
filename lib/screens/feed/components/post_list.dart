@@ -31,7 +31,18 @@ class _PostListViewState extends State<PostListView> {
   int _option = 1; // 인기 or 최신
   late ScrollController _controller;
   int userId = 0;
-  var _emotionList = ["😀", "🥲", "😡", "😳", "😎"];
+  var _emotionList = [
+    "😀",
+    "🥲",
+    "😡",
+    "😳",
+    "😎",
+    "🎤",
+    "🎁",
+    "🧸",
+    "🎧",
+    "💌"
+  ];
 
   _PostListViewState(FeedScrrenController _controller) {
     _controller.lastPostId = _lastPostId;

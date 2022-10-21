@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
-import 'package:conopot/debounce.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/feed/components/added_playlist.dart';
 import 'package:conopot/screens/feed/components/editing_playlist.dart';
@@ -22,8 +21,21 @@ class CreateFeedScreen extends StatefulWidget {
 }
 
 class _CreateFeedScreenState extends State<CreateFeedScreen> {
-  int _emotionIndex = 0; // 😀, 🥲, 😡, 😳, 🫠
-  var _emotionList = ["😀", "🥲", "😡", "😳", "😎"];
+  int _emotionIndex = 0;
+  var _emotionList = [
+    "😀",
+    "🥲",
+    "😡",
+    "😳",
+    "😎",
+    "🎤",
+    "🎁",
+    "🧸",
+    "🎧",
+    "💌"
+  ];
+  var _emotionList1 = ["😀", "🥲", "😡", "😳", "😎"];
+  var _emotionList2 = ["🎤", "🎁", "🧸", "🎧", "💌"];
   bool _isIconEditting = false;
   bool _isListEditting = false;
   String _listName = "";
@@ -120,7 +132,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: defaultSize * 14,
+                  height: defaultSize * 18,
                   child: Column(
                     children: [
                       Text("감정 이모지",
@@ -150,7 +162,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                                   child: Column(
                                 children: [
                                   Row(
-                                      children: _emotionList
+                                      children: _emotionList1
                                           .map((e) => Container(
                                                 margin: EdgeInsets.only(
                                                     left: defaultSize),
@@ -158,8 +170,31 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                                                   onTap: () {
                                                     setState(() {
                                                       _emotionIndex =
-                                                          _emotionList
+                                                          _emotionList1
                                                               .indexOf(e);
+                                                      _isIconEditting = false;
+                                                    });
+                                                  },
+                                                  child: Text(e,
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              defaultSize * 2)),
+                                                ),
+                                              ))
+                                          .toList()),
+                                  SizedBox(height: defaultSize * 0.5),
+                                  Row(
+                                      children: _emotionList2
+                                          .map((e) => Container(
+                                                margin: EdgeInsets.only(
+                                                    left: defaultSize),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      _emotionIndex =
+                                                          _emotionList2
+                                                                  .indexOf(e) +
+                                                              5;
                                                       _isIconEditting = false;
                                                     });
                                                   },

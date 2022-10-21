@@ -24,7 +24,18 @@ class UserSharePlaylistScreen extends StatefulWidget {
 class _UserSharePlaylistScreenState extends State<UserSharePlaylistScreen> {
   bool _isLoading = false;
   List<Post> _posts = [];
-  var _emotionList = ["😀", "🥲", "😡", "😳", "😎"];
+  var _emotionList = [
+    "😀",
+    "🥲",
+    "😡",
+    "😳",
+    "😎",
+    "🎤",
+    "🎁",
+    "🧸",
+    "🎧",
+    "💌"
+  ];
   int userId = 0;
   BannerAd? _anchoredAdaptiveAd;
   bool _isLoaded = false;
