@@ -108,16 +108,18 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
       appBar: AppBar(
         title: Container(
           padding: EdgeInsets.all(defaultSize * 0.5),
-          decoration: BoxDecoration(color: kPrimaryGreyColor, borderRadius: BorderRadius.all(Radius.circular(8))),
+          decoration: BoxDecoration(
+              color: kPrimaryGreyColor,
+              borderRadius: BorderRadius.all(Radius.circular(8))),
           child: Text(
               "${_emotionList[widget.post.postIconId]} ${widget.post.postTitle}"),
         ),
         leading: BackButton(
-            color: kPrimaryLightWhiteColor,
-            onPressed: () {
-              Navigator.pop(context, _like); //뒤로가기
-            },
-          ),
+          color: kPrimaryLightWhiteColor,
+          onPressed: () {
+            Navigator.pop(context, _like); //뒤로가기
+          },
+        ),
         actions: [
           IconButton(
               onPressed: () {
@@ -295,36 +297,47 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
             child: Row(
               children: [
                 ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: SizedBox(
-                        width: defaultSize * 4,
-                        height: defaultSize * 4,
-                        child: Image.network(widget.post.userImage!,
-                            fit: BoxFit.cover))),
+                  borderRadius: BorderRadius.circular(100),
+                  child: SizedBox(
+                    width: defaultSize * 4,
+                    height: defaultSize * 4,
+                    child: (widget.post.userImage == null)
+                        ? Image.asset("assets/images/profile.png")
+                        : Image.network(widget.post.userImage!,
+                            fit: BoxFit.cover),
+                  ),
+                ),
                 SizedBox(width: defaultSize),
                 Text("${widget.post.userName}",
-                    style: TextStyle(color: kPrimaryLightWhiteColor, fontSize: defaultSize * 1.5),
+                    style: TextStyle(
+                        color: kPrimaryLightWhiteColor,
+                        fontSize: defaultSize * 1.5),
                     overflow: TextOverflow.ellipsis),
                 Spacer(),
-                (widget.post.postAuthorId == Provider.of<NoteData>(context, listen: false).userId && _isEditting == false) ?
-                SizedBox.shrink() :
-                (_isEditting == false)
-                    ? Row(
-                        children: [
-                          (_like == true)
-                              ? Icon(Icons.favorite, color: kMainColor)
-                              : Icon(Icons.favorite_border, color: kMainColor),
-                          SizedBox(width: defaultSize * 0.3),
-                          Text("좋아요", style: TextStyle(color: kMainColor))
-                        ],
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _isEditting = false;
-                          });
-                        },
-                        child: Text("완료", style: TextStyle(color: kMainColor))),
+                (widget.post.postAuthorId ==
+                            Provider.of<NoteData>(context, listen: false)
+                                .userId &&
+                        _isEditting == false)
+                    ? SizedBox.shrink()
+                    : (_isEditting == false)
+                        ? Row(
+                            children: [
+                              (_like == true)
+                                  ? Icon(Icons.favorite, color: kMainColor)
+                                  : Icon(Icons.favorite_border,
+                                      color: kMainColor),
+                              SizedBox(width: defaultSize * 0.3),
+                              Text("좋아요", style: TextStyle(color: kMainColor))
+                            ],
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _isEditting = false;
+                              });
+                            },
+                            child: Text("완료",
+                                style: TextStyle(color: kMainColor))),
               ],
             ),
           ),
@@ -362,7 +375,8 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    Provider.of<NoteData>(context, listen: false).lists = postList;
+                    Provider.of<NoteData>(context, listen: false).lists =
+                        postList;
                     Navigator.push(
                       context,
                       MaterialPageRoute(

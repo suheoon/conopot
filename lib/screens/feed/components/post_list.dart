@@ -261,7 +261,7 @@ class _PostListViewState extends State<PostListView> {
                                                       null
                                                   ? ""
                                                   : _posts[index]
-                                                      .postSubscription!
+                                                      .postSubscription
                                                       .trim()
                                                       .replaceAll("\n", " "),
                                               style: TextStyle(

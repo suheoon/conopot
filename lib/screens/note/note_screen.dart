@@ -165,7 +165,7 @@ class _NoteScreenState extends State<NoteScreen> {
       }
 
       //화면 빌드 후, 바로 모달 창 띄우는 부분
-      if (abtest1021_modal != 'B') {
+      if (abtest1021_modal == 'B') {
         WidgetsBinding.instance
             .addPostFrameCallback((_) => _dialogBuilder(context));
       }
