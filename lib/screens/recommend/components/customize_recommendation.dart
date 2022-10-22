@@ -63,15 +63,15 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
           EasyLoading.showSuccess('분석에 성공했습니다!');
         } else {
           setState(() {});
-          EasyLoading.showError('분석을 위한 데이터가 부족합니다😿\n노트를 좀더 추가해주세요');
+          EasyLoading.showToast('분석을 위한 데이터가 부족합니다\n노트를 좀더 추가해주세요');
         }
       } else {
         setState(() {});
-        EasyLoading.showError('서버 문제가 발생했습니다😿\n채널톡에 문의해주세요');
+        EasyLoading.showToast('서버 문제가 발생했습니다\n채널톡에 문의해주세요');
       }
     }, onError: (e) {
       setState(() {});
-      EasyLoading.showError('분석에 실패했습니다😿\n인터넷 연결을 확인해 주세요');
+      EasyLoading.showToast('분석에 실패했습니다\n인터넷 연결을 확인해 주세요');
     });
   }
 

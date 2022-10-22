@@ -87,7 +87,7 @@ class _CustomizeRecommendationDetailScreenState
       EasyLoading.instance
         ..fontSize = defaultSize * 1.2
         ..displayDuration = Duration(seconds: 2);
-      EasyLoading.showError('분석에 실패했습니다 인터넷 연결을 확인해 주세요.');
+      EasyLoading.showToast('분석에 실패했습니다 인터넷 연결을 확인해 주세요.');
     });
   }
 
