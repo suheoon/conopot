@@ -24,7 +24,18 @@ class UserLikedPlaylistScreen extends StatefulWidget {
 class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
   bool _isLoading = false;
   List<Post> _posts = [];
-  var _emotionList = ["😀", "🥲", "😡", "😳", "😎"];
+  var _emotionList = [
+    "😀",
+    "🥲",
+    "😡",
+    "😳",
+    "😎",
+    "🎤",
+    "🎁",
+    "🧸",
+    "🎧",
+    "💌"
+  ];
   int userId = 0;
   BannerAd? _anchoredAdaptiveAd;
   bool _isLoaded = false;
@@ -289,7 +300,7 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
       });
     } on SocketException {
       // 에러처리 (인터넷 연결 등등)
-      EasyLoading.showError("인터넷 연결을 확인해주세요");
+      EasyLoading.showToast("인터넷 연결을 확인해주세요.");
     }
     setState(() {
       _isLoading = false;

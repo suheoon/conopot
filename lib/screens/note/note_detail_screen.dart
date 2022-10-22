@@ -787,34 +787,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                           ),
                                           SizedBox(width: defaultSize * 1.5),
                                           widget.note.ky_songNumber == '?'
-                                              ? GestureDetector(
-                                                  onTap: () {
-                                                    showKySearchDialog(context);
-                                                  },
-                                                  child: Container(
-                                                      width: defaultSize * 4.7,
-                                                      height: defaultSize * 2.3,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    8)),
-                                                        color: kMainColor,
-                                                      ),
-                                                      child: Center(
-                                                          child: Text(
-                                                        "검색",
-                                                        style: TextStyle(
-                                                            color:
-                                                                kPrimaryWhiteColor,
-                                                            fontSize:
-                                                                defaultSize *
-                                                                    1.2,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                      ))),
-                                                )
+                                              ? Text("-", style: TextStyle(color: kPrimaryWhiteColor),)
                                               : Text(
                                                   widget.note.ky_songNumber,
                                                   style: TextStyle(

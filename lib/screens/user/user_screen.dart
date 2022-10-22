@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
@@ -14,6 +15,8 @@ import 'package:conopot/screens/user/user_liked_playlist_screen.dart';
 import 'package:conopot/screens/user/user_share_playlist_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -552,8 +555,9 @@ class _UserScreenState extends State<UserScreen> {
                               : SizedBox.shrink(),
                           (loginState == true)
                               ? Padding(
-                                padding: EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
-                                child: InkWell(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: defaultSize * 1.5),
+                                  child: InkWell(
                                     onTap: () {
                                       Navigator.push(
                                           context,
@@ -576,15 +580,16 @@ class _UserScreenState extends State<UserScreen> {
                                       ]),
                                     ),
                                   ),
-                              )
+                                )
                               : SizedBox.shrink(),
                           (loginState == true)
                               ? SizedBox(height: defaultSize * 2)
                               : SizedBox.shrink(),
                           (loginState == true)
                               ? Padding(
-                                padding: EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
-                                child: InkWell(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: defaultSize * 1.5),
+                                  child: InkWell(
                                     onTap: () {
                                       Navigator.push(
                                           context,
@@ -607,11 +612,11 @@ class _UserScreenState extends State<UserScreen> {
                                       ]),
                                     ),
                                   ),
-                              )
+                                )
                               : SizedBox.shrink(),
-                              SizedBox(height: defaultSize * 1.5),
+                          SizedBox(height: defaultSize * 1.5),
                         ])),
-                    if(loginState) SizedBox(height: defaultSize * 1.5),
+                    if (loginState) SizedBox(height: defaultSize * 1.5),
                     Container(
                       color: kPrimaryLightBlackColor,
                       child: IntrinsicHeight(
@@ -749,14 +754,7 @@ class _UserScreenState extends State<UserScreen> {
       //("인터넷 연결 성공");
       Provider.of<NoteData>(context, listen: false).showBackupDialog(context);
     } on SocketException {
-      Fluttertoast.showToast(
-          msg: "인터넷 연결 후 이용가능합니다",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Color(0xFFFF7878),
-          textColor: kPrimaryWhiteColor,
-          fontSize: defaultSize * 1.6);
+      EasyLoading.showToast("인터넷 연결 후 이용가능합니다");
     }
   }
 
@@ -769,14 +767,7 @@ class _UserScreenState extends State<UserScreen> {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => LoginScreen()));
     } on SocketException {
-      Fluttertoast.showToast(
-          msg: "인터넷 연결 후 이용가능합니다",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Color(0xFFFF7878),
-          textColor: kPrimaryWhiteColor,
-          fontSize: defaultSize * 1.6);
+      EasyLoading.showToast("인터넷 연결 후 이용가능합니다");
     }
   }
 
@@ -790,21 +781,19 @@ class _UserScreenState extends State<UserScreen> {
       // 기본 이미지
       return SvgPicture.asset("assets/icons/profile.svg");
     }
-    //인터넷 연결 확인
-    try {
-      return ClipRRect(
-          borderRadius: BorderRadius.circular(100),
-          child: SizedBox(
-            width: defaultSize * 5,
-            height: defaultSize * 5,
-            child: Image.network(
-              Provider.of<NoteData>(context, listen: true).userImage,
-              fit: BoxFit.cover,
-            ),
-          ));
-    } on SocketException {
-      // 인터넷 연결이 안 되어 있을 때 -> 기본 이미지
-      return SvgPicture.asset("assets/icons/profile.svg");
-    }
+    String? serverURL = dotenv.env['USER_SERVER_URL'];
+    return ClipRRect(
+        borderRadius: BorderRadius.circular(100),
+        child: SizedBox(
+          width: defaultSize * 5,
+          height: defaultSize * 5,
+          child: Image.network(
+            Provider.of<NoteData>(context, listen: true).userImage,
+            errorBuilder: ((context, error, stackTrace) {
+              return Image.asset("assets/images/profile.png");
+            }),
+            fit: BoxFit.cover,
+          ),
+        ));
   }
 }

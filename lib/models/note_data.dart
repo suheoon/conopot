@@ -1095,7 +1095,7 @@ class NoteData extends ChangeNotifier {
                       color: kPrimaryWhiteColor, fontSize: defaultSize * 1.6))),
           SizedBox(height: defaultSize * 2),
           Text(
-            "현재 애창곡 노트에 저장한 애창곡들을 서버에 백업하고 핸드폰이 바뀌거나 앱을 삭제 하더라도 편리하게 다시 가져올 수 있어요",
+            "현재 애창곡 노트에 저장한 애창곡들을 서버에 백업하고 핸드폰이 바뀌거나 앱을 삭제 하더라도 편리하게 다시 가져올 수 있어요.",
             style: TextStyle(
                 color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4),
           )
@@ -1160,16 +1160,16 @@ class NoteData extends ChangeNotifier {
       content: IntrinsicHeight(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Center(
-              child: Text("데이터 백업시 주의사항 ⚠️",
+              child: Text("데이터 백업시 주의사항",
                   style: TextStyle(
-                      color: kPrimaryWhiteColor, fontSize: defaultSize * 1.6))),
+                      color: kMainColor, fontSize: defaultSize * 1.6))),
           SizedBox(height: defaultSize * 2),
-          Text("애창곡 노트에 저장한 노래 개수 : ${notes.length}",
+          Text("내 애창곡 노트에 저장한 노래 개수 : ${notes.length}",
               style: TextStyle(
                   color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4)),
           SizedBox(height: defaultSize),
           Text(
-            "현재 애창곡 노트에 저장된 곡을 기준으로 백업이 되어 기존에 서버에 저장된 곡들은 사라지므로 백업한 노래가 있다면 가져오기 이후 백업을 진행해 주세요 🤓",
+            "현재 애창곡 노트에 저장된 곡을 기준으로 백업이 되어 기존에 서버에 저장된 곡들은 사라지므로 백업한 노래가 있다면 가져오기 이후 백업을 진행해 주세요!!",
             style: TextStyle(
                 color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4),
           )
@@ -1192,7 +1192,7 @@ class NoteData extends ChangeNotifier {
 
   // 저장한 노트들 백업하기
   Future<void> saveNotes() async {
-    await EasyLoading.show(status: "백업 진행 중");
+    await EasyLoading.show();
     //!event: 내정보_뷰__백업하기
     Analytics_config().backUpNoteEvent();
     String? serverURL = dotenv.env['USER_SERVER_URL'];
@@ -1213,11 +1213,11 @@ class NoteData extends ChangeNotifier {
         //백업 날짜 기록
         backUpDate = DateFormat("yyyy-MM-dd hh:mm:ss a").format(DateTime.now());
         await storage.write(key: 'backupdate', value: backUpDate);
-        EasyLoading.showSuccess("백업에 성공했습니다");
+        EasyLoading.showToast("백업이 완료되었습니다.");
         notifyListeners();
-      } on HttpException {
+      } on SocketException {
         // 인터넷 연결 예외처리
-        EasyLoading.showError("백업이 실패했습니다 인터넷 연결을 확인해주세요 😢");
+        EasyLoading.showToast("백업이 실패했습니다 인터넷 연결을 확인해주세요.");
       }
     }
   }
@@ -1273,11 +1273,11 @@ class NoteData extends ChangeNotifier {
           }
         }
         await storage.write(key: 'notes', value: jsonEncode(notes));
-        EasyLoading.showSuccess("${songNumberList.length}개의 곡을 가져왔습니다");
+        EasyLoading.showToast("${songNumberList.length}개의 곡을 가져왔습니다");
       }
     } on FormatException {
       // 백업된 곡이 하나도 없을 때 예외처리
-      EasyLoading.showError("백업된 곡이 없습니다!!");
+      EasyLoading.showToast("백업된 곡이 없습니다.");
     }
     notifyListeners();
   }
@@ -1502,15 +1502,17 @@ class NoteData extends ChangeNotifier {
         overlap++;
       } else {
         notes.add(note);
+        userMusics.add(note.tj_songNumber);
+        noteCount += 1;
       }
     }
     if (overlap > 0) {
-      tt.Toast.show("중복을 제외한 ${addSet.length - overlap}개의 곡이 추가되었습니다.",
-        duration: 2, backgroundColor: kDialogColor.withOpacity(0.8));
+      EasyLoading.instance..fontSize = defaultSize * 1.25;
+      EasyLoading.showToast("중복을 제외한 ${addSet.length - overlap}개의 곡이 추가되었습니다.");
     } else {
-      tt.Toast.show("${addSet.length}개의 곡이 추가되었습니다.",
-        duration: 2, backgroundColor: kDialogColor.withOpacity(0.8));
+      EasyLoading.showToast("${addSet.length}개의 곡이 추가되었습니다.");
     }
+    await storage.write(key: 'notes', value: jsonEncode(notes));
     notifyListeners();
   }
 

@@ -117,7 +117,8 @@ class _FeedScreenState extends State<FeedScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: GestureDetector(
         onTap: () {
-          if (Provider.of<NoteData>(context, listen: false).isLogined == false) {
+          if (Provider.of<NoteData>(context, listen: false).isLogined ==
+              false) {
             EasyLoading.showToast("로그인 이후 이용가능합니다.");
           } else {
             Provider.of<NoteData>(context, listen: false).lists = [];
@@ -149,60 +150,68 @@ class _FeedScreenState extends State<FeedScreen> {
         ),
       ),
       body: SafeArea(
-        child: ListView(controller: _controller, children: [
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (_anchoredAdaptiveAd != null && _isLoaded)
-                  Container(
-                    color: Colors.transparent,
-                    width: _anchoredAdaptiveAd!.size.width.toDouble(),
-                    height: _anchoredAdaptiveAd!.size.height.toDouble(),
-                    child: AdWidget(ad: _anchoredAdaptiveAd!),
-                  )
-              ],
+        child: RawScrollbar(
+          controller: _controller,
+          thumbColor: Colors.grey,
+          radius: Radius.circular(20),
+          thickness: 5,
+          child: ListView(controller: _controller, children: [
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (_anchoredAdaptiveAd != null && _isLoaded)
+                    Container(
+                      color: Colors.transparent,
+                      width: _anchoredAdaptiveAd!.size.width.toDouble(),
+                      height: _anchoredAdaptiveAd!.size.height.toDouble(),
+                      child: AdWidget(ad: _anchoredAdaptiveAd!),
+                    )
+                ],
+              ),
+              decoration: BoxDecoration(
+                  color: kPrimaryLightBlackColor,
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
             ),
-            decoration: BoxDecoration(
-                color: kPrimaryLightBlackColor,
-                borderRadius: BorderRadius.all(Radius.circular(8))),
-          ),
-          SizedBox(height: defaultSize),
-          Container(
-            padding: EdgeInsets.fromLTRB(
-                defaultSize, defaultSize * 1.5, defaultSize, defaultSize * 1.5),
-            margin: EdgeInsets.all(defaultSize),
-            decoration: BoxDecoration(
-                color: kPrimaryLightBlackColor.withOpacity(0.8),
-                borderRadius: BorderRadius.all(Radius.circular(8))),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(
-                "🎤 싱스타그램",
-                style: TextStyle(
-                    color: kMainColor,
-                    fontSize: defaultSize * 1.6,
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: defaultSize * 0.5),
-              Text(
-                "다른 사람들은 노래방에서 어떤 노래를 부를까?",
-                style: TextStyle(
-                    color: kPrimaryWhiteColor,
-                    fontSize: defaultSize * 1.5,
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: defaultSize * 0.5),
-              Text(
-                "궁금할 땐 싱스타그램에서 찾아보고 내 플레이리스트도 자랑해보세요!",
-                style: TextStyle(
-                    color: kPrimaryLightGreyColor, fontSize: defaultSize * 1.3),
-              ),
-            ]),
-          ),
-          SizedBox(height: defaultSize),
-          PostListView(controller: feedScrrenController)
-        ]),
+            SizedBox(height: defaultSize),
+            Container(
+              padding: EdgeInsets.fromLTRB(defaultSize, defaultSize * 1.5,
+                  defaultSize, defaultSize * 1.5),
+              margin: EdgeInsets.all(defaultSize),
+              decoration: BoxDecoration(
+                  color: kPrimaryLightBlackColor.withOpacity(0.8),
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "🎤 싱스타그램",
+                      style: TextStyle(
+                          color: kMainColor,
+                          fontSize: defaultSize * 1.6,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(height: defaultSize * 0.5),
+                    Text(
+                      "다른 사람들은 노래방에서 어떤 노래를 부를까?",
+                      style: TextStyle(
+                          color: kPrimaryWhiteColor,
+                          fontSize: defaultSize * 1.5,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(height: defaultSize * 0.5),
+                    Text(
+                      "궁금할 땐 싱스타그램에서 찾아보고 내 플레이리스트도 자랑해보세요!",
+                      style: TextStyle(
+                          color: kPrimaryLightGreyColor,
+                          fontSize: defaultSize * 1.3),
+                    ),
+                  ]),
+            ),
+            SizedBox(height: defaultSize),
+            PostListView(controller: feedScrrenController)
+          ]),
+        ),
       ),
     );
   }

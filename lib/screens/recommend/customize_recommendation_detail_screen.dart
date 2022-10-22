@@ -6,8 +6,10 @@ import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_music.dart';
+import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -41,7 +43,7 @@ class _CustomizeRecommendationDetailScreenState
   void requestCFApi() async {
     widget.musicList.recommendRequest = true;
     storage.write(key: "recommendRequest", value: 'true');
-    await EasyLoading.show(status: '분석중 입니다...');
+    await EasyLoading.show();
     String url = 'https://recommendcf-pfenq2lbpq-du.a.run.app/recommendCF';
     List<String> musicArr =
         Provider.of<NoteData>(context, listen: false).userMusics;
@@ -65,18 +67,27 @@ class _CustomizeRecommendationDetailScreenState
         if (recommendList != null) {
           widget.musicList.saveAiRecommendationList(recommendList);
           setState(() {});
-          EasyLoading.showSuccess('분석에 성공했습니다!');
+          EasyLoading.showToast('분석에 성공했습니다.');
         } else {
           setState(() {});
-          EasyLoading.showError('분석을 위한 데이터가 부족합니다😿\n노트를 좀더 추가해주세요');
+          EasyLoading.instance
+            ..fontSize = defaultSize * 1.2
+            ..displayDuration = Duration(seconds: 2);
+          EasyLoading.showToast('분석을 위한 데이터가 부족합니다\n애창곡 노트에 노래를 좀 더 추가해 주세요.');
         }
       } else {
         setState(() {});
-        EasyLoading.showError('서버 문제가 발생했습니다😿\n채널톡에 문의해주세요');
+        EasyLoading.instance
+          ..fontSize = defaultSize * 1.2
+          ..displayDuration = Duration(seconds: 2);
+        EasyLoading.showToast('서버 문제가 발생했습니다 채널톡에 문의해 주세요.');
       }
     }, onError: (e) {
       setState(() {});
-      EasyLoading.showError('분석에 실패했습니다😿\n인터넷 연결을 확인해 주세요');
+      EasyLoading.instance
+        ..fontSize = defaultSize * 1.2
+        ..displayDuration = Duration(seconds: 2);
+      EasyLoading.showToast('분석에 실패했습니다 인터넷 연결을 확인해 주세요.');
     });
   }
 
@@ -103,7 +114,8 @@ class _CustomizeRecommendationDetailScreenState
                       .userMusics
                       .length <
                   5) {
-                EasyLoading.showError('최소 5개 이상의 노트를 추가해 주세요 🙀');
+                EasyLoading.instance..fontSize = defaultSize * 1.3;
+                EasyLoading.showToast('최소 5개 이상의 노트를 추가해 주세요.');
               } else {
                 requestCFApi();
                 //전면 광고
@@ -133,7 +145,15 @@ class _CustomizeRecommendationDetailScreenState
             String title = widget.songList[(index)].tj_title;
             String singer = widget.songList[(index)].tj_singer;
             int pitchNum = widget.songList[(index)].pitchNum;
-
+            Set<Note> entireNote =
+                Provider.of<MusicSearchItemLists>(context, listen: false)
+                    .entireNote;
+            Note? note;
+            for (Note e in entireNote) {
+              if (e.tj_songNumber == songNumber) {
+                note = e;
+              }
+            }
             return ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(8)),
               child: Card(
@@ -172,16 +192,26 @@ class _CustomizeRecommendationDetailScreenState
                           fontWeight: FontWeight.w300,
                           fontSize: defaultSize * 1.2),
                     ),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.chevron_right, color: kPrimaryWhiteColor),
+                        Text("상세정보",
+                            style: TextStyle(
+                                color: kPrimaryWhiteColor,
+                                fontSize: defaultSize))
+                      ],
+                    ),
                     onTap: () {
                       //!event: 추천_뷰__맞춤_추천_리스트_아이템_클릭
                       Analytics_config()
                           .clickCustomizeRecommendationListItemEvent();
-                      Provider.of<NoteData>(context, listen: false)
-                          .showAddNoteDialogWithInfo(context,
-                              isTj: true,
-                              songNumber: songNumber,
-                              title: title,
-                              singer: singer);
+                      if (note != null)
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    NoteDetailScreen(note: note!)));
                     }),
               ),
             );

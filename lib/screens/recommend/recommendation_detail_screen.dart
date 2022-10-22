@@ -1,7 +1,10 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item.dart';
+import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,15 +34,23 @@ class RecommendationDetailScreen extends StatelessWidget {
               String songNumber = songList[index].songNumber;
               String title = songList[index].title;
               String singer = songList[index].singer;
-
+              Set<Note> entireNote =
+                  Provider.of<MusicSearchItemLists>(context, listen: false)
+                      .entireNote;
+              Note? note;
+              for (Note e in entireNote) {
+                if (e.tj_songNumber == songNumber) {
+                  note = e;
+                }
+              }
               return GestureDetector(
                 onTap: () {
-                  Provider.of<NoteData>(context, listen: false)
-                      .showAddNoteDialogWithInfo(context,
-                          isTj: true,
-                          songNumber: songNumber,
-                          title: title,
-                          singer: singer);
+                  if (note != null)
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                NoteDetailScreen(note: note!)));
                 },
                 child: Container(
                   margin: EdgeInsets.fromLTRB(
@@ -79,9 +90,19 @@ class RecommendationDetailScreen extends StatelessWidget {
                                 color: kPrimaryLightWhiteColor,
                                 fontSize: defaultSize * 1.2,
                                 fontWeight: FontWeight.w300),
-                          )
+                          ),
                         ],
                       ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.chevron_right, color: kPrimaryWhiteColor),
+                        Text("상세정보",
+                            style: TextStyle(
+                                color: kPrimaryWhiteColor,
+                                fontSize: defaultSize))
+                      ],
                     )
                   ]),
                 ),

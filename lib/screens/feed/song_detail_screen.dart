@@ -112,7 +112,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "상세정보",
+            "${widget.note.tj_title}",
             style: TextStyle(
                 fontWeight: FontWeight.w700, fontSize: defaultSize * 1.5),
           ),
@@ -497,6 +497,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                     children: [
                       // 정보 탭
                       ListView(
+                        padding: EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.3),
                         children: [
                           Container(
                             padding: EdgeInsets.all(defaultSize * 1.5),

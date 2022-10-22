@@ -16,24 +16,28 @@ class CarouselSliderBanner extends StatelessWidget {
   final double defaultSize = SizeConfig.defaultSize;
 
   final imageIcons = [
+    "assets/icons/feed.svg",
     "assets/icons/banner_cat.svg",
     "assets/icons/banner_mike.svg",
     "assets/icons/banner_music_score.svg",
   ];
 
   final sentence1 = [
-    "노래방에서 부를 노래를 찾고 계신가요? 😮",
+    "다른 사람들은 노래방에서 뭘 부를까? 🤔",
+        "노래방에서 부를 노래를 찾고 계신가요? 😮",
     "노래방 전투력 측정 😎",
     "최고음 표시가 가능한 것을 아시나요? 🧐",
   ];
 
   final sentence2 = [
-    "추천탭에서 노래를 추천받아 보세요!",
+    "싱스타그램에서 확인해보세요!!",
+        "추천탭에서 노래를 추천받아 보세요!",
     "당신의 음역대를 측정해보세요",
     "우측 상단 [설정] - [애창곡 노트 설정]",
   ];
 
   final screen = [
+    Container(),
     Container(),
     PitchMainScreen(),
     NoteSettingScreen(),
@@ -46,15 +50,14 @@ class CarouselSliderBanner extends StatelessWidget {
       onTap: () {
         // !event 배너 클릭 이벤트
         if (itemIndex == 0) {
+          (Provider.of<NoteData>(context, listen: false).globalKey.currentWidget
+                  as BottomNavigationBar)
+              .onTap!(3);
+        } else if (itemIndex == 1) {
           Analytics_config().noteViewBannerRecommandEvent();
           (Provider.of<NoteData>(context, listen: false).globalKey.currentWidget
                   as BottomNavigationBar)
-              .onTap!(Firebase_Remote_Config()
-                      .remoteConfig
-                      .getString('navigationOrderChange') ==
-                  'A'
-              ? 2
-              : 1);
+              .onTap!(2);
         } else {
           if (itemIndex == 1) {
             Analytics_config().noteViewBannerMeasureEvent();
@@ -136,7 +139,7 @@ class CarouselSliderBanner extends StatelessWidget {
         autoPlayInterval: Duration(seconds: 5),
         autoPlayAnimationDuration: Duration(milliseconds: 800),
       ),
-      itemCount: 3,
+      itemCount: 4,
       itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) =>
           _bannerItem(context, itemIndex, imageIcons[itemIndex],
               sentence1[itemIndex], sentence2[itemIndex], screen[itemIndex]),

@@ -1,7 +1,10 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item.dart';
+import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +54,15 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
                 String songNumber = songList[index].songNumber;
                 String songTitle = songList[index].title;
                 String singer = songList[index].singer;
-
+                Set<Note> entireNote =
+                    Provider.of<MusicSearchItemLists>(context, listen: false)
+                        .entireNote;
+                Note? note;
+                for (Note e in entireNote) {
+                  if (e.tj_songNumber == songNumber) {
+                    note = e;
+                  }
+                }
                 return ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                   child: Card(
@@ -119,12 +130,12 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
                         ),
                         onTap: () {
                           if (title != '금영 인기차트') {
-                            Provider.of<NoteData>(context, listen: false)
-                                .showAddNoteDialogWithInfo(context,
-                                    isTj: true,
-                                    songNumber: songNumber,
-                                    title: songTitle,
-                                    singer: singer);
+                            if (note != null)
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    NoteDetailScreen(note: note!)));
                           } else {
                             Provider.of<NoteData>(context, listen: false)
                                 .showAddNoteDialogWithInfo(context,

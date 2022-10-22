@@ -31,7 +31,18 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
   int _index = 0;
   bool _like = false; // 좋아요 여부
   int? _userId;
-  var _emotionList = ["😀", "🥲", "😡", "😳", "😎"];
+  var _emotionList = [
+    "😀",
+    "🥲",
+    "😡",
+    "😳",
+    "😎",
+    "🎤",
+    "🎁",
+    "🧸",
+    "🎧",
+    "💌"
+  ];
   bool _isEditting = false;
   List<Note> postList = [];
   int _checkCount = 0;
@@ -98,7 +109,7 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
       return response.body;
     } on SocketException {
       // 에러처리 (인터넷 연결 등등)
-      EasyLoading.showError("인터넷 연결을 확인해주세요");
+      EasyLoading.showToast("인터넷 연결을 확인해주세요");
     }
   }
 
@@ -113,8 +124,20 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
           decoration: BoxDecoration(
               color: kPrimaryGreyColor,
               borderRadius: BorderRadius.all(Radius.circular(8))),
-          child: Text(
-              "${_emotionList[widget.post.postIconId]} ${widget.post.postTitle}"),
+          child: IntrinsicWidth(
+            child: Row(
+              children: [
+                Text("${_emotionList[widget.post.postIconId]} "),
+                Expanded(
+                  child: Text(
+                    "${widget.post.postTitle}",
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: defaultSize * 1.5),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
         leading: BackButton(
           color: kPrimaryLightWhiteColor,
@@ -265,91 +288,119 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
           YoutubeVideoPlayer(videoId: videoId!, key: ValueKey(videoId)),
         ],
         SizedBox(height: defaultSize * 2),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: defaultSize),
-          child: GestureDetector(
-            onTap: () async {
-              String? serverURL = dotenv.env['USER_SERVER_URL'];
-              String URL = "";
-              setState(() {
-                if (_like == false) {
-                  _like = true;
-                  URL = '${serverURL}/playlist/heart';
-                } else {
-                  _like = false;
-                  URL = '${serverURL}/playlist/hate';
-                }
-              });
-              try {
-                final response = await http.post(
-                  Uri.parse(URL),
-                  headers: <String, String>{
-                    'Content-Type': 'application/json; charset=UTF-8',
+        Expanded(
+          child: ListView(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: defaultSize),
+                child: GestureDetector(
+                  onTap: () async {
+                    String? serverURL = dotenv.env['USER_SERVER_URL'];
+                    String URL = "";
+                    setState(() {
+                      if (_like == false) {
+                        _like = true;
+                        URL = '${serverURL}/playlist/heart';
+                      } else {
+                        _like = false;
+                        URL = '${serverURL}/playlist/hate';
+                      }
+                    });
+                    try {
+                      final response = await http.post(
+                        Uri.parse(URL),
+                        headers: <String, String>{
+                          'Content-Type': 'application/json; charset=UTF-8',
+                        },
+                        body: jsonEncode({
+                          "postId": widget.post.postId,
+                          "userId": Provider.of<NoteData>(context, listen: false)
+                              .userId,
+                        }),
+                      );
+                    } on SocketException {
+                      // 에러처리 (인터넷 연결 등등)
+                      EasyLoading.showToast("인터넷 연결을 확인해주세요");
+                    }
                   },
-                  body: jsonEncode({
-                    "postId": widget.post.postId,
-                    "userId":
-                        Provider.of<NoteData>(context, listen: false).userId,
-                  }),
-                );
-              } on SocketException {
-                // 에러처리 (인터넷 연결 등등)
-                EasyLoading.showError("인터넷 연결을 확인해주세요");
-              }
-            },
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: SizedBox(
-                    width: defaultSize * 4,
-                    height: defaultSize * 4,
-                    child: (widget.post.userImage == null)
-                        ? Image.asset("assets/images/profile.png")
-                        : Image.network(widget.post.userImage!,
-                            fit: BoxFit.cover),
+                  child: Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: SizedBox(
+                          width: defaultSize * 4,
+                          height: defaultSize * 4,
+                          child: (widget.post.userImage == null)
+                              ? Image.asset("assets/images/profile.png")
+                              : Image.network(widget.post.userImage!,
+                                  fit: BoxFit.cover),
+                        ),
+                      ),
+                      SizedBox(width: defaultSize),
+                      Text("${widget.post.userName}",
+                          style: TextStyle(
+                              color: kPrimaryLightWhiteColor,
+                              fontSize: defaultSize * 1.5),
+                          overflow: TextOverflow.ellipsis),
+                      Spacer(),
+                      (widget.post.postAuthorId ==
+                                  Provider.of<NoteData>(context, listen: false)
+                                      .userId &&
+                              _isEditting == false)
+                          ? SizedBox.shrink()
+                          : (_isEditting == false)
+                              ? Row(
+                                  children: [
+                                    (_like == true)
+                                        ? Icon(Icons.favorite, color: kMainColor)
+                                        : Icon(Icons.favorite_border,
+                                            color: kMainColor),
+                                    SizedBox(width: defaultSize * 0.3),
+                                    Text("좋아요",
+                                        style: TextStyle(color: kMainColor))
+                                  ],
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _isEditting = false;
+                                    });
+                                  },
+                                  child: Text("완료",
+                                      style: TextStyle(color: kMainColor))),
+                    ],
                   ),
                 ),
-                SizedBox(width: defaultSize),
-                Text("${widget.post.userName}",
-                    style: TextStyle(
-                        color: kPrimaryLightWhiteColor,
-                        fontSize: defaultSize * 1.5),
-                    overflow: TextOverflow.ellipsis),
-                Spacer(),
-                (widget.post.postAuthorId ==
-                            Provider.of<NoteData>(context, listen: false)
-                                .userId &&
-                        _isEditting == false)
-                    ? SizedBox.shrink()
-                    : (_isEditting == false)
-                        ? Row(
-                            children: [
-                              (_like == true)
-                                  ? Icon(Icons.favorite, color: kMainColor)
-                                  : Icon(Icons.favorite_border,
-                                      color: kMainColor),
-                              SizedBox(width: defaultSize * 0.3),
-                              Text("좋아요", style: TextStyle(color: kMainColor))
-                            ],
-                          )
-                        : GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _isEditting = false;
-                              });
-                            },
-                            child: Text("완료",
-                                style: TextStyle(color: kMainColor))),
-              ],
-            ),
+              ),
+               SizedBox(height: defaultSize),
+                Container(
+                  decoration: BoxDecoration(color: kPrimaryLightBlackColor, borderRadius: BorderRadius.all(Radius.circular(8))),
+                  padding: EdgeInsets.all(defaultSize),
+                  margin: EdgeInsets.symmetric(horizontal: defaultSize),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("${widget.post.postTitle}",
+                          style: TextStyle(
+                              color: kPrimaryWhiteColor,
+                              fontSize: defaultSize * 1.5)),
+                      SizedBox(height: defaultSize * 0.5),
+                      Text("${widget.post.postSubscription}",
+                          style: TextStyle(
+                              color: kPrimaryLightWhiteColor,
+                              fontSize: defaultSize * 1.3)),
+                    ],
+                  ),
+                ),
+              SizedBox(height: defaultSize),
+              (_isEditting == false)
+                  ? FeedDetailSongList(
+                      postList: postList, indexChange: _indexChange)
+                  : EditFeedDetailSongList(
+                      postList: postList, checkedCountChange: _checkCountChange)
+            ],
           ),
-        ),
-        SizedBox(height: defaultSize * 2),
-        (_isEditting == false)
-            ? FeedDetailSongList(postList: postList, indexChange: _indexChange)
-            : EditFeedDetailSongList(
-                postList: postList, checkedCountChange: _checkCountChange)
+        )
       ]),
     );
   }
@@ -477,7 +528,7 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
             );
           } on SocketException {
             // 에러처리 (인터넷 연결 등등)
-            EasyLoading.showError("인터넷 연결을 확인해주세요");
+            EasyLoading.showToast("인터넷 연결을 확인해주세요");
           }
           for (int i = 0; i < 3; i++) Navigator.of(context).pop();
         },

@@ -5,6 +5,7 @@ import 'package:conopot/models/music_search_item.dart';
 import 'package:conopot/models/recommendation_item_list.dart';
 import 'package:conopot/screens/recommend/recommendation_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class GenderRecommendation extends StatelessWidget {
   double defaultSize = SizeConfig.defaultSize;
@@ -17,10 +18,10 @@ class GenderRecommendation extends StatelessWidget {
   ];
 
   List<String> _images = [
-    'assets/images/4-1.png',
-    'assets/images/4-2.png',
-    'assets/images/4-3.png',
-    'assets/images/4-4.png',
+    'assets/icons/4-1.svg',
+    'assets/icons/4-2.svg',
+    'assets/icons/4-3.svg',
+    'assets/icons/4-4.svg',
   ];
 
   @override
@@ -78,7 +79,7 @@ class GenderRecommendation extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(8)),
                       child: FittedBox(
                           fit: BoxFit.fill,
-                          child: Image.asset(
+                          child: SvgPicture.asset(
                             _images[index],
                             width: defaultSize * 11,
                             height: defaultSize * 11,

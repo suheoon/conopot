@@ -7,6 +7,7 @@ import 'package:conopot/models/recommendation_item_list.dart';
 import 'package:conopot/screens/recommend/pitch_reommendation_detail_screen.dart';
 import 'package:conopot/screens/recommend/recommendation_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class ContextualRecommendation extends StatelessWidget {
@@ -27,12 +28,12 @@ class ContextualRecommendation extends StatelessWidget {
     RecommendationItemList.rainList
   ];
   List<String> _images = [
-    'assets/images/2-1.png',
-    'assets/images/2-2.png',
-    'assets/images/2-3.png',
-    'assets/images/2-4.png',
-    'assets/images/2-5.png',
-    'assets/images/2-6.png',
+    'assets/icons/2-1.svg',
+    'assets/icons/2-2.svg',
+    'assets/icons/2-3.svg',
+    'assets/icons/2-4.svg',
+    'assets/icons/2-5.svg',
+    'assets/icons/2-6.svg',
   ];
 
   @override
@@ -110,7 +111,7 @@ class ContextualRecommendation extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(8)),
                       child: FittedBox(
                           fit: BoxFit.fill,
-                          child: Image.asset(
+                          child: SvgPicture.asset(
                             _images[index],
                             width: defaultSize * 11,
                             height: defaultSize * 11,

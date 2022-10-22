@@ -5,12 +5,13 @@ import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/recommendation_item_list.dart';
 import 'package:conopot/screens/recommend/popular_recommendation_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class PopularSongRecommendation extends StatelessWidget {
   double defaultSize = SizeConfig.defaultSize;
   List<String> _list = ['TJ 인기차트', '금영 인기차트', '올타임 레전드'];
-  List<String> _images = ['assets/images/1-1_tj.png','assets/images/1-2_ky.png', 'assets/images/1-3_all.png'];
+  List<String> _images = ['assets/icons/1-1.svg','assets/icons/1-2.svg', 'assets/icons/1-3.svg'];
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +86,7 @@ class PopularSongRecommendation extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(8)),
                       child: FittedBox(
                           fit: BoxFit.fill,
-                          child: Image.asset(
+                          child: SvgPicture.asset(
                             _images[index],
                             width: defaultSize * 11,
                             height: defaultSize * 11,

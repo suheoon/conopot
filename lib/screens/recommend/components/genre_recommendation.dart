@@ -1,11 +1,11 @@
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item.dart';
 import 'package:conopot/models/recommendation_item_list.dart';
 import 'package:conopot/screens/recommend/recommendation_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class GenreRecommendation extends StatelessWidget {
   const GenreRecommendation({Key? key}) : super(key: key);
@@ -35,12 +35,13 @@ class GenreRecommendation extends StatelessWidget {
     ];
 
     List<String> _images = [
-    'assets/images/3-1.png',
-    'assets/images/3-2.png',
-    'assets/images/3-3.png',
-    'assets/images/3-4.png',
-    'assets/images/3-5.png',
-    'assets/images/3-6.png',
+    'assets/icons/3-1.svg',
+    'assets/icons/3-2.svg',
+    'assets/icons/3-3.svg',
+    'assets/icons/3-4.svg',
+    'assets/icons/3-5.svg',
+    'assets/icons/3-6.svg',
+    'assets/icons/3-7.svg',
   ];
 
     return Container(
@@ -108,7 +109,7 @@ class GenreRecommendation extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(8)),
                       child: FittedBox(
                           fit: BoxFit.fill,
-                          child: Image.asset(
+                          child: SvgPicture.asset(
                             _images[index],
                             width: defaultSize * 11,
                             height: defaultSize * 11,
