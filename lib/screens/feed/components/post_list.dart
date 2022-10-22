@@ -32,6 +32,7 @@ class _PostListViewState extends State<PostListView> {
   int _option = 1; // 인기 or 최신
   late ScrollController _controller;
   int userId = 0;
+
   var _emotionList = [
     "😀",
     "🥲",
@@ -44,6 +45,7 @@ class _PostListViewState extends State<PostListView> {
     "🎧",
     "💌"
   ];
+
 
   _PostListViewState(FeedScrrenController _controller) {
     _controller.lastPostId = _lastPostId;
@@ -370,6 +372,7 @@ class _PostListViewState extends State<PostListView> {
     if (_isFirstLoadRunning == true ||
         _isLoadMoreRunning == true ||
         _hasNextPage == false) return;
+
     setState(() {
       // api 호출시 List Veiew의 하단에 Loading Indicator를 띄운다.
       _isLoadMoreRunning = true;
