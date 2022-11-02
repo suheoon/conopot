@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
@@ -44,6 +45,7 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   void initState() {
+    Analytics_config().feedPageView();
     Provider.of<NoteData>(context, listen: false).isUserRewarded();
     _controller = ScrollController()
       ..addListener(() {
@@ -127,7 +129,10 @@ class _FeedScreenState extends State<FeedScreen> {
     double defaultSize = SizeConfig.defaultSize;
     return Scaffold(
       appBar: AppBar(
-        title: Text("싱스타그램", style: TextStyle(fontWeight: FontWeight.w700),),
+        title: Text(
+          "싱스타그램",
+          style: TextStyle(fontWeight: FontWeight.w700),
+        ),
         centerTitle: false,
         actions: [
           IconButton(
@@ -145,6 +150,7 @@ class _FeedScreenState extends State<FeedScreen> {
               false) {
             EasyLoading.showToast("로그인 이후 이용가능합니다.");
           } else {
+            Analytics_config().feedViewShare();
             Provider.of<NoteData>(context, listen: false).lists = [];
             Navigator.push(
                 context, MaterialPageRoute(builder: (_) => CreateFeedScreen()));
