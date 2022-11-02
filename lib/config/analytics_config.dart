@@ -524,4 +524,14 @@ class Analytics_config {
   feedViewAddList() {
     event('피드_뷰__애창곡리스트추가', {});
   }
+
+  //!event: 피드_뷰__애창곡리스트공유하기
+  feedViewShare() {
+    event('피드_뷰__애창곡리스트공유하기', {});
+  }
+
+  //!event: 애창곡_노트_뷰__광고제거
+  addRemoveEvent() {
+    event('애창곡_노트_뷰__광고제거', {});
+  }
 }

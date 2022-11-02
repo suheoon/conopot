@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:conopot/config/analytics_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:conopot/models/note.dart';
@@ -307,6 +308,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                       (_isEditting == false)
                           ? GestureDetector(
                               onTap: () async {
+                                Analytics_config().feedViewClickLikeEvent();
                                 if (widget.post.postAuthorId ==
                                     Provider.of<NoteData>(context,
                                             listen: false)
@@ -467,6 +469,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                         false) {
                       EasyLoading.showToast("로그인 후 이용가능합니다.");
                     } else {
+                      Analytics_config().feedViewBanEvent();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -500,6 +503,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                         false) {
                       EasyLoading.showToast("로그인 후 이용가능합니다.");
                     } else {
+                      Analytics_config().feedViewUserBlockEvent();
                       // 차단하기
                       showBlockDialog(context);
                     }

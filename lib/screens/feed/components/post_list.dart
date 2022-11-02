@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
@@ -253,6 +254,7 @@ class _PostListViewState extends State<PostListView>
                 child: TabBar(
                     onTap: (index) {
                       if (index == 0) {
+                        Analytics_config().feedViewFamous();
                         if (_option == 2) {
                           _hasNextPage = true;
                           _option = 1;
@@ -261,6 +263,7 @@ class _PostListViewState extends State<PostListView>
                           _firstLoad(_option);
                         }
                       } else if (index == 1) {
+                        Analytics_config().feedViewLatest();
                         if (_option == 1) {
                           _hasNextPage = true;
                           _option = 2;

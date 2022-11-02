@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
@@ -92,6 +93,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                             .map((e) => e.tj_songNumber)
                             .toList();
                     try {
+                      Analytics_config().feedViewAddList();
                       String? serverURL = dotenv.env['USER_SERVER_URL'];
                       String URL = "${serverURL}/playlist/create";
                       final response = await http.post(
@@ -139,7 +141,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
         body: SafeArea(
           child: GestureDetector(
             onTap: () {
-                FocusScope.of(context).requestFocus(new FocusNode());
+              FocusScope.of(context).requestFocus(new FocusNode());
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: defaultSize),
@@ -188,7 +190,8 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                                                           _emotionIndex =
                                                               _emotionList1
                                                                   .indexOf(e);
-                                                          _isIconEditting = false;
+                                                          _isIconEditting =
+                                                              false;
                                                         });
                                                       },
                                                       child: Text(e,
@@ -213,7 +216,8 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                                                                       .indexOf(
                                                                           e) +
                                                                   5;
-                                                          _isIconEditting = false;
+                                                          _isIconEditting =
+                                                              false;
                                                         });
                                                       },
                                                       child: Text(e,

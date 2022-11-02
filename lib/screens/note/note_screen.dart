@@ -739,6 +739,7 @@ class _NoteScreenState extends State<NoteScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ))),
                 onPressed: () async {
+                  Analytics_config().addRemoveEvent();
                   if (_rewardedAd != null) {
                     Navigator.pop(context);
                     _rewardedAd?.show(

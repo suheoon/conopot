@@ -266,6 +266,9 @@ class _MainScreenState extends State<MainScreen>
                   //!event: 네비게이션__추천탭
                   Analytics_config().clickRecommendationTapEvent();
                 } else if (index == 3) {
+                  //!event: 네비게이션__피드탭
+                  Analytics_config().feedTabClickEvent();
+                } else if (index == 4) {
                   //!event: 네비게이션__내정보
                   Analytics_config().clickMyTapEvent();
                 }
