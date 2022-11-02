@@ -484,4 +484,44 @@ class Analytics_config {
   emptyNoteUserEvent() {
     event('노트없는사용자', {});
   }
+
+  //!event: 네비게이션__피드탭
+  feedTabClickEvent() {
+    event('네비게이션__피드탭', {});
+  }
+
+  //!event: 피드_뷰__페이지뷰
+  feedPageView() {
+    event('피드_뷰__페이지뷰', {});
+  }
+
+  //!event: 피드_뷰__인기순
+  feedViewFamous() {
+    event('피드_뷰__인기순', {});
+  }
+
+  //!event: 피드_뷰__최신순
+  feedViewLatest() {
+    event('피드_뷰__최신순', {});
+  }
+
+  //!event: 피드_뷰__좋아요
+  feedViewClickLikeEvent() {
+    event('피드_뷰__좋아요', {});
+  }
+
+  //!event: 피드_뷰__신고
+  feedViewBanEvent() {
+    event('피드_뷰__신고', {});
+  }
+
+  //!event: 피드_뷰__유저차단
+  feedViewUserBlockEvent() {
+    event('피드_뷰__유저차단', {});
+  }
+
+  //!event: 피드_뷰__애창곡리스트추가
+  feedViewAddList() {
+    event('피드_뷰__애창곡리스트추가', {});
+  }
 }
