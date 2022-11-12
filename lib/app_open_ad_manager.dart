@@ -1,14 +1,18 @@
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/main_screen.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/tutorial_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'dart:io' show Platform;
 
 import 'package:provider/provider.dart';
 
 bool canShowOpenAd = true;
+
+final storage = new FlutterSecureStorage();
 
 class AppOpenAdManager {
   Map<String, String> APP_OPEN_UNIT_ID = {
@@ -75,15 +79,22 @@ class AppOpenAdManager {
         ad.dispose();
         _appOpenAd = null;
       },
-      onAdDismissedFullScreenContent: (ad) {
+      onAdDismissedFullScreenContent: (ad) async {
         _isShowingAd = false;
         ad.dispose();
         _appOpenAd = null;
         loadAd(context);
 
-        /// MainScreen 전환 (replace)
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => MainScreen()));
+        /// 튜토리얼 전환
+        String? tutorialFlag = await storage.read(key: "tutorial");
+        if (tutorialFlag != "1") {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => TutorialScreen()));
+        } else {
+          // 만약 튜토리얼을 완료한 사용자라면 MainScreen 전환 (replace)
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => MainScreen()));
+        }
       },
     );
     canShowOpenAd = false;
