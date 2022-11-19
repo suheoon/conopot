@@ -27,31 +27,39 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   @override
   Widget build(BuildContext context) {
     ToastContext().init(context);
-    return Scaffold(
-      appBar: AppBar(
-        title:
-            const Text("노래 추가", style: TextStyle(fontWeight: FontWeight.w700)),
-        centerTitle: true,
-        leading: BackButton(
-          color: kPrimaryLightWhiteColor,
-          onPressed: () {
-            Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
+    return WillPopScope (
+      onWillPop: () async {
+        Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
             Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
             Navigator.of(context).pop();
-          },
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title:
+              const Text("노래 추가", style: TextStyle(fontWeight: FontWeight.w700)),
+          centerTitle: true,
+          leading: BackButton(
+            color: kPrimaryLightWhiteColor,
+            onPressed: () {
+              Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
+              Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+              Navigator.of(context).pop();
+            },
+          ),
         ),
-      ),
-      body: Consumer<MusicSearchItemLists>(
-        builder: (
-          context,
-          musicList,
-          child,
-        ) =>
-            Column(
-          children: [
-            NoteSearchBar(musicList: musicList),
-            NoteSearchList(musicList: musicList),
-          ],
+        body: Consumer<MusicSearchItemLists>(
+          builder: (
+            context,
+            musicList,
+            child,
+          ) =>
+              Column(
+            children: [
+              NoteSearchBar(musicList: musicList),
+              NoteSearchList(musicList: musicList),
+            ],
+          ),
         ),
       ),
     );

@@ -62,6 +62,7 @@ class YoutubePlayerProvider extends ChangeNotifier {
   void removeVideoList(int index) {
     videoList.removeAt(index);
     if (videoList.isNotEmpty) {
+      playingIndex = 0;
       controller.loadVideoById(videoId: videoList[playingIndex]);
     }
     notifyListeners();
