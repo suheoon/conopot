@@ -269,7 +269,7 @@ class _MainScreenState extends State<MainScreen>
                     }
                     if (index == 0) {
                       Provider.of<YoutubePlayerProvider>(context, listen: false)
-                          .firstStart();
+                          .openPlayer();
                       Provider.of<YoutubePlayerProvider>(context, listen: false)
                           .refresh();
                     }

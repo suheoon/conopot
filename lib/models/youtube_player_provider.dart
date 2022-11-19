@@ -61,7 +61,7 @@ class YoutubePlayerProvider extends ChangeNotifier {
     refresh();
   }
 
-  void firstStart() {
+  void openPlayer() {
     isHome = true;
   }
 
