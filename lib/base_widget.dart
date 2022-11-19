@@ -17,13 +17,14 @@ class BaseWidget extends StatefulWidget {
 }
 
 class _BaseWidgetState extends State<BaseWidget> {
-  late YoutubePlayerController _controller;
+  YoutubePlayerController _controller = YoutubePlayerController();
   late var playingIndex;
 
   @override
   void initState() {
     Provider.of<YoutubePlayerProvider>(context, listen: false).refresh =
         refresh;
+    _controller = Provider.of<YoutubePlayerProvider>(context, listen: false).controller;
   }
 
   void getIndex() async {
@@ -71,32 +72,32 @@ class _BaseWidgetState extends State<BaseWidget> {
                             height: Provider.of<YoutubePlayerProvider>(context,
                                         listen: true)
                                     .isMini
-                                ? defaultSize * 0.01
+                                ? defaultSize * 8
                                 : SizeConfig.defaultSize * 20,
                             width: Provider.of<YoutubePlayerProvider>(context,
                                         listen: true)
                                     .isMini
-                                ? defaultSize * 0.01
+                                ? defaultSize * 10
                                 : SizeConfig.screenWidth,
-                            child: PersistentYoutubeVideoPlayer()),
-                        if (Provider.of<YoutubePlayerProvider>(context,
-                                listen: false)
-                            .isMini)
-                          AbsorbPointer(
-                            child: SizedBox(
-                              height: 6.5 * defaultSize,
-                              width: 10 * defaultSize,
-                              child: Image.network(
-                                  errorBuilder: ((context, error, stackTrace) {
-                                return SizedBox(
-                                    height: 6.5 * defaultSize,
-                                    width: 10 * defaultSize,
-                                    child: Image.asset(
-                                        "assets/images/profile.png"));
-                                ;
-                              }), "${Provider.of<YoutubePlayerProvider>(context, listen: false).getThumbnail()}"),
-                            ),
-                          )
+                            child: PersistentYoutubeVideoPlayer(controller: _controller)),
+                        // if (Provider.of<YoutubePlayerProvider>(context,
+                        //         listen: false)
+                        //     .isMini)
+                        //   AbsorbPointer(
+                        //     child: SizedBox(
+                        //       height: 6.5 * defaultSize,
+                        //       width: 10 * defaultSize,
+                        //       child: Image.network(
+                        //           errorBuilder: ((context, error, stackTrace) {
+                        //         return SizedBox(
+                        //             height: 6.5 * defaultSize,
+                        //             width: 10 * defaultSize,
+                        //             child: Image.asset(
+                        //                 "assets/images/profile.png"));
+                        //         ;
+                        //       }), "${Provider.of<YoutubePlayerProvider>(context, listen: false).getThumbnail()}"),
+                        //     ),
+                        //   )
                       ]),
                       if (Provider.of<YoutubePlayerProvider>(context,
                               listen: true)
@@ -174,21 +175,21 @@ class _BaseWidgetState extends State<BaseWidget> {
                               color: kPrimaryWhiteColor,
                             )),
                         SizedBox(width: defaultSize),
-                        SizedBox(width: defaultSize),
-                        GestureDetector(
-                            onTap: () {
-                              Provider.of<YoutubePlayerProvider>(context,
-                                      listen: false)
-                                  .closePlayer();
-                              Provider.of<YoutubePlayerProvider>(context,
-                                      listen: false)
-                                  .refresh();
-                            },
-                            child: Icon(
-                              Icons.refresh,
-                              color: kPrimaryWhiteColor,
-                            )),
-                        SizedBox(width: defaultSize),
+                        // SizedBox(width: defaultSize),
+                        // GestureDetector(
+                        //     onTap: () {
+                        //       Provider.of<YoutubePlayerProvider>(context,
+                        //               listen: false)
+                        //           .closePlayer();
+                        //       Provider.of<YoutubePlayerProvider>(context,
+                        //               listen: false)
+                        //           .refresh();
+                        //     },
+                        //     child: Icon(
+                        //       Icons.refresh,
+                        //       color: kPrimaryWhiteColor,
+                        //     )),
+                        // SizedBox(width: defaultSize),
                       ],
                     ],
                   ),
@@ -203,6 +204,8 @@ class _BaseWidgetState extends State<BaseWidget> {
   }
 
   void refresh() {
-    setState(() {});
+    setState(() {
+      _controller = Provider.of<YoutubePlayerProvider>(context, listen: false).controller;
+    });
   }
 }

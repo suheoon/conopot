@@ -5,12 +5,12 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import 'note.dart';
 
 class YoutubePlayerProvider extends ChangeNotifier {
+  // 타이머 init 하는걸 main에서 호출
   bool isHome = false;
   bool isMini = true;
   bool isPlaying = false;
   int playingIndex = 0;
   List<String> videoList = [];
-  late Function reload;
   late Function refresh;
 
   YoutubePlayerController controller = YoutubePlayerController();
@@ -20,27 +20,17 @@ class YoutubePlayerProvider extends ChangeNotifier {
     for (var note in notes) {
       videoList.add(youtubeURL[note.tj_songNumber]!);
     }
-    if (videoList.length == 1) {
-      controller = YoutubePlayerController.fromVideoId(videoId: videoList[0]);
-    }
-    if (videoList.length >= 2) {
-      controller = YoutubePlayerController(
-        params: const YoutubePlayerParams(
-          showControls: true,
-          mute: false,
-          showFullscreenButton: false,
-          loop: true,
-        ),
-      )..onInit = () async {
-          await controller.loadPlaylist(list: videoList);
-          if (videoList.isNotEmpty) {
-            print("여기: ${videoList}");
-            playingIndex = 0;
-            firstStart();
-            refresh();
-          }
-        };
-    }
+
+    controller = YoutubePlayerController(
+      params: const YoutubePlayerParams(
+        showControls: true,
+        mute: false,
+        showFullscreenButton: false,
+        loop: true,
+      ),
+    )..onInit = () async {
+        await controller.cueVideoById(videoId: videoList[0]);
+      };
   }
 
   void load() {
@@ -80,7 +70,7 @@ class YoutubePlayerProvider extends ChangeNotifier {
   }
 
   void stopVideo() async {
-    await controller.stopVideo();
+    await controller.pauseVideo();
     isPlaying = false;
     notifyListeners();
   }
@@ -88,21 +78,22 @@ class YoutubePlayerProvider extends ChangeNotifier {
   void playVideo() async {
     await controller.playVideo();
     isPlaying = true;
-
     notifyListeners();
   }
 
   void previousVideo() {
-    isPlaying = true;
-    controller.previousVideo();
     if (playingIndex - 1 >= 0) playingIndex -= 1;
+    controller.cueVideoById(videoId: videoList[playingIndex]);
+    isPlaying = true;
+    refresh();
     notifyListeners();
   }
 
   void nextVideo() {
-    controller.nextVideo();
-    isPlaying = true;
     if (videoList.length > playingIndex + 1) playingIndex += 1;
+    controller.cueVideoById(videoId: videoList[playingIndex]);
+    isPlaying = true;
+    refresh();
     notifyListeners();
   }
 
@@ -113,6 +104,7 @@ class YoutubePlayerProvider extends ChangeNotifier {
 
   void leaveNoteDetailScreen() async {
     isMini = true;
+    notifyListeners();
     var state = await controller.playerState;
     if (state == PlayerState.playing) {
       isPlaying = true;
@@ -127,13 +119,9 @@ class YoutubePlayerProvider extends ChangeNotifier {
 
   void changePlayingIndex(int index) async {
     if (playingIndex != index) {
-      print("여기 : ${index}");
       playingIndex = index;
-      closePlayer();
-      firstStart();
-      controller.playVideoAt(index);
-      var number = await controller.playlist;
-      print("여기 : ${number.length}");
+      controller.cueVideoById(videoId: videoList[playingIndex]);
+      refresh();
       notifyListeners();
     }
   }

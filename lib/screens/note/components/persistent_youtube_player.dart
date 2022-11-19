@@ -1,11 +1,10 @@
 import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class PersistentYoutubeVideoPlayer extends StatefulWidget {
-  PersistentYoutubeVideoPlayer({Key? key}) : super(key: key);
+  YoutubePlayerController controller;
+  PersistentYoutubeVideoPlayer({Key? key, required this.controller}) : super(key: key);
 
   @override
   State<PersistentYoutubeVideoPlayer> createState() =>
@@ -24,7 +23,6 @@ class _YoutubeVideoPlayerState extends State<PersistentYoutubeVideoPlayer> {
         child: YoutubePlayer(
             aspectRatio: 16 / 8.5,
             controller:
-                Provider.of<YoutubePlayerProvider>(context, listen: false)
-                    .controller));
+                widget.controller));
   }
 }
