@@ -35,6 +35,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         leading: BackButton(
           color: kPrimaryLightWhiteColor,
           onPressed: () {
+            Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
+            Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
             Navigator.of(context).pop();
           },
         ),

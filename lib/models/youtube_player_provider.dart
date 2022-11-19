@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import 'note.dart';
@@ -28,7 +27,10 @@ class YoutubePlayerProvider extends ChangeNotifier {
         loop: true,
       ),
     )..onInit = () async {
-        await controller.cueVideoById(videoId: videoList[playingIndex]);
+        if (videoList.isNotEmpty) {
+          isPlaying = false;
+          await controller.cueVideoById(videoId: videoList[playingIndex]);
+        }
       };
   }
 
@@ -39,8 +41,28 @@ class YoutubePlayerProvider extends ChangeNotifier {
       if (isMini && 0 < duration - currentTime && duration - currentTime < 2) {
         nextVideo();
       }
-    } catch (Exception) {
-    }
+    } catch (e) {}
+  }
+
+  void checkState() async {
+    try {
+      var state = await controller.playerState;
+      if (state == PlayerState.playing) {
+        isPlaying = true;
+        notifyListeners();
+      }
+      if (state == PlayerState.paused) {
+        isPlaying = false;
+        notifyListeners();
+      }
+      refresh();
+    } catch (e) {}
+  }
+
+  void removeVideoList(int index) {
+    videoList.removeAt(index);
+    isPlaying = false;
+    notifyListeners();
   }
 
   void removeAllVideoList() {
@@ -72,6 +94,8 @@ class YoutubePlayerProvider extends ChangeNotifier {
 
   void closePlayer() {
     isHome = false;
+    isMini = true;
+    playingIndex = 0;
   }
 
   void stopVideo() async {
@@ -88,7 +112,9 @@ class YoutubePlayerProvider extends ChangeNotifier {
 
   void previousVideo() {
     if (playingIndex - 1 >= 0) playingIndex -= 1;
-    controller.loadVideoById(videoId: videoList[playingIndex]);
+    if (videoList.isNotEmpty) {
+      controller.loadVideoById(videoId: videoList[playingIndex]);
+    }
     isPlaying = true;
     refresh();
     notifyListeners();
@@ -96,7 +122,9 @@ class YoutubePlayerProvider extends ChangeNotifier {
 
   void nextVideo() {
     if (videoList.length > playingIndex + 1) playingIndex += 1;
-    controller.loadVideoById(videoId: videoList[playingIndex]);
+    if (videoList.isNotEmpty) {
+      controller.loadVideoById(videoId: videoList[playingIndex]);
+    }
     isPlaying = true;
     refresh();
     notifyListeners();
@@ -117,15 +145,10 @@ class YoutubePlayerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void playMiniPlayer() {
-    isPlaying = true;
-    notifyListeners();
-  }
-
   void changePlayingIndex(int index) async {
     if (playingIndex != index) {
       playingIndex = index;
-      controller.cueVideoById(videoId: videoList[playingIndex]);
+      controller.loadVideoById(videoId: videoList[playingIndex]);
       refresh();
       notifyListeners();
     }

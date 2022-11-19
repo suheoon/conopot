@@ -59,9 +59,15 @@ class _MainScreenState extends State<MainScreen>
   @override
   void initState() {
     Provider.of<YoutubePlayerProvider>(context, listen: false).timer =
-        Timer.periodic(Duration(seconds: 1), (timer) {
-          Provider.of<YoutubePlayerProvider>(context, listen: false).checkAutoPlay();
-        });
+        Timer.periodic(Duration(microseconds: 500), (timer) {
+      if (Provider.of<YoutubePlayerProvider>(context, listen: false)
+          .videoList
+          .isNotEmpty) {
+        Provider.of<YoutubePlayerProvider>(context, listen: false)
+            .checkAutoPlay();
+        Provider.of<YoutubePlayerProvider>(context, listen: false).checkState();
+      }
+    });
     Provider.of<NoteData>(context, listen: false).isUserRewarded();
     _widgetOptions = <Widget>[
       NoteScreen(),

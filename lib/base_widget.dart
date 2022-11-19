@@ -1,5 +1,4 @@
 import 'package:conopot/config/constants.dart';
-import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/note/components/persistent_youtube_player.dart';
 import 'package:flutter/material.dart';
@@ -67,37 +66,40 @@ class _BaseWidgetState extends State<BaseWidget> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      (Provider.of<YoutubePlayerProvider>(context, listen: false).videoList.isEmpty) ?
+                      SizedBox(height: defaultSize * 5 ,child: Center(child: Text('곡 목록이 없습니다.', style: TextStyle(color: kPrimaryWhiteColor))))
+                      :
                       Stack(children: [
                         SizedBox(
                             height: Provider.of<YoutubePlayerProvider>(context,
                                         listen: true)
                                     .isMini
-                                ? defaultSize * 8
+                                ? 0.1
                                 : SizeConfig.defaultSize * 20,
                             width: Provider.of<YoutubePlayerProvider>(context,
                                         listen: true)
                                     .isMini
-                                ? defaultSize * 10
+                                ? 0.1
                                 : SizeConfig.screenWidth,
                             child: PersistentYoutubeVideoPlayer(controller: _controller)),
-                        // if (Provider.of<YoutubePlayerProvider>(context,
-                        //         listen: false)
-                        //     .isMini)
-                        //   AbsorbPointer(
-                        //     child: SizedBox(
-                        //       height: 6.5 * defaultSize,
-                        //       width: 10 * defaultSize,
-                        //       child: Image.network(
-                        //           errorBuilder: ((context, error, stackTrace) {
-                        //         return SizedBox(
-                        //             height: 6.5 * defaultSize,
-                        //             width: 10 * defaultSize,
-                        //             child: Image.asset(
-                        //                 "assets/images/profile.png"));
-                        //         ;
-                        //       }), "${Provider.of<YoutubePlayerProvider>(context, listen: false).getThumbnail()}"),
-                        //     ),
-                        //   )
+                        if (Provider.of<YoutubePlayerProvider>(context,
+                                listen: false)
+                            .isMini)
+                          AbsorbPointer(
+                            child: SizedBox(
+                              height: 6.5 * defaultSize,
+                              width: 10 * defaultSize,
+                              child: Image.network(
+                                  errorBuilder: ((context, error, stackTrace) {
+                                return SizedBox(
+                                    height: 6.5 * defaultSize,
+                                    width: 10 * defaultSize,
+                                    child: Image.asset(
+                                        "assets/images/profile.png"));
+                                ;
+                              }), "${Provider.of<YoutubePlayerProvider>(context, listen: false).getThumbnail()}"),
+                            ),
+                          )
                       ]),
                       if (Provider.of<YoutubePlayerProvider>(context,
                               listen: true)
@@ -175,21 +177,6 @@ class _BaseWidgetState extends State<BaseWidget> {
                               color: kPrimaryWhiteColor,
                             )),
                         SizedBox(width: defaultSize),
-                        // SizedBox(width: defaultSize),
-                        // GestureDetector(
-                        //     onTap: () {
-                        //       Provider.of<YoutubePlayerProvider>(context,
-                        //               listen: false)
-                        //           .closePlayer();
-                        //       Provider.of<YoutubePlayerProvider>(context,
-                        //               listen: false)
-                        //           .refresh();
-                        //     },
-                        //     child: Icon(
-                        //       Icons.refresh,
-                        //       color: kPrimaryWhiteColor,
-                        //     )),
-                        // SizedBox(width: defaultSize),
                       ],
                     ],
                   ),

@@ -354,9 +354,7 @@ class _NoteScreenState extends State<NoteScreen> {
                         0,
                         0,
                         defaultSize * 0.5,
-                        defaultSize * 0.5 +
-                            MediaQuery.of(context).padding.bottom +
-                            kBottomNavigationBarHeight),
+                        6.5 * defaultSize),
                     width: 72,
                     height: 72,
                     child: FittedBox(
@@ -364,6 +362,8 @@ class _NoteScreenState extends State<NoteScreen> {
                         backgroundColor: Colors.transparent,
                         child: SvgPicture.asset('assets/icons/addButton.svg'),
                         onPressed: () {
+                          Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
+                          Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
                           Future.delayed(Duration.zero, () {
                             Provider.of<MusicSearchItemLists>(context,
                                     listen: false)

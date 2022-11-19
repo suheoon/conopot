@@ -247,8 +247,6 @@ class NoteData extends ChangeNotifier {
       Map<String, String> youtubeURL) async {
     noteCount += 1;
     videoList.add(youtubeURL[songNumber]!);
-    Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
-    Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
 
     for (FitchMusic fitchMusic in musicList) {
       if (fitchMusic.tj_songNumber == songNumber) {
@@ -478,6 +476,7 @@ class NoteData extends ChangeNotifier {
         indexToDelete = i;
       }
     }
+    Provider.of<YoutubePlayerProvider>(context, listen: false).removeVideoList(indexToDelete);
     if (indexToDelete <=
         Provider.of<YoutubePlayerProvider>(context, listen: false)
             .playingIndex) {
@@ -487,8 +486,8 @@ class NoteData extends ChangeNotifier {
     
     Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
     Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
-    Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
-    Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+    // Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
+    // Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
 
     await storage.write(key: 'notes', value: jsonEncode(notes));
 
