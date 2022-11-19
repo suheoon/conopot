@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:conopot/config/analytics_config.dart';
@@ -57,6 +58,10 @@ class _MainScreenState extends State<MainScreen>
 
   @override
   void initState() {
+    Provider.of<YoutubePlayerProvider>(context, listen: false).timer =
+        Timer.periodic(Duration(seconds: 1), (timer) {
+          Provider.of<YoutubePlayerProvider>(context, listen: false).checkAutoPlay();
+        });
     Provider.of<NoteData>(context, listen: false).isUserRewarded();
     _widgetOptions = <Widget>[
       NoteScreen(),

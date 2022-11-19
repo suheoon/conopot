@@ -5,7 +5,7 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import 'note.dart';
 
 class YoutubePlayerProvider extends ChangeNotifier {
-  // 타이머 init 하는걸 main에서 호출
+  late Timer timer;
   bool isHome = false;
   bool isMini = true;
   bool isPlaying = false;
@@ -20,7 +20,6 @@ class YoutubePlayerProvider extends ChangeNotifier {
     for (var note in notes) {
       videoList.add(youtubeURL[note.tj_songNumber]!);
     }
-
     controller = YoutubePlayerController(
       params: const YoutubePlayerParams(
         showControls: true,
@@ -29,13 +28,19 @@ class YoutubePlayerProvider extends ChangeNotifier {
         loop: true,
       ),
     )..onInit = () async {
-        await controller.cueVideoById(videoId: videoList[0]);
+        await controller.cueVideoById(videoId: videoList[playingIndex]);
       };
   }
 
-  void load() {
-    playingIndex = 0;
-    notifyListeners();
+  void checkAutoPlay() async {
+    try {
+      var duration = await controller.duration;
+      var currentTime = await controller.currentTime;
+      if (isMini && 0 < duration - currentTime && duration - currentTime < 2) {
+        nextVideo();
+      }
+    } catch (Exception) {
+    }
   }
 
   void removeAllVideoList() {
@@ -83,7 +88,7 @@ class YoutubePlayerProvider extends ChangeNotifier {
 
   void previousVideo() {
     if (playingIndex - 1 >= 0) playingIndex -= 1;
-    controller.cueVideoById(videoId: videoList[playingIndex]);
+    controller.loadVideoById(videoId: videoList[playingIndex]);
     isPlaying = true;
     refresh();
     notifyListeners();
@@ -91,7 +96,7 @@ class YoutubePlayerProvider extends ChangeNotifier {
 
   void nextVideo() {
     if (videoList.length > playingIndex + 1) playingIndex += 1;
-    controller.cueVideoById(videoId: videoList[playingIndex]);
+    controller.loadVideoById(videoId: videoList[playingIndex]);
     isPlaying = true;
     refresh();
     notifyListeners();
