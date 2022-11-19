@@ -65,15 +65,30 @@ class _BaseWidgetState extends State<BaseWidget> {
                         .isHome,
                 child: Container(
                   decoration: BoxDecoration(color: kPrimaryBlackColor),
-                  child: (Provider.of<YoutubePlayerProvider>(context,
-                              listen: false)
-                          .videoList
-                          .isEmpty)
-                      ? Container()
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Stack(children: [
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      (Provider.of<YoutubePlayerProvider>(context,
+                                  listen: false)
+                              .videoList
+                              .isEmpty)
+                          ? Row(
+                              children: [
+                                SizedBox(width: defaultSize * 3),
+                                SizedBox(
+                                  height: defaultSize * 5,
+                                  child: Center(
+                                    child: Text(
+                                      '곡 목록이 없습니다.',
+                                      style: TextStyle(
+                                          color: kPrimaryWhiteColor,
+                                          fontSize: defaultSize * 1.5),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : (Stack(children: [
                               SizedBox(
                                   height: Provider.of<YoutubePlayerProvider>(
                                               context,
@@ -107,112 +122,106 @@ class _BaseWidgetState extends State<BaseWidget> {
                                     }), "${Provider.of<YoutubePlayerProvider>(context, listen: false).getThumbnail()}"),
                                   ),
                                 )
-                            ]),
-                            if (Provider.of<YoutubePlayerProvider>(context,
-                                    listen: true)
-                                .isMini) ...[
-                              SizedBox(width: defaultSize),
-                              Expanded(
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "${title}",
-                                        style: TextStyle(
-                                            fontSize: defaultSize * 1.1,
-                                            fontWeight: FontWeight.w500,
-                                            color: kPrimaryWhiteColor,
-                                            overflow: TextOverflow.ellipsis),
-                                      ),
-                                      Text(
-                                        "${singer}",
-                                        style: TextStyle(
-                                            fontSize: defaultSize * 0.9,
-                                            fontWeight: FontWeight.w300,
-                                            color: kPrimaryLightWhiteColor,
-                                            overflow: TextOverflow.ellipsis),
-                                      )
-                                    ]),
-                              ),
-                              GestureDetector(
-                                  onTap: () {
-                                    Provider.of<YoutubePlayerProvider>(context,
-                                            listen: false)
-                                        .previousVideo();
-                                  },
-                                  child: Icon(Icons.skip_previous,
-                                      color: kPrimaryWhiteColor)),
-                              SizedBox(width: defaultSize),
-                              (Provider.of<YoutubePlayerProvider>(context,
-                                          listen: false)
-                                      .isPlaying)
-                                  ? GestureDetector(
-                                      onTap: () {
-                                        if (Provider.of<YoutubePlayerProvider>(
-                                                context,
-                                                listen: false)
-                                            .videoList
-                                            .isEmpty) {
-                                          EasyLoading.showToast(
-                                              '재생 가능한 곡이 없습니다.');
-                                        }
-                                        if (Provider.of<YoutubePlayerProvider>(
-                                                context,
-                                                listen: false)
-                                            .videoList
-                                            .isNotEmpty)
-                                          Provider.of<YoutubePlayerProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .stopVideo();
-                                      },
-                                      child: Icon(Icons.pause,
-                                          color: kPrimaryWhiteColor))
-                                  : GestureDetector(
-                                      onTap: () async {
-                                        if (Provider.of<YoutubePlayerProvider>(
-                                                context,
-                                                listen: false)
-                                            .videoList
-                                            .isEmpty) {
-                                          EasyLoading.showToast(
-                                              '재생 가능한 곡이 없습니다.');
-                                        }
-                                        if (Provider.of<YoutubePlayerProvider>(
-                                                context,
-                                                listen: false)
-                                            .videoList
-                                            .isNotEmpty)
-                                          Provider.of<YoutubePlayerProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .playVideo();
-                                      },
-                                      child: Icon(Icons.play_arrow,
-                                          color: kPrimaryWhiteColor)),
-                              SizedBox(width: defaultSize),
-                              GestureDetector(
-                                  onTap: () {
-                                    if (Provider.of<YoutubePlayerProvider>(
-                                            context,
-                                            listen: false)
-                                        .videoList
-                                        .isEmpty) {
-                                      EasyLoading.showToast('재생 가능한 곡이 없습니다.');
-                                    }
-                                    Provider.of<YoutubePlayerProvider>(context,
-                                            listen: false)
-                                        .nextVideo();
-                                  },
-                                  child: Icon(
-                                    Icons.skip_next,
-                                    color: kPrimaryWhiteColor,
-                                  )),
-                              SizedBox(width: defaultSize),
-                            ],
-                          ],
+                            ])),
+                      if (Provider.of<YoutubePlayerProvider>(context,
+                              listen: true)
+                          .isMini) ...[
+                        SizedBox(width: defaultSize),
+                        Expanded(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${title}",
+                                  style: TextStyle(
+                                      fontSize: defaultSize * 1.1,
+                                      fontWeight: FontWeight.w500,
+                                      color: kPrimaryWhiteColor,
+                                      overflow: TextOverflow.ellipsis),
+                                ),
+                                Text(
+                                  "${singer}",
+                                  style: TextStyle(
+                                      fontSize: defaultSize * 0.9,
+                                      fontWeight: FontWeight.w300,
+                                      color: kPrimaryLightWhiteColor,
+                                      overflow: TextOverflow.ellipsis),
+                                )
+                              ]),
                         ),
+                        GestureDetector(
+                            onTap: () {
+                              Provider.of<YoutubePlayerProvider>(context,
+                                      listen: false)
+                                  .previousVideo();
+                            },
+                            child: Icon(Icons.skip_previous,
+                                color: kPrimaryWhiteColor)),
+                        SizedBox(width: defaultSize),
+                        (Provider.of<YoutubePlayerProvider>(context,
+                                    listen: false)
+                                .isPlaying)
+                            ? GestureDetector(
+                                onTap: () {
+                                  if (Provider.of<YoutubePlayerProvider>(
+                                          context,
+                                          listen: false)
+                                      .videoList
+                                      .isEmpty) {
+                                    EasyLoading.showToast('재생 가능한 곡이 없습니다.');
+                                  }
+                                  if (Provider.of<YoutubePlayerProvider>(
+                                          context,
+                                          listen: false)
+                                      .videoList
+                                      .isNotEmpty)
+                                    Provider.of<YoutubePlayerProvider>(context,
+                                            listen: false)
+                                        .stopVideo();
+                                },
+                                child: Icon(Icons.pause,
+                                    color: kPrimaryWhiteColor))
+                            : GestureDetector(
+                                onTap: () async {
+                                  if (Provider.of<YoutubePlayerProvider>(
+                                          context,
+                                          listen: false)
+                                      .videoList
+                                      .isEmpty) {
+                                    EasyLoading.showToast('재생 가능한 곡이 없습니다.');
+                                  }
+                                  if (Provider.of<YoutubePlayerProvider>(
+                                          context,
+                                          listen: false)
+                                      .videoList
+                                      .isNotEmpty)
+                                    Provider.of<YoutubePlayerProvider>(context,
+                                            listen: false)
+                                        .playVideo();
+                                },
+                                child: Icon(Icons.play_arrow,
+                                    color: kPrimaryWhiteColor)),
+                        SizedBox(width: defaultSize),
+                        GestureDetector(
+                            onTap: () {
+                              if (Provider.of<YoutubePlayerProvider>(context,
+                                      listen: false)
+                                  .videoList
+                                  .isEmpty) {
+                                EasyLoading.showToast('재생 가능한 곡이 없습니다.');
+                              }
+                              Provider.of<YoutubePlayerProvider>(context,
+                                      listen: false)
+                                  .nextVideo();
+                            },
+                            child: Icon(
+                              Icons.skip_next,
+                              color: kPrimaryWhiteColor,
+                            )),
+                        SizedBox(width: defaultSize),
+                      ],
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: navigationHeight),

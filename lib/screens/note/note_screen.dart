@@ -180,8 +180,8 @@ class _NoteScreenState extends State<NoteScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
-      // Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+      Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
+      Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
     });
     Provider.of<NoteData>(context, listen: false).isUserRewarded();
     isReward = Provider.of<NoteData>(context, listen: false).rewardFlag;
@@ -354,7 +354,7 @@ class _NoteScreenState extends State<NoteScreen> {
                         0,
                         0,
                         defaultSize * 0.5,
-                        6.5 * defaultSize),
+                        6 * defaultSize),
                     width: 72,
                     height: 72,
                     child: FittedBox(

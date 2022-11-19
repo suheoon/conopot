@@ -488,6 +488,9 @@ class NoteData extends ChangeNotifier {
 
     Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
     Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+    Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
+    Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+
     await storage.write(key: 'notes', value: jsonEncode(notes));
 
     Identify identify = Identify()
