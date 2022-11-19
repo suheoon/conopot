@@ -90,6 +90,7 @@ class YoutubePlayerProvider extends ChangeNotifier {
 
   void openPlayer() {
     isHome = true;
+    isPlaying = false;
   }
 
   void closePlayer() {

@@ -180,8 +180,8 @@ class _NoteScreenState extends State<NoteScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
-      Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+      // Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
+      // Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
     });
     Provider.of<NoteData>(context, listen: false).isUserRewarded();
     isReward = Provider.of<NoteData>(context, listen: false).rewardFlag;

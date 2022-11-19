@@ -59,7 +59,7 @@ class _MainScreenState extends State<MainScreen>
   @override
   void initState() {
     Provider.of<YoutubePlayerProvider>(context, listen: false).timer =
-        Timer.periodic(Duration(microseconds: 500), (timer) {
+        Timer.periodic(Duration(seconds: 1), (timer) {
       if (Provider.of<YoutubePlayerProvider>(context, listen: false)
           .videoList
           .isNotEmpty) {

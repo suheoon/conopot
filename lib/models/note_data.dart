@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
@@ -476,19 +477,17 @@ class NoteData extends ChangeNotifier {
         indexToDelete = i;
       }
     }
-    Provider.of<YoutubePlayerProvider>(context, listen: false).removeVideoList(indexToDelete);
+    Provider.of<YoutubePlayerProvider>(context, listen: false)
+        .removeVideoList(indexToDelete);
     if (indexToDelete <=
         Provider.of<YoutubePlayerProvider>(context, listen: false)
             .playingIndex) {
       Provider.of<YoutubePlayerProvider>(context, listen: false)
           .downPlayingIndex();
     }
-    
+
     Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
     Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
-    // Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
-    // Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
-
     await storage.write(key: 'notes', value: jsonEncode(notes));
 
     Identify identify = Identify()
@@ -1538,7 +1537,8 @@ class NoteData extends ChangeNotifier {
     noteCount -= deleteSet.length;
     List<Note> temp_notes = [];
     List<String> temp_userMusics = [];
-    Provider.of<YoutubePlayerProvider>(context, listen: false).removeAllVideoList();
+    Provider.of<YoutubePlayerProvider>(context, listen: false)
+        .removeAllVideoList();
     for (int i = 0; i < notes.length; i++) {
       if (deleteSet.contains(notes[i])) continue;
       temp_notes.add(notes[i]);

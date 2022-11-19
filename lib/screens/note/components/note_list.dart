@@ -95,6 +95,12 @@ class _NoteListState extends State<NoteList> {
                           onTap: () {
                             Provider.of<YoutubePlayerProvider>(context,
                                     listen: false)
+                                .openPlayer();
+                            Provider.of<YoutubePlayerProvider>(context,
+                                    listen: false)
+                                .refresh();
+                            Provider.of<YoutubePlayerProvider>(context,
+                                    listen: false)
                                 .enterNoteDetailScreen(
                                     noteData.notes.indexOf(note));
                             Provider.of<YoutubePlayerProvider>(context,

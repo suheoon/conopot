@@ -77,6 +77,8 @@ class EmptyNoteList extends StatelessWidget {
       ),
       GestureDetector(
         onTap: () {
+          Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
+          Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
           Provider.of<MusicSearchItemLists>(context, listen: false)
               .initCombinedBook();
           Navigator.push(
