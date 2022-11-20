@@ -59,6 +59,13 @@ class YoutubePlayerProvider extends ChangeNotifier {
     } catch (e) {}
   }
 
+  void reorder(int oldIndex, int newIndex) {
+    final String oldVideoId = videoList.removeAt(oldIndex);
+    videoList.insert(newIndex, oldVideoId);
+    playingIndex = 0;
+    notifyListeners();
+  }
+
   void removeVideoList(int index) {
     videoList.removeAt(index);
     if (videoList.isNotEmpty) {

@@ -141,7 +141,7 @@ class _BaseWidgetState extends State<BaseWidget> {
                                       Text(
                                         "${title}",
                                         style: TextStyle(
-                                            fontSize: defaultSize * 1.3,
+                                            fontSize: defaultSize,
                                             fontWeight: FontWeight.w500,
                                             color: kPrimaryWhiteColor,
                                             overflow: TextOverflow.ellipsis),
@@ -149,7 +149,7 @@ class _BaseWidgetState extends State<BaseWidget> {
                                       Text(
                                         "${singer}",
                                         style: TextStyle(
-                                            fontSize: defaultSize * 1.1,
+                                            fontSize: defaultSize * 0.9,
                                             fontWeight: FontWeight.w300,
                                             color: kPrimaryLightWhiteColor,
                                             overflow: TextOverflow.ellipsis),
@@ -225,7 +225,7 @@ class _BaseWidgetState extends State<BaseWidget> {
                                     Icons.skip_next,
                                     color: kPrimaryWhiteColor,
                                   )),
-                              SizedBox(width: defaultSize * 2),
+                              SizedBox(width: defaultSize),
                             ],
                           ],
                         ),

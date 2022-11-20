@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
@@ -8,6 +10,7 @@ import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
@@ -230,6 +233,18 @@ class _NoteListState extends State<NoteList> {
                   }
                   final Note note = noteData.notes.removeAt(oldIndex);
                   noteData.notes.insert(newIndex, note);
+                  Provider.of<YoutubePlayerProvider>(context, listen: false)
+                      .reorder(oldIndex, newIndex);
+                  Provider.of<YoutubePlayerProvider>(context, listen: false)
+                      .closePlayer();
+                  Provider.of<YoutubePlayerProvider>(context, listen: false)
+                      .refresh();
+                  Timer(Duration(microseconds: 500), () {
+                    Provider.of<YoutubePlayerProvider>(context, listen: false)
+                        .openPlayer();
+                    Provider.of<YoutubePlayerProvider>(context, listen: false)
+                        .refresh();
+                  });
                   Provider.of<NoteData>(context, listen: false).reorderEvent();
                 });
               },
