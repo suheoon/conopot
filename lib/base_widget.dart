@@ -66,61 +66,67 @@ class _BaseWidgetState extends State<BaseWidget> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    (Provider.of<YoutubePlayerProvider>(context,
-                                  listen: false)
-                              .videoList
-                              .isEmpty)
-                          ? Row(
-                              children: [
-                                SizedBox(width: defaultSize * 3),
-                                SizedBox(
-                                  height: defaultSize * 5,
-                                  child: Center(
-                                    child: Text(
+                    (Provider.of<YoutubePlayerProvider>(context, listen: false)
+                            .videoList
+                            .isEmpty)
+                        ? Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                color: kPrimaryBlackColor,
+                                height: defaultSize * 6,
+                                child: Row(
+                                  children: [
+                                    SizedBox(width: defaultSize * 2),
+                                    Icon(Icons.list, color: kPrimaryWhiteColor),
+                                    SizedBox(width: defaultSize),
+                                    Text(
                                       '곡 목록이 없습니다.',
                                       style: TextStyle(
                                           color: kPrimaryWhiteColor,
-                                          fontSize: defaultSize * 1.5),
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: defaultSize * 1.3),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
-                            )
-                          : (Stack(children: [
-                              SizedBox(
-                                  height: Provider.of<YoutubePlayerProvider>(
-                                              context,
-                                              listen: true)
-                                          .isMini
-                                      ? defaultSize * 13
-                                      : SizeConfig.defaultSize * 20,
-                                  width: Provider.of<YoutubePlayerProvider>(
-                                              context,
-                                              listen: true)
-                                          .isMini
-                                      ? defaultSize * 15
-                                      : SizeConfig.screenWidth,
-                                  child: PersistentYoutubeVideoPlayer(
-                                      controller: _controller)),
-                              // if (Provider.of<YoutubePlayerProvider>(context,
-                              //         listen: false)
-                              //     .isMini)
-                              //   AbsorbPointer(
-                              //     child: SizedBox(
-                              //       height: 6.5 * defaultSize,
-                              //       width: 10 * defaultSize,
-                              //       child: Image.network(errorBuilder:
-                              //           ((context, error, stackTrace) {
-                              //         return SizedBox(
-                              //             height: 6.5 * defaultSize,
-                              //             width: 10 * defaultSize,
-                              //             child: Image.asset(
-                              //                 "assets/images/profile.png"));
-                              //         ;
-                              //       }), "${Provider.of<YoutubePlayerProvider>(context, listen: false).getThumbnail()}"),
-                              //     ),
-                              //   )
-                            ])),
+                              ),
+                            ],
+                          )
+                        : (Stack(children: [
+                            SizedBox(
+                                height: Provider.of<YoutubePlayerProvider>(
+                                            context,
+                                            listen: true)
+                                        .isMini
+                                    ? defaultSize * 13
+                                    : SizeConfig.defaultSize * 20,
+                                width: Provider.of<YoutubePlayerProvider>(
+                                            context,
+                                            listen: true)
+                                        .isMini
+                                    ? defaultSize * 15
+                                    : SizeConfig.screenWidth,
+                                child: PersistentYoutubeVideoPlayer(
+                                    controller: _controller)),
+                            // if (Provider.of<YoutubePlayerProvider>(context,
+                            //         listen: false)
+                            //     .isMini)
+                            //   AbsorbPointer(
+                            //     child: SizedBox(
+                            //       height: 6.5 * defaultSize,
+                            //       width: 10 * defaultSize,
+                            //       child: Image.network(errorBuilder:
+                            //           ((context, error, stackTrace) {
+                            //         return SizedBox(
+                            //             height: 6.5 * defaultSize,
+                            //             width: 10 * defaultSize,
+                            //             child: Image.asset(
+                            //                 "assets/images/profile.png"));
+                            //         ;
+                            //       }), "${Provider.of<YoutubePlayerProvider>(context, listen: false).getThumbnail()}"),
+                            //     ),
+                            //   )
+                          ])),
                     Expanded(
                       child: Container(
                         height: defaultSize * 6,
@@ -135,7 +141,8 @@ class _BaseWidgetState extends State<BaseWidget> {
                               SizedBox(width: defaultSize),
                               Expanded(
                                 child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
@@ -175,14 +182,16 @@ class _BaseWidgetState extends State<BaseWidget> {
                                                 listen: false)
                                             .videoList
                                             .isEmpty) {
-                                          EasyLoading.showToast('재생 가능한 곡이 없습니다.');
+                                          EasyLoading.showToast(
+                                              '재생 가능한 곡이 없습니다.');
                                         }
                                         if (Provider.of<YoutubePlayerProvider>(
                                                 context,
                                                 listen: false)
                                             .videoList
                                             .isNotEmpty)
-                                          Provider.of<YoutubePlayerProvider>(context,
+                                          Provider.of<YoutubePlayerProvider>(
+                                                  context,
                                                   listen: false)
                                               .stopVideo();
                                       },
@@ -195,14 +204,16 @@ class _BaseWidgetState extends State<BaseWidget> {
                                                 listen: false)
                                             .videoList
                                             .isEmpty) {
-                                          EasyLoading.showToast('재생 가능한 곡이 없습니다.');
+                                          EasyLoading.showToast(
+                                              '재생 가능한 곡이 없습니다.');
                                         }
                                         if (Provider.of<YoutubePlayerProvider>(
                                                 context,
                                                 listen: false)
                                             .videoList
                                             .isNotEmpty)
-                                          Provider.of<YoutubePlayerProvider>(context,
+                                          Provider.of<YoutubePlayerProvider>(
+                                                  context,
                                                   listen: false)
                                               .playVideo();
                                       },
@@ -211,7 +222,8 @@ class _BaseWidgetState extends State<BaseWidget> {
                               SizedBox(width: defaultSize),
                               GestureDetector(
                                   onTap: () {
-                                    if (Provider.of<YoutubePlayerProvider>(context,
+                                    if (Provider.of<YoutubePlayerProvider>(
+                                            context,
                                             listen: false)
                                         .videoList
                                         .isEmpty) {
