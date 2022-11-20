@@ -165,6 +165,13 @@ class YoutubePlayerProvider extends ChangeNotifier {
     }
   }
 
+  void enterOtherDetailScreen(String videoId) {
+    isMini = false;
+    controller.loadVideoById(videoId: videoId);
+    refresh();
+    notifyListeners();
+  }
+
   void downPlayingIndex() {
     if (playingIndex - 1 >= 0) {
       playingIndex -= 1;
