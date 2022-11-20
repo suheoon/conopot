@@ -1,6 +1,7 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:conopot/screens/note/add_note_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -74,6 +75,8 @@ class EmptyNoteList extends StatelessWidget {
       ),
       GestureDetector(
         onTap: () {
+          Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
+          Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
           Provider.of<MusicSearchItemLists>(context, listen: false)
               .initCombinedBook();
           Navigator.push(

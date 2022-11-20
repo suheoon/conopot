@@ -9,11 +9,13 @@ import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:conopot/screens/note/components/banner.dart';
 import 'package:conopot/screens/note/components/edit_note_list.dart';
 import 'package:conopot/screens/note/components/empty_note_list.dart';
 import 'package:conopot/screens/note/components/memo_shape_button.dart';
 import 'package:conopot/screens/note/components/note_list.dart';
+import 'package:conopot/screens/note/components/youtube_player.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -176,6 +178,10 @@ class _NoteScreenState extends State<NoteScreen> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
+      Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+    });
     Provider.of<NoteData>(context, listen: false).isUserRewarded();
     isReward = Provider.of<NoteData>(context, listen: false).rewardFlag;
     Analytics_config().noteViewPageViewEvent();
@@ -296,6 +302,10 @@ class _NoteScreenState extends State<NoteScreen> {
             if (noteData.notes.isNotEmpty && _listSate == 0) ...[
               IconButton(
                   onPressed: () {
+                    Provider.of<YoutubePlayerProvider>(context, listen: false)
+                        .closePlayer();
+                    Provider.of<YoutubePlayerProvider>(context, listen: false)
+                        .refresh();
                     showNoteListOption(context);
                   },
                   icon: Icon(Icons.more_horiz_outlined)),
@@ -303,6 +313,10 @@ class _NoteScreenState extends State<NoteScreen> {
               if (_listSate == 1) ...[
                 TextButton(
                     onPressed: () {
+                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                          .openPlayer();
+                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                          .refresh();
                       noteData.initEditNote();
                       setState(() {
                         _listSate = 0;
@@ -324,7 +338,10 @@ class _NoteScreenState extends State<NoteScreen> {
             : (_listSate == 0)
                 ? Container(
                     margin: EdgeInsets.fromLTRB(
-                        0, 0, defaultSize * 0.5, defaultSize * 0.5),
+                        0,
+                        0,
+                        defaultSize * 0.5,
+                        6 * defaultSize),
                     width: 72,
                     height: 72,
                     child: FittedBox(
@@ -332,6 +349,8 @@ class _NoteScreenState extends State<NoteScreen> {
                         backgroundColor: Colors.transparent,
                         child: SvgPicture.asset('assets/icons/addButton.svg'),
                         onPressed: () {
+                          Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
+                          Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
                           Future.delayed(Duration.zero, () {
                             Provider.of<MusicSearchItemLists>(context,
                                     listen: false)
@@ -405,6 +424,8 @@ class _NoteScreenState extends State<NoteScreen> {
                                     noteData
                                         .showDeleteMultipleNoteDialog(context);
                                   }
+                                  Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
+                                  Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
                                 },
                                 child: Column(
                                   children: [
@@ -521,6 +542,12 @@ class _NoteScreenState extends State<NoteScreen> {
                     Spacer(),
                     GestureDetector(
                         onTap: () {
+                          Provider.of<YoutubePlayerProvider>(context,
+                                  listen: false)
+                              .openPlayer();
+                          Provider.of<YoutubePlayerProvider>(context,
+                                  listen: false)
+                              .refresh();
                           Navigator.pop(context);
                         },
                         child: Text(
@@ -591,7 +618,12 @@ class _NoteScreenState extends State<NoteScreen> {
               ]),
             ),
           );
-        });
+        }).whenComplete(() {
+      if (_listSate != 1) {
+        Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
+        Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+      }
+    });
   }
 
   _showAdBlockDialog() async {

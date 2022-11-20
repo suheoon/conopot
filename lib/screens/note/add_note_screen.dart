@@ -1,5 +1,8 @@
 import 'package:conopot/config/analytics_config.dart';
+import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:conopot/screens/note/components/note_search_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,23 +27,39 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   @override
   Widget build(BuildContext context) {
     ToastContext().init(context);
-    return Scaffold(
-      appBar: AppBar(
-        title:
-            const Text("노래 추가", style: TextStyle(fontWeight: FontWeight.w700)),
-        centerTitle: true,
-      ),
-      body: Consumer<MusicSearchItemLists>(
-        builder: (
-          context,
-          musicList,
-          child,
-        ) =>
-            Column(
-          children: [
-            NoteSearchBar(musicList: musicList),
-            NoteSearchList(musicList: musicList),
-          ],
+    return WillPopScope (
+      onWillPop: () async {
+        Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
+            Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+            Navigator.of(context).pop();
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title:
+              const Text("노래 추가", style: TextStyle(fontWeight: FontWeight.w700)),
+          centerTitle: true,
+          leading: BackButton(
+            color: kPrimaryLightWhiteColor,
+            onPressed: () {
+              Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
+              Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+        body: Consumer<MusicSearchItemLists>(
+          builder: (
+            context,
+            musicList,
+            child,
+          ) =>
+              Column(
+            children: [
+              NoteSearchBar(musicList: musicList),
+              NoteSearchList(musicList: musicList),
+            ],
+          ),
         ),
       ),
     );
