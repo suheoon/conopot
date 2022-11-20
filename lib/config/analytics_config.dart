@@ -150,6 +150,31 @@ class Analytics_config {
     event('노트_상세정보_뷰__최고음요청', {'곡명': title});
   }
 
+  //!event: 노트_상세정보_뷰__댓글_페이지뷰
+  noteCommentPageView() {
+    event('노트_상세정보_뷰__댓글_페이지뷰', {});
+  }
+
+  //!event: 노트_상세정보_뷰__댓글남기기
+  noteLeaveCommentEvent() {
+    event('노트_상세정보_뷰__댓글남기기', {});
+  }
+
+  //!event: 노트_상세정보_뷰__댓글좋아요
+  noteLikeCommentEvent() {
+    event('노트_상세정보_뷰__댓글좋아요', {});
+  }
+
+  //!event: 노트_상세정보_뷰__댓글신고하기
+  noteReportCommentEvent() {
+    event('노트_상세정보_뷰__댓글신고하기', {});
+  }
+
+  //!event: 노트_상세정보_뷰__댓글삭제하기
+  noteDeleteCommentEvent() {
+    event('노트_상세정보_뷰__댓글삭제하기', {});
+  }
+
   //!event: 설정_뷰__페이지뷰
   settingPageView() {
     event('설정_뷰__페이지뷰', {});
@@ -480,6 +505,11 @@ class Analytics_config {
     event('첫세션', {});
   }
 
+  //!event: 튜토리얼_뷰__시작하기
+  tutorialStart() {
+    event('튜토리얼_뷰__시작하기', {});
+  }
+
   //!event: 노트가 없는 사용자
   emptyNoteUserEvent() {
     event('노트없는사용자', {});
@@ -533,5 +563,30 @@ class Analytics_config {
   //!event: 애창곡_노트_뷰__광고제거
   addRemoveEvent() {
     event('애창곡_노트_뷰__광고제거', {});
+  }
+
+  //!event: 친구초대_뷰__페이지뷰
+  invitePageView() {
+    event('친구초대_뷰__페이지뷰', {});
+  }
+
+  //!event: 친구초대_뷰__배너클릭
+  inviteBannerClick() {
+    event('친구초대_뷰__광고제거받기', {});
+  }
+
+  //!event: 친구초대_뷰__공유하기
+  inviteShare() {
+    event('친구초대_뷰__공유하기', {});
+  }
+
+  //!event: 친구초대_뷰__인증하기
+  inviteAuth() {
+    event('친구초대_뷰__인증하기', {});
+  }
+
+  //!event: 친구초대_뷰__광고제거받기
+  inviteGetReward() {
+    event('친구초대_뷰__광고제거받기', {});
   }
 }

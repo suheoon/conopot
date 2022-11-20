@@ -14,6 +14,8 @@ import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/recommendation_item_list.dart';
 import 'package:conopot/models/youtube_player_provider.dart';
+import 'package:conopot/tutorial_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -75,11 +77,24 @@ class _SplashScreenState extends State<SplashScreen> {
       initYoutube();
 
       //앱 오픈 광고
-      //리워드가 존재하는지 체크
+      //리워드, 앱 오픈 플래그가 존재하는지 체크
+      String? appOpenFlag = await storage.read(key: 'appOpenFlag');
+      //예외적으로, 세션이 10번 이상이면 플래그 등록해두기
+      if (sessionCnt >= 10) appOpenFlag = 'true';
+
       //존재한다면 광고 없이 넘어가기
-      if (Provider.of<NoteData>(context, listen: false).rewardFlag) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => MainScreen()));
+      if (Provider.of<NoteData>(context, listen: false).isUserAdRemove() ||
+          appOpenFlag == null) {
+        /// 튜토리얼 전환
+        String? tutorialFlag = await storage.read(key: "tutorial");
+        if (tutorialFlag != "1") {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => TutorialScreen()));
+        } else {
+          // 만약 튜토리얼을 완료한 사용자라면 MainScreen 전환 (replace)
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => MainScreen()));
+        }
       } else {
         await appOpenAds(context);
       }
@@ -104,9 +119,16 @@ class _SplashScreenState extends State<SplashScreen> {
       // await SizeConfig().init(context);
       await RecommendationItemList().initRecommendationList();
 
-      /// MainScreen 전환 (replace)
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => MainScreen()));
+      /// 튜토리얼 전환
+      String? tutorialFlag = await storage.read(key: "tutorial");
+      if (tutorialFlag != "1") {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => TutorialScreen()));
+      } else {
+        // 만약 튜토리얼을 완료한 사용자라면 MainScreen 전환 (replace)
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MainScreen()));
+      }
     }
   }
 

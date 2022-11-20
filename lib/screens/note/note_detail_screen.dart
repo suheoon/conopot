@@ -12,10 +12,12 @@ import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/models/youtube_player_provider.dart';
+import 'package:conopot/screens/note/components/note_comment.dart';
 import 'package:conopot/screens/note/components/song_by_same_singer_list.dart';
 import 'package:conopot/screens/note/components/youtube_player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:marquee/marquee.dart';
@@ -174,13 +176,14 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
   }
 
   bool? reward;
+  final storage = new FlutterSecureStorage();
 
   @override
   void initState() {
     Provider.of<NoteData>(context, listen: false).isUserRewarded();
     reward = Provider.of<NoteData>(context, listen: false).rewardFlag;
     _interstitialAd = createInterstitialAd();
-    _tabController = new TabController(length: 2, vsync: this);
+    _tabController = new TabController(length: 3, vsync: this);
     _tabController
       ..addListener(
         () {
@@ -191,12 +194,19 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
     super.initState();
   }
 
+  appOpenFlagFunc() async {
+    await storage.write(key: 'appOpenFlag', value: 'true');
+  }
+
   @override
   void dispose() {
     provider.detailDisposeCount += 1;
     //3배수의 횟수로 상세정보를 보고 나갈 때, 전면 광고 재생
-    if (provider.detailDisposeCount % 3 == 0 && reward != true) {
+    if (provider.detailDisposeCount % 3 == 0 &&
+        Provider.of<NoteData>(context, listen: false).isUserAdRemove() ==
+            false) {
       _showInterstitialAd();
+      appOpenFlagFunc();
     }
     super.dispose();
     _tabController.dispose();
@@ -530,6 +540,21 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                   ])),
                             )
                           ],
+                          )),
+                  SizedBox(height: defaultSize * 1.25),
+                  TabBar(
+                    controller: _tabController,
+                    isScrollable: false,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    indicatorColor: kMainColor,
+                    labelColor: kPrimaryWhiteColor,
+                    unselectedLabelColor: kPrimaryLightGreyColor,
+                    tabs: [
+                      Text(
+                        '정보',
+                        style: TextStyle(
+                          fontSize: defaultSize * 1.8,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       SizedBox(height: defaultSize),
@@ -571,6 +596,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                             ]),
                       )
                     ]),
+                      Icon(Icons.comment)
+                    ],
                   ),
                 )
               : Column(
@@ -979,6 +1006,16 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                   ],
                 )),
     );
+                                ]),
+                          )
+                        ],
+                      ),
+                      // 댓글 탭
+                      NoteComment(musicId: int.parse(widget.note.tj_songNumber))
+                    ],
+                  ))
+                ],
+              ));
   }
 
   // 금영 노래방 번호 검색 팝업 함수

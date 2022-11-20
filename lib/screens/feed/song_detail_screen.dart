@@ -12,6 +12,7 @@ import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/models/youtube_player_provider.dart';
+import 'package:conopot/screens/note/components/note_comment.dart';
 import 'package:conopot/screens/note/components/request_pitch_button.dart';
 import 'package:conopot/screens/note/components/song_by_same_singer_list.dart';
 import 'package:conopot/screens/note/components/youtube_player.dart';
@@ -179,7 +180,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
     if (videoId == null) {
       getLyrics(widget.note.tj_songNumber);
     }
-    _tabController = new TabController(length: 2, vsync: this);
+    _tabController = new TabController(length: 3, vsync: this);
     _tabController
       ..addListener(
         () {
@@ -194,7 +195,9 @@ class _SongDetailScreenState extends State<SongDetailScreen>
   void dispose() {
     provider.detailDisposeCount += 1;
     //3배수의 횟수로 상세정보를 보고 나갈 때, 전면 광고 재생
-    if (provider.detailDisposeCount % 3 == 0 && reward != true) {
+    if (provider.detailDisposeCount % 3 == 0 &&
+        Provider.of<NoteData>(context, listen: false).isUserAdRemove() ==
+            false) {
       _showInterstitialAd();
     }
     super.dispose();
@@ -571,7 +574,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                   SizedBox(height: defaultSize * 1.25),
                   TabBar(
                     controller: _tabController,
-                    isScrollable: true,
+                    isScrollable: false,
                     indicatorSize: TabBarIndicatorSize.label,
                     indicatorColor: kMainColor,
                     labelColor: kPrimaryWhiteColor,
@@ -591,6 +594,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                           fontWeight: FontWeight.w600,
                         ),
                       ),
+                      Icon(Icons.comment)
                     ],
                   ),
                   SizedBox(height: defaultSize * 1.25),
@@ -936,7 +940,9 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                 ]),
                           )
                         ],
-                      )
+                      ),
+                      // 댓글 탭
+                      NoteComment(musicId: int.parse(widget.note.tj_songNumber))
                     ],
                   ))
                 ],
