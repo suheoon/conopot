@@ -51,6 +51,7 @@ class _BaseWidgetState extends State<BaseWidget> {
         MediaQuery.of(context).padding.bottom + kBottomNavigationBarHeight;
     double defaultSize = SizeConfig.defaultSize;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           widget.child,
