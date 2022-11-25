@@ -37,9 +37,7 @@ class YoutubePlayerProvider extends ChangeNotifier {
   }
 
   void checkVideoList() {
-    if (videoList.isEmpty) {
-      
-    }
+    if (videoList.isEmpty) {}
   }
 
   void checkAutoPlay() async {

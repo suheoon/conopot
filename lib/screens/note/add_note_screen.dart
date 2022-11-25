@@ -32,6 +32,11 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         if (Provider.of<YoutubePlayerProvider>(context, listen: false)
             .isHomeTab) {
           Provider.of<YoutubePlayerProvider>(context, listen: false)
+              .youtubeInit(
+                  Provider.of<NoteData>(context, listen: false).notes,
+                  Provider.of<MusicSearchItemLists>(context, listen: false)
+                      .youtubeURL);
+          Provider.of<YoutubePlayerProvider>(context, listen: false)
               .openPlayer();
           Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
         }
@@ -48,6 +53,12 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
             onPressed: () {
               if (Provider.of<YoutubePlayerProvider>(context, listen: false)
                   .isHomeTab) {
+                Provider.of<YoutubePlayerProvider>(context, listen: false)
+                    .youtubeInit(
+                        Provider.of<NoteData>(context, listen: false).notes,
+                        Provider.of<MusicSearchItemLists>(context,
+                                listen: false)
+                            .youtubeURL);
                 Provider.of<YoutubePlayerProvider>(context, listen: false)
                     .openPlayer();
                 Provider.of<YoutubePlayerProvider>(context, listen: false)
