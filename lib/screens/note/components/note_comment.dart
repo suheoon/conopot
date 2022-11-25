@@ -166,10 +166,12 @@ class _NoteCommentState extends State<NoteComment> {
   }
 
   load() async {
-    setState(() {
-      isLoading = true;
-      _comments = [];
-    });
+    if (this.mounted) {
+      setState(() {
+        isLoading = true;
+        _comments = [];
+      });
+    }
     try {
       String? serverURL = dotenv.env['USER_SERVER_URL'];
       String URL =
@@ -182,14 +184,16 @@ class _NoteCommentState extends State<NoteComment> {
       );
       var data = json.decode(response.body);
       if (!data.containsKey('comments')) throw Exception();
-      setState(() {
-        if (data['comments'].isNotEmpty) {
-          for (var e in data['comments']) {
-            _comments.add(Comment.fromJson(e));
+      if (this.mounted) {
+        setState(() {
+          if (data['comments'].isNotEmpty) {
+            for (var e in data['comments']) {
+              _comments.add(Comment.fromJson(e));
+            }
           }
-        }
-        isLoading = false;
-      });
+          isLoading = false;
+        });
+      }
       return _comments;
     } on SocketException catch (e) {
       // 에러처리 (인터넷 연결 등등)
@@ -391,9 +395,11 @@ class _NoteCommentState extends State<NoteComment> {
       EasyLoading.showToast('자신의 댓글에는 공감할 수 없습니다.');
       return;
     }
-    setState(() {
-      isLiking = true;
-    });
+    if (this.mounted) {
+      setState(() {
+        isLiking = true;
+      });
+    }
     try {
       String? serverURL = dotenv.env['USER_SERVER_URL'];
       String URL = '${serverURL}/comment/like';
