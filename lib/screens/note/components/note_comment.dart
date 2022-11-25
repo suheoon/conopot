@@ -223,7 +223,6 @@ class _NoteCommentState extends State<NoteComment> {
       String externalUserId = userId.toString();
       if (userId != 0) {
         OneSignal.shared.setExternalUserId(externalUserId).then((results) {
-          print("여기 : ${results}");
         }).catchError((error) {
           print(error.toString());
         });
