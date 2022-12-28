@@ -321,16 +321,16 @@ class NoteData extends ChangeNotifier {
       _showInterstitialAd("noteAdd");
       isOverlapping = true;
     }
-    if (isOverlapping == false &&
-        (_preRequestTime == null ||
-            _currentTime.difference(_preRequestTime).inDays > 20) &&
-        !_isSubmitted &&
-        noteCount >= 5 &&
-        Provider.of<MusicSearchItemLists>(context, listen: false)
-                .sessionCount >=
-            5) {
-      showReviewDialog(context);
-    }
+    // if (isOverlapping == false &&
+    //     (_preRequestTime == null ||
+    //         _currentTime.difference(_preRequestTime).inDays > 20) &&
+    //     !_isSubmitted &&
+    //     noteCount >= 5 &&
+    //     Provider.of<MusicSearchItemLists>(context, listen: false)
+    //             .sessionCount >=
+    //         5) {
+    //   showReviewDialog(context);
+    // }
     notifyListeners();
   }
 
