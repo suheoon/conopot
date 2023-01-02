@@ -92,20 +92,18 @@ class _NoteSearchListState extends State<NoteSearchList> {
   }
 
   Widget _ListView(BuildContext context) {
-    return widget.musicList.combinedFoundItems.isNotEmpty
+    return widget.musicList.foundItems.isNotEmpty
         ? Consumer<NoteData>(
             builder: (context, notedata, child) => Expanded(
               child: ListView.builder(
-                  itemCount: widget.musicList.combinedFoundItems.length,
+                  itemCount: widget.musicList.foundItems.length,
                   itemBuilder: (context, index) {
-                    String songNumber = widget
-                        .musicList.combinedFoundItems[(index)].tj_songNumber;
-                    String title =
-                        widget.musicList.combinedFoundItems[(index)].tj_title;
-                    String singer =
-                        widget.musicList.combinedFoundItems[(index)].tj_singer;
-                    int pitchNum =
-                        widget.musicList.combinedFoundItems[(index)].pitchNum;
+                    String songNumber =
+                        widget.musicList.foundItems[(index)].songNumber;
+                    String title = widget.musicList.foundItems[(index)].title;
+                    String singer = widget.musicList.foundItems[(index)].singer;
+                    // int pitchNum =
+                    //     widget.musicList.foundItems[(index)].pitchNum;
 
                     return Container(
                       margin: EdgeInsets.fromLTRB(
@@ -181,36 +179,8 @@ class _NoteSearchListState extends State<NoteSearchList> {
                                             0) ...[
                                           Row(
                                             children: [
-                                              ClipRRect(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(8)),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: kPrimaryGreyColor,
-                                                  ),
-                                                  padding: EdgeInsets.all(3),
-                                                  child: Text(
-                                                    "최고음",
-                                                    style: TextStyle(
-                                                      color: kPrimaryWhiteColor,
-                                                      fontSize:
-                                                          defaultSize * 0.8,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
                                               SizedBox(
                                                   width: defaultSize * 0.3),
-                                              Text(
-                                                pitchNumToString[pitchNum],
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: defaultSize * 1.2,
-                                                  color: kPrimaryWhiteColor,
-                                                ),
-                                              ),
                                             ],
                                           )
                                         ],
