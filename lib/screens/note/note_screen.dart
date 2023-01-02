@@ -349,6 +349,7 @@ class _NoteScreenState extends State<NoteScreen> {
                         backgroundColor: Colors.transparent,
                         child: SvgPicture.asset('assets/icons/addButton.svg'),
                         onPressed: () {
+                          Provider.of<MusicSearchItemLists>(context, listen: false).initChart();
                           Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
                           Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
                           Future.delayed(Duration.zero, () {
