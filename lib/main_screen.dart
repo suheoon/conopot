@@ -283,6 +283,8 @@ class _MainScreenState extends State<MainScreen>
                           .refresh();
                     }
                     if (index == 0) {
+                      Provider.of<MusicSearchItemLists>(context, listen: false)
+                          .changeTabIndex(index: 1);
                       Provider.of<YoutubePlayerProvider>(context, listen: false)
                           .isHomeTab = true;
                       Provider.of<YoutubePlayerProvider>(context, listen: false)
