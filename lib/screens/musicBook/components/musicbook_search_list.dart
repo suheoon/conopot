@@ -265,7 +265,7 @@ class _SearchListState extends State<SearchList> {
                     },
                     child: Container(
                       margin: EdgeInsets.fromLTRB(
-                          defaultSize, 0, defaultSize, defaultSize),
+                          defaultSize, 0, defaultSize, defaultSize * 0.5),
                       padding: EdgeInsets.all(defaultSize * 1.5),
                       decoration: BoxDecoration(
                           color: kPrimaryLightBlackColor,
