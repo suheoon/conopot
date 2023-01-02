@@ -654,6 +654,9 @@ class MusicSearchItemLists extends ChangeNotifier {
       }
     }
     foundItems = results;
+    if (enteredLyricKeyword.isEmpty) {
+      foundItems = tjChartSongList;
+    }
 
     //!event : 일반_검색_뷰__검색_키워드
     Analytics_config().event('일반_검색_뷰__검색_키워드', {'검색_키워드': enteredKeyword});
