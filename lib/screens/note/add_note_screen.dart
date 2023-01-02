@@ -77,7 +77,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
           ) =>
               Column(
             children: [
-              NoteSearchBar(musicList: musicList),
+              SearchBar(musicList: musicList),
               NoteSearchList(musicList: musicList),
             ],
           ),
