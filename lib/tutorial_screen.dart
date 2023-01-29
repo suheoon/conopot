@@ -118,7 +118,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => TutorialAddNoteScreen()));
+                            builder: (context) => MainScreen()));
                   },
                   child: Container(
                     width: SizeConfig.screenWidth,
