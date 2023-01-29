@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:conopot/base_widget.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
@@ -21,6 +22,7 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
+  HttpOverrides.global = NoCheckCertificateHttpOverrides(); 
   await Analytics_config().init();
   await dotenv.load(fileName: "assets/config/.env");
   MobileAds.instance.initialize().then((initializationStatus) {
@@ -49,6 +51,16 @@ Future<void> main() async {
         FirebaseCrashlytics.instance.recordError(error, stack, fatal: true),
   );
 }
+
+class NoCheckCertificateHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = 
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

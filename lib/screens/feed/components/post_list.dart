@@ -351,8 +351,10 @@ class _PostListViewState extends State<PostListView>
       }
     } on SocketException catch (e) {
       // 에러처리 (인터넷 연결 등등)
+      print(e);
       EasyLoading.showToast("인터넷 연결을 확인해주세요.");
     } on Exception catch (e) {
+      print(e);
       EasyLoading.showToast("인터넷 연결을 확인해주세요.");
     }
   }
