@@ -77,6 +77,7 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   //유저 음악 버전 체크 (true: 최신버전, false: 버전 업데이트 필요)
   Future<int> checkVersionUpdate() async {
+    print("test start");
     //사용자의 music file 버전을 가져온다.
     String? userVersionStr = await storage.read(key: 'userVersion');
 
@@ -89,10 +90,11 @@ class MusicSearchItemLists extends ChangeNotifier {
     );
 
     int s3Version = int.parse(response.body);
+    await fileUpdate();
 
     //버전 정보가 없는 첫 설치 이용자라면 -> 파일 내려받기
     if (userVersionStr == null) {
-      //print("신규 사용자");
+      print("신규 사용자");
       await fileUpdate();
       storage.write(key: 'userVersion', value: s3Version.toString());
     } else {
@@ -110,25 +112,20 @@ class MusicSearchItemLists extends ChangeNotifier {
     return 1;
   }
 
-  // Download the ZIP file using the HTTP library //
+  // Download the file using the HTTP library //
   Future<File> _downloadFile(String url, String fileName) async {
-    //print("download file in");
     var req = await http.Client().get(Uri.parse(url));
     var file = File('$dir/$fileName');
-    //print(file.path);
+
     return file.writeAsBytes(req.bodyBytes);
   }
 
   unarchiveAndSave(var zippedFile) async {
-    //print("unarchiveAndSave in");
-
     var bytes = zippedFile.readAsBytesSync();
     var archive = ZipDecoder().decodeBytes(bytes);
 
-    //print(archive);
     for (var file in archive) {
       var fileName = '$dir/${file.name}';
-      //print(fileName);
       if (file.isFile) {
         var outFile = File(fileName);
         outFile = await outFile.create(recursive: true);
@@ -138,27 +135,28 @@ class MusicSearchItemLists extends ChangeNotifier {
   }
 
   fileUpdate() async {
-    //print("fileUpdate in");
-    final doc = await _localDirectory;
+    // aws cloud front url (Musics.zip in S3)
+    print("test file update");
+    String musicZipFileUrl = "https://d26jfubr2fa7sp.cloudfront.net/Musics.zip";
+    String youtubeTxtFileUrl = "https://d2roillo3z37rm.cloudfront.net/youtube_Url.txt";
 
-    //aws cloud front url (Musics.zip in S3)
-    String url = "https://d26jfubr2fa7sp.cloudfront.net/Musics.zip";
-
-    //zip file download
-    var zippedFile = await _downloadFile(url, "Musics.zip");
+    // zip file download
+    var zippedFile = await _downloadFile(musicZipFileUrl, "Musics.zip");
+    // txt file download
+    var txtFile = await _downloadFile(youtubeTxtFileUrl, "youtube_Url.txt");
 
     //unzip and save in path provider(device storage)
     await unarchiveAndSave(zippedFile);
   }
 
-  //측정 결과 페이지 (유저의 최고음이 바뀐 경우)
+  // 측정 결과 페이지 (유저의 최고음이 바뀐 경우)
   void changeUserPitch({required int pitch}) {
     userPitch = pitch;
     userMaxPitch = pitch;
     notifyListeners();
   }
 
-  //유저가 노트 세팅을 바꿨을 때
+  // 유저가 노트 세팅을 바꿨을 때
   void changeUserNoteSetting(int settingNum) {
     userNoteSetting = settingNum;
     storage.write(key: 'userNoteSetting', value: settingNum.toString());
@@ -219,6 +217,10 @@ class MusicSearchItemLists extends ChangeNotifier {
     return await rootBundle.loadString('assets/musics/matching_Musics.txt');
   }
 
+  Future<String> firstSessionGetYoutubeUrl() async {
+    return await rootBundle.loadString('assets/musics/youtube_Url.txt');
+  }
+
   //리소스 업데이트 코드 (개발 완료되면 풀 것)
   Future<String> getTJMusics() async {
     final file = File('$dir/musicbook_TJ.txt');
@@ -247,6 +249,11 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   Future<String> getCombinedMusics() async {
     final file = File('$dir/matching_Musics.txt');
+    return file.readAsString();
+  }
+
+  Future<String> getYoutubeUrl() async {
+    final file = File('$dir/youtube_Url.txt');
     return file.readAsString();
   }
 
@@ -289,7 +296,7 @@ class MusicSearchItemLists extends ChangeNotifier {
   void init(bool firstSession) async {
     // youtube url 로드
     String youtubeURLString =
-        await rootBundle.loadString('assets/musics/youtube_Url.txt');
+        (firstSession) ? await firstSessionGetYoutubeUrl() : await getYoutubeUrl();
     // youtube url 파싱
     LineSplitter ls = new LineSplitter();
     List<String> youtubeURLArray = ls.convert(youtubeURLString);
