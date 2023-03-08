@@ -89,7 +89,7 @@ class MusicSearchItemLists extends ChangeNotifier {
     );
 
     int s3Version = int.parse(response.body);
-    await fileUpdate();
+    
 
     //버전 정보가 없는 첫 설치 이용자라면 -> 파일 내려받기
     if (userVersionStr == null) {
@@ -247,8 +247,11 @@ class MusicSearchItemLists extends ChangeNotifier {
     return file.readAsString();
   }
 
-  Future<String> getYoutubeUrl() async {
+  Future<String?> getYoutubeUrl() async {
     final file = File('$dir/youtube_Url.txt');
+    if (!file.existsSync()) {
+      return null;
+    }
     return file.readAsString();
   }
 
@@ -290,8 +293,8 @@ class MusicSearchItemLists extends ChangeNotifier {
   // 프로그램 실행 시, 노래방 책 List 초기화 (TJ, KY txt -> List)
   void init(bool firstSession) async {
     // youtube url 로드
-    String youtubeURLString =
-        (firstSession) ? await firstSessionGetYoutubeUrl() : await getYoutubeUrl();
+    String? youtubeURLString = await getYoutubeUrl() ?? await firstSessionGetYoutubeUrl();
+
     // youtube url 파싱
     LineSplitter ls = new LineSplitter();
     List<String> youtubeURLArray = ls.convert(youtubeURLString);
