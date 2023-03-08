@@ -77,7 +77,6 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   //유저 음악 버전 체크 (true: 최신버전, false: 버전 업데이트 필요)
   Future<int> checkVersionUpdate() async {
-    print("test start");
     //사용자의 music file 버전을 가져온다.
     String? userVersionStr = await storage.read(key: 'userVersion');
 
@@ -94,18 +93,14 @@ class MusicSearchItemLists extends ChangeNotifier {
 
     //버전 정보가 없는 첫 설치 이용자라면 -> 파일 내려받기
     if (userVersionStr == null) {
-      print("신규 사용자");
       await fileUpdate();
       storage.write(key: 'userVersion', value: s3Version.toString());
     } else {
       int userVersion = int.parse(userVersionStr);
       //만약 s3에 있는 버전이 더 신 버전이라면 다운로드가 필요하다.
       if (s3Version > userVersion) {
-        //print("업데이트가 필요한 사용자");
         await fileUpdate();
         storage.write(key: 'userVersion', value: s3Version.toString());
-      } else {
-        //print("이미 업데이트된 버전을 갖고 있는 사용자");
       }
     }
 
@@ -136,14 +131,14 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   fileUpdate() async {
     // aws cloud front url (Musics.zip in S3)
-    print("test file update");
     String musicZipFileUrl = "https://d26jfubr2fa7sp.cloudfront.net/Musics.zip";
-    String youtubeTxtFileUrl = "https://d2roillo3z37rm.cloudfront.net/youtube_Url.txt";
+    // aws cloud front url (youtube_Url.txt in S3)
+    String yotubeTextFileUrl = "https://d2roillo3z37rm.cloudfront.net/youtube_Url.txt";
 
     // zip file download
     var zippedFile = await _downloadFile(musicZipFileUrl, "Musics.zip");
     // txt file download
-    var txtFile = await _downloadFile(youtubeTxtFileUrl, "youtube_Url.txt");
+    var txtFile = await _downloadFile(yotubeTextFileUrl, "youtube_Url.txt");
 
     //unzip and save in path provider(device storage)
     await unarchiveAndSave(zippedFile);
@@ -604,8 +599,6 @@ class MusicSearchItemLists extends ChangeNotifier {
                   }
                 }
               }
-
-              //print(songNumberList);
 
               //map
               Map songNumberList_map = {};
