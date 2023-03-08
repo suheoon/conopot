@@ -9,7 +9,6 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:conopot/splash/splash_screen.dart';
-import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,11 +33,6 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   KakaoSdk.init(nativeAppKey: 'c5f3c164cf6f6bc40f417898b5284a66');
-
-  FacebookAudienceNetwork.init(
-    testingId: "a77955ee-3304-4635-be65-81029b0f5201",
-    iOSAdvertiserTrackingEnabled: true,
-  );
 
   /// firebase crashlytics init
   runZonedGuarded<Future<void>>(
