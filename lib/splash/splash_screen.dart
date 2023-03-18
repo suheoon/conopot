@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
@@ -15,7 +16,6 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/recommendation_item_list.dart';
 import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:conopot/tutorial_screen.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -30,25 +30,24 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  void initYoutube() async {
-    List<Note> notes = Provider.of<NoteData>(context, listen: false).notes;
-    Map<String, String> youtubeURL =
-        Provider.of<MusicSearchItemLists>(context, listen: false).youtubeURL;
-    Provider.of<YoutubePlayerProvider>(context, listen: false)
-        .youtubeInit(notes, youtubeURL);
+
+  Future<void> init() async {
+    await Future.wait([
+      getInformation(),
+      initResource(),
+    ]);
   }
 
-  checkConnection() async {
+  Future<void> initResource() async {
     //버전이 존재하는지 체크한다.
     final storage = new FlutterSecureStorage();
     String? userVersionStr = await storage.read(key: 'userVersion');
-    //print(userVersionStr);
 
     //인터넷 연결 확인
     try {
       final result = await InternetAddress.lookup('example.com');
-      //("인터넷 연결 성공");
 
+      //("인터넷 연결 성공");
       int sessionCnt = Provider.of<MusicSearchItemLists>(context, listen: false)
           .sessionCount;
 
@@ -74,6 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
       /// 사용자 노트 초기화 (local storage)
       await Provider.of<NoteData>(context, listen: false).initNotes();
       await RecommendationItemList().initRecommendationList();
+
       initYoutube();
 
       //앱 오픈 광고
@@ -96,9 +96,8 @@ class _SplashScreenState extends State<SplashScreen> {
               context, MaterialPageRoute(builder: (context) => MainScreen()));
         }
       } else {
-        await appOpenAds(context);
+        appOpenAds(context);
       }
-      initYoutube();
     }
     //인터넷 연결이 안 되어있다면
     on SocketException {
@@ -133,7 +132,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   /// 앱 실행 시 얻어야 하는 정보들 수집
-  void init() async {
+  Future<void> getInformation() async {
     if (Platform.isIOS)
       final status =
           await AppTrackingTransparency.requestTrackingAuthorization();
@@ -157,17 +156,26 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // 적응형 광고 크기 초기화
     Provider.of<NoteData>(context, listen: false).initAdSize(context);
-
-    // Firebase FCM token
-    // var token = await FirebaseMessaging.instance.getToken();
-    // print("FCM token: ${token}");
-
-    checkConnection();
   }
 
   static final String oneSignalAppId = "3dd8ef2b-8d2b-4e05-9499-479c974fed91";
-  // onesignal 설정
-  Future<void> initOneSignal() async {
+
+  void initYoutube() {
+    List<Note> notes = Provider.of<NoteData>(context, listen: false).notes;
+    Map<String, String> youtubeURL =
+        Provider.of<MusicSearchItemLists>(context, listen: false).youtubeURL;
+    Provider.of<YoutubePlayerProvider>(context, listen: false)
+        .youtubeInit(notes, youtubeURL);
+  }
+
+  void appOpenAds(BuildContext context) {
+    AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd(context);
+    WidgetsBinding.instance.addObserver(AppLifecycleReactor(
+        appOpenAdManager: appOpenAdManager, context: context));
+  }
+
+    // onesignal 설정
+  void initOneSignal() async {
     OneSignal.shared.setAppId(oneSignalAppId);
     // 권한 허가
     OneSignal.shared
@@ -180,17 +188,11 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
-  appOpenAds(BuildContext context) async {
-    AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd(context);
-    WidgetsBinding.instance.addObserver(AppLifecycleReactor(
-        appOpenAdManager: appOpenAdManager, context: context));
-  }
-
   @override
   void initState() {
-    init();
-    initOneSignal();
     super.initState();
+    initOneSignal();
+    init();
   }
 
   @override
