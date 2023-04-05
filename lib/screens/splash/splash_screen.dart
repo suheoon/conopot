@@ -22,13 +22,25 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+
+  static final String oneSignalAppId = "3dd8ef2b-8d2b-4e05-9499-479c974fed91";
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    initOneSignal();
+    init();
+  }
+
   @override
   Widget build(BuildContext context) {
-    initOneSignal();
-    init(context);
     SizeConfig().init(context);
-
+    
     return Scaffold(
       body: Center(
         child: Column(
@@ -56,12 +68,12 @@ class SplashScreen extends StatelessWidget {
     );
   }
 
-  Future<void> init(BuildContext context) async {
-    await getInformation(context);
-    await initResource(context);
+  Future<void> init() async {
+    await getInformation();
+    await initResource();
   }
 
-  Future<void> initResource(BuildContext context) async {
+  Future<void> initResource() async {
     //버전이 존재하는지 체크한다.
     final storage = new FlutterSecureStorage();
     String? userVersionStr = await storage.read(key: 'userVersion');
@@ -155,7 +167,7 @@ class SplashScreen extends StatelessWidget {
   }
 
   /// 앱 실행 시 얻어야 하는 정보들 수집
-  Future<void> getInformation(BuildContext context) async {
+  Future<void> getInformation() async {
     if (Platform.isIOS)
       final status =
           await AppTrackingTransparency.requestTrackingAuthorization();
@@ -179,8 +191,6 @@ class SplashScreen extends StatelessWidget {
     Provider.of<NoteState>(context, listen: false).initAdSize(context);
   }
 
-  static final String oneSignalAppId = "3dd8ef2b-8d2b-4e05-9499-479c974fed91";
-
   void initYoutube(BuildContext context) {
     List<Note> notes = Provider.of<NoteState>(context, listen: false).notes;
     Map<String, String> youtubeURL =
@@ -197,7 +207,7 @@ class SplashScreen extends StatelessWidget {
 
   // onesignal 설정
   void initOneSignal() async {
-    OneSignal.shared.setAppId(oneSignalAppId);
+    OneSignal.shared.setAppId(SplashScreen.oneSignalAppId);
     // 권한 허가
     OneSignal.shared
         .promptUserForPushNotificationPermission()
