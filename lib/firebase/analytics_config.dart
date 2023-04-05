@@ -3,7 +3,6 @@ import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/firebase/firebase_options.dart';
 import 'package:conopot/models/note.dart';
 import 'package:conopot/models/pitch_item.dart';
-import 'package:conopot/models/pitch_music.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';

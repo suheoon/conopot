@@ -1,11 +1,9 @@
-import 'package:conopot/components/custom_page_route.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/youtube_player_provider.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/models/music_state.dart';
+import 'package:conopot/models/youtube_player_state.dart';
 import 'package:conopot/screens/pitch/pitch_choice.dart';
 import 'package:conopot/screens/pitch/pitch_measure.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:flutter/foundation.dart';
+import 'package:conopot/global/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -25,10 +23,11 @@ class _PitchMainScreenState extends State<PitchMainScreen> {
     SizeConfig().init(context);
     return WillPopScope(
       onWillPop: () async {
-        if (Provider.of<YoutubePlayerProvider>(context, listen: false).isHomeTab) {
-          Provider.of<YoutubePlayerProvider>(context, listen: false)
+        if (Provider.of<YoutubePlayerState>(context, listen: false)
+            .isHomeTab) {
+          Provider.of<YoutubePlayerState>(context, listen: false)
               .openPlayer();
-          Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+          Provider.of<YoutubePlayerState>(context, listen: false).refresh();
         }
         return true;
       },
@@ -41,11 +40,11 @@ class _PitchMainScreenState extends State<PitchMainScreen> {
           automaticallyImplyLeading: false,
           leading: GestureDetector(
               onTap: () {
-                if (Provider.of<YoutubePlayerProvider>(context, listen: false)
+                if (Provider.of<YoutubePlayerState>(context, listen: false)
                     .isHomeTab) {
-                  Provider.of<YoutubePlayerProvider>(context, listen: false)
+                  Provider.of<YoutubePlayerState>(context, listen: false)
                       .openPlayer();
-                  Provider.of<YoutubePlayerProvider>(context, listen: false)
+                  Provider.of<YoutubePlayerState>(context, listen: false)
                       .refresh();
                 }
                 Navigator.of(context).pop();
@@ -62,9 +61,7 @@ class _PitchMainScreenState extends State<PitchMainScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      CustomPageRoute(
-                        child: PitchMeasure(),
-                      ),
+                      MaterialPageRoute(builder: (_) => PitchMeasure()),
                     );
                   },
                   child: Center(
@@ -118,21 +115,19 @@ class _PitchMainScreenState extends State<PitchMainScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Provider.of<MusicSearchItemLists>(context, listen: false)
+                    Provider.of<MusicState>(context, listen: false)
                         .initFitch();
-                    Provider.of<MusicSearchItemLists>(context, listen: false)
+                    Provider.of<MusicState>(context, listen: false)
                             .isChecked =
                         List<bool>.filled(
-                            Provider.of<MusicSearchItemLists>(context,
+                            Provider.of<MusicState>(context,
                                     listen: false)
                                 .highestFoundItems
                                 .length,
                             false);
                     Navigator.push(
                       context,
-                      CustomPageRoute(
-                        child: PitchChoice(),
-                      ),
+                      MaterialPageRoute(builder: (_) => PitchChoice()),
                     );
                   },
                   child: Center(

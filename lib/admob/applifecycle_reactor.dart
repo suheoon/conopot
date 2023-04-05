@@ -1,4 +1,4 @@
-import 'package:conopot/app_open_ad_manager.dart';
+import 'package:conopot/admob/app_open_ad_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 

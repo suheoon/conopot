@@ -1,11 +1,11 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/debounce.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/global/debounce.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:flutter/material.dart';
 
 class MusicSearchBar extends StatefulWidget {
-  final MusicSearchItemLists musicList;
+  final MusicState musicList;
   MusicSearchBar({required this.musicList});
 
   @override

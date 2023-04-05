@@ -1,24 +1,21 @@
 import 'dart:convert';
-import 'dart:io';
+import 'package:conopot/models/user_state.dart';
 import 'package:conopot/screens/feed/song_detail_screen.dart';
-import 'package:conopot/screens/note/note_detail_screen.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:conopot/models/note.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/screens/recommend/customize_recommendation_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomizeRecommendation extends StatefulWidget {
-  late MusicSearchItemLists musicList;
+  late MusicState musicList;
   late List<Note> notes;
   CustomizeRecommendation(
       {Key? key, required this.musicList, required this.notes})
@@ -35,12 +32,12 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
   final storage = new FlutterSecureStorage();
 
   void requestCFApi() async {
-    widget.musicList.recommendRequest = true;
+    Provider.of<UserState>(context, listen: false).recommendRequest = true;
     storage.write(key: "recommendRequest", value: 'true');
     await EasyLoading.show();
     String url = 'https://recommendcf-pfenq2lbpq-du.a.run.app/recommendCF';
     List<String> musicArr =
-        Provider.of<NoteData>(context, listen: false).userMusics;
+        Provider.of<NoteState>(context, listen: false).userMusics;
     if (musicArr.length > 20) {
       // 저장한 노트수가 20개 보다 많은 경우 자르기
       musicArr = musicArr.sublist(0, 20);
@@ -103,8 +100,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                                 CustomizeRecommendationDetailScreen(
                                     musicList: widget.musicList,
                                     title: "AI 추천",
-                                    songList: Provider.of<MusicSearchItemLists>(
-                                            context,
+                                    songList: Provider.of<MusicState>(context,
                                             listen: true)
                                         .aiRecommendationList)));
                   },
@@ -129,7 +125,8 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
         ),
         SizedBox(height: defaultSize * 2),
         if (widget.notes.length < 5 &&
-            widget.musicList.recommendRequest == false) ...[
+            Provider.of<UserState>(context, listen: false).sessionCount ==
+                false) ...[
           // 저장한 노트 개수가 5개 미만일 때
           Container(
             width: double.infinity,
@@ -150,7 +147,8 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
             ),
           )
         ] else if (widget.notes.length >= 5 &&
-            widget.musicList.recommendRequest == false) ...[
+            Provider.of<UserState>(context, listen: false).sessionCount ==
+                false) ...[
           // 저장한 노트 개수가 5개 이상이지만 호출을 하지 않았을 때
           Container(
             width: double.infinity,
@@ -175,7 +173,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                     requestCFApi();
                     setState(() {});
                     //전면 광고
-                    Provider.of<NoteData>(context, listen: false)
+                    Provider.of<NoteState>(context, listen: false)
                         .aiInterstitialAd();
                   },
                   child: Container(
@@ -196,7 +194,9 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
               ],
             )),
           )
-        ] else if (widget.musicList.recommendRequest == true &&
+        ] else if (Provider.of<UserState>(context, listen: false)
+                    .recommendRequest ==
+                true &&
             widget.musicList.aiRecommendationList.isEmpty) ...[
           // api 호출을 했지만 추천을 받지 못했을 때
           Container(
@@ -290,8 +290,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                     widget.musicList.aiRecommendationList[index].tj_singer;
 
                 Set<Note> entireNote =
-                    Provider.of<MusicSearchItemLists>(context, listen: false)
-                        .entireNote;
+                    Provider.of<MusicState>(context, listen: false).entireNote;
                 Note? note;
                 for (Note e in entireNote) {
                   if (e.tj_songNumber == songNumber) {

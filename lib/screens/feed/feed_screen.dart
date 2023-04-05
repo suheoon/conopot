@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/screens/feed/components/post_list.dart';
 import 'package:conopot/screens/feed/feed_creation_screen.dart';
 import 'package:conopot/screens/feed/feed_search_screen.dart';
@@ -46,7 +46,7 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   void initState() {
     Analytics_config().feedPageView();
-    Provider.of<NoteData>(context, listen: false).isUserRewarded();
+    Provider.of<NoteState>(context, listen: false).isUserRewarded();
     _controller = ScrollController()
       ..addListener(() {
         if (_controller.position.maxScrollExtent ==
@@ -60,7 +60,7 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (Provider.of<NoteData>(context, listen: false).isUserAdRemove() ==
+    if (Provider.of<NoteState>(context, listen: false).isUserAdRemove() ==
         false) {
       _loadAd();
     }
@@ -102,7 +102,7 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 
   Widget adaptiveAdShow() {
-    return (Provider.of<NoteData>(context, listen: false).isUserAdRemove() ==
+    return (Provider.of<NoteState>(context, listen: false).isUserAdRemove() ==
             true) //리워드 효과 시
         ? SizedBox.shrink()
         //광고를 불러온 경우
@@ -116,11 +116,11 @@ class _FeedScreenState extends State<FeedScreen> {
             //광고를 불러오지 못한 경우
             : Container(
                 color: Colors.transparent,
-                width: Provider.of<NoteData>(context, listen: false)
+                width: Provider.of<NoteState>(context, listen: false)
                     .size!
                     .width
                     .toDouble(),
-                height: Provider.of<NoteData>(context, listen: false)
+                height: Provider.of<NoteState>(context, listen: false)
                     .size!
                     .height
                     .toDouble(),
@@ -150,12 +150,12 @@ class _FeedScreenState extends State<FeedScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: GestureDetector(
         onTap: () {
-          if (Provider.of<NoteData>(context, listen: false).isLogined ==
+          if (Provider.of<NoteState>(context, listen: false).isLogined ==
               false) {
             EasyLoading.showToast("로그인 이후 이용가능합니다.");
           } else {
             Analytics_config().feedViewShare();
-            Provider.of<NoteData>(context, listen: false).lists = [];
+            Provider.of<NoteState>(context, listen: false).lists = [];
             Navigator.push(
                 context, MaterialPageRoute(builder: (_) => CreateFeedScreen()));
           }

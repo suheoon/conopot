@@ -1,11 +1,9 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
 import 'package:conopot/models/music_search_item.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:conopot/models/note.dart';
-import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/feed/song_detail_screen.dart';
-import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +34,7 @@ class RecommendationDetailScreen extends StatelessWidget {
               String title = songList[index].title;
               String singer = songList[index].singer;
               Set<Note> entireNote =
-                  Provider.of<MusicSearchItemLists>(context, listen: false)
+                  Provider.of<MusicState>(context, listen: false)
                       .entireNote;
               Note? note;
               for (Note e in entireNote) {

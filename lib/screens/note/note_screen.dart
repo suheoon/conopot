@@ -1,23 +1,19 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:amplitude_flutter/identify.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/firebase_remote_config.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/note_data.dart';
-import 'package:conopot/models/youtube_player_provider.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
+import 'package:conopot/models/note_state.dart';
+import 'package:conopot/models/user_state.dart';
+import 'package:conopot/models/youtube_player_state.dart';
 import 'package:conopot/screens/note/components/banner.dart';
 import 'package:conopot/screens/note/components/edit_note_list.dart';
 import 'package:conopot/screens/note/components/empty_note_list.dart';
-import 'package:conopot/screens/note/components/memo_shape_button.dart';
 import 'package:conopot/screens/note/components/note_list.dart';
-import 'package:conopot/screens/note/components/youtube_player.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -63,7 +59,7 @@ class _NoteScreenState extends State<NoteScreen> {
 
   rewardRemainTimeCheck() async {
     rewardRemainTime =
-        await Provider.of<NoteData>(context, listen: false).userRewardedTime();
+        await Provider.of<NoteState>(context, listen: false).userRewardedTime();
   }
 
   Future<void> _dialogBuilder(BuildContext context) {
@@ -141,7 +137,7 @@ class _NoteScreenState extends State<NoteScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  Provider.of<MusicSearchItemLists>(context, listen: false)
+                  Provider.of<MusicState>(context, listen: false)
                       .initCombinedBook();
                   Navigator.of(context).pop();
                   Navigator.push(
@@ -179,14 +175,14 @@ class _NoteScreenState extends State<NoteScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
-      Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+      Provider.of<YoutubePlayerState>(context, listen: false).openPlayer();
+      Provider.of<YoutubePlayerState>(context, listen: false).refresh();
     });
-    Provider.of<NoteData>(context, listen: false).isUserRewarded();
-    isReward = Provider.of<NoteData>(context, listen: false).rewardFlag;
+    Provider.of<NoteState>(context, listen: false).isUserRewarded();
+    isReward = Provider.of<NoteState>(context, listen: false).rewardFlag;
     Analytics_config().noteViewPageViewEvent();
     _loadRewardedAd();
-    Provider.of<MusicSearchItemLists>(context, listen: false).sessionCount += 1;
+    Provider.of<UserState>(context, listen: false).sessionCount += 1;
     _events = StreamController<String>.broadcast();
     _events.add(rewardRemainTime);
     super.initState();
@@ -248,7 +244,7 @@ class _NoteScreenState extends State<NoteScreen> {
   @override
   Widget build(BuildContext context) {
     rewardRemainTimeCheck();
-    return Consumer<NoteData>(
+    return Consumer<NoteState>(
       builder: (context, noteData, child) => Scaffold(
         appBar: AppBar(
           title: Text(
@@ -302,9 +298,9 @@ class _NoteScreenState extends State<NoteScreen> {
             if (noteData.notes.isNotEmpty && _listSate == 0) ...[
               IconButton(
                   onPressed: () {
-                    Provider.of<YoutubePlayerProvider>(context, listen: false)
+                    Provider.of<YoutubePlayerState>(context, listen: false)
                         .closePlayer();
-                    Provider.of<YoutubePlayerProvider>(context, listen: false)
+                    Provider.of<YoutubePlayerState>(context, listen: false)
                         .refresh();
                     showNoteListOption(context);
                   },
@@ -313,9 +309,9 @@ class _NoteScreenState extends State<NoteScreen> {
               if (_listSate == 1) ...[
                 TextButton(
                     onPressed: () {
-                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                      Provider.of<YoutubePlayerState>(context, listen: false)
                           .openPlayer();
-                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                      Provider.of<YoutubePlayerState>(context, listen: false)
                           .refresh();
                       noteData.initEditNote();
                       setState(() {
@@ -349,11 +345,11 @@ class _NoteScreenState extends State<NoteScreen> {
                         backgroundColor: Colors.transparent,
                         child: SvgPicture.asset('assets/icons/addButton.svg'),
                         onPressed: () {
-                          Provider.of<MusicSearchItemLists>(context, listen: false).initChart();
-                          Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
-                          Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+                          Provider.of<MusicState>(context, listen: false).initChart();
+                          Provider.of<YoutubePlayerState>(context, listen: false).closePlayer();
+                          Provider.of<YoutubePlayerState>(context, listen: false).refresh();
                           Future.delayed(Duration.zero, () {
-                            Provider.of<MusicSearchItemLists>(context,
+                            Provider.of<MusicState>(context,
                                     listen: false)
                                 .initCombinedBook();
                           });
@@ -425,8 +421,8 @@ class _NoteScreenState extends State<NoteScreen> {
                                     noteData
                                         .showDeleteMultipleNoteDialog(context);
                                   }
-                                  Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
-                                  Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+                                  Provider.of<YoutubePlayerState>(context, listen: false).closePlayer();
+                                  Provider.of<YoutubePlayerState>(context, listen: false).refresh();
                                 },
                                 child: Column(
                                   children: [
@@ -458,26 +454,6 @@ class _NoteScreenState extends State<NoteScreen> {
             if (noteData.notes.isEmpty) ...[
               if (_listSate == 0) ...[
                 EmptyNoteList()
-                // 손가락 있는 버튼
-                // Expanded(
-                //   child: GestureDetector(
-                //     onTap: () {
-                //       Navigator.push(context,
-                //           MaterialPageRoute(builder: (context) {
-                //         return AddNoteScreen();
-                //       }));
-                //     },
-                //     child: Center(
-                //         child: SizedBox(
-                //       width: defaultSize * 12,
-                //       height: defaultSize * 12,
-                //       child: Image.asset(
-                //         "./assets/images/abtest.png",
-                //         fit: BoxFit.fill,
-                //       ),
-                //     )),
-                //   ),
-                // ),
               ] else if (_listSate == 1) ...[
                 Expanded(
                   child: Center(
@@ -543,10 +519,10 @@ class _NoteScreenState extends State<NoteScreen> {
                     Spacer(),
                     GestureDetector(
                         onTap: () {
-                          Provider.of<YoutubePlayerProvider>(context,
+                          Provider.of<YoutubePlayerState>(context,
                                   listen: false)
                               .openPlayer();
-                          Provider.of<YoutubePlayerProvider>(context,
+                          Provider.of<YoutubePlayerState>(context,
                                   listen: false)
                               .refresh();
                           Navigator.pop(context);
@@ -564,7 +540,7 @@ class _NoteScreenState extends State<NoteScreen> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    Provider.of<NoteData>(context, listen: false)
+                    Provider.of<NoteState>(context, listen: false)
                         .initEditNote();
                     Navigator.pop(context);
                     setState(() {
@@ -621,8 +597,8 @@ class _NoteScreenState extends State<NoteScreen> {
           );
         }).whenComplete(() {
       if (_listSate != 1) {
-        Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
-        Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+        Provider.of<YoutubePlayerState>(context, listen: false).openPlayer();
+        Provider.of<YoutubePlayerState>(context, listen: false).refresh();
       }
     });
   }
@@ -784,7 +760,7 @@ class _NoteScreenState extends State<NoteScreen> {
                         setState(() {
                           isReward = true;
                         });
-                        Provider.of<NoteData>(context, listen: false)
+                        Provider.of<NoteState>(context, listen: false)
                             .changeRewardState();
                       },
                     );

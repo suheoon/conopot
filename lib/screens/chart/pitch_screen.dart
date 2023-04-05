@@ -1,11 +1,9 @@
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:conopot/screens/chart/components/pitch_search_bar.dart';
 import 'package:conopot/screens/chart/components/pitch_search_list.dart';
 import 'package:conopot/screens/pitch/components/pitch_dropdown_option.dart';
-import 'package:conopot/config/size_config.dart';
+import 'package:conopot/global/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +21,7 @@ class _PitchScreenState extends State<PitchScreen> {
     double widthSize = SizeConfig.screenWidth / 10;
     Analytics_config().pitchMeasurePageView();
 
-    return Consumer<MusicSearchItemLists>(
+    return Consumer<MusicState>(
       builder: (
         context,
         musicList,
@@ -48,28 +46,6 @@ class _PitchScreenState extends State<PitchScreen> {
             PitchSearchBar(
               musicList: musicList,
             ),
-            // RichText(
-            //   text: TextSpan(
-            //     style: TextStyle(
-            //       fontWeight: FontWeight.bold,
-            //       fontSize: 12,
-            //     ),
-            //     children: [
-            //       TextSpan(
-            //         text: '* 음역대 측정 ',
-            //         style: TextStyle(
-            //           color: kPrimaryColor,
-            //         ),
-            //       ),
-            //       TextSpan(
-            //         text: '후 내게 맞는 노래인지 확인하세요!',
-            //         style: TextStyle(
-            //           color: kTextColor,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
             PitchDropdownOption(),
             PitchSearchList(),
           ],

@@ -1,8 +1,8 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
 import 'package:conopot/models/note.dart';
-import 'package:conopot/models/note_data.dart';
-import 'package:conopot/models/youtube_player_provider.dart';
+import 'package:conopot/models/note_state.dart';
+import 'package:conopot/models/youtube_player_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +23,7 @@ class _EditNoteListState extends State<EditNoteList> {
     double screenHieght = SizeConfig.screenHeight;
 
     return Expanded(
-      child: Consumer<NoteData>(
+      child: Consumer<NoteState>(
         builder: (context, noteData, child) {
           return Theme(
             data: ThemeData(
@@ -47,7 +47,7 @@ class _EditNoteListState extends State<EditNoteList> {
                             children: [
                               SlidableAction(
                                 onPressed: (value) {
-                                  Provider.of<NoteData>(context, listen: false)
+                                  Provider.of<NoteState>(context, listen: false)
                                       .showDeleteDialog(context, note);
                                 },
                                 backgroundColor: kPrimaryLightBlackColor,
@@ -170,8 +170,8 @@ class _EditNoteListState extends State<EditNoteList> {
                   }
                   final Note note = noteData.notes.removeAt(oldIndex);
                   noteData.notes.insert(newIndex, note);
-                  Provider.of<NoteData>(context, listen: false).reorderEvent();
-                  Provider.of<YoutubePlayerProvider>(context, listen: false)
+                  Provider.of<NoteState>(context, listen: false).reorderEvent();
+                  Provider.of<YoutubePlayerState>(context, listen: false)
                       .reorder(oldIndex, newIndex);
                 });
               },

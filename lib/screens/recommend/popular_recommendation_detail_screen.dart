@@ -1,11 +1,10 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
 import 'package:conopot/models/music_search_item.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:conopot/models/note.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/screens/feed/song_detail_screen.dart';
-import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -56,7 +55,7 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
               String songTitle = songList[index].title;
               String singer = songList[index].singer;
               Set<Note> entireNote =
-                  Provider.of<MusicSearchItemLists>(context, listen: false)
+                  Provider.of<MusicState>(context, listen: false)
                       .entireNote;
               Note? note;
               for (Note e in entireNote) {
@@ -150,7 +149,7 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
                                     builder: (context) =>
                                         SongDetailScreen(note: note!)));
                         } else {
-                          Provider.of<NoteData>(context, listen: false)
+                          Provider.of<NoteState>(context, listen: false)
                               .showAddNoteDialogWithInfo(context,
                                   isTj: false,
                                   songNumber: songNumber,

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 class Post {
   final int postId;

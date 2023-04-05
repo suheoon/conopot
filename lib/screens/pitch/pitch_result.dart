@@ -1,10 +1,10 @@
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:conopot/models/pitch_item.dart';
-import 'package:conopot/models/youtube_player_provider.dart';
+import 'package:conopot/models/youtube_player_state.dart';
 import 'package:conopot/screens/chart/components/pitch_search_list.dart';
-import 'package:conopot/config/size_config.dart';
+import 'package:conopot/global/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
@@ -34,12 +34,12 @@ class _PitchResultState extends State<PitchResult> {
     await storage.write(key: 'userPitch', value: pitchLevel.toString());
 
     Future.delayed(Duration.zero, () {
-      Provider.of<MusicSearchItemLists>(context, listen: false)
+      Provider.of<MusicState>(context, listen: false)
           .changeUserPitch(pitch: pitchLevel);
     });
 
     Future.delayed(Duration.zero, () {
-      Provider.of<MusicSearchItemLists>(context, listen: false)
+      Provider.of<MusicState>(context, listen: false)
           .initPitchMusic(pitchNum: pitchLevel);
     });
   }
@@ -50,7 +50,7 @@ class _PitchResultState extends State<PitchResult> {
 
     Analytics_config().event('음역대_측정_결과_뷰__페이지뷰', {});
 
-    return Consumer<MusicSearchItemLists>(
+    return Consumer<MusicState>(
       builder: (
         context,
         musicList,
@@ -161,11 +161,11 @@ class _PitchResultState extends State<PitchResult> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            if (Provider.of<YoutubePlayerProvider>(context, listen: false)
+            if (Provider.of<YoutubePlayerState>(context, listen: false)
                 .isHomeTab) {
-              Provider.of<YoutubePlayerProvider>(context, listen: false)
+              Provider.of<YoutubePlayerState>(context, listen: false)
                   .openPlayer();
-              Provider.of<YoutubePlayerProvider>(context, listen: false)
+              Provider.of<YoutubePlayerState>(context, listen: false)
                   .refresh();
             }
             // !event : 음역대 측정 결과뷰 - 홈화면으로 이동

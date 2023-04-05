@@ -1,13 +1,13 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/debounce.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/global/debounce.dart';
+import 'package:conopot/models/music_state.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SearchBar extends StatefulWidget {
-  final MusicSearchItemLists musicList;
+  final MusicState musicList;
   SearchBar({required this.musicList});
 
   @override
@@ -20,14 +20,13 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   void initState() {
-    Provider.of<NoteData>(context, listen: false).controller =
+    Provider.of<NoteState>(context, listen: false).controller =
         TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
-    //Provider.of<NoteData>(context, listen: false).controller.dispose();
     _debounce.dispose();
     super.dispose();
   }
@@ -35,9 +34,9 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     void _clearTextField() {
-      Provider.of<NoteData>(context, listen: false).controller.text = "";
+      Provider.of<NoteState>(context, listen: false).controller.text = "";
       widget.musicList.runFilter(
-          Provider.of<NoteData>(context, listen: false).controller.text,
+          Provider.of<NoteState>(context, listen: false).controller.text,
           widget.musicList.tabIndex,
           _dropdwonValue);
     }
@@ -78,7 +77,7 @@ class _SearchBarState extends State<SearchBar> {
           Expanded(
             child: TextField(
               controller:
-                  Provider.of<NoteData>(context, listen: false).controller,
+                  Provider.of<NoteState>(context, listen: false).controller,
               style: TextStyle(color: kPrimaryWhiteColor),
               onChanged: (text) => {
                 if (_dropdwonValue != '가사')
@@ -112,7 +111,7 @@ class _SearchBarState extends State<SearchBar> {
                   color: kPrimaryLightGreyColor,
                 ),
                 border: InputBorder.none,
-                suffixIcon: Provider.of<NoteData>(context, listen: false)
+                suffixIcon: Provider.of<NoteState>(context, listen: false)
                         .controller
                         .text
                         .isEmpty

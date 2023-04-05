@@ -1,10 +1,11 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/debounce.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:flutter/material.dart';
 
 class PitchSearchBar extends StatefulWidget {
-  final MusicSearchItemLists musicList;
+  final MusicState musicList;
   PitchSearchBar({required this.musicList});
 
   @override
@@ -14,6 +15,7 @@ class PitchSearchBar extends StatefulWidget {
 class _PitchSearchBarState extends State<PitchSearchBar> {
   TextEditingController _controller = TextEditingController();
   double defaultSize = SizeConfig.defaultSize;
+  final Debounce _debounce = Debounce(delay: Duration(milliseconds: 500));
 
   void _clearTextField() {
     _controller.text = "";
@@ -30,7 +32,11 @@ class _PitchSearchBarState extends State<PitchSearchBar> {
       child: TextField(
         style: TextStyle(color: kPrimaryWhiteColor),
         controller: _controller,
-        onChanged: (text) => {widget.musicList.runHighFitchFilter(text)},
+        onChanged: (text) => {
+          _debounce.call(() {
+            widget.musicList.runHighFitchFilter(text);
+          })
+        },
         enableInteractiveSelection: false,
         textAlign: TextAlign.left,
         textAlignVertical: TextAlignVertical.center,

@@ -1,6 +1,6 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +17,7 @@ class _PitchCheckBoxState extends State<PitchCheckBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MusicSearchItemLists>(
+    return Consumer<MusicState>(
       builder: (context, musicList, child) => Expanded(
         child: musicList.highestFoundItems.isNotEmpty
             ? ListView.builder(

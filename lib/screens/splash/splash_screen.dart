@@ -1,44 +1,67 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
-import 'package:conopot/app_open_ad_manager.dart';
-import 'package:conopot/applifecycle_reactor.dart';
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/firebase_remote_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/main_screen.dart';
-import 'package:conopot/config/size_config.dart';
+import 'package:conopot/admob/app_open_ad_manager.dart';
+import 'package:conopot/admob/applifecycle_reactor.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/firebase/firebase_remote_config.dart';
+import 'package:conopot/models/music_state.dart';
+import 'package:conopot/models/user_state.dart';
+import 'package:conopot/screens/home/home_screen.dart';
+import 'package:conopot/global/size_config.dart';
 import 'package:conopot/models/note.dart';
-import 'package:conopot/models/note_data.dart';
-import 'package:conopot/models/recommendation_item_list.dart';
-import 'package:conopot/models/youtube_player_provider.dart';
-import 'package:conopot/tutorial_screen.dart';
+import 'package:conopot/models/note_state.dart';
+import 'package:conopot/global/recommendation_item_list.dart';
+import 'package:conopot/models/youtube_player_state.dart';
+import 'package:conopot/screens/tutorial/tutorial_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-
+class SplashScreen extends StatelessWidget {
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
+  Widget build(BuildContext context) {
+    initOneSignal();
+    init(context);
+    SizeConfig().init(context);
 
-class _SplashScreenState extends State<SplashScreen> {
-
-  Future<void> init() async {
-    await Future.wait([
-      getInformation(),
-      initResource(),
-    ]);
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image(
+                image: const AssetImage('assets/images/splash.png'),
+                height: SizeConfig.screenWidth * 0.3,
+              ),
+            ),
+            SizedBox(
+              height: SizeConfig.defaultSize * 5,
+            ),
+            RepaintBoundary(
+              child: const CircularProgressIndicator(
+                color: kMainColor,
+                backgroundColor: Color(0x4DFF9A62),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
-  Future<void> initResource() async {
+  Future<void> init(BuildContext context) async {
+    await getInformation(context);
+    await initResource(context);
+  }
+
+  Future<void> initResource(BuildContext context) async {
     //버전이 존재하는지 체크한다.
     final storage = new FlutterSecureStorage();
     String? userVersionStr = await storage.read(key: 'userVersion');
@@ -48,8 +71,8 @@ class _SplashScreenState extends State<SplashScreen> {
       final result = await InternetAddress.lookup('example.com');
 
       //("인터넷 연결 성공");
-      int sessionCnt = Provider.of<MusicSearchItemLists>(context, listen: false)
-          .sessionCount;
+      int sessionCnt =
+          Provider.of<UserState>(context, listen: false).sessionCount;
 
       if (sessionCnt == 0) {
         Analytics_config().firstSessionEvent();
@@ -67,14 +90,14 @@ class _SplashScreenState extends State<SplashScreen> {
       }
 
       /// 노래방 곡 관련 초기화
-      await Provider.of<MusicSearchItemLists>(context, listen: false)
+      await Provider.of<MusicState>(context, listen: false)
           .initVersion(musicUpdateSetting, false);
 
       /// 사용자 노트 초기화 (local storage)
-      await Provider.of<NoteData>(context, listen: false).initNotes();
+      await Provider.of<NoteState>(context, listen: false).initNotes();
       await RecommendationItemList().initRecommendationList();
 
-      initYoutube();
+      initYoutube(context);
 
       //앱 오픈 광고
       //리워드, 앱 오픈 플래그가 존재하는지 체크
@@ -83,7 +106,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (sessionCnt >= 10) appOpenFlag = 'true';
 
       //존재한다면 광고 없이 넘어가기
-      if (Provider.of<NoteData>(context, listen: false).isUserAdRemove() ||
+      if (Provider.of<NoteState>(context, listen: false).isUserAdRemove() ||
           appOpenFlag == null) {
         /// 튜토리얼 전환
         String? tutorialFlag = await storage.read(key: "tutorial");
@@ -105,16 +128,16 @@ class _SplashScreenState extends State<SplashScreen> {
       if (userVersionStr == null) {
         //기존에 있는 txt 파일 사용
         //버전이 존재한다면 -> 버전 체크 없이 초기화 진행
-        await Provider.of<MusicSearchItemLists>(context, listen: false)
+        await Provider.of<MusicState>(context, listen: false)
             .initVersion(false, true);
       } else {
         //버전이 존재한다면 -> 버전 체크 없이 초기화 진행
-        await Provider.of<MusicSearchItemLists>(context, listen: false)
+        await Provider.of<MusicState>(context, listen: false)
             .initVersion(false, false);
       }
 
       /// 사용자 노트 초기화 (local storage)
-      await Provider.of<NoteData>(context, listen: false).initNotes();
+      await Provider.of<NoteState>(context, listen: false).initNotes();
       // await SizeConfig().init(context);
       await RecommendationItemList().initRecommendationList();
 
@@ -132,16 +155,15 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   /// 앱 실행 시 얻어야 하는 정보들 수집
-  Future<void> getInformation() async {
+  Future<void> getInformation(BuildContext context) async {
     if (Platform.isIOS)
       final status =
           await AppTrackingTransparency.requestTrackingAuthorization();
     await Analytics_config().init();
     // 유저 세션 체크
-    await Provider.of<MusicSearchItemLists>(context, listen: false)
-        .checkSessionCount();
+    await Provider.of<UserState>(context, listen: false).checkSessionCount();
     //Admob 전면광고 캐싱
-    await Provider.of<NoteData>(context, listen: false)
+    await Provider.of<NoteState>(context, listen: false)
         .createInterstitialAd("noteAdd");
 
     // 첫 설치 사용자라면, 로컬 스토리지를 비운다.
@@ -153,18 +175,17 @@ class _SplashScreenState extends State<SplashScreen> {
       await storage.delete(key: 'tutorial');
       prefs.setBool('first_run', false);
     }
-
     // 적응형 광고 크기 초기화
-    Provider.of<NoteData>(context, listen: false).initAdSize(context);
+    Provider.of<NoteState>(context, listen: false).initAdSize(context);
   }
 
   static final String oneSignalAppId = "3dd8ef2b-8d2b-4e05-9499-479c974fed91";
 
-  void initYoutube() {
-    List<Note> notes = Provider.of<NoteData>(context, listen: false).notes;
+  void initYoutube(BuildContext context) {
+    List<Note> notes = Provider.of<NoteState>(context, listen: false).notes;
     Map<String, String> youtubeURL =
-        Provider.of<MusicSearchItemLists>(context, listen: false).youtubeURL;
-    Provider.of<YoutubePlayerProvider>(context, listen: false)
+        Provider.of<MusicState>(context, listen: false).youtubeURL;
+    Provider.of<YoutubePlayerState>(context, listen: false)
         .youtubeInit(notes, youtubeURL);
   }
 
@@ -174,7 +195,7 @@ class _SplashScreenState extends State<SplashScreen> {
         appOpenAdManager: appOpenAdManager, context: context));
   }
 
-    // onesignal 설정
+  // onesignal 설정
   void initOneSignal() async {
     OneSignal.shared.setAppId(oneSignalAppId);
     // 권한 허가
@@ -186,40 +207,5 @@ class _SplashScreenState extends State<SplashScreen> {
         (OSNotificationReceivedEvent event) {
       event.complete(event.notification);
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    initOneSignal();
-    init();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image(
-                image: const AssetImage('assets/images/splash.png'),
-                height: SizeConfig.screenWidth * 0.3,
-              ),
-            ),
-            SizedBox(
-              height: SizeConfig.defaultSize * 5,
-            ),
-            const CircularProgressIndicator(
-              color: kMainColor,
-              backgroundColor: Color(0x4DFF9A62),
-            )
-          ],
-        ),
-      ),
-    );
   }
 }
