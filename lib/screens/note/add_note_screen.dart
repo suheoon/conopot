@@ -1,14 +1,13 @@
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/note_data.dart';
-import 'package:conopot/models/youtube_player_provider.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/models/music_state.dart';
+import 'package:conopot/models/note_state.dart';
+import 'package:conopot/models/youtube_player_state.dart';
 import 'package:conopot/screens/musicBook/components/musicbook_search_bar.dart';
 import 'package:conopot/screens/note/components/note_search_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
-import 'components/note_search_bar.dart';
 
 class AddNoteScreen extends StatefulWidget {
   const AddNoteScreen({Key? key}) : super(key: key);
@@ -30,16 +29,16 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     ToastContext().init(context);
     return WillPopScope(
       onWillPop: () async {
-        if (Provider.of<YoutubePlayerProvider>(context, listen: false)
+        if (Provider.of<YoutubePlayerState>(context, listen: false)
             .isHomeTab) {
-          Provider.of<YoutubePlayerProvider>(context, listen: false)
+          Provider.of<YoutubePlayerState>(context, listen: false)
               .youtubeInit(
-                  Provider.of<NoteData>(context, listen: false).notes,
-                  Provider.of<MusicSearchItemLists>(context, listen: false)
+                  Provider.of<NoteState>(context, listen: false).notes,
+                  Provider.of<MusicState>(context, listen: false)
                       .youtubeURL);
-          Provider.of<YoutubePlayerProvider>(context, listen: false)
+          Provider.of<YoutubePlayerState>(context, listen: false)
               .openPlayer();
-          Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+          Provider.of<YoutubePlayerState>(context, listen: false).refresh();
         }
         Navigator.of(context).pop();
         return true;
@@ -52,24 +51,24 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
           leading: BackButton(
             color: kPrimaryLightWhiteColor,
             onPressed: () {
-              if (Provider.of<YoutubePlayerProvider>(context, listen: false)
+              if (Provider.of<YoutubePlayerState>(context, listen: false)
                   .isHomeTab) {
-                Provider.of<YoutubePlayerProvider>(context, listen: false)
+                Provider.of<YoutubePlayerState>(context, listen: false)
                     .youtubeInit(
-                        Provider.of<NoteData>(context, listen: false).notes,
-                        Provider.of<MusicSearchItemLists>(context,
+                        Provider.of<NoteState>(context, listen: false).notes,
+                        Provider.of<MusicState>(context,
                                 listen: false)
                             .youtubeURL);
-                Provider.of<YoutubePlayerProvider>(context, listen: false)
+                Provider.of<YoutubePlayerState>(context, listen: false)
                     .openPlayer();
-                Provider.of<YoutubePlayerProvider>(context, listen: false)
+                Provider.of<YoutubePlayerState>(context, listen: false)
                     .refresh();
               }
               Navigator.of(context).pop();
             },
           ),
         ),
-        body: Consumer<MusicSearchItemLists>(
+        body: Consumer<MusicState>(
           builder: (
             context,
             musicList,

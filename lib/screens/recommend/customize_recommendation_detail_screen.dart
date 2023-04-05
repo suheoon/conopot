@@ -1,21 +1,17 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/firebase_remote_config.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:conopot/models/note.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/models/pitch_music.dart';
+import 'package:conopot/models/user_state.dart';
 import 'package:conopot/screens/feed/song_detail_screen.dart';
-import 'package:conopot/screens/note/note_detail_screen.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -23,7 +19,7 @@ import 'package:http/http.dart' as http;
 class CustomizeRecommendationDetailScreen extends StatefulWidget {
   late String title;
   late List<FitchMusic> songList = [];
-  late MusicSearchItemLists musicList;
+  late MusicState musicList;
 
   CustomizeRecommendationDetailScreen(
       {Key? key,
@@ -42,12 +38,12 @@ class _CustomizeRecommendationDetailScreenState
   double defaultSize = SizeConfig.defaultSize;
 
   void requestCFApi() async {
-    widget.musicList.recommendRequest = true;
+    Provider.of<UserState>(context, listen: false).recommendRequest = true;
     storage.write(key: "recommendRequest", value: 'true');
     await EasyLoading.show();
     String url = 'https://recommendcf-pfenq2lbpq-du.a.run.app/recommendCF';
     List<String> musicArr =
-        Provider.of<NoteData>(context, listen: false).userMusics;
+        Provider.of<NoteState>(context, listen: false).userMusics;
     if (musicArr.length > 20) {
       // 저장한 노트수가 20개 보다 많은 경우 자르기
       musicArr = musicArr.sublist(0, 20);
@@ -107,7 +103,7 @@ class _CustomizeRecommendationDetailScreenState
             onTap: () {
               //!event: 추천_뷰__AI추천_더보기
               Analytics_config().clickReAIRecommendationEvent();
-              if (Provider.of<NoteData>(context, listen: false)
+              if (Provider.of<NoteState>(context, listen: false)
                       .userMusics
                       .length <
                   5) {
@@ -117,7 +113,7 @@ class _CustomizeRecommendationDetailScreenState
                 requestCFApi();
                 setState(() {});
                 //전면 광고
-                Provider.of<NoteData>(context, listen: false)
+                Provider.of<NoteState>(context, listen: false)
                     .aiInterstitialAd();
               }
             },
@@ -144,7 +140,7 @@ class _CustomizeRecommendationDetailScreenState
             String singer = widget.songList[(index)].tj_singer;
             int pitchNum = widget.songList[(index)].pitchNum;
             Set<Note> entireNote =
-                Provider.of<MusicSearchItemLists>(context, listen: false)
+                Provider.of<MusicState>(context, listen: false)
                     .entireNote;
             Note? note;
             for (Note e in entireNote) {

@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/screens/feed/components/added_playlist.dart';
 import 'package:conopot/screens/feed/components/editing_playlist.dart';
 import 'package:flutter/material.dart';
@@ -80,14 +80,14 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                 onPressed: () async {
                   if (_listName.isEmpty) {
                     EasyLoading.showToast("리스트명을 입력해주세요");
-                  } else if (Provider.of<NoteData>(context, listen: false)
+                  } else if (Provider.of<NoteState>(context, listen: false)
                           .lists
                           .length <
                       3) {
                     EasyLoading.showToast("노래를 세곡 이상 추가해주세요");
                   } else {
                     List<String> songList =
-                        Provider.of<NoteData>(context, listen: false)
+                        Provider.of<NoteState>(context, listen: false)
                             .lists
                             .map((e) => e.tj_songNumber)
                             .toList();
@@ -105,13 +105,13 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                           "postIconId": _emotionIndex,
                           "postSubscription": _explanation,
                           "postAuthorId":
-                              Provider.of<NoteData>(context, listen: false)
+                              Provider.of<NoteState>(context, listen: false)
                                   .userId,
                           "postMusicList": jsonEncode(songList)
                         }),
                       );
                       int userId =
-                          Provider.of<NoteData>(context, listen: false).userId;
+                          Provider.of<NoteState>(context, listen: false).userId;
                       String externalUserId = userId.toString();
                       // 플레이리스트 공유 완료 후 userId를 externalUserId로 지정
                       if (userId != 0) {
@@ -329,11 +329,11 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                             fontWeight: FontWeight.w500)),
                     SizedBox(width: defaultSize * 0.5),
                     Text(
-                        '${Provider.of<NoteData>(context, listen: false).lists.length}곡',
+                        '${Provider.of<NoteState>(context, listen: false).lists.length}곡',
                         style: TextStyle(
                             color: kMainColor, fontSize: defaultSize * 1.3)),
                     Spacer(),
-                    if (Provider.of<NoteData>(context, listen: true)
+                    if (Provider.of<NoteState>(context, listen: true)
                             .lists
                             .isNotEmpty ||
                         _isListEditting == true)

@@ -1,6 +1,6 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,8 +10,8 @@ class EtcScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
-    var loginState = Provider.of<NoteData>(context, listen: true).isLogined;
-    var backUpDate = Provider.of<NoteData>(context, listen: true).backUpDate;
+    var loginState = Provider.of<NoteState>(context, listen: true).isLogined;
+    var backUpDate = Provider.of<NoteState>(context, listen: true).backUpDate;
     return Scaffold(
       appBar: AppBar(
         title: Text("기타", style: TextStyle(color: kPrimaryWhiteColor)),
@@ -26,7 +26,7 @@ class EtcScreen extends StatelessWidget {
             (loginState == true)
                 ? InkWell(
                     onTap: () {
-                      Provider.of<NoteData>(context, listen: false)
+                      Provider.of<NoteState>(context, listen: false)
                           .showAccountDialog(context, "logout");
                     },
                     splashColor: Colors.transparent,
@@ -51,7 +51,7 @@ class EtcScreen extends StatelessWidget {
             (loginState == true)
                 ? InkWell(
                     onTap: () {
-                      Provider.of<NoteData>(context, listen: false)
+                      Provider.of<NoteState>(context, listen: false)
                           .showAccountDialog(context, "delete");
                     },
                     splashColor: Colors.transparent,

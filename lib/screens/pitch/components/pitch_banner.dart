@@ -1,7 +1,6 @@
-import 'package:conopot/components/custom_page_route.dart';
+import 'package:conopot/global/size_config.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/pitch/pitch_result.dart';
-import 'package:conopot/config/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -67,9 +66,9 @@ class PitchBanner extends StatelessWidget {
                             //local storage? or 최종결과 page route
                             Navigator.push(
                               context,
-                              CustomPageRoute(
-                                child: PitchResult(fitchLevel: fitchItem.id),
-                              ),
+                              MaterialPageRoute(
+                                  builder: (_) =>
+                                      PitchResult(fitchLevel: fitchItem.id)),
                             );
                           },
                           child: Text(

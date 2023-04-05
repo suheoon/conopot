@@ -1,16 +1,15 @@
 import 'dart:async';
 
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:conopot/models/note.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/models/pitch_item.dart';
-import 'package:conopot/models/youtube_player_provider.dart';
+import 'package:conopot/models/youtube_player_state.dart';
 import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
@@ -60,7 +59,7 @@ class _NoteListState extends State<NoteList> {
     double screenHieght = SizeConfig.screenHeight;
 
     return Expanded(
-      child: Consumer<NoteData>(
+      child: Consumer<NoteState>(
         builder: (context, noteData, child) {
           return Theme(
             data: ThemeData(
@@ -84,7 +83,7 @@ class _NoteListState extends State<NoteList> {
                             children: [
                               SlidableAction(
                                 onPressed: (value) {
-                                  Provider.of<NoteData>(context, listen: false)
+                                  Provider.of<NoteState>(context, listen: false)
                                       .showDeleteDialog(context, note);
                                 },
                                 backgroundColor: kPrimaryLightBlackColor,
@@ -96,17 +95,17 @@ class _NoteListState extends State<NoteList> {
                             ]),
                         child: GestureDetector(
                           onTap: () {
-                            Provider.of<YoutubePlayerProvider>(context,
+                            Provider.of<YoutubePlayerState>(context,
                                     listen: false)
                                 .openPlayer();
-                            Provider.of<YoutubePlayerProvider>(context,
+                            Provider.of<YoutubePlayerState>(context,
                                     listen: false)
                                 .refresh();
-                            Provider.of<YoutubePlayerProvider>(context,
+                            Provider.of<YoutubePlayerState>(context,
                                     listen: false)
                                 .enterNoteDetailScreen(
                                     noteData.notes.indexOf(note));
-                            Provider.of<YoutubePlayerProvider>(context,
+                            Provider.of<YoutubePlayerState>(context,
                                     listen: false)
                                 .changePlayingIndex(
                                     noteData.notes.indexOf(note));
@@ -143,12 +142,12 @@ class _NoteListState extends State<NoteList> {
                                       width: defaultSize * 5,
                                       child: Center(
                                         child: _userSettingInfo(
-                                            Provider.of<MusicSearchItemLists>(
+                                            Provider.of<NoteState>(
                                                     context,
                                                     listen: true)
                                                 .userNoteSetting,
                                             note,
-                                            Provider.of<MusicSearchItemLists>(
+                                            Provider.of<MusicState>(
                                                     context,
                                                     listen: true)
                                                 .userMaxPitch),
@@ -233,19 +232,19 @@ class _NoteListState extends State<NoteList> {
                   }
                   final Note note = noteData.notes.removeAt(oldIndex);
                   noteData.notes.insert(newIndex, note);
-                  Provider.of<YoutubePlayerProvider>(context, listen: false)
+                  Provider.of<YoutubePlayerState>(context, listen: false)
                       .reorder(oldIndex, newIndex);
-                  Provider.of<YoutubePlayerProvider>(context, listen: false)
+                  Provider.of<YoutubePlayerState>(context, listen: false)
                       .closePlayer();
-                  Provider.of<YoutubePlayerProvider>(context, listen: false)
+                  Provider.of<YoutubePlayerState>(context, listen: false)
                       .refresh();
                   Timer(Duration(microseconds: 500), () {
-                    Provider.of<YoutubePlayerProvider>(context, listen: false)
+                    Provider.of<YoutubePlayerState>(context, listen: false)
                         .openPlayer();
-                    Provider.of<YoutubePlayerProvider>(context, listen: false)
+                    Provider.of<YoutubePlayerState>(context, listen: false)
                         .refresh();
                   });
-                  Provider.of<NoteData>(context, listen: false).reorderEvent();
+                  Provider.of<NoteState>(context, listen: false).reorderEvent();
                 });
               },
             ),

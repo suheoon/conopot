@@ -1,17 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
 import 'package:conopot/models/lyric.dart';
 import 'package:conopot/models/music_search_item.dart';
 import 'package:conopot/models/note.dart';
-import 'package:conopot/config/size_config.dart';
+import 'package:conopot/global/size_config.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/music_state.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/models/pitch_item.dart';
-import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:conopot/screens/note/components/note_comment.dart';
 import 'package:conopot/screens/note/components/request_pitch_button.dart';
 import 'package:conopot/screens/note/components/song_by_same_singer_list.dart';
@@ -172,10 +171,10 @@ class _SongDetailScreenState extends State<SongDetailScreen>
 
   @override
   void initState() {
-    Provider.of<NoteData>(context, listen: false).isUserRewarded();
-    reward = Provider.of<NoteData>(context, listen: false).rewardFlag;
+    Provider.of<NoteState>(context, listen: false).isUserRewarded();
+    reward = Provider.of<NoteState>(context, listen: false).rewardFlag;
     _interstitialAd = createInterstitialAd();
-    videoId = Provider.of<MusicSearchItemLists>(context, listen: false)
+    videoId = Provider.of<MusicState>(context, listen: false)
         .youtubeURL[widget.note.tj_songNumber];
     if (videoId == null) {
       getLyrics(widget.note.tj_songNumber);
@@ -202,7 +201,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
     ToastContext().init(context);
     double defaultSize = SizeConfig.defaultSize;
     double screenWidth = SizeConfig.screenWidth;
-    provider = Provider.of<NoteData>(context, listen: false);
+    provider = Provider.of<NoteState>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -216,7 +215,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
           actions: [
             TextButton(
                 onPressed: () {
-                  Provider.of<NoteData>(context, listen: false)
+                  Provider.of<NoteState>(context, listen: false)
                       .showAddNoteDialog(context, widget.note.tj_songNumber,
                           widget.note.tj_title);
                 },
@@ -925,10 +924,10 @@ class _SongDetailScreenState extends State<SongDetailScreen>
     double defaultSize = SizeConfig.defaultSize;
     //!event: 곡 상세정보 뷰 - 금영 검색
     Analytics_config().noteDetailViewFindKY(widget.note.tj_songNumber);
-    Provider.of<MusicSearchItemLists>(context, listen: false)
+    Provider.of<MusicState>(context, listen: false)
         .runKYFilter(widget.note.tj_title);
     List<MusicSearchItem> kySearchSongList =
-        Provider.of<MusicSearchItemLists>(context, listen: false).foundItems;
+        Provider.of<MusicState>(context, listen: false).foundItems;
 
     showDialog(
       context: context,
@@ -983,7 +982,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                   elevation: 0,
                                   child: GestureDetector(
                                     onTap: () {
-                                      Provider.of<NoteData>(context,
+                                      Provider.of<NoteState>(context,
                                               listen: false)
                                           .editKySongNumber(
                                               widget.note,

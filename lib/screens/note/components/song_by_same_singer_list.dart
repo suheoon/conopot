@@ -1,12 +1,10 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:conopot/models/note.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/models/pitch_music.dart';
-import 'package:conopot/models/youtube_player_provider.dart';
-import 'package:conopot/screens/feed/song_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +23,7 @@ class _SongBySameSingerListState extends State<SongBySameSingerList> {
 
   @override
   void initState() {
-    list = Provider.of<MusicSearchItemLists>(context, listen: false)
+    list = Provider.of<MusicState>(context, listen: false)
         .findSongbySameSinger(widget.note.tj_singer, widget.note.tj_title);
     super.initState();
   }
@@ -65,31 +63,8 @@ class _SongBySameSingerListState extends State<SongBySameSingerList> {
                       margin: EdgeInsets.only(bottom: defaultSize * 0.5),
                       child: GestureDetector(
                         onTap: () {
-                          Provider.of<NoteData>(context, listen: false)
+                          Provider.of<NoteState>(context, listen: false)
                               .showAddNoteDialog(context, songNumber, title);
-                          // Set<Note> entireNote =
-                          //     Provider.of<MusicSearchItemLists>(context,
-                          //             listen: false)
-                          //         .entireNote;
-                          // Note? note;
-                          // for (Note e in entireNote) {
-                          //   if (e.tj_songNumber == songNumber) {
-                          //     note = e;
-                          //   }
-                          // }
-                          // Provider.of<YoutubePlayerProvider>(context,
-                          //         listen: false)
-                          //     .closePlayer();
-                          // Provider.of<YoutubePlayerProvider>(context,
-                          //         listen: false)
-                          //     .refresh();
-                          // if (note != null) {
-                          //   Navigator.push(
-                          //       context,
-                          //       MaterialPageRoute(
-                          //           builder: (context) =>
-                          //               SongDetailScreen(note: note!)));
-                          // }
                         },
                         child: Container(
                           width: defaultSize * 35.5,
@@ -191,7 +166,7 @@ class _SongBySameSingerListState extends State<SongBySameSingerList> {
                               GestureDetector(
                                 behavior: HitTestBehavior.translucent,
                                 onTap: () {
-                                  Provider.of<NoteData>(context, listen: false)
+                                  Provider.of<NoteState>(context, listen: false)
                                       .showAddNoteDialog(
                                           context, songNumber, title);
                                 },

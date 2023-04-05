@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/models/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -81,7 +81,7 @@ class _FeedReportScreenState extends State<FeedReportScreen> {
                           'Content-Type': 'application/json; charset=UTF-8',
                         },
                         body: jsonEncode({
-                          "userId": Provider.of<NoteData>(context, listen: false).userId,
+                          "userId": Provider.of<NoteState>(context, listen: false).userId,
                           "postId" : widget.post.postId,
                           "reportScript" : _text
                         }),

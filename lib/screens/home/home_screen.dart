@@ -1,16 +1,15 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/firebase_remote_config.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/note_data.dart';
-import 'package:conopot/models/youtube_player_provider.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/firebase/firebase_remote_config.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
+import 'package:conopot/models/note_state.dart';
+import 'package:conopot/models/youtube_player_state.dart';
 import 'package:conopot/screens/feed/feed_screen.dart';
 import 'package:conopot/screens/musicBook/music_book.dart';
-import 'package:conopot/screens/note/components/mini_youtube_player.dart';
 import 'package:conopot/screens/note/note_screen.dart';
 import 'package:conopot/screens/recommend/recommend_screen.dart';
 import 'package:conopot/screens/user/user_screen.dart';
@@ -20,8 +19,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-
-import 'models/note.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -58,17 +55,17 @@ class _MainScreenState extends State<MainScreen>
 
   @override
   void initState() {
-    Provider.of<YoutubePlayerProvider>(context, listen: false).timer =
+    Provider.of<YoutubePlayerState>(context, listen: false).timer =
         Timer.periodic(Duration(seconds: 1), (timer) {
-      if (Provider.of<YoutubePlayerProvider>(context, listen: false)
+      if (Provider.of<YoutubePlayerState>(context, listen: false)
           .videoList
           .isNotEmpty) {
-        Provider.of<YoutubePlayerProvider>(context, listen: false)
+        Provider.of<YoutubePlayerState>(context, listen: false)
             .checkAutoPlay();
-        Provider.of<YoutubePlayerProvider>(context, listen: false).checkState();
+        Provider.of<YoutubePlayerState>(context, listen: false).checkState();
       }
     });
-    Provider.of<NoteData>(context, listen: false).isUserRewarded();
+    Provider.of<NoteState>(context, listen: false).isUserRewarded();
     _widgetOptions = <Widget>[
       NoteScreen(),
       MusicBookScreen(),
@@ -118,7 +115,7 @@ class _MainScreenState extends State<MainScreen>
               children: [
                 // TODO: Display a banner when ready
                 if (_bannerAd != null &&
-                    Provider.of<NoteData>(context, listen: false)
+                    Provider.of<NoteState>(context, listen: false)
                             .isUserAdRemove() ==
                         false)
                   Align(
@@ -191,7 +188,7 @@ class _MainScreenState extends State<MainScreen>
         if (_selectedIndex == 0) {
           return showExitPopup(context);
         } else {
-          (Provider.of<NoteData>(context, listen: false).globalKey.currentWidget
+          (Provider.of<NoteState>(context, listen: false).globalKey.currentWidget
                   as BottomNavigationBar)
               .onTap!(0);
           return false;
@@ -209,7 +206,7 @@ class _MainScreenState extends State<MainScreen>
                             BorderSide(color: kPrimaryWhiteColor, width: 0.1))),
                 child: BottomNavigationBar(
                   type: BottomNavigationBarType.fixed,
-                  key: Provider.of<NoteData>(context, listen: false).globalKey,
+                  key: Provider.of<NoteState>(context, listen: false).globalKey,
                   selectedFontSize: defaultSize * 1.2,
                   unselectedFontSize: defaultSize * 1.2,
                   backgroundColor: kBackgroundColor,
@@ -275,26 +272,26 @@ class _MainScreenState extends State<MainScreen>
                   ],
                   onTap: (index) {
                     if (index != 0) {
-                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                      Provider.of<YoutubePlayerState>(context, listen: false)
                           .isHomeTab = false;
-                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                      Provider.of<YoutubePlayerState>(context, listen: false)
                           .closePlayer();
-                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                      Provider.of<YoutubePlayerState>(context, listen: false)
                           .refresh();
                     }
                     if (index == 0) {
-                      Provider.of<MusicSearchItemLists>(context, listen: false)
+                      Provider.of<MusicState>(context, listen: false)
                           .changeTabIndex(index: 1);
-                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                      Provider.of<YoutubePlayerState>(context, listen: false)
                           .isHomeTab = true;
-                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                      Provider.of<YoutubePlayerState>(context, listen: false)
                           .openPlayer();
-                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                      Provider.of<YoutubePlayerState>(context, listen: false)
                           .refresh();
                     }
                     // TJ탭
                     if (index == 1) {
-                      Provider.of<MusicSearchItemLists>(context, listen: false)
+                      Provider.of<MusicState>(context, listen: false)
                           .changeTabIndex(index: 1);
                     }
                     setState(() {

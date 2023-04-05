@@ -1,31 +1,31 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/screens/note/components/persistent_youtube_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
-import 'config/size_config.dart';
-import 'models/youtube_player_provider.dart';
+import 'global/size_config.dart';
+import 'models/youtube_player_state.dart';
 
-class BaseWidget extends StatefulWidget {
+class PlayerWidget extends StatefulWidget {
   final Widget child;
-  BaseWidget({required this.child});
+  PlayerWidget({required this.child});
 
   @override
-  State<BaseWidget> createState() => _BaseWidgetState();
+  State<PlayerWidget> createState() => _PlayerWidgetState();
 }
 
-class _BaseWidgetState extends State<BaseWidget> {
+class _PlayerWidgetState extends State<PlayerWidget> {
   YoutubePlayerController _controller = YoutubePlayerController();
   late var playingIndex;
 
   @override
   void initState() {
-    Provider.of<YoutubePlayerProvider>(context, listen: false).refresh =
+    Provider.of<YoutubePlayerState>(context, listen: false).refresh =
         refresh;
     _controller =
-        Provider.of<YoutubePlayerProvider>(context, listen: false).controller;
+        Provider.of<YoutubePlayerState>(context, listen: false).controller;
   }
 
   void getIndex() async {
@@ -36,13 +36,13 @@ class _BaseWidgetState extends State<BaseWidget> {
   Widget build(BuildContext context) {
     var title = "";
     var singer = "";
-    if (Provider.of<NoteData>(context, listen: false).notes.isNotEmpty) {
-      title = Provider.of<NoteData>(context, listen: false)
-          .notes[Provider.of<YoutubePlayerProvider>(context, listen: false)
+    if (Provider.of<NoteState>(context, listen: false).notes.isNotEmpty) {
+      title = Provider.of<NoteState>(context, listen: false)
+          .notes[Provider.of<YoutubePlayerState>(context, listen: false)
               .playingIndex]
           .tj_title;
-      singer = Provider.of<NoteData>(context, listen: false)
-          .notes[Provider.of<YoutubePlayerProvider>(context, listen: false)
+      singer = Provider.of<NoteState>(context, listen: false)
+          .notes[Provider.of<YoutubePlayerState>(context, listen: false)
               .playingIndex]
           .tj_singer;
     }
@@ -58,16 +58,16 @@ class _BaseWidgetState extends State<BaseWidget> {
           Column(
             children: [
               SizedBox(height: appBarHeight),
-              if (Provider.of<YoutubePlayerProvider>(context, listen: false)
+              if (Provider.of<YoutubePlayerState>(context, listen: false)
                   .isMini) ...[Spacer()],
               Visibility(
                 visible:
-                    Provider.of<YoutubePlayerProvider>(context, listen: false)
+                    Provider.of<YoutubePlayerState>(context, listen: false)
                         .isHome,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    (Provider.of<YoutubePlayerProvider>(context, listen: false)
+                    (Provider.of<YoutubePlayerState>(context, listen: false)
                             .videoList
                             .isEmpty)
                         ? Row(
@@ -95,13 +95,13 @@ class _BaseWidgetState extends State<BaseWidget> {
                           )
                         : (Stack(children: [
                             SizedBox(
-                                height: Provider.of<YoutubePlayerProvider>(
+                                height: Provider.of<YoutubePlayerState>(
                                             context,
                                             listen: true)
                                         .isMini
                                     ? defaultSize * 6
                                     : SizeConfig.defaultSize * 20,
-                                width: Provider.of<YoutubePlayerProvider>(
+                                width: Provider.of<YoutubePlayerState>(
                                             context,
                                             listen: true)
                                         .isMini
@@ -109,24 +109,6 @@ class _BaseWidgetState extends State<BaseWidget> {
                                     : SizeConfig.screenWidth,
                                 child: PersistentYoutubeVideoPlayer(
                                     controller: _controller)),
-                            // if (Provider.of<YoutubePlayerProvider>(context,
-                            //         listen: false)
-                            //     .isMini)
-                            //   AbsorbPointer(
-                            //     child: SizedBox(
-                            //       height: 6.5 * defaultSize,
-                            //       width: 10 * defaultSize,
-                            //       child: Image.network(errorBuilder:
-                            //           ((context, error, stackTrace) {
-                            //         return SizedBox(
-                            //             height: 6.5 * defaultSize,
-                            //             width: 10 * defaultSize,
-                            //             child: Image.asset(
-                            //                 "assets/images/profile.png"));
-                            //         ;
-                            //       }), "${Provider.of<YoutubePlayerProvider>(context, listen: false).getThumbnail()}"),
-                            //     ),
-                            //   )
                           ])),
                     Expanded(
                       child: Container(
@@ -136,7 +118,7 @@ class _BaseWidgetState extends State<BaseWidget> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            if (Provider.of<YoutubePlayerProvider>(context,
+                            if (Provider.of<YoutubePlayerState>(context,
                                     listen: true)
                                 .isMini) ...[
                               SizedBox(width: defaultSize),
@@ -167,19 +149,19 @@ class _BaseWidgetState extends State<BaseWidget> {
                               SizedBox(width: defaultSize),
                               GestureDetector(
                                   onTap: () {
-                                    Provider.of<YoutubePlayerProvider>(context,
+                                    Provider.of<YoutubePlayerState>(context,
                                             listen: false)
                                         .previousVideo();
                                   },
                                   child: Icon(Icons.skip_previous,
                                       color: kPrimaryWhiteColor)),
                               SizedBox(width: defaultSize),
-                              (Provider.of<YoutubePlayerProvider>(context,
+                              (Provider.of<YoutubePlayerState>(context,
                                           listen: false)
                                       .isPlaying)
                                   ? GestureDetector(
                                       onTap: () {
-                                        if (Provider.of<YoutubePlayerProvider>(
+                                        if (Provider.of<YoutubePlayerState>(
                                                 context,
                                                 listen: false)
                                             .videoList
@@ -187,12 +169,12 @@ class _BaseWidgetState extends State<BaseWidget> {
                                           EasyLoading.showToast(
                                               '재생 가능한 곡이 없습니다.');
                                         }
-                                        if (Provider.of<YoutubePlayerProvider>(
+                                        if (Provider.of<YoutubePlayerState>(
                                                 context,
                                                 listen: false)
                                             .videoList
                                             .isNotEmpty)
-                                          Provider.of<YoutubePlayerProvider>(
+                                          Provider.of<YoutubePlayerState>(
                                                   context,
                                                   listen: false)
                                               .stopVideo();
@@ -201,7 +183,7 @@ class _BaseWidgetState extends State<BaseWidget> {
                                           color: kPrimaryWhiteColor))
                                   : GestureDetector(
                                       onTap: () async {
-                                        if (Provider.of<YoutubePlayerProvider>(
+                                        if (Provider.of<YoutubePlayerState>(
                                                 context,
                                                 listen: false)
                                             .videoList
@@ -209,12 +191,12 @@ class _BaseWidgetState extends State<BaseWidget> {
                                           EasyLoading.showToast(
                                               '재생 가능한 곡이 없습니다.');
                                         }
-                                        if (Provider.of<YoutubePlayerProvider>(
+                                        if (Provider.of<YoutubePlayerState>(
                                                 context,
                                                 listen: false)
                                             .videoList
                                             .isNotEmpty)
-                                          Provider.of<YoutubePlayerProvider>(
+                                          Provider.of<YoutubePlayerState>(
                                                   context,
                                                   listen: false)
                                               .playVideo();
@@ -224,14 +206,14 @@ class _BaseWidgetState extends State<BaseWidget> {
                               SizedBox(width: defaultSize),
                               GestureDetector(
                                   onTap: () {
-                                    if (Provider.of<YoutubePlayerProvider>(
+                                    if (Provider.of<YoutubePlayerState>(
                                             context,
                                             listen: false)
                                         .videoList
                                         .isEmpty) {
                                       EasyLoading.showToast('재생 가능한 곡이 없습니다.');
                                     }
-                                    Provider.of<YoutubePlayerProvider>(context,
+                                    Provider.of<YoutubePlayerState>(context,
                                             listen: false)
                                         .nextVideo();
                                   },
@@ -240,16 +222,6 @@ class _BaseWidgetState extends State<BaseWidget> {
                                     color: kPrimaryWhiteColor,
                                   )),
                               SizedBox(width: defaultSize * 2),
-                              // GestureDetector(
-                              //     onTap: () {
-                              //       Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
-                              //       Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
-                              //     },
-                              //     child: Icon(
-                              //       Icons.close,
-                              //       color: kPrimaryWhiteColor,
-                              //     )),
-                              // SizedBox(width: defaultSize)
                             ],
                           ],
                         ),
@@ -269,7 +241,7 @@ class _BaseWidgetState extends State<BaseWidget> {
   void refresh() {
     setState(() {
       _controller =
-          Provider.of<YoutubePlayerProvider>(context, listen: false).controller;
+          Provider.of<YoutubePlayerState>(context, listen: false).controller;
     });
   }
 }

@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/models/post.dart';
 import 'package:conopot/screens/feed/feed_detail_screen.dart';
 import 'package:conopot/screens/feed/feed_screen.dart';
@@ -57,7 +57,7 @@ class _PostListViewState extends State<PostListView>
   @override
   void initState() {
     super.initState();
-    userId = Provider.of<NoteData>(context, listen: false).userId;
+    userId = Provider.of<NoteState>(context, listen: false).userId;
     _firstLoad(_option);
     _controller = ScrollController()
       ..addListener(() {

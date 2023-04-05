@@ -1,7 +1,7 @@
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/screens/recommend/components/contextual_recommendation.dart';
 import 'package:conopot/screens/recommend/components/customize_recommendation.dart';
 import 'package:conopot/screens/recommend/components/gender_recommendation.dart';
@@ -35,7 +35,7 @@ class _RecommendScreenState extends State<RecommendScreen> {
     //!evnet:  추천_뷰__페이지뷰
     Analytics_config().recommendationPageVeiwEvent;
 
-    return Consumer<MusicSearchItemLists>(
+    return Consumer<MusicState>(
       builder: (
         context,
         musicList,
@@ -54,12 +54,12 @@ class _RecommendScreenState extends State<RecommendScreen> {
               children: [
                 PitchDetectionBanner(
                   musicList: musicList,
-                  notes: Provider.of<NoteData>(context, listen: true).notes,
+                  notes: Provider.of<NoteState>(context, listen: true).notes,
                 ), // 음역대 측정하기 버튼 배너
                 SizedBox(height: defaultSize * 2),
                 CustomizeRecommendation(
                   musicList: musicList,
-                  notes: Provider.of<NoteData>(context, listen: true).notes,
+                  notes: Provider.of<NoteState>(context, listen: true).notes,
                 ), // 맞춤 추천
                 SizedBox(height: defaultSize * 2),
                 PopularSongRecommendation(), // 인기 추천

@@ -1,12 +1,13 @@
 import 'package:amplitude_flutter/identify.dart';
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/firebase_remote_config.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/main_screen.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/note_data.dart';
-import 'package:conopot/tutorial_add_note_screen.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/firebase/firebase_remote_config.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/user_state.dart';
+import 'package:conopot/screens/home/home_screen.dart';
+import 'package:conopot/models/music_state.dart';
+import 'package:conopot/models/note_state.dart';
+import 'package:conopot/screens/tutorial/tutorial_add_note_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +34,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
         Firebase_Remote_Config().remoteConfig.getString('abtest1114_modal');
     //유저 프로퍼티 설정하기
     if (abtest1114_modal != "" &&
-        Provider.of<MusicSearchItemLists>(context, listen: false)
+        Provider.of<UserState>(context, listen: false)
                 .sessionCount ==
             0) {
       Identify identify = Identify()..set('11/14 튜토리얼', abtest1114_modal);
@@ -86,7 +87,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                     Analytics_config().tutorialStart();
                     //"시작하기" 버튼 누를 시, 다음부터는 튜토리얼 화면이 뜨지 않는다.
                     await storage.write(key: 'tutorial', value: '1');
-                    if (Provider.of<NoteData>(context, listen: false)
+                    if (Provider.of<NoteState>(context, listen: false)
                         .notes
                         .isNotEmpty) {
                       Navigator.pushReplacement(
@@ -95,7 +96,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                               builder: (context) => MainScreen()));
                       return;
                     }
-                    if (Provider.of<NoteData>(context, listen: false)
+                    if (Provider.of<NoteState>(context, listen: false)
                             .notes
                             .isEmpty &&
                         abtest1114_modal == 'A') {
@@ -105,7 +106,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                               builder: (context) => MainScreen()));
                       return;
                     }
-                    if (Provider.of<NoteData>(context, listen: false)
+                    if (Provider.of<NoteState>(context, listen: false)
                             .notes
                             .isEmpty &&
                         abtest1114_modal == 'B') {

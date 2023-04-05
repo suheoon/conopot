@@ -1,8 +1,8 @@
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/youtube_player_provider.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/note_state.dart';
+import 'package:conopot/models/youtube_player_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,12 +19,12 @@ class _NoteSettingScreenState extends State<NoteSettingScreen> {
   @override
   Widget build(BuildContext context) {
     Analytics_config().settingNotePageView();
-    int choice = Provider.of<MusicSearchItemLists>(context, listen: true)
+    int choice = Provider.of<NoteState>(context, listen: true)
         .userNoteSetting;
     return WillPopScope(
       onWillPop: () async {
-        Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
-        Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+        Provider.of<YoutubePlayerState>(context, listen: false).openPlayer();
+        Provider.of<YoutubePlayerState>(context, listen: false).refresh();
         Navigator.of(context).pop();
         
         return true;
@@ -41,9 +41,9 @@ class _NoteSettingScreenState extends State<NoteSettingScreen> {
             automaticallyImplyLeading: false,
             leading: GestureDetector(
                 onTap: () {
-                  Provider.of<YoutubePlayerProvider>(context, listen: false)
+                  Provider.of<YoutubePlayerState>(context, listen: false)
                       .openPlayer();
-                  Provider.of<YoutubePlayerProvider>(context, listen: false)
+                  Provider.of<YoutubePlayerState>(context, listen: false)
                       .refresh();
                   Navigator.of(context).pop();
                 },
@@ -63,7 +63,7 @@ class _NoteSettingScreenState extends State<NoteSettingScreen> {
                           setState(() {
                             Analytics_config().settingNoteSettingItem("반주기번호");
                             choice = 0;
-                            Provider.of<MusicSearchItemLists>(context,
+                            Provider.of<NoteState>(context,
                                     listen: false)
                                 .changeUserNoteSetting(0);
                           });
@@ -168,7 +168,7 @@ class _NoteSettingScreenState extends State<NoteSettingScreen> {
                           setState(() {
                             Analytics_config().settingNoteSettingItem("최고음");
                             choice = 1;
-                            Provider.of<MusicSearchItemLists>(context,
+                            Provider.of<NoteState>(context,
                                     listen: false)
                                 .changeUserNoteSetting(1);
                           });

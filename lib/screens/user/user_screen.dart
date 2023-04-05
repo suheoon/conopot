@@ -1,12 +1,11 @@
 import 'dart:io';
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/note.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
-import 'package:conopot/screens/recommend/components/timbre_screen.dart';
+import 'package:conopot/screens/recommend/timbre_screen.dart';
 import 'package:conopot/screens/user/components/channel_talk.dart';
 import 'package:conopot/screens/user/components/notice.dart';
 import 'package:conopot/screens/user/etc_screen.dart';
@@ -16,10 +15,8 @@ import 'package:conopot/screens/user/profile_modification_screen.dart';
 import 'package:conopot/screens/user/user_liked_playlist_screen.dart';
 import 'package:conopot/screens/user/user_share_playlist_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -42,10 +39,10 @@ class _UserScreenState extends State<UserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var loginState = Provider.of<NoteData>(context, listen: true).isLogined;
-    var backUpDate = Provider.of<NoteData>(context, listen: true).backUpDate;
+    var loginState = Provider.of<NoteState>(context, listen: true).isLogined;
+    var backUpDate = Provider.of<NoteState>(context, listen: true).backUpDate;
 
-    return Consumer<MusicSearchItemLists>(
+    return Consumer<MusicState>(
         builder: (
       context,
       musicList,
@@ -84,7 +81,7 @@ class _UserScreenState extends State<UserScreen> {
                                   Text(
                                     (loginState == false)
                                         ? "로그인"
-                                        : Provider.of<NoteData>(context,
+                                        : Provider.of<NoteState>(context,
                                                 listen: true)
                                             .userNickname,
                                     style: TextStyle(
@@ -311,7 +308,7 @@ class _UserScreenState extends State<UserScreen> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                value: Provider.of<NoteData>(context,
+                                value: Provider.of<NoteState>(context,
                                         listen: false)
                                     .isSubscribed,
                                 onChanged: (bool value) async {
@@ -324,7 +321,7 @@ class _UserScreenState extends State<UserScreen> {
                                         key: 'isSubscribed', value: 'no');
                                   }
                                   setState(() {
-                                    Provider.of<NoteData>(context,
+                                    Provider.of<NoteState>(context,
                                             listen: false)
                                         .isSubscribed = value;
                                   });
@@ -466,7 +463,7 @@ class _UserScreenState extends State<UserScreen> {
     try {
       final result = await InternetAddress.lookup('example.com');
       //("인터넷 연결 성공");
-      Provider.of<NoteData>(context, listen: false).showBackupDialog(context);
+      Provider.of<NoteState>(context, listen: false).showBackupDialog(context);
     } on SocketException {
       EasyLoading.showToast("인터넷 연결 후 이용가능합니다");
     }
@@ -491,7 +488,7 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   userProfile() {
-    if (Provider.of<NoteData>(context, listen: false).userImage == "") {
+    if (Provider.of<NoteState>(context, listen: false).userImage == "") {
       // 기본 이미지
       return SizedBox(
           height: defaultSize * 4.5,
@@ -499,7 +496,7 @@ class _UserScreenState extends State<UserScreen> {
           child: Image.asset("assets/images/profile.png"));
     }
     var profileState =
-        Provider.of<NoteData>(context, listen: false).profileStatus;
+        Provider.of<NoteState>(context, listen: false).profileStatus;
     if (profileState == 0) {
       return ClipRRect(
           borderRadius: BorderRadius.circular(100),
@@ -507,7 +504,7 @@ class _UserScreenState extends State<UserScreen> {
             width: defaultSize * 5,
             height: defaultSize * 5,
             child: Image.network(
-              Provider.of<NoteData>(context, listen: false).userImage,
+              Provider.of<NoteState>(context, listen: false).userImage,
               errorBuilder: ((BuildContext context, Object? error,
                   StackTrace? stackTrace) {
                 return SizedBox(

@@ -1,8 +1,7 @@
-import 'package:conopot/config/constants.dart';
+import 'package:conopot/global/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
-///
 class PlayPauseButtonBar extends StatefulWidget {
   YoutubePlayerController controller;
   PlayPauseButtonBar({required this.controller});

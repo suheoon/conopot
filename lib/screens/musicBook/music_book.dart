@@ -1,9 +1,9 @@
 import 'dart:ui';
 
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/screens/musicBook/components/musicbook_search_bar.dart';
 import 'package:conopot/screens/musicBook/components/musicbook_search_list.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,7 @@ class _MusicBookScreenState extends State<MusicBookScreen>
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
-    return Consumer<MusicSearchItemLists>(
+    return Consumer<MusicState>(
       builder: (
         context,
         musicList,
@@ -59,10 +59,10 @@ class _MusicBookScreenState extends State<MusicBookScreen>
                     Spacer(),
                     TabBar(
                       onTap: (index) {
-                        Provider.of<MusicSearchItemLists>(context,
+                        Provider.of<MusicState>(context,
                                 listen: false)
                             .changeTabIndex(index: index + 1);
-                        Provider.of<NoteData>(context, listen: false)
+                        Provider.of<NoteState>(context, listen: false)
                             .controller
                             .text = "";
                         FocusScope.of(context).requestFocus(FocusNode());

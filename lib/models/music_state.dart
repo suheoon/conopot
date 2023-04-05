@@ -4,12 +4,11 @@ import 'dart:io';
 import 'dart:math';
 import 'package:amplitude_flutter/identify.dart';
 import 'package:archive/archive.dart';
-import 'package:conopot/config/analytics_config.dart';
+import 'package:conopot/firebase/analytics_config.dart';
 import 'package:conopot/models/note.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:conopot/models/music_search_item.dart';
-import 'package:easy_debounce/easy_debounce.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,13 +18,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
-class MusicSearchItemLists extends ChangeNotifier {
+class MusicState extends ChangeNotifier {
   List<MusicSearchItem> foundItems = [];
   List<MusicSearchItem> results = [];
   List<MusicSearchItem> tjSongList = [];
   List<MusicSearchItem> kySongList = [];
   List<MusicSearchItem> tjChartSongList = [];
   List<MusicSearchItem> kyChartSongList = [];
+  List<MusicSearchItem> initialMusicbookList = [];
   List<FitchMusic> highestSongList = [];
   List<FitchMusic> highestFoundItems = [];
   List<FitchMusic> customizeRecommendationList = [];
@@ -33,46 +33,22 @@ class MusicSearchItemLists extends ChangeNotifier {
   List<FitchMusic> highestResults = [];
   List<FitchMusic> combinedSongList = [];
   List<FitchMusic> combinedFoundItems = [];
-  List<bool> isChecked = [];
   List<FitchMusic> checkedMusics = [];
   Map<String, String> youtubeURL = {};
-  Set<Note> entireNote = new Set<Note>();
-  bool recommendRequest = false;
-  List<MusicSearchItem> initalMusicbookList = [];
+  Set<Note> entireNote = Set<Note>();
+  List<bool> isChecked = [];
 
   int tabIndex = 1; // TJ or 금영
   int userPitch = 23;
   int userMaxPitch = -1;
-  int userNoteSetting = 0; //(0: 번호, 1: 최고음, 2: 최고음 차이)
-  int sessionCount = 0;
 
   final storage = new FlutterSecureStorage();
   static var httpClient = new HttpClient();
-
   late String dir;
 
   Future<Directory> get _localDirectory async {
     final directory = await getApplicationDocumentsDirectory();
     return directory;
-  }
-
-  // 유저 세션 체크
-  checkSessionCount() async {
-    String? _sessionCount = await storage.read(key: 'sessionCount');
-    if (_sessionCount == null) {
-      await storage.write(key: 'sessionCount', value: '0');
-      sessionCount = 0;
-    } else {
-      sessionCount = int.parse(_sessionCount);
-      sessionCount += 1;
-      await storage.write(key: 'sessionCount', value: sessionCount.toString());
-    }
-    // 추천 요청 api 요청 여부
-    String? recommend = await storage.read(key: 'recommendRequest');
-    if (recommend != null) {
-      recommendRequest = true;
-    }
-    notifyListeners();
   }
 
   //유저 음악 버전 체크 (true: 최신버전, false: 버전 업데이트 필요)
@@ -148,13 +124,6 @@ class MusicSearchItemLists extends ChangeNotifier {
   void changeUserPitch({required int pitch}) {
     userPitch = pitch;
     userMaxPitch = pitch;
-    notifyListeners();
-  }
-
-  // 유저가 노트 세팅을 바꿨을 때
-  void changeUserNoteSetting(int settingNum) {
-    userNoteSetting = settingNum;
-    storage.write(key: 'userNoteSetting', value: settingNum.toString());
     notifyListeners();
   }
 
@@ -326,11 +295,6 @@ class MusicSearchItemLists extends ChangeNotifier {
         name: 'max_pitch', value: pitchNumToString[userPitch].toString());
 
     Analytics_config.analytics.identify(identify);
-
-    value = await storage.read(key: 'userNoteSetting');
-    if (value != null) {
-      userNoteSetting = int.parse(value);
-    }
 
     String TJMusics =
         (firstSession) ? await firstSessionGetTJMusics() : await getTJMusics();
@@ -506,7 +470,7 @@ class MusicSearchItemLists extends ChangeNotifier {
         );
         entireNote.add(note);
       }
-      initalMusicbookList = tjChartSongList;
+      initialMusicbookList = tjChartSongList;
     }
 
     combinedFoundItems = combinedSongList;
@@ -524,7 +488,7 @@ class MusicSearchItemLists extends ChangeNotifier {
   void changeTabIndex({required int index}) {
     tabIndex = index;
     foundItems = (index == 1) ? tjSongList : kySongList;
-    initalMusicbookList = (index == 1) ? tjChartSongList : kyChartSongList;
+    initialMusicbookList = (index == 1) ? tjChartSongList : kyChartSongList;
     notifyListeners();
   }
 
@@ -732,7 +696,6 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   // 검색 필터링 기능(인기검색)
   void runHighFitchFilter(String enteredKeyword) {
-    EasyDebounce.debounce('searching', Duration(milliseconds: 500), () {
       highestResults = List.from(highestSongList);
       //공백 제거 && 대문자 → 소문자 변경
       enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
@@ -761,7 +724,6 @@ class MusicSearchItemLists extends ChangeNotifier {
       Analytics_config().musicSearchKeywordEvent(enteredKeyword);
 
       notifyListeners();
-    });
   }
 
   void parseMusics(List<String> contents, List<MusicSearchItem> musicList) {

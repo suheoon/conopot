@@ -1,19 +1,14 @@
-import 'dart:io';
-
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/note_data.dart';
-import 'package:conopot/models/pitch_item.dart';
-import 'package:flutter/foundation.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
 class NoteSearchList extends StatefulWidget {
-  final MusicSearchItemLists musicList;
+  final MusicState musicList;
   const NoteSearchList({super.key, required this.musicList});
 
   @override
@@ -23,77 +18,14 @@ class NoteSearchList extends StatefulWidget {
 class _NoteSearchListState extends State<NoteSearchList> {
   double defaultSize = SizeConfig.defaultSize;
 
-  // bool isLoaded1 = false;
-
-  // Map<String, String> Search_Native_UNIT_ID_ODD = kReleaseMode
-  //     ? {
-  //         //release 모드일때 (실기기 사용자)
-  //         'android': 'ca-app-pub-7139143792782560/3104068385',
-  //         'ios': 'ca-app-pub-7139143792782560/5971824166',
-  //       }
-  //     : {
-  //         'android': 'ca-app-pub-3940256099942544/2247696110',
-  //         'ios': 'ca-app-pub-3940256099942544/3986624511',
-  //       };
-
-  // // Native 광고 위치
-  // static final _kAdIndex = 0;
-  // // TODO: Add a native ad instance
-  // NativeAd? _ad_odd;
-
-  // // TODO: Add _getDestinationItemIndex()
-  // int _getDestinationItemIndex(int rawIndex) {
-  //   // native 광고 index가 포함되어 있기 때문에, 그 이후 인덱스는 -1씩 줄여줘야 한다.
-  //   if (isLoaded1 == true) {
-  //     return rawIndex - 1;
-  //   }
-  //   return rawIndex;
-  // }
-
-  // Widget nativeAdWidget(int idx) {
-  //   return Container(
-  //     height: 80.0,
-  //     margin:
-  //         EdgeInsets.fromLTRB(defaultSize, 0, defaultSize, defaultSize * 0.5),
-  //     decoration: BoxDecoration(
-  //         color: kPrimaryLightBlackColor,
-  //         borderRadius: BorderRadius.all(Radius.circular(8))),
-  //     child: AdWidget(
-  //       ad: _ad_odd!,
-  //     ),
-  //   );
-  // }
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
-    // TODO: Create a NativeAd instance
-    // _ad_odd = NativeAd(
-    //   adUnitId: Search_Native_UNIT_ID_ODD[Platform.isIOS ? 'ios' : 'android']!,
-    //   factoryId: 'listTile',
-    //   request: AdRequest(),
-    //   listener: NativeAdListener(
-    //     onAdLoaded: (ad) {
-    //       setState(() {
-    //         _ad_odd = ad as NativeAd;
-    //         isLoaded1 = true;
-    //       });
-    //     },
-    //     onAdFailedToLoad: (ad, error) {
-    //       ad.dispose();
-    //       print('Ad load failed (code=${error.code} message=${error.message})');
-    //     },
-    //   ),
-    // );
-
-    // _ad_odd!.load();
   }
 
   Widget _ListView(BuildContext context) {
     return widget.musicList.foundItems.isNotEmpty
-        ? Consumer<NoteData>(
+        ? Consumer<NoteState>(
             builder: (context, notedata, child) => Expanded(
               child: ListView.builder(
                   itemCount: widget.musicList.foundItems.length,
@@ -102,19 +34,13 @@ class _NoteSearchListState extends State<NoteSearchList> {
                         widget.musicList.foundItems[(index)].songNumber;
                     String title = widget.musicList.foundItems[(index)].title;
                     String singer = widget.musicList.foundItems[(index)].singer;
-                    // int pitchNum =
-                    //     widget.musicList.foundItems[(index)].pitchNum;
-
                     return Container(
                       margin: EdgeInsets.fromLTRB(
                           defaultSize, 0, defaultSize, defaultSize * 0.5),
                       child: GestureDetector(
                         onTap: () {
-                          Provider.of<NoteData>(context, listen: false)
+                          Provider.of<NoteState>(context, listen: false)
                               .showAddNoteDialog(context, songNumber, title);
-                          //!event: 곡 추가 뷰 - 리스트 클릭 시
-                          // Analytics_config().addViewSongClickEvent(widget
-                          //     .musicList.combinedFoundItems[index].tj_title);
                         },
                         child: Container(
                           width: defaultSize * 35.5,

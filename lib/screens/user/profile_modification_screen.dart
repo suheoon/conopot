@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -32,13 +32,13 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
   @override
   void initState() {
     this._controller = TextEditingController(
-      text: Provider.of<NoteData>(context, listen: false).userNickname,
+      text: Provider.of<NoteState>(context, listen: false).userNickname,
     );
-    _originName = Provider.of<NoteData>(context, listen: false).userNickname;
+    _originName = Provider.of<NoteState>(context, listen: false).userNickname;
     _profileStatus =
-        Provider.of<NoteData>(context, listen: false).profileStatus;
+        Provider.of<NoteState>(context, listen: false).profileStatus;
     _originProfileStatus = _profileStatus;
-    _userId = Provider.of<NoteData>(context, listen: false).userId;
+    _userId = Provider.of<NoteState>(context, listen: false).userId;
     super.initState();
   }
 
@@ -63,7 +63,7 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
                         child: userProfile(),
                       )),
                   SizedBox(height: defaultSize * 1.5),
-                  if (!_isProfileEditting && Provider.of<NoteData>(context, listen: false).userImage.isNotEmpty)
+                  if (!_isProfileEditting && Provider.of<NoteState>(context, listen: false).userImage.isNotEmpty)
                     GestureDetector(
                         onTap: () {
                           setState(() {
@@ -72,7 +72,7 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
                         },
                         child: Text("프로필 아이콘 변경",
                             style: TextStyle(color: kMainColor))),
-                  if (_isProfileEditting && Provider.of<NoteData>(context, listen: false).userImage.isNotEmpty)
+                  if (_isProfileEditting && Provider.of<NoteState>(context, listen: false).userImage.isNotEmpty)
                     Column(
                       children: [
                         Row(
@@ -89,7 +89,7 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
                                     width: defaultSize * 5,
                                     height: defaultSize * 5,
                                     child: Image.network(
-                                      Provider.of<NoteData>(context,
+                                      Provider.of<NoteState>(context,
                                               listen: false)
                                           .userImage,
                                       errorBuilder:
@@ -185,7 +185,7 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
                         {"userId": _userId, "status": _profileStatus}),
                   );
                   if (response2.statusCode == 200) {
-                    Provider.of<NoteData>(context, listen: false)
+                    Provider.of<NoteState>(context, listen: false)
                         .changeProfileStatus(_profileStatus);
                     EasyLoading.showToast("프로필 수정이 완료되었습니다.");
                     Navigator.of(context).pop();
@@ -227,10 +227,10 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
                       String? jwtToken = response1.headers['authorization'];
                       //로그인 성공 시 처리
                       //로컬 스토리지에 jwt 토큰 저장
-                      Provider.of<NoteData>(context, listen: false)
+                      Provider.of<NoteState>(context, listen: false)
                           .writeJWT(jwtToken);
 
-                      Provider.of<NoteData>(context, listen: false)
+                      Provider.of<NoteState>(context, listen: false)
                           .initAccountInfo();
                     }
                     EasyLoading.showToast("프로필 수정이 완료되었습니다.");
@@ -273,10 +273,10 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
                       String? jwtToken = response1.headers['authorization'];
                       //로그인 성공 시 처리
                       //로컬 스토리지에 jwt 토큰 저장
-                      Provider.of<NoteData>(context, listen: false)
+                      Provider.of<NoteState>(context, listen: false)
                           .writeJWT(jwtToken);
 
-                      Provider.of<NoteData>(context, listen: false)
+                      Provider.of<NoteState>(context, listen: false)
                           .initAccountInfo();
                     }
                     String? serverURL = dotenv.env['USER_SERVER_URL'];
@@ -291,7 +291,7 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
 
                     if (response1.statusCode == 200 &&
                         response2.statusCode == 200) {
-                      Provider.of<NoteData>(context, listen: false)
+                      Provider.of<NoteState>(context, listen: false)
                           .changeProfileStatus(_profileStatus);
                       //변경할 수 있다면
                       EasyLoading.showToast("프로필 수정이 완료되었습니다.");
@@ -333,7 +333,7 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
   }
 
   userProfile() {
-    if (Provider.of<NoteData>(context, listen: false).userImage == "") {
+    if (Provider.of<NoteState>(context, listen: false).userImage == "") {
       // 기본 이미지
       return SizedBox(
           height: defaultSize * 10,
@@ -348,7 +348,7 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
             width: defaultSize * 10,
             height: defaultSize * 10,
             child: Image.network(
-              Provider.of<NoteData>(context, listen: false).userImage,
+              Provider.of<NoteState>(context, listen: false).userImage,
               errorBuilder: ((context, error, stackTrace) {
                 return SizedBox(
                     height: defaultSize * 10,
