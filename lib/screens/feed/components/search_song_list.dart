@@ -1,14 +1,14 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
 class SearchSongList extends StatefulWidget {
-  final MusicSearchItemLists musicList;
+  final MusicState musicList;
   const SearchSongList({super.key, required this.musicList});
 
   @override
@@ -19,7 +19,7 @@ class _SearchSongListState extends State<SearchSongList> {
   double defaultSize = SizeConfig.defaultSize;
   Widget _ListView(BuildContext context) {
     return widget.musicList.combinedFoundItems.isNotEmpty
-        ? Consumer<NoteData>(
+        ? Consumer<NoteState>(
             builder: (context, notedata, child) => Expanded(
               child: ListView.builder(
                   itemCount: widget.musicList.combinedFoundItems.length,
@@ -45,7 +45,7 @@ class _SearchSongListState extends State<SearchSongList> {
                             defaultSize, 0, defaultSize, defaultSize * 0.5),
                         child: GestureDetector(
                           onTap: () {
-                            Provider.of<NoteData>(context, listen: false)
+                            Provider.of<NoteState>(context, listen: false)
                                 .showAddListSongDialog(context, songNumber, title);
                           },
                           child: Container(

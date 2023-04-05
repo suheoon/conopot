@@ -1,9 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/note_data.dart';
-import 'package:conopot/models/youtube_player_provider.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/note_state.dart';
+import 'package:conopot/models/youtube_player_state.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
 import 'package:conopot/screens/user/invite_screen.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
@@ -57,16 +57,16 @@ class CarouselSliderBanner extends StatelessWidget {
           Analytics_config().inviteBannerClick();
           //login 여부 확인
           var loginState =
-              Provider.of<NoteData>(context, listen: false).isLogined;
+              Provider.of<NoteState>(context, listen: false).isLogined;
           //login 하지 않은 사용자라면 -> 로그인 유도
           if (loginState == false) {
             EasyLoading.showToast("로그인 후 사용 가능한 기능입니다 😄");
           }
           //login 사용자 -> 친구 초대 스크린 이동
           else {
-            Provider.of<YoutubePlayerProvider>(context, listen: false)
+            Provider.of<YoutubePlayerState>(context, listen: false)
                 .closePlayer();
-            Provider.of<YoutubePlayerProvider>(context, listen: false)
+            Provider.of<YoutubePlayerState>(context, listen: false)
                 .refresh();
             Navigator.push(
               context,
@@ -74,25 +74,25 @@ class CarouselSliderBanner extends StatelessWidget {
             );
           }
         } else if (itemIndex == 1) {
-          (Provider.of<NoteData>(context, listen: false).globalKey.currentWidget
+          (Provider.of<NoteState>(context, listen: false).globalKey.currentWidget
                   as BottomNavigationBar)
               .onTap!(3);
         } else if (itemIndex == 2) {
           Analytics_config().noteViewBannerRecommandEvent();
-          (Provider.of<NoteData>(context, listen: false).globalKey.currentWidget
+          (Provider.of<NoteState>(context, listen: false).globalKey.currentWidget
                   as BottomNavigationBar)
               .onTap!(2);
         } else {
           if (itemIndex == 3) {
-            Provider.of<YoutubePlayerProvider>(context, listen: false)
+            Provider.of<YoutubePlayerState>(context, listen: false)
                 .closePlayer();
-            Provider.of<YoutubePlayerProvider>(context, listen: false)
+            Provider.of<YoutubePlayerState>(context, listen: false)
                 .refresh();
             Analytics_config().noteViewBannerMeasureEvent();
           } else {
-            Provider.of<YoutubePlayerProvider>(context, listen: false)
+            Provider.of<YoutubePlayerState>(context, listen: false)
                 .closePlayer();
-            Provider.of<YoutubePlayerProvider>(context, listen: false)
+            Provider.of<YoutubePlayerState>(context, listen: false)
                 .refresh();
             Analytics_config().noteViewBannerNoteSettingEvent();
           }

@@ -1,16 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:conopot/models/youtube_player_provider.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
+import 'package:toast/toast.dart' as toast;
+import 'package:conopot/models/note.dart';
+import 'package:conopot/models/youtube_player_state.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:amplitude_flutter/identify.dart';
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/firebase_remote_config.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/main_screen.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/firebase/firebase_remote_config.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/screens/home/home_screen.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:conopot/screens/user/components/channel_talk.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -25,34 +27,36 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
-import 'package:toast/toast.dart' as tt;
 import 'package:url_launcher/url_launcher.dart';
-import 'note.dart';
 
-class NoteData extends ChangeNotifier {
+class NoteState extends ChangeNotifier {
   List<Note> notes = [];
   List<Note> lists = [];
   List<bool> isChecked = []; // 노트 편집 체크여부 확인
-  Set<Note> deleteSet = {}; // 노트 여러개 삭제를 위한 set
   List<String> userMusics = [];
-  bool emptyCheck = false;
-  GlobalKey globalKey = GlobalKey(); // 배너 클릭시 추천탭으로 이동시키기 위한 globalKey
+  List<bool> feedDetailCheckList = []; // 피드 노래추가 체크여부 확인
+  DateTime? _preRequestTime; // 이전 요청 시간
+  bool isOnboarding = false;
+  bool isAppOpenBanner = true; //앱 오픈 배너 로드 여부
+
+  int userNoteSetting = 0; //(0: 번호, 1: 최고음, 2: 최고음 차이)
+
   late TextEditingController controller;
   late int noteCount;
+  late DateTime _currentTime; // 현재 시간
   late bool _isSubmitted; // 리뷰 또는 채널톡 의견 제출 여부
-  late final _currentTime; // 현재 시간
-  DateTime? _preRequestTime; // 이전 요청 시간
   late bool isSubscribed; // 구독 여부
-  List<bool> feedDetailCheckList = []; // 피드 노래추가 체크여부 확인
-  Set<Note> addSet = {}; // 피드 노래 여러개 추가를 위한 set
-  bool isOnboarding = false;
-
-  bool isAppOpenBanner = true; //앱 오픈 배너 로드 여부
 
   final InAppReview _inAppReview = InAppReview.instance;
   final storage = new FlutterSecureStorage();
 
+  GlobalKey globalKey = GlobalKey(); // 배너 클릭시 추천탭으로 이동시키기 위한 globalKey
+
   bool noteAddInterstitialSetting = false;
+  bool emptyCheck = false;
+
+  Set<Note> addSet = {}; // 피드 노래 여러개 추가를 위한 set
+  Set<Note> deleteSet = {}; // 노트 여러개 삭제를 위한 set
 
   bool isLogined = false; //사용자 로그인 여부
   String userNickname = "사용자 ID";
@@ -63,7 +67,6 @@ class NoteData extends ChangeNotifier {
 
   bool userAdRemove = false;
 
-  // AdMob
   int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
   int detailDisposeCount = 0; //광고를 위해, 노트 상세정보에서 나간 횟수를 기록
 
@@ -137,15 +140,11 @@ class NoteData extends ChangeNotifier {
       return;
     }
     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (InterstitialAd ad) =>
-          print('ad onAdShowedFullScreenContent.'),
       onAdDismissedFullScreenContent: (InterstitialAd ad) {
-        // print('$ad onAdDismissedFullScreenContent.');
         ad.dispose();
         createInterstitialAd(command);
       },
       onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-        // print('$ad onAdFailedToShowFullScreenContent: $error');
         ad.dispose();
         createInterstitialAd(command);
       },
@@ -185,9 +184,13 @@ class NoteData extends ChangeNotifier {
     initSubscirbeState();
     initLoginState();
     await initAccountInfo();
-
     await isUserRewarded();
-    // Read all values
+
+    String? value = await storage.read(key: 'userNoteSetting');
+    if (value != null) {
+      userNoteSetting = int.parse(value);
+    }
+
     String? allValues = await storage.read(key: 'notes');
     if (allValues != null) {
       var noteJson = jsonDecode(allValues) as List;
@@ -242,6 +245,13 @@ class NoteData extends ChangeNotifier {
     }
   }
 
+  // 유저가 노트 세팅을 바꿨을 때
+  void changeUserNoteSetting(int settingNum) {
+    userNoteSetting = settingNum;
+    storage.write(key: 'userNoteSetting', value: settingNum.toString());
+    notifyListeners();
+  }
+
   Future<void> addNoteBySongNumber(
       BuildContext context,
       String songNumber,
@@ -288,16 +298,6 @@ class NoteData extends ChangeNotifier {
 
           await FirebaseAnalytics.instance
               .setUserProperty(name: 'noteCnt', value: notes.length.toString());
-
-          //!event: 인기 차트 - 노트 추가 이벤트
-          // Analytics_config().event('인기_차트__노트_추가_이벤트', {
-          //   '곡_이름': note.tj_title,
-          //   '가수_이름': note.tj_singer,
-          //   'TJ_번호': note.tj_songNumber,
-          //   '금영_번호': note.ky_songNumber,
-          //   '매칭_여부': (note.tj_songNumber == note.ky_songNumber),
-          //   '메모_여부': note.memo
-          // });
           Analytics_config().musicAddEvent(note.tj_title);
         } else {
           emptyCheck = true;
@@ -309,7 +309,6 @@ class NoteData extends ChangeNotifier {
 
     //Google Admob event
     noteAddCount++;
-    notifyListeners();
     noteAddInterstitialSetting = Firebase_Remote_Config()
         .remoteConfig
         .getBool('noteAddInterstitialSetting');
@@ -321,16 +320,7 @@ class NoteData extends ChangeNotifier {
       _showInterstitialAd("noteAdd");
       isOverlapping = true;
     }
-    // if (isOverlapping == false &&
-    //     (_preRequestTime == null ||
-    //         _currentTime.difference(_preRequestTime).inDays > 20) &&
-    //     !_isSubmitted &&
-    //     noteCount >= 5 &&
-    //     Provider.of<MusicSearchItemLists>(context, listen: false)
-    //             .sessionCount >=
-    //         5) {
-    //   showReviewDialog(context);
-    // }
+
     notifyListeners();
   }
 
@@ -402,21 +392,18 @@ class NoteData extends ChangeNotifier {
 
     Widget okButton = ElevatedButton(
       onPressed: () {
-        addSongBySongNumber(
-            context,
-            songNumber,
-            Provider.of<MusicSearchItemLists>(context, listen: false)
-                .combinedSongList);
+        addSongBySongNumber(context, songNumber,
+            Provider.of<MusicState>(context, listen: false).combinedSongList);
         Navigator.of(context).pop();
         Fluttertoast.cancel();
-        if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
-          tt.Toast.show("이미 리스트에 추가된 노래입니다.",
+        if (Provider.of<NoteState>(context, listen: false).emptyCheck == true) {
+          toast.Toast.show("이미 리스트에 추가된 노래입니다.",
               backgroundColor: kPrimaryGreyColor);
-          Provider.of<NoteData>(context, listen: false).initEmptyCheck();
+          Provider.of<NoteState>(context, listen: false).initEmptyCheck();
         } else {
           Analytics_config().addViewSongAddEvent(title);
           Analytics_config().musicAddEvent(title);
-          tt.Toast.show("리스트에 노래가 추가 되었습니다.",
+          toast.Toast.show("리스트에 노래가 추가 되었습니다.",
               backgroundColor: kPrimaryGreyColor);
         }
       },
@@ -486,19 +473,18 @@ class NoteData extends ChangeNotifier {
         indexToDelete = i;
       }
     }
-    Provider.of<YoutubePlayerProvider>(context, listen: false)
+    Provider.of<YoutubePlayerState>(context, listen: false)
         .removeVideoList(indexToDelete);
     if (indexToDelete <=
-        Provider.of<YoutubePlayerProvider>(context, listen: false)
-            .playingIndex) {
-      Provider.of<YoutubePlayerProvider>(context, listen: false)
+        Provider.of<YoutubePlayerState>(context, listen: false).playingIndex) {
+      Provider.of<YoutubePlayerState>(context, listen: false)
           .downPlayingIndex();
     }
 
-    Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
-    Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
-    Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
-    Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+    Provider.of<YoutubePlayerState>(context, listen: false).closePlayer();
+    Provider.of<YoutubePlayerState>(context, listen: false).refresh();
+    Provider.of<YoutubePlayerState>(context, listen: false).openPlayer();
+    Provider.of<YoutubePlayerState>(context, listen: false).refresh();
 
     await storage.write(key: 'notes', value: jsonEncode(notes));
 
@@ -542,21 +528,18 @@ class NoteData extends ChangeNotifier {
         addNoteBySongNumber(
             context,
             songNumber,
-            Provider.of<MusicSearchItemLists>(context, listen: false)
-                .combinedSongList,
-            Provider.of<YoutubePlayerProvider>(context, listen: false)
-                .videoList,
-            Provider.of<MusicSearchItemLists>(context, listen: false)
-                .youtubeURL);
+            Provider.of<MusicState>(context, listen: false).combinedSongList,
+            Provider.of<YoutubePlayerState>(context, listen: false).videoList,
+            Provider.of<MusicState>(context, listen: false).youtubeURL);
         Navigator.of(context).pop();
-        if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
-          tt.Toast.show("애창곡 노트에 이미 등록된 곡입니다.",
+        if (Provider.of<NoteState>(context, listen: false).emptyCheck == true) {
+          toast.Toast.show("애창곡 노트에 이미 등록된 곡입니다.",
               backgroundColor: kPrimaryGreyColor);
-          Provider.of<NoteData>(context, listen: false).initEmptyCheck();
+          Provider.of<NoteState>(context, listen: false).initEmptyCheck();
         } else {
           Analytics_config().addViewSongAddEvent(title);
           Analytics_config().musicAddEvent(title);
-          tt.Toast.show("애창곡 노트에 노래가 추가되었습니다.",
+          toast.Toast.show("애창곡 노트에 노래가 추가되었습니다.",
               backgroundColor: kPrimaryGreyColor);
         }
         if (isOnboarding) {
@@ -634,15 +617,12 @@ class NoteData extends ChangeNotifier {
         addNoteBySongNumber(
             context,
             songNumber,
-            Provider.of<MusicSearchItemLists>(context, listen: false)
-                .combinedSongList,
-            Provider.of<YoutubePlayerProvider>(context, listen: false)
-                .videoList,
-            Provider.of<MusicSearchItemLists>(context, listen: false)
-                .youtubeURL);
+            Provider.of<MusicState>(context, listen: false).combinedSongList,
+            Provider.of<YoutubePlayerState>(context, listen: false).videoList,
+            Provider.of<MusicState>(context, listen: false).youtubeURL);
         Navigator.of(context).pop();
         Fluttertoast.cancel();
-        if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
+        if (Provider.of<NoteState>(context, listen: false).emptyCheck == true) {
           Fluttertoast.showToast(
               msg: "이미 등록된 곡입니다 😢",
               toastLength: Toast.LENGTH_SHORT,
@@ -651,7 +631,7 @@ class NoteData extends ChangeNotifier {
               backgroundColor: Color(0xFFFF7878),
               textColor: kPrimaryWhiteColor,
               fontSize: defaultSize * 1.6);
-          Provider.of<NoteData>(context, listen: false).initEmptyCheck();
+          Provider.of<NoteState>(context, listen: false).initEmptyCheck();
         } else {
           //!event: 일반_검색_뷰__노트추가
           Analytics_config().searchViewNoteAddEvent(title);
@@ -757,10 +737,8 @@ class NoteData extends ChangeNotifier {
         deleteNote(
             context,
             note,
-            Provider.of<YoutubePlayerProvider>(context, listen: false)
-                .videoList,
-            Provider.of<MusicSearchItemLists>(context, listen: false)
-                .youtubeURL);
+            Provider.of<YoutubePlayerState>(context, listen: false).videoList,
+            Provider.of<MusicState>(context, listen: false).youtubeURL);
         Navigator.of(context).popUntil((route) => route.isFirst);
       },
       child: Text("삭제",
@@ -1319,8 +1297,7 @@ class NoteData extends ChangeNotifier {
           throw FormatException();
         }
         Set<Note> entireNote =
-            Provider.of<MusicSearchItemLists>(context, listen: false)
-                .entireNote;
+            Provider.of<MusicState>(context, listen: false).entireNote;
         for (int i = 0; i < songNumberList.length; i++) {
           Note note = entireNote.firstWhere(
               (element) => element.tj_songNumber == songNumberList[i]);
@@ -1338,9 +1315,8 @@ class NoteData extends ChangeNotifier {
         await storage.write(key: 'notes', value: jsonEncode(notes));
         EasyLoading.showToast("${songNumberList.length}개의 곡을 가져왔습니다");
       }
-      Provider.of<YoutubePlayerProvider>(context, listen: false).youtubeInit(
-          notes,
-          Provider.of<MusicSearchItemLists>(context, listen: false).youtubeURL);
+      Provider.of<YoutubePlayerState>(context, listen: false).youtubeInit(
+          notes, Provider.of<MusicState>(context, listen: false).youtubeURL);
     } on FormatException {
       // 백업된 곡이 하나도 없을 때 예외처리
       EasyLoading.showToast("백업된 곡이 없습니다.");
@@ -1563,15 +1539,14 @@ class NoteData extends ChangeNotifier {
     noteCount -= deleteSet.length;
     List<Note> temp_notes = [];
     List<String> temp_userMusics = [];
-    Provider.of<YoutubePlayerProvider>(context, listen: false)
+    Provider.of<YoutubePlayerState>(context, listen: false)
         .removeAllVideoList();
     for (int i = 0; i < notes.length; i++) {
       if (deleteSet.contains(notes[i])) continue;
       temp_notes.add(notes[i]);
       temp_userMusics.add(notes[i].tj_songNumber);
-      Provider.of<YoutubePlayerProvider>(context, listen: false).addVideoId(
-          notes[i],
-          Provider.of<MusicSearchItemLists>(context, listen: false).youtubeURL);
+      Provider.of<YoutubePlayerState>(context, listen: false).addVideoId(
+          notes[i], Provider.of<MusicState>(context, listen: false).youtubeURL);
     }
     deleteSet = {};
     notes = temp_notes;

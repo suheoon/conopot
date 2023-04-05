@@ -1,8 +1,8 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:conopot/models/note.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/screens/feed/playlist_serach_song_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +22,7 @@ class _AddedPlaylistState extends State<AddedPlaylist> {
   Widget build(BuildContext context) {
     double screenHieght = SizeConfig.screenHeight;
 
-    return Consumer<NoteData>(
+    return Consumer<NoteState>(
       builder: (context, noteData, child) {
         var items = noteData.lists.map(
           (list) {
@@ -109,7 +109,7 @@ class _AddedPlaylistState extends State<AddedPlaylist> {
               child: GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
-                  Provider.of<MusicSearchItemLists>(context, listen: false).initCombinedBook();
+                  Provider.of<MusicState>(context, listen: false).initCombinedBook();
                   Navigator.push(
                       context,
                       MaterialPageRoute(

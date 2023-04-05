@@ -1,24 +1,21 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bubble/bubble.dart';
-import 'package:conopot/components/custom_page_route.dart';
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/firebase_remote_config.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/firebase/firebase_remote_config.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/models/pitch_item.dart';
-import 'package:conopot/config/size_config.dart';
+import 'package:conopot/global/size_config.dart';
 import 'package:conopot/screens/pitch/pitch_result.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_capture/flutter_audio_capture.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pitch_detector_dart/pitch_detector.dart';
 import 'package:pitchupdart/instrument_type.dart';
@@ -115,7 +112,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
 
   @override
   void initState() {
-    Provider.of<NoteData>(context, listen: false).isUserRewarded();
+    Provider.of<NoteState>(context, listen: false).isUserRewarded();
     _interstitialAd = createInterstitialAd();
     super.initState();
     frequency = 0;
@@ -739,19 +736,19 @@ class _PitchMeasureState extends State<PitchMeasure> {
                               .getBool('pitchMeasureInterstitialSetting');
                       if (pitchMeasureInterstitialSetting == true &&
                           _interstitialAd != null &&
-                          Provider.of<NoteData>(context, listen: false)
+                          Provider.of<NoteState>(context, listen: false)
                                   .isUserAdRemove() ==
                               false) _showInterstitialAd();
 
                       //!event : 직접 음역대 측정 뷰  - 다시 측정하기
                       Analytics_config().event('직접_음역대_측정_뷰__선택_완료', {});
                       Navigator.push(
-                          context,
-                          CustomPageRoute(
-                            child: PitchResult(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => PitchResult(
                                 fitchLevel: StringToPitchNum[
-                                    selected1 + ' ' + selected2]),
-                          ));
+                                    selected1 + ' ' + selected2])),
+                      );
                     },
                     child: Container(
                       padding: EdgeInsets.all(defaultSize),

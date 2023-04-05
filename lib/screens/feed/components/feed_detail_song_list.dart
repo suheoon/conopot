@@ -1,5 +1,5 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
 import 'package:conopot/models/note.dart';
 import 'package:conopot/screens/feed/song_detail_screen.dart';
 import 'package:flutter/material.dart';

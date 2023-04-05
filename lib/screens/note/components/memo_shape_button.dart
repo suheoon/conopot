@@ -1,10 +1,8 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:conopot/screens/note/add_note_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 
 class MemoShapeButton extends StatelessWidget {
@@ -22,7 +20,7 @@ class MemoShapeButton extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(8))),
       child: GestureDetector(
         onTap: () {
-          Provider.of<MusicSearchItemLists>(context, listen: false)
+          Provider.of<MusicState>(context, listen: false)
               .initCombinedBook();
           Navigator.push(
             context,

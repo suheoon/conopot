@@ -1,13 +1,13 @@
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/screens/note/components/note_search_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
-import 'screens/note/components/note_search_bar.dart';
+import '../note/components/note_search_bar.dart';
 
 class TutorialAddNoteScreen extends StatefulWidget {
   const TutorialAddNoteScreen({Key? key}) : super(key: key);
@@ -19,7 +19,7 @@ class TutorialAddNoteScreen extends StatefulWidget {
 class _TutorialAddNoteScreenState extends State<TutorialAddNoteScreen> {
   @override
   void initState() {
-    Provider.of<NoteData>(context, listen: false).isOnboarding = true;
+    Provider.of<NoteState>(context, listen: false).isOnboarding = true;
     Analytics_config().addNotePageView();
     super.initState();
   }
@@ -30,7 +30,7 @@ class _TutorialAddNoteScreenState extends State<TutorialAddNoteScreen> {
     double defaultSize = SizeConfig.defaultSize;
     return Scaffold(
       body: SafeArea(
-        child: Consumer<MusicSearchItemLists>(
+        child: Consumer<MusicState>(
           builder: (
             context,
             musicList,

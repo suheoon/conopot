@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:conopot/base_widget.dart';
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/firebase_remote_config.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/note_data.dart';
-import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/youtube_player_provider.dart';
-import 'package:conopot/splash/splash_screen.dart';
+import 'package:conopot/models/user_state.dart';
+import 'package:conopot/player_widget.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/note_state.dart';
+import 'package:conopot/models/music_state.dart';
+import 'package:conopot/models/youtube_player_state.dart';
+import 'package:conopot/screens/splash/splash_screen.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
@@ -64,9 +64,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => MusicSearchItemLists()),
-        ChangeNotifierProvider<NoteData>(create: (context) => NoteData()),
-        ChangeNotifierProvider<YoutubePlayerProvider>(create: (context) => YoutubePlayerProvider())
+        ChangeNotifierProvider(create: (context) => MusicState()),
+        ChangeNotifierProvider<NoteState>(create: (context) => NoteState()),
+        ChangeNotifierProvider<UserState>(create: (context) => UserState()),
+        ChangeNotifierProvider<YoutubePlayerState>(create: (context) => YoutubePlayerState())
       ],
       child: GestureDetector(
         onTap: () {
@@ -81,7 +82,7 @@ class MyApp extends StatelessWidget {
               ),
               child: child,
             );
-            child = BaseWidget(child: child);
+            child = PlayerWidget(child: child);
             SizeConfig().init(context);
             return child;
           },
@@ -106,7 +107,7 @@ class MyApp extends StatelessWidget {
                     fontSize: 20,
                     fontWeight: FontWeight.w500),
               ))),
-          home: const SplashScreen(),
+          home: SplashScreen(),
           navigatorObservers: [
             FirebaseAnalyticsObserver(
                 analytics: Analytics_config.firebaseAnalytics),

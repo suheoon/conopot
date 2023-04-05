@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'package:conopot/models/note.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
-import 'note.dart';
 
-class YoutubePlayerProvider extends ChangeNotifier {
+class YoutubePlayerState extends ChangeNotifier {
   late Timer timer;
   bool isHome = false;
   bool isMini = true;

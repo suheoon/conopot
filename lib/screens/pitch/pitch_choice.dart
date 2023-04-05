@@ -1,12 +1,11 @@
-import 'package:conopot/components/custom_page_route.dart';
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:conopot/screens/chart/components/pitch_search_bar.dart';
 import 'package:conopot/screens/pitch/components/pitch_checkbox.dart';
 import 'package:conopot/screens/pitch/components/pitch_dropdown.dart';
 import 'package:conopot/screens/pitch/pitch_result.dart';
-import 'package:conopot/config/size_config.dart';
+import 'package:conopot/global/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +29,7 @@ class _PitchChoiceState extends State<PitchChoice> {
     double defaultSize = SizeConfig.defaultSize;
     bool keyboardIsOpened = MediaQuery.of(context).viewInsets.bottom != 0.0;
 
-    return Consumer<MusicSearchItemLists>(
+    return Consumer<MusicState>(
         builder: (context, musicList, child) => Container(
               child: Scaffold(
                 appBar: PreferredSize(
@@ -112,10 +111,9 @@ class _PitchChoiceState extends State<PitchChoice> {
                             {
                               Navigator.push(
                                 context,
-                                CustomPageRoute(
-                                  child: PitchResult(
-                                      fitchLevel: musicList.userMaxPitch),
-                                ),
+                                MaterialPageRoute(
+                                    builder: (_) => PitchResult(
+                                        fitchLevel: musicList.userMaxPitch)),
                               ),
                             }
                         },

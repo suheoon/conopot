@@ -1,8 +1,8 @@
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
 import 'package:conopot/models/note.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -97,7 +97,7 @@ class _EditableTextFieldState extends State<EditableTextField> {
                           setState(() {
                             initialText = _editingController.text;
                             _isEditingText = false;
-                            Provider.of<NoteData>(context, listen: false)
+                            Provider.of<NoteState>(context, listen: false)
                                 .editNote(widget.note, initialText);
                           });
                         },

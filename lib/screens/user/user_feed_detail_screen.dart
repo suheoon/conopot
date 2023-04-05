@@ -4,14 +4,14 @@ import 'package:conopot/screens/user/user_feed_edit_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:conopot/models/note.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/screens/feed/components/edit_feed_detail_song_list.dart';
 import 'package:conopot/screens/feed/components/feed_detail_song_list.dart';
 import 'package:conopot/screens/feed/feed_report_screen.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:conopot/models/post.dart';
 import 'package:conopot/screens/note/components/youtube_player.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +50,7 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
   _indexChange(int index) {
     setState(() {
       _index = index;
-      videoId = Provider.of<MusicSearchItemLists>(context, listen: false)
+      videoId = Provider.of<MusicState>(context, listen: false)
           .youtubeURL[widget.post.postMusicList[_index]];
     });
   }
@@ -67,7 +67,7 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
   void initPostList() {
     // tjSongNumber 문자열로 돼 있는 리스트를 Note 배열로 변환
     Set<Note> entireNote =
-        Provider.of<MusicSearchItemLists>(context, listen: false).entireNote;
+        Provider.of<MusicState>(context, listen: false).entireNote;
     for (int i = 0; i < widget.post.postMusicList.length; i++) {
       Note note = entireNote.firstWhere(
           (element) => element.tj_songNumber == widget.post.postMusicList[i]);
@@ -78,7 +78,7 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
 
   @override
   void initState() {
-    _userId = Provider.of<NoteData>(context, listen: false).userId;
+    _userId = Provider.of<NoteState>(context, listen: false).userId;
     getLikeInfo().then((result) {
       setState(() {
         if (result == 'true') {
@@ -88,7 +88,7 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
         }
       });
     });
-    videoId = Provider.of<MusicSearchItemLists>(context, listen: false)
+    videoId = Provider.of<MusicState>(context, listen: false)
         .youtubeURL[widget.post.postMusicList[_index]];
     super.initState();
     initPostList();
@@ -162,7 +162,7 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
                 setState(() {
                   _checkCount = 0;
                   _isEditting = true;
-                  Provider.of<NoteData>(context, listen: false)
+                  Provider.of<NoteState>(context, listen: false)
                       .initAddFeedSong(widget.post.postMusicList);
                 });
               },
@@ -213,7 +213,7 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
                                 setState(() {
                                   _checkCount = postList.length;
                                 });
-                                Provider.of<NoteData>(context, listen: false)
+                                Provider.of<NoteState>(context, listen: false)
                                     .checkAllFeedSongs(postList);
                               },
                               child: Column(children: [
@@ -232,7 +232,7 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
                                 setState(() {
                                   _checkCount = 0;
                                 });
-                                Provider.of<NoteData>(context, listen: false)
+                                Provider.of<NoteState>(context, listen: false)
                                     .uncheckAllFeedSongs();
                               },
                               child: Column(children: [
@@ -249,7 +249,7 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
                             GestureDetector(
                               onTap: () {
                                 if (_checkCount > 0) {
-                                  Provider.of<NoteData>(context, listen: false)
+                                  Provider.of<NoteState>(context, listen: false)
                                       .addMultipleFeedSongs();
                                 }
                               },
@@ -314,7 +314,7 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
                         },
                         body: jsonEncode({
                           "postId": widget.post.postId,
-                          "userId": Provider.of<NoteData>(context, listen: false)
+                          "userId": Provider.of<NoteState>(context, listen: false)
                               .userId,
                         }),
                       );
@@ -344,7 +344,7 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
                           overflow: TextOverflow.ellipsis),
                       Spacer(),
                       (widget.post.postAuthorId ==
-                                  Provider.of<NoteData>(context, listen: false)
+                                  Provider.of<NoteState>(context, listen: false)
                                       .userId &&
                               _isEditting == false)
                           ? SizedBox.shrink()
@@ -429,7 +429,7 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    Provider.of<NoteData>(context, listen: false).lists =
+                    Provider.of<NoteState>(context, listen: false).lists =
                         postList;
                     Navigator.push(
                       context,

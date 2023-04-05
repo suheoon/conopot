@@ -1,7 +1,7 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
 import 'package:conopot/models/note.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +19,7 @@ class _EditFeedDetailSongListState extends State<EditFeedDetailSongList> {
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
-    return Consumer<NoteData>(builder: (context, noteData, child) {
+    return Consumer<NoteState>(builder: (context, noteData, child) {
       return ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
@@ -33,11 +33,11 @@ class _EditFeedDetailSongListState extends State<EditFeedDetailSongList> {
               onTap: () {
                 setState(() {
                   if (!noteData.feedDetailCheckList[index] == true) {
-                    Provider.of<NoteData>(context, listen: false)
+                    Provider.of<NoteState>(context, listen: false)
                         .addSet
                         .add(widget.postList[index]);
                   } else {
-                    Provider.of<NoteData>(context, listen: false)
+                    Provider.of<NoteState>(context, listen: false)
                         .addSet
                         .remove(widget.postList[index]);
                   }
@@ -67,11 +67,11 @@ class _EditFeedDetailSongListState extends State<EditFeedDetailSongList> {
                           value: noteData.feedDetailCheckList[index],
                           onChanged: (bool? val) {
                             if (val == true) {
-                              Provider.of<NoteData>(context, listen: false)
+                              Provider.of<NoteState>(context, listen: false)
                                   .addSet
                                   .add(widget.postList[index]);
                             } else {
-                              Provider.of<NoteData>(context, listen: false)
+                              Provider.of<NoteState>(context, listen: false)
                                   .addSet
                                   .remove(widget.postList[index]);
                             }

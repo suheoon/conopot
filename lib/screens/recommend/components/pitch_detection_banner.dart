@@ -1,26 +1,25 @@
 import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/firebase_remote_config.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:conopot/models/note.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/models/pitch_item.dart';
+import 'package:conopot/models/user_state.dart';
 import 'package:conopot/screens/note/add_note_screen.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
-import 'package:conopot/screens/recommend/components/timbre_screen.dart';
+import 'package:conopot/screens/recommend/timbre_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 class PitchDetectionBanner extends StatefulWidget {
-  late MusicSearchItemLists musicList;
+  late MusicState musicList;
   late List<Note> notes;
   PitchDetectionBanner({Key? key, required this.musicList, required this.notes})
       : super(key: key);
@@ -137,7 +136,7 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
                                     requestCFApi();
                                     setState(() {});
                                     //전면 광고
-                                    Provider.of<NoteData>(context,
+                                    Provider.of<NoteState>(context,
                                             listen: false)
                                         .aiInterstitialAd();
                                   },
@@ -399,12 +398,12 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
   }
 
   void requestCFApi() async {
-    widget.musicList.recommendRequest = true;
+    Provider.of<UserState>(context, listen: false).recommendRequest = true;
     storage.write(key: "recommendRequest", value: 'true');
     await EasyLoading.show();
     String url = 'https://recommendcf-pfenq2lbpq-du.a.run.app/recommendCF';
     List<String> musicArr =
-        Provider.of<NoteData>(context, listen: false).userMusics;
+        Provider.of<NoteState>(context, listen: false).userMusics;
     if (musicArr.length > 20) {
       // 저장한 노트수가 20개 보다 많은 경우 자르기
       musicArr = musicArr.sublist(0, 20);

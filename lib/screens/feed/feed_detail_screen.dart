@@ -1,18 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:conopot/config/analytics_config.dart';
+import 'package:conopot/firebase/analytics_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:conopot/models/note.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/screens/feed/components/edit_feed_detail_song_list.dart';
 import 'package:conopot/screens/feed/components/feed_detail_song_list.dart';
 import 'package:conopot/screens/feed/feed_report_screen.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:conopot/models/post.dart';
 import 'package:conopot/screens/note/components/youtube_player.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +52,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
   _indexChange(int index) {
     setState(() {
       _index = index;
-      videoId = Provider.of<MusicSearchItemLists>(context, listen: false)
+      videoId = Provider.of<MusicState>(context, listen: false)
           .youtubeURL[widget.post.postMusicList[_index]];
     });
   }
@@ -69,7 +69,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
   void initPostList() {
     // tjSongNumber 문자열로 돼 있는 리스트를 Note 배열로 변환
     Set<Note> entireNote =
-        Provider.of<MusicSearchItemLists>(context, listen: false).entireNote;
+        Provider.of<MusicState>(context, listen: false).entireNote;
     for (int i = 0; i < widget.post.postMusicList.length; i++) {
       Note note = entireNote.firstWhere(
           (element) => element.tj_songNumber == widget.post.postMusicList[i]);
@@ -80,7 +80,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
 
   @override
   void initState() {
-    _userId = Provider.of<NoteData>(context, listen: false).userId;
+    _userId = Provider.of<NoteState>(context, listen: false).userId;
     getLikeInfo().then((result) {
       setState(() {
         if (result == 'true') {
@@ -90,7 +90,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
         }
       });
     });
-    videoId = Provider.of<MusicSearchItemLists>(context, listen: false)
+    videoId = Provider.of<MusicState>(context, listen: false)
         .youtubeURL[widget.post.postMusicList[_index]];
     super.initState();
     initPostList();
@@ -154,7 +154,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
           ),
           actions: [
             if (widget.post.postAuthorId !=
-                Provider.of<NoteData>(context, listen: false).userId)
+                Provider.of<NoteState>(context, listen: false).userId)
               IconButton(
                   onPressed: () {
                     showReportListOption(context);
@@ -171,7 +171,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                   setState(() {
                     _checkCount = 0;
                     _isEditting = true;
-                    Provider.of<NoteData>(context, listen: false)
+                    Provider.of<NoteState>(context, listen: false)
                         .initAddFeedSong(widget.post.postMusicList);
                   });
                 },
@@ -219,7 +219,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                                     setState(() {
                                       _checkCount = postList.length;
                                     });
-                                    Provider.of<NoteData>(context, listen: false)
+                                    Provider.of<NoteState>(context, listen: false)
                                         .checkAllFeedSongs(postList);
                                   },
                                   child: Column(children: [
@@ -236,7 +236,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                                     setState(() {
                                       _checkCount = 0;
                                     });
-                                    Provider.of<NoteData>(context, listen: false)
+                                    Provider.of<NoteState>(context, listen: false)
                                         .uncheckAllFeedSongs();
                                   },
                                   child: Column(children: [
@@ -315,11 +315,11 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                                 onTap: () async {
                                   Analytics_config().feedViewClickLikeEvent();
                                   if (widget.post.postAuthorId ==
-                                      Provider.of<NoteData>(context,
+                                      Provider.of<NoteState>(context,
                                               listen: false)
                                           .userId) {
                                     EasyLoading.showToast("좋아요할 수 없습니다.");
-                                  } else if (Provider.of<NoteData>(context,
+                                  } else if (Provider.of<NoteState>(context,
                                               listen: false)
                                           .isLogined ==
                                       false) {
@@ -336,13 +336,13 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                                         URL = '${serverURL}/playlist/heart';
                                         body = jsonEncode({
                                           "postId": widget.post.postId,
-                                          "userId": Provider.of<NoteData>(context,
+                                          "userId": Provider.of<NoteState>(context,
                                                   listen: false)
                                               .userId,
                                           "postAuthorId":
                                               widget.post.postAuthorId,
                                           "postTitle": widget.post.postTitle,
-                                          "username": Provider.of<NoteData>(
+                                          "username": Provider.of<NoteState>(
                                                   context,
                                                   listen: false)
                                               .userNickname
@@ -355,7 +355,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                                         URL = '${serverURL}/playlist/hate';
                                         body = jsonEncode({
                                           "postId": widget.post.postId,
-                                          "userId": Provider.of<NoteData>(context,
+                                          "userId": Provider.of<NoteState>(context,
                                                   listen: false)
                                               .userId,
                                         });
@@ -390,7 +390,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                             : GestureDetector(
                                 onTap: () {
                                   if (_checkCount > 0) {
-                                    Provider.of<NoteData>(context, listen: false)
+                                    Provider.of<NoteState>(context, listen: false)
                                         .addMultipleFeedSongs();
                                   }
                                   setState(() {
@@ -470,7 +470,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    if (Provider.of<NoteData>(context, listen: false)
+                    if (Provider.of<NoteState>(context, listen: false)
                             .isLogined ==
                         false) {
                       EasyLoading.showToast("로그인 후 이용가능합니다.");
@@ -504,7 +504,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    if (Provider.of<NoteData>(context, listen: false)
+                    if (Provider.of<NoteState>(context, listen: false)
                             .isLogined ==
                         false) {
                       EasyLoading.showToast("로그인 후 이용가능합니다.");
@@ -576,7 +576,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                 'Content-Type': 'application/json; charset=UTF-8',
               },
               body: jsonEncode({
-                "userId": Provider.of<NoteData>(context, listen: false).userId,
+                "userId": Provider.of<NoteState>(context, listen: false).userId,
                 "blockUserId": widget.post.postAuthorId
               }),
             );

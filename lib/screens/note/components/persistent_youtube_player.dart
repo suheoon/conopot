@@ -1,6 +1,6 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/youtube_player_provider.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/youtube_player_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
@@ -20,11 +20,11 @@ class _YoutubeVideoPlayerState extends State<PersistentYoutubeVideoPlayer> {
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
     double screenWidth = SizeConfig.screenWidth;
-    if (Provider.of<YoutubePlayerProvider>(context, listen: false).videoList[
-            Provider.of<YoutubePlayerProvider>(context, listen: false)
+    if (Provider.of<YoutubePlayerState>(context, listen: false).videoList[
+            Provider.of<YoutubePlayerState>(context, listen: false)
                 .playingIndex] ==
         '없음') {
-      if (Provider.of<YoutubePlayerProvider>(context, listen: false).isMini) {
+      if (Provider.of<YoutubePlayerState>(context, listen: false).isMini) {
         return Center(
           child: Text('유튜브 영상이 없습니다 채널톡으로 문의해 주세요.',
               style: TextStyle(color: kPrimaryWhiteColor, fontSize: defaultSize * 0.8)),

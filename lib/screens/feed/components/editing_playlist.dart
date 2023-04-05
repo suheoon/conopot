@@ -1,7 +1,7 @@
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
 import 'package:conopot/models/note.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +20,7 @@ class _EditingPlayListState extends State<EditingPlayList> {
   Widget build(BuildContext context) {
     double screenHieght = SizeConfig.screenHeight;
 
-    return Consumer<NoteData>(
+    return Consumer<NoteState>(
       builder: (context, noteData, child) {
         return Theme(
           data: ThemeData(

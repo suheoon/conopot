@@ -1,17 +1,15 @@
 import 'dart:convert';
 
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/note_data.dart';
-import 'package:conopot/models/youtube_player_provider.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/note_state.dart';
+import 'package:conopot/models/youtube_player_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -31,7 +29,7 @@ class _InviteScreenState extends State<InviteScreen> {
   bool userInviteStatus = false;
 
   getUserInviteStatus() async {
-    int userId = Provider.of<NoteData>(context, listen: false).userId;
+    int userId = Provider.of<NoteState>(context, listen: false).userId;
     String? serverURL = dotenv.env['USER_SERVER_URL'];
 
     String url = '$serverURL/user/invite/status?userId=$userId';
@@ -58,7 +56,7 @@ class _InviteScreenState extends State<InviteScreen> {
   }
 
   getUserInvitePersonCount() async {
-    int userId = Provider.of<NoteData>(context, listen: false).userId;
+    int userId = Provider.of<NoteState>(context, listen: false).userId;
     String? serverURL = dotenv.env['USER_SERVER_URL'];
 
     String url = '$serverURL/user/invite/count?userId=$userId';
@@ -88,11 +86,11 @@ class _InviteScreenState extends State<InviteScreen> {
       text: '',
     );
     //사용자 초대 코드
-    userInviteCode = Provider.of<NoteData>(context, listen: false)
+    userInviteCode = Provider.of<NoteState>(context, listen: false)
             .userId
             .toString() +
         "Ksc9a" +
-        (Provider.of<NoteData>(context, listen: false).userId % 10).toString();
+        (Provider.of<NoteState>(context, listen: false).userId % 10).toString();
 
     //사용자가 초대한 사람 수 (api 호출)
     getUserInviteStatus();
@@ -106,11 +104,11 @@ class _InviteScreenState extends State<InviteScreen> {
     double defaultSize = SizeConfig.defaultSize;
     return WillPopScope(
       onWillPop: () async {
-        if (Provider.of<YoutubePlayerProvider>(context, listen: false)
+        if (Provider.of<YoutubePlayerState>(context, listen: false)
             .isHomeTab) {
-          Provider.of<YoutubePlayerProvider>(context, listen: false)
+          Provider.of<YoutubePlayerState>(context, listen: false)
               .openPlayer();
-          Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+          Provider.of<YoutubePlayerState>(context, listen: false).refresh();
         }
         return true;
       },
@@ -284,7 +282,7 @@ class _InviteScreenState extends State<InviteScreen> {
                       EasyLoading.showToast("이미 인증을 하였습니다.");
                     }
                     // 노트를 3개 이상 가지고 있지 않은 사용자라면
-                    else if (Provider.of<NoteData>(context, listen: false)
+                    else if (Provider.of<NoteState>(context, listen: false)
                             .notes
                             .length <
                         3) {
@@ -354,7 +352,7 @@ class _InviteScreenState extends State<InviteScreen> {
                 GestureDetector(
                   onTap: () {
                     // 이미 광고 제거 효과인 경우
-                    if (Provider.of<NoteData>(context, listen: false)
+                    if (Provider.of<NoteState>(context, listen: false)
                             .userAdRemove ==
                         true) {
                       EasyLoading.showToast("이미 광고 제거 효과를 받았습니다 😆");
@@ -446,13 +444,13 @@ class _InviteScreenState extends State<InviteScreen> {
     }
 
     //검증하기 : 입력한 코드 == 내 코드인지 확인
-    if (inviteUserId == Provider.of<NoteData>(context, listen: false).userId) {
+    if (inviteUserId == Provider.of<NoteState>(context, listen: false).userId) {
       EasyLoading.showToast("내 코드는 입력할 수 없어요 😭");
       return;
     }
 
     //검증하기 : 초대"한" 유저가 초대"받은" 유저보다 가입 순서가 늦다면
-    if (inviteUserId < Provider.of<NoteData>(context, listen: false).userId) {
+    if (inviteUserId < Provider.of<NoteState>(context, listen: false).userId) {
       EasyLoading.showToast("나 보다 늦게 가입한 유저의 코드는 입력할 수 없어요 😭");
       return;
     }
@@ -462,7 +460,7 @@ class _InviteScreenState extends State<InviteScreen> {
   }
 
   inviteComplete(int inviteUserId) async {
-    int userId = Provider.of<NoteData>(context, listen: false).userId;
+    int userId = Provider.of<NoteState>(context, listen: false).userId;
     String? serverURL = dotenv.env['USER_SERVER_URL'];
 
     //초대"한" 사람의 카운트 +1 증가
@@ -501,10 +499,10 @@ class _InviteScreenState extends State<InviteScreen> {
 
   //해당 유저의 광고 제거
   userAdRemove() async {
-    int userId = Provider.of<NoteData>(context, listen: false).userId;
+    int userId = Provider.of<NoteState>(context, listen: false).userId;
     //로컬 스토리지에 광고 제거 적용
     await storage.write(key: 'adRemove', value: "true");
-    Provider.of<NoteData>(context, listen: false).userAdRemove = true;
+    Provider.of<NoteState>(context, listen: false).userAdRemove = true;
 
     //서버에 광고 제거 상태 변경
     String? serverURL = dotenv.env['USER_SERVER_URL'];

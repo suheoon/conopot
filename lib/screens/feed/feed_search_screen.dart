@@ -1,15 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/debounce.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/global/debounce.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/models/post.dart';
 import 'package:conopot/screens/feed/feed_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
@@ -58,7 +57,7 @@ class _FeedSearchScrrenState extends State<FeedSearchScrren> {
           load();
         }
       });
-    userId = Provider.of<NoteData>(context, listen: false).userId;
+    userId = Provider.of<NoteState>(context, listen: false).userId;
   }
 
   void _clearTextField() {

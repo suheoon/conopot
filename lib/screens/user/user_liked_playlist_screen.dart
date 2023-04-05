@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/models/post.dart';
 import 'package:conopot/screens/feed/feed_detail_screen.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +53,7 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
         };
 
   Widget adaptiveAdShow() {
-    return (Provider.of<NoteData>(context, listen: false).isUserAdRemove() ==
+    return (Provider.of<NoteState>(context, listen: false).isUserAdRemove() ==
             true) //리워드 효과 시
         ? SizedBox.shrink()
         //광고를 불러온 경우
@@ -67,11 +67,11 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
             //광고를 불러오지 못한 경우
             : Container(
                 color: Colors.transparent,
-                width: Provider.of<NoteData>(context, listen: false)
+                width: Provider.of<NoteState>(context, listen: false)
                     .size!
                     .width
                     .toDouble(),
-                height: Provider.of<NoteData>(context, listen: false)
+                height: Provider.of<NoteState>(context, listen: false)
                     .size!
                     .height
                     .toDouble(),
@@ -82,7 +82,7 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (Provider.of<NoteData>(context, listen: false).isUserAdRemove() ==
+    if (Provider.of<NoteState>(context, listen: false).isUserAdRemove() ==
         false) {
       _loadAd();
     }
@@ -125,8 +125,8 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
 
   @override
   void initState() {
-    Provider.of<NoteData>(context, listen: false).isUserRewarded();
-    userId = Provider.of<NoteData>(context, listen: false).userId;
+    Provider.of<NoteState>(context, listen: false).isUserRewarded();
+    userId = Provider.of<NoteState>(context, listen: false).userId;
     _firstLoad();
     super.initState();
   }

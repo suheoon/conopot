@@ -1,20 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/note_state.dart';
 import 'package:conopot/screens/user/personal_information_screen.dart';
 import 'package:conopot/screens/user/terms_of_user_screen.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
-import 'package:conopot/config/constants.dart';
-import 'package:conopot/config/size_config.dart';
+import 'package:conopot/global/theme_colors.dart';
+import 'package:conopot/global/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -259,8 +254,8 @@ void appleRegister(
 
 void loginSuccess(String? jwtToken, BuildContext context) async {
   //로컬 스토리지에 jwt 토큰 저장
-  Provider.of<NoteData>(context, listen: false).writeJWT(jwtToken);
-  Provider.of<NoteData>(context, listen: false).initAccountInfo();
+  Provider.of<NoteState>(context, listen: false).writeJWT(jwtToken);
+  Provider.of<NoteState>(context, listen: false).initAccountInfo();
   // 로그인 성공 후 userId를 OneSignal의 externalUserId로 지정
   if (jwtToken != null) {
     Map<String, dynamic> payload = Jwt.parseJwt(jwtToken);

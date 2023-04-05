@@ -1,5 +1,4 @@
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/models/music_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +11,7 @@ class _PitchDropdownOptionState extends State<PitchDropdownOption> {
   String optionString = '모든 노래';
   @override
   Widget build(BuildContext context) {
-    return Consumer<MusicSearchItemLists>(
+    return Consumer<MusicState>(
       builder: (
         context,
         musicList,

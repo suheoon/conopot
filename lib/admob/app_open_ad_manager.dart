@@ -1,8 +1,7 @@
-import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/main_screen.dart';
-import 'package:conopot/models/note_data.dart';
-import 'package:conopot/tutorial_screen.dart';
-import 'package:flutter/foundation.dart';
+import 'package:conopot/firebase/analytics_config.dart';
+import 'package:conopot/screens/home/home_screen.dart';
+import 'package:conopot/models/note_state.dart';
+import 'package:conopot/screens/tutorial/tutorial_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -44,7 +43,7 @@ class AppOpenAdManager {
         },
         onAdFailedToLoad: (error) {
           Analytics_config().adAppOpenFail();
-          Provider.of<NoteData>(context, listen: false)
+          Provider.of<NoteState>(context, listen: false)
               .appOpenAdUnloaded(context);
         },
       ),
