@@ -6,12 +6,12 @@
 - 프로젝트 기간 : `2022.05` ~ `2022.12`
 
 ## Specification
-- Flutter
-- Dart
+- flutter
+- dart
 - provider
 - http
 - shared_preferences
-- Firebase
+- firebase
 
 ## Contributor
 <table class="tg">
