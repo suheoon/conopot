@@ -8,7 +8,7 @@
 ## Specification
 - Flutter
 - Dart
-- Provider
+- provider
 - http
 - shared_preferences
 - Firebase
