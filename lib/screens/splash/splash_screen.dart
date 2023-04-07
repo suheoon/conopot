@@ -23,10 +23,12 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 
-  static final String oneSignalAppId = "3dd8ef2b-8d2b-4e05-9499-479c974fed91";
+  static const String oneSignalAppId = "3dd8ef2b-8d2b-4e05-9499-479c974fed91";
 }
 
 class _SplashScreenState extends State<SplashScreen> {
