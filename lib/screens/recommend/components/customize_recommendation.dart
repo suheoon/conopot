@@ -29,7 +29,7 @@ class CustomizeRecommendation extends StatefulWidget {
 // 맞춤 추천
 class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
   double defaultSize = SizeConfig.defaultSize;
-  final storage = new FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   void requestCFApi() async {
     Provider.of<UserState>(context, listen: false).recommendRequest = true;
@@ -125,7 +125,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
         ),
         SizedBox(height: defaultSize * 2),
         if (widget.notes.length < 5 &&
-            Provider.of<UserState>(context, listen: false).sessionCount ==
+            Provider.of<UserState>(context, listen: false).recommendRequest ==
                 false) ...[
           // 저장한 노트 개수가 5개 미만일 때
           Container(
@@ -147,7 +147,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
             ),
           )
         ] else if (widget.notes.length >= 5 &&
-            Provider.of<UserState>(context, listen: false).sessionCount ==
+            Provider.of<UserState>(context, listen: false).recommendRequest ==
                 false) ...[
           // 저장한 노트 개수가 5개 이상이지만 호출을 하지 않았을 때
           Container(

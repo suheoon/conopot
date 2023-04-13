@@ -42,14 +42,9 @@ class MusicState extends ChangeNotifier {
   int userPitch = 23;
   int userMaxPitch = -1;
 
-  final storage = new FlutterSecureStorage();
-  static var httpClient = new HttpClient();
+  final storage = const FlutterSecureStorage();
+  static var httpClient = HttpClient();
   late String dir;
-
-  Future<Directory> get _localDirectory async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory;
-  }
 
   //유저 음악 버전 체크 (true: 최신버전, false: 버전 업데이트 필요)
   Future<int> checkVersionUpdate() async {
