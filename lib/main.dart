@@ -75,16 +75,15 @@ class MyApp extends StatelessWidget {
         },
         child: MaterialApp(
           builder: (context, child) {
+            SizeConfig().init(context);
             child = EasyLoading.init()(context, child);
-            child = MediaQuery(
+            child = PlayerWidget(child: child);
+            return MediaQuery(
               data: MediaQuery.of(context).copyWith(
                 textScaleFactor: 1.0,
               ),
               child: child,
             );
-            child = PlayerWidget(child: child);
-            SizeConfig().init(context);
-            return child;
           },
           initialRoute: '/',
           themeMode: ThemeMode.light,

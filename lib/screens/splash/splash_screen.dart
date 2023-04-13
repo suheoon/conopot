@@ -168,6 +168,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
+
   /// 앱 실행 시 얻어야 하는 정보들 수집
   Future<void> getInformation() async {
     if (Platform.isIOS)

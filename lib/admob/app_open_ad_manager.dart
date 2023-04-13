@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 bool canShowOpenAd = true;
 
-final storage = new FlutterSecureStorage();
+const storage = FlutterSecureStorage();
 
 class AppOpenAdManager {
   Map<String, String> APP_OPEN_UNIT_ID = {
